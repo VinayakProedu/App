@@ -6,9 +6,6 @@
 <meta name="robots" content="noindex, nofollow, noarchive">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="permissions-policy" content="camera=(), microphone=(), geolocation=()">
-
-<title>Student Portal | Vinayak ProEdu</title>
-<link rel="icon" type="image/png" href="https://pasteimg.com/images/2026/03/31/WhatsApp-Image-2026-03-19-at-6.49.19-PM.jpg">
 <link rel="manifest" href="./manifest.json">
 <meta name="theme-color" content="#0D1B40">
 <meta name="mobile-web-app-capable" content="yes">
@@ -17,6 +14,8 @@
 <meta name="apple-mobile-web-app-title" content="ProEdu">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 
+<title>Student Portal | Vinayak ProEdu</title>
+<link rel="icon" type="image/png" href="https://pasteimg.com/images/2026/03/31/WhatsApp-Image-2026-03-19-at-6.49.19-PM.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -251,7 +250,7 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
       <div class="portal-field"><label>Password</label><input type="password" id="loginPasswordX" placeholder="••••••••"></div>
       <button class="secondary-btn" id="studentLoginBtnX" type="button" style="width:100%">Login</button>
       <div class="portal-status" id="studentLoginStatusX"></div>
-    </div></div>
+    </div>
   </div>
 </div>
 
@@ -445,8 +444,398 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
 const auth = firebase.auth();
 const db = firebase.firestore();
 const ADMIN_EMAIL = "vinayakproedu@gmail.com";
+
+/* ===== UTILS ===== */
+function esc(v){ return String(v ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;'); }
+function fmtDate(v){ if(!v) return ''; const d = v.toDate ? v.toDate() : new Date(v.seconds ? v.seconds*1000 : v); return d.toLocaleString(); }
+function getYouTubeId(input) {
+  const raw = String(input || '').trim(); if(!raw) return '';
+  const short = raw.match(/youtu\.be\/([A-Za-z0-9_-]{6,})/i); if(short) return short[1];
+  const watch = raw.match(/[?&]v=([A-Za-z0-9_-]{6,})/i); if(watch) return watch[1];
+  const embed = raw.match(/youtube\.com\/embed\/([A-Za-z0-9_-]{6,})/i); if(embed) return embed[1];
+  if(/^[A-Za-z0-9_-]{6,}$/.test(raw)) return raw; return '';
+}
+
+/* ===== STATE ===== */
+const state = {
+  currentUser: null, userData: null, courses: [], lectures: [], activeCourse: null,
+  pagination: { mocks: { page: 1, pageSize: 20 }, doubts: { page: 1, pageSize: 10 } }
+};
+
+/* ===== NAV ===== */
+function openStudentApp(){ document.getElementById('studentAppX').classList.add('show'); document.body.style.overflow='hidden'; }
+function closeStudentApp(){ document.getElementById('studentAppX').classList.remove('show'); document.body.style.overflow=''; }
+function showView(id){ document.querySelectorAll('.app-view').forEach(v => v.classList.add('hidden')); const el=document.getElementById(id); if(el) el.classList.remove('hidden'); }
+function setMenuActive(key){ document.querySelectorAll('.app-menu button[data-stu-view]').forEach(b => b.classList.toggle('active', b.dataset.stuView === key)); }
+function openStudentView(viewId){
+  setMenuActive(viewId); showView(viewId);
+  const titles = {
+    studentHomeX: ['Dashboard','Select a course'],
+    studentCourseHubX: ['Course Hub','Choose what to study'],
+    studentLecturesX: ['Lectures','Recorded lessons'],
+    studentMocksX: ['Mocks & Tests','Practice tests'],
+    studentLiveX: ['Live Classes','Join sessions'],
+    studentDoubtsX: ['Doubts','Ask faculty'],
+    studentCourseLeaderboardX: ['Leaderboard','Rankings'],
+    studentCourseCalendarX: ['Calendar','Upcoming events'],
+    studentAnnouncementsX: ['Announcements','Important updates']
+  };
+  const t = titles[viewId] || ['Portal',''];
+  document.getElementById('pageTitleX').textContent = t[0];
+  document.getElementById('pageSubX').textContent = t[1];
+}
+function toggleSidebar(){ document.getElementById('appSidebarX').classList.toggle('open'); }
+function setStatus(id, msg, err=false){
+  const el = document.getElementById(id); if(!el) return;
+  el.textContent = msg; el.className = 'portal-status ' + (err ? 'error' : 'ok');
+}
+
+/* ===== AUTH ===== */
+document.getElementById('studentLoginBtnX').addEventListener('click', async ()=>{
+  const email = document.getElementById('loginEmailX').value.trim();
+  const password = document.getElementById('loginPasswordX').value;
+  if(!email||!password){ setStatus('studentLoginStatusX','Email and password required.',true); return; }
+  try{
+    const cred = await auth.signInWithEmailAndPassword(email, password);
+    if(cred.user.email === ADMIN_EMAIL){ await auth.signOut(); setStatus('studentLoginStatusX','Admin cannot login here.',true); return; }
+    setStatus('studentLoginStatusX','Login successful.');
+  }catch(err){ setStatus('studentLoginStatusX',err.message,true); }
+});
+
+document.getElementById('studentLogoutBtnX').addEventListener('click', async ()=>{ await auth.signOut(); location.reload(); });
+document.getElementById('studentCloseBtnX').addEventListener('click', closeStudentApp);
+
+document.querySelectorAll('.app-menu button[data-stu-view]').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    openStudentView(btn.dataset.stuView);
+    if(btn.dataset.stuView === 'studentAnnouncementsX') loadAnnouncements();
+    if(window.innerWidth<=640) document.getElementById('appSidebarX').classList.remove('open');
+  });
+});
+
+/* ===== DASHBOARD ===== */
+async function loadDashboard(){
+  const user = auth.currentUser; if(!user) return;
+  const userDoc = await db.collection('users').doc(user.uid).get().catch(()=>null);
+  state.userData = userDoc && userDoc.exists ? userDoc.data() : {};
+  const myBatch = state.userData.batchCode || '';
+  const mySubjects = Array.isArray(state.userData.enrolledSubjects) ? state.userData.enrolledSubjects : [];
+  const myLectures = Array.isArray(state.userData.assignedLectureIds) ? state.userData.assignedLectureIds : [];
+
+  const lectSnap = await db.collection('lectures').limit(500).get().catch(()=>null);
+  let lectures = lectSnap ? lectSnap.docs.map(d=>({id:d.id,...d.data()})) : [];
+
+  if(myBatch) lectures = lectures.filter(l => { const b = l.batchCodes||[]; return !b.length || b.includes(myBatch); });
+  if(myLectures.length) lectures = lectures.filter(l => myLectures.includes(l.id));
+  else if(mySubjects.length) lectures = lectures.filter(l => {
+    const sub = l.subject || 'General';
+    return mySubjects.includes(sub) || sub === 'General';
+  });
+
+  state.lectures = lectures;
+  const subjects = [...new Set(lectures.map(l => l.subject || 'General'))].sort();
+  state.courses = subjects.map(sub => ({
+    subject: sub,
+    count: lectures.filter(l => (l.subject||'General')===sub).length,
+    hasLive: lectures.filter(l => (l.subject||'General')===sub && l.meetingLink).length > 0
+  }));
+  renderCourses();
+}
+
+function renderCourses(){
+  const grid = document.getElementById('studentCourseGridX');
+  const empty = document.getElementById('studentCourseEmptyX');
+  if(!state.courses.length){ grid.innerHTML=''; empty.classList.remove('hidden'); return; }
+  empty.classList.add('hidden');
+  grid.innerHTML = state.courses.map(c => `
+    <div class="course-card" onclick="selectCourse('${esc(c.subject)}')">
+      <div class="course-thumb" style="background:linear-gradient(135deg,#1e3c72,#2a5298)">
+        <span class="badge">${esc(c.subject.slice(0,4).toUpperCase())}</span>
+        <span style="font-size:1.5rem">📚</span>
+      </div>
+      <div class="course-info">
+        <h4>${esc(c.subject)}</h4>
+        <p>${c.count} lesson${c.count!==1?'s':''} ${c.hasLive?'· 🔴 Live':''}</p>
+        <div class="course-meta"><span>Vinayak ProEdu</span><span>▶ Open</span></div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function filterCourses(){
+  const q = (document.getElementById('studentCourseSearchX')?.value||'').toLowerCase();
+  document.querySelectorAll('#studentCourseGridX .course-card').forEach(card=>{
+    card.style.display = !q || card.innerText.toLowerCase().includes(q) ? '' : 'none';
+  });
+}
+
+window.selectCourse = function(subject){
+  state.activeCourse = { subject };
+  document.getElementById('courseHubTitleX').textContent = subject;
+  openStudentView('studentCourseHubX');
+};
+
+window.backToDashboard = function(){ state.activeCourse = null; openStudentView('studentHomeX'); };
+window.backToCourseHub = function(){ if(!state.activeCourse) return backToDashboard(); openStudentView('studentCourseHubX'); };
+
+window.openCourseSection = function(section){
+  if(!state.activeCourse) return;
+  const sub = state.activeCourse.subject;
+  if(section==='lectures'){ document.getElementById('lectureCourseNameX').textContent=sub; openStudentView('studentLecturesX'); renderSyllabus(sub); }
+  else if(section==='mocks'){ document.getElementById('mockCourseNameX').textContent=sub; openStudentView('studentMocksX'); if(window.__loadMocksForCourse) window.__loadMocksForCourse(sub); }
+  else if(section==='live'){ document.getElementById('liveCourseNameX').textContent=sub; openStudentView('studentLiveX'); loadLiveClasses(sub); }
+  else if(section==='doubts'){ document.getElementById('doubtCourseNameX').textContent=sub; state.pagination.doubts.page=1; openStudentView('studentDoubtsX'); loadCourseDoubts(); }
+  else if(section==='leaderboard'){ document.getElementById('lbCourseNameX').textContent=sub; openStudentView('studentCourseLeaderboardX'); loadCourseLeaderboard(sub); }
+  else if(section==='calendar'){ document.getElementById('calCourseNameX').textContent=sub; openStudentView('studentCourseCalendarX'); loadCourseCalendar(sub); }
+};
+
+/* ===== LECTURES ===== */
+async function renderSyllabus(subject){
+  const container = document.getElementById('studentSyllabusX');
+  container.innerHTML = '<div class="skeleton" style="height:60px;margin-bottom:8px;"></div><div class="skeleton" style="height:60px;margin-bottom:8px;"></div>';
+  
+  // Use pre-filtered user lectures so General (missing subject) lectures appear correctly
+  let courseLectures = state.lectures.filter(l => (l.subject || 'General') === subject);
+  courseLectures.sort((a,b) => String(a.lectureDate||'').localeCompare(String(b.lectureDate||'')));
+  
+  if(!courseLectures.length){ container.innerHTML = '<div class="empty-box">No lectures yet.</div>'; return; }
+  const total = courseLectures.length;
+  document.getElementById('courseProgressBarX').style.width = '0%';
+  document.getElementById('courseProgressTextX').textContent = `0 of ${total} Lessons`;
+  document.getElementById('courseProgressPctX').textContent = '0%';
+  const bySection = {};
+  courseLectures.forEach(l => { const sec = l.section || 'General'; if(!bySection[sec]) bySection[sec]=[]; bySection[sec].push(l); });
+  container.innerHTML = Object.keys(bySection).sort().map((sec, idx) => {
+    const lessons = bySection[sec].sort((a,b) => String(a.lectureDate||'').localeCompare(String(b.lectureDate||'')));
+    return `<details class="syllabus-section" ${idx===0?'open':''}>
+      <summary><span>${esc(sec)}</span><span class="sec-icon">${lessons.length} lesson(s)</span></summary>
+      ${lessons.map(l => {
+        const releaseDate = l.lectureDate ? new Date(l.lectureDate + 'T' + (l.lectureTime||'00:00')) : null;
+        const isLocked = releaseDate && releaseDate > new Date();
+        return `<div class="lesson-item ${isLocked?'locked':''}" onclick="${isLocked?'':`playLesson('${l.id}')`}">
+          <div class="icon">${isLocked?'🔒':'▶'}</div>
+          <div><div class="lesson-title">${esc(l.title||'Lesson')}</div>
+          <div class="lesson-meta">${esc(l.lectureDate||'')} ${l.lectureTime?'· '+esc(l.lectureTime):''}</div></div>
+        </div>`;
+      }).join('')}
+    </details>`;
+  }).join('');
+  const first = courseLectures.find(l => !l.lectureDate || new Date(l.lectureDate + 'T' + (l.lectureTime||'00:00')) <= new Date());
+  if(first) playLesson(first.id);
+}
+
+window.filterLectures = function(){
+  const q = (document.getElementById('lectureSearchX')?.value || '').toLowerCase().trim();
+  document.querySelectorAll('#studentSyllabusX .syllabus-section').forEach(sec => {
+    let visible = 0;
+    sec.querySelectorAll('.lesson-item').forEach(item => {
+      const match = !q || item.innerText.toLowerCase().includes(q);
+      item.style.display = match ? '' : 'none';
+      if(match) visible++;
+    });
+    const summary = sec.querySelector('summary');
+    const summaryMatch = summary && summary.innerText.toLowerCase().includes(q);
+    sec.style.display = (visible > 0 || summaryMatch) ? '' : 'none';
+    if(q && visible > 0) sec.open = true;
+  });
+};
+
+window.playLesson = async function(lectureId){
+  let lecture = state.lectures.find(l => l.id === lectureId);
+  if(!lecture){ const snap=await db.collection('lectures').doc(lectureId).get().catch(()=>null); if(!snap||!snap.exists)return; lecture={id:snap.id,...snap.data()}; }
+  const videoContainer = document.getElementById('lectureVideoContainerX');
+  document.getElementById('lecturePlayerTitleX').textContent = lecture.title || 'Lesson';
+  document.getElementById('lecturePlayerMetaX').textContent = (lecture.subject||'')+' · '+(lecture.section||'General');
+  const releaseDate = lecture.lectureDate ? new Date(lecture.lectureDate + 'T' + (lecture.lectureTime||'00:00')) : null;
+  const isLocked = releaseDate && releaseDate > new Date();
+  if(isLocked){
+    const diff = releaseDate - new Date();
+    const h=Math.floor(diff/3600000), m=Math.floor((diff%3600000)/60000), s=Math.floor((diff%60000)/1000);
+    videoContainer.innerHTML = `<div style="color:#fff;text-align:center;padding:40px;"><h3>🔒 Scheduled</h3><p>Releases on ${esc(lecture.lectureDate)}</p><div style="display:flex;gap:10px;justify-content:center;margin-top:16px;"><div style="background:rgba(255,255,255,.1);padding:10px 14px;border-radius:10px;"><strong>${h}</strong><br><small>hrs</small></div><div style="background:rgba(255,255,255,.1);padding:10px 14px;border-radius:10px;"><strong>${m}</strong><br><small>min</small></div><div style="background:rgba(255,255,255,.1);padding:10px 14px;border-radius:10px;"><strong>${s}</strong><br><small>sec</small></div></div></div>`;
+    return;
+  }
+  if(lecture.videoURL){
+    const vid = getYouTubeId(lecture.videoURL);
+    if(vid) videoContainer.innerHTML = `<iframe src="https://www.youtube.com/embed/${vid}?autoplay=1&modestbranding=1&rel=0" allowfullscreen style="width:100%;height:100%;border:none"></iframe>`;
+    else videoContainer.innerHTML = `<video controls autoplay src="${esc(lecture.videoURL)}" style="max-width:100%;max-height:100%"></video>`;
+  } else if(lecture.fileURL){ videoContainer.innerHTML = `<div style="color:#fff;text-align:center;padding:40px;"><a href="${esc(lecture.fileURL)}" target="_blank" class="primary-btn" style="display:inline-block">Download File</a></div>`; }
+  else if(lecture.meetingLink){ videoContainer.innerHTML = `<div style="color:#fff;text-align:center;padding:40px;"><a href="${esc(lecture.meetingLink)}" target="_blank" class="primary-btn" style="display:inline-block">Join Live</a></div>`; }
+  else { videoContainer.innerHTML = `<div style="color:#fff;text-align:center;padding:40px;"><p>No content attached.</p></div>`; }
+};
+
+/* ===== LIVE ===== */
+async function loadLiveClasses(subject){
+  const container = document.getElementById('liveListX');
+  const empty = document.getElementById('liveEmptyX');
+  container.innerHTML = '<div class="skeleton" style="height:120px;border-radius:16px;"></div>';
+  const now = new Date();
+  const snap = await db.collection('lectures').where('subject','==',subject).limit(200).get().catch(()=>null);
+  let lives = snap ? snap.docs.map(d=>({id:d.id,...d.data()})).filter(l => l.meetingLink) : [];
+  const relevant = lives.filter(l => {
+    if(!l.lectureDate) return false;
+    const d = new Date(l.lectureDate + 'T' + (l.lectureTime||'00:00'));
+    return d >= new Date(now.getTime() - 2*3600*1000);
+  }).sort((a,b)=> new Date(a.lectureDate+'T'+(a.lectureTime||'00:00')) - new Date(b.lectureDate+'T'+(b.lectureTime||'00:00')));
+  if(!relevant.length){ container.innerHTML=''; empty.classList.remove('hidden'); return; }
+  empty.classList.add('hidden');
+  container.innerHTML = relevant.map(l => {
+    const d = new Date(l.lectureDate + 'T' + (l.lectureTime||'00:00'));
+    const isLive = Math.abs(now - d) < 3600*1000;
+    return `<div class="live-card">${isLive?'<span class="live-badge">● LIVE</span>':'<span class="live-badge upcoming">Upcoming</span>'}<h4>${esc(l.title||'Live')}</h4><p style="opacity:.8;">${esc(l.lectureDate||'')} at ${esc(l.lectureTime||'')}</p><a href="${esc(l.meetingLink)}" target="_blank" class="primary-btn" style="display:inline-block;">Join</a></div>`;
+  }).join('');
+}
+
+/* ===== LEADERBOARD ===== */
+async function loadCourseLeaderboard(subject){
+  const podium = document.getElementById('lbPodiumX');
+  const tbody = document.getElementById('lbTableBodyX');
+  podium.innerHTML = '<div class="skeleton" style="height:180px;border-radius:20px;"></div>'.repeat(3);
+  tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:24px;">Loading…</td></tr>';
+  try {
+    const snap = await db.collection('attempts').where('subject','==',subject).limit(300).get();
+    const attempts = snap.docs.map(d => d.data());
+    const stats = {};
+    attempts.forEach(a => {
+      const uid = a.userId || 'unknown';
+      if(!stats[uid]) stats[uid] = { name: a.userName || 'Student', scores: [], best: 0, count: 0 };
+      stats[uid].scores.push(Number(a.percentage || 0));
+      stats[uid].best = Math.max(stats[uid].best, Number(a.percentage || 0));
+      stats[uid].count++;
+    });
+    let rows = Object.entries(stats).map(([uid, s]) => ({
+      uid, name: s.name, count: s.count,
+      avg: Math.round(s.scores.reduce((a,b)=>a+b,0)/s.scores.length),
+      best: s.best
+    })).sort((a,b) => b.avg - a.avg || b.best - a.best);
+    if(!rows.length){ podium.innerHTML = '<div class="empty-box" style="grid-column:1/-1;">No test data yet.</div>'; tbody.innerHTML=''; return; }
+    const top3 = rows.slice(0,3);
+    const order = [
+      { rank:2, data:top3[1], cls:'podium-2nd', icon:'🥈', label:'2nd' },
+      { rank:1, data:top3[0], cls:'podium-1st', icon:'👑', label:'1st' },
+      { rank:3, data:top3[2], cls:'podium-3rd', icon:'🥉', label:'3rd' }
+    ];
+    podium.innerHTML = order.map(p => {
+      if(!p.data) return '<div></div>';
+      return `<div class="${p.cls}"><div class="podium-crown">${p.icon}</div><div class="podium-name">${esc(p.data.name)}</div><div class="podium-meta">${p.data.count} tests · ${p.label}</div><div class="podium-score">${p.data.avg}%</div></div>`;
+    }).join('');
+    tbody.innerHTML = rows.map((r, i) => {
+      const medal = i===0?'🥇':i===1?'🥈':i===2?'🥉':'';
+      return `<tr><td style="padding:14px;font-weight:800;color:${i<3?'#C9922A':'#6b7280'};">${medal} #${i+1}</td><td style="padding:14px;"><strong>${esc(r.name)}</strong></td><td style="padding:14px;">${r.count}</td><td style="padding:14px;font-weight:700;">${r.avg}%</td><td style="padding:14px;">${r.best}%</td></tr>`;
+    }).join('');
+  } catch(err){ console.error(err); podium.innerHTML='<div class="empty-box" style="grid-column:1/-1;">Failed to load.</div>'; tbody.innerHTML=''; }
+}
+
+/* ===== CALENDAR ===== */
+async function loadCourseCalendar(subject){
+  const list = document.getElementById('courseCalendarListX');
+  list.innerHTML = '<div class="skeleton" style="height:100px;border-radius:12px;"></div>';
+  const now = new Date();
+  const snap = await db.collection('lectures').where('subject','==',subject).limit(200).get().catch(()=>null);
+  let events = snap ? snap.docs.map(d=>({id:d.id,...d.data()})).filter(l => l.meetingLink && l.lectureDate) : [];
+  events = events.filter(l => new Date(l.lectureDate+'T'+(l.lectureTime||'00:00')) >= new Date(now.getTime()-2*3600*1000));
+  events.sort((a,b)=>String(a.lectureDate||'').localeCompare(String(b.lectureDate||'')));
+  if(!events.length){ list.innerHTML='<div class="empty-box">No upcoming events.</div>'; return; }
+  list.innerHTML = events.map(l => `
+    <div class="calendar-item">
+      <div class="calendar-date">${esc(l.lectureDate||'TBD')} · ${esc(l.lectureTime||'')}</div>
+      <div class="calendar-title">${esc(l.title||'Event')}</div>
+      <a href="${esc(l.meetingLink)}" target="_blank" class="primary-btn" style="margin-top:6px;display:inline-block">Join Live</a>
+    </div>
+  `).join('');
+}
+
+/* ===== ANNOUNCEMENTS ===== */
+async function loadAnnouncements(){
+  const list = document.getElementById('announcementListX');
+  const empty = document.getElementById('announcementEmptyX');
+  list.innerHTML = '<div class="skeleton" style="height:120px;border-radius:14px;"></div>'.repeat(2);
+  try {
+    const snap = await db.collection('announcements').orderBy('createdAt','desc').limit(20).get();
+    const items = snap.docs.map(d=>({id:d.id,...d.data()}));
+    if(!items.length){ list.innerHTML=''; empty.classList.remove('hidden'); return; }
+    empty.classList.add('hidden');
+    list.innerHTML = items.map(a => {
+      const isHigh = a.priority === 'high';
+      return `<div class="mini-item ${isHigh?'announcement-high':'announcement-normal'}">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:8px;">
+          <strong style="font-size:1.05rem;color:#0D1B40;">${esc(a.title||'Announcement')}</strong>
+          ${isHigh?'<span style="background:#fee2e2;color:#991b1b;padding:3px 10px;border-radius:999px;font-size:.7rem;font-weight:800;">IMPORTANT</span>':''}
+        </div>
+        <p style="color:#374151;line-height:1.6;margin-bottom:8px;">${esc(a.message||'')}</p>
+        <div style="font-size:.78rem;color:#9ca3af;">${fmtDate(a.createdAt)} · by ${esc(a.createdBy||'Admin')}</div>
+      </div>`;
+    }).join('');
+  } catch(err){ list.innerHTML='<div class="empty-box">Unable to load.</div>'; }
+}
+
+/* ===== DOUBTS ===== */
+async function loadCourseDoubts(){
+  if(!state.activeCourse) return;
+  const user = auth.currentUser; if(!user) return;
+  const box = document.getElementById('studentDoubtListX');
+  box.innerHTML = '<div class="skeleton" style="height:100px;border-radius:14px;"></div>'.repeat(2);
+  try {
+    const snap = await db.collection('studentDoubts').where('userId','==',user.uid).where('courseSubject','==',state.activeCourse.subject).limit(50).get();
+    let doubts = snap.docs.map(d=>({id:d.id,...d.data()}));
+    doubts.sort((a,b) => (b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
+    if(!doubts.length){ box.innerHTML='<div class="empty-box">No doubts yet.</div>'; return; }
+    box.innerHTML = doubts.map(d => {
+      const replies = Array.isArray(d.replies) ? d.replies : [];
+      return `<div class="mini-item">
+        <strong>${esc(d.topic||'General')}</strong> 
+        <span style="display:inline-flex;padding:3px 8px;border-radius:999px;background:${d.status==='open'?'#d1fae5;color:#065f46':'#dbe8ff;color:#1e3c72'};font-size:.72rem;font-weight:800;margin-left:6px">${esc(d.status||'open')}</span><br>
+        <span style="font-size:.85rem;color:#6b7280">${esc(d.studentName||'')} · ${fmtDate(d.createdAt)}</span>
+        <p style="margin-top:8px;font-size:.92rem">${esc(d.message||'')}</p>
+        ${replies.length ? `<div style="margin-top:10px;border-left:3px solid #C9922A;padding-left:10px;">${replies.map(r=>`<div><span style="font-size:.75rem;color:#6b7280">${esc(r.by||'Faculty')}</span><p style="margin:4px 0;font-size:.9rem">${esc(r.text||'')}</p></div>`).join('')}</div>` : '<div style="margin-top:8px;font-size:.85rem;color:#9ca3af">Awaiting reply…</div>'}
+      </div>`;
+    }).join('');
+  } catch(err){ box.innerHTML='<div class="empty-box">Unable to load doubts.</div>'; }
+}
+
+window.submitCourseDoubt = async function(){
+  if(!state.activeCourse) return;
+  const subject = state.activeCourse.subject;
+  const topic = document.getElementById('doubtTopicX')?.value.trim() || 'General';
+  const message = document.getElementById('doubtTextX')?.value.trim();
+  const statusEl = document.getElementById('doubtStatusX');
+  const user = auth.currentUser;
+  if(!user || !message){ if(statusEl) statusEl.textContent = 'Sign in and write your doubt first.'; return; }
+  try{
+    if(statusEl) statusEl.textContent = 'Sending…';
+    await db.collection('studentDoubts').add({
+      userId: user.uid,
+      studentName: user.displayName || user.email || 'Student',
+      courseSubject: subject,
+      topic: topic,
+      message: message,
+      status: 'open',
+      replies: [],
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    document.getElementById('doubtTextX').value = '';
+    document.getElementById('doubtTopicX').value = '';
+    if(statusEl) statusEl.textContent = 'Sent successfully.';
+    loadCourseDoubts();
+  }catch(err){ if(statusEl) statusEl.textContent = err.message || 'Could not send.'; }
+};
+
+/* ===== AUTH STATE ===== */
+auth.onAuthStateChanged(async user => {
+  state.currentUser = user || null;
+  if(!user){
+    document.getElementById('loginScreenX').style.display = 'flex';
+    closeStudentApp();
+    return;
+  }
+  if(user.email === ADMIN_EMAIL){ await auth.signOut(); return; }
+  document.getElementById('loginScreenX').style.display = 'none';
+  document.getElementById('studentHelloX').textContent = 'Logged in as ' + (user.displayName || user.email || 'Student');
+  openStudentApp();
+  openStudentView('studentHomeX');
+  await loadDashboard();
+});
 </script>
-<script src="./push.js"></script>
 <script src="./test.js"></script>
 <script src="./test-engine.js"></script>
 <script>
@@ -456,7 +845,6 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('../sw.js').catch(function(e){ console.warn('SW:', e); });
   });
 }
-/* One-tap PWA install button */
 (function(){
   var deferredPrompt = null;
   window.addEventListener('beforeinstallprompt', function(e){
@@ -468,27 +856,10 @@ if ('serviceWorker' in navigator) {
     b.id = 'vpInstallBtn';
     b.textContent = '📲 Install App';
     b.style.cssText = "position:fixed;left:18px;bottom:18px;z-index:15000;border:none;border-radius:999px;padding:12px 20px;background:linear-gradient(135deg,#C9922A,#E8AA48);color:#0D1B40;font:800 14px 'DM Sans',sans-serif;box-shadow:0 10px 28px rgba(13,27,64,.35);cursor:pointer;";
-    b.onclick = function(){
-      if (deferredPrompt) { deferredPrompt.prompt(); deferredPrompt = null; }
-      b.remove();
-    };
+    b.onclick = function(){ if(deferredPrompt){ deferredPrompt.prompt(); deferredPrompt = null; } b.remove(); };
     document.body.appendChild(b);
   }
   window.__vpShowInstall = showBtn;
-  /* If already installed, the prompt never fires - hide nothing, just don't show */
-})();
-</script>
-<script>
-/* Skip login flash for returning admin (auth will re-verify and correct if needed) */
-(function(){
-  try{
-    var ok = localStorage.getItem('adminUnlocked') === '1' || sessionStorage.getItem('adminUnlocked') === '1';
-    if(!ok) return;
-    var loginEl = document.getElementById('loginWrap') || document.getElementById('loginScreen');
-    var appEl = document.getElementById('appShell') || document.getElementById('adminApp');
-    if(loginEl){ loginEl.style.display = 'none'; loginEl.classList.add('hidden'); }
-    if(appEl){ appEl.classList.remove('hidden'); appEl.style.display = ''; }
-  }catch(e){}
 })();
 </script>
 </body>
