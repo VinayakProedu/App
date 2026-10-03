@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex, nofollow, noarchive">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="permissions-policy" content="camera=(), microphone=(), geolocation=()">
-<link rel="manifest" href="../manifest.json">
+<link rel="manifest" href="./manifest.json">
 <meta name="theme-color" content="#0D1B40">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
@@ -166,6 +166,7 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
       <a href="live.html">🔴 Live Classes</a>
       <a href="leaderboard.html">🏆 Leaderboard</a>
       <a href="doubts.html">💬 Doubts</a>
+      <a href="announcements.html"><span>📢</span> Announcements</a>
       <button id="logoutBtn" type="button">🚪 Logout</button>
     </nav>
   </aside>
@@ -530,6 +531,40 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('../sw.js').catch(function(e){ console.warn('SW:', e); });
   });
 }
+/* One-tap PWA install button */
+(function(){
+  var deferredPrompt = null;
+  window.addEventListener('beforeinstallprompt', function(e){
+    e.preventDefault(); deferredPrompt = e; showBtn();
+  });
+  function showBtn(){
+    if (document.getElementById('vpInstallBtn')) return;
+    var b = document.createElement('button');
+    b.id = 'vpInstallBtn';
+    b.textContent = '📲 Install App';
+    b.style.cssText = "position:fixed;left:18px;bottom:18px;z-index:15000;border:none;border-radius:999px;padding:12px 20px;background:linear-gradient(135deg,#C9922A,#E8AA48);color:#0D1B40;font:800 14px 'DM Sans',sans-serif;box-shadow:0 10px 28px rgba(13,27,64,.35);cursor:pointer;";
+    b.onclick = function(){
+      if (deferredPrompt) { deferredPrompt.prompt(); deferredPrompt = null; }
+      b.remove();
+    };
+    document.body.appendChild(b);
+  }
+  window.__vpShowInstall = showBtn;
+  /* If already installed, the prompt never fires - hide nothing, just don't show */
+})();
+</script>
+<script>
+/* Skip login flash for returning admin (auth will re-verify and correct if needed) */
+(function(){
+  try{
+    var ok = localStorage.getItem('adminUnlocked') === '1' || sessionStorage.getItem('adminUnlocked') === '1';
+    if(!ok) return;
+    var loginEl = document.getElementById('loginWrap') || document.getElementById('loginScreen');
+    var appEl = document.getElementById('appShell') || document.getElementById('adminApp');
+    if(loginEl){ loginEl.style.display = 'none'; loginEl.classList.add('hidden'); }
+    if(appEl){ appEl.classList.remove('hidden'); appEl.style.display = ''; }
+  }catch(e){}
+})();
 </script>
 </body>
 </html>
