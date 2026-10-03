@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="permissions-policy" content="camera=(), microphone=(), geolocation=()">
+<title>Announcements | Vinayak ProEdu Admin</title>
+<link rel="icon" type="image/png" href="https://pasteimg.com/images/2026/03/31/WhatsApp-Image-2026-03-19-at-6.49.19-PM.jpg">
+<link rel="manifest" href="../manifest.json">
+<meta name="theme-color" content="#0D1B40">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0D1B40;--blue:#1e3c72;--gold:#C9922A;--gold-lt:#E8AA48;--ink:#1A1A2E;--muted:#6B7280;--border:#e5e7eb;}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;color:var(--ink);background:#f5f7fb;line-height:1.65;}
+h1,h2,h3{font-family:'Playfair Display',serif;}
+a{text-decoration:none;color:inherit;}
+.login-wrap{position:fixed;inset:0;z-index:9999;background:linear-gradient(135deg,var(--navy),var(--blue));display:flex;align-items:center;justify-content:center;padding:20px;}
+.login-box{width:min(420px,92vw);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:24px;padding:clamp(32px,6vw,48px);backdrop-filter:blur(20px);box-shadow:0 40px 100px rgba(0,0,0,.4);}
+.login-box h2{color:#fff;font-size:1.6rem;margin-bottom:6px;text-align:center;}
+.login-box p{color:rgba(255,255,255,.55);font-size:.9rem;text-align:center;margin-bottom:28px;}
+.login-field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;}
+.login-field label{font-size:.74rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.65);}
+.login-field input{padding:13px 16px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.14);border-radius:10px;color:#fff;font-size:.95em;font-family:inherit;}
+.login-field input::placeholder{color:rgba(255,255,255,.32);}
+.login-field input:focus{outline:none;border-color:rgba(201,146,42,.6);}
+.login-btn{width:100%;padding:15px;border-radius:50px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--gold),var(--gold-lt));color:var(--navy);font-size:1em;font-weight:700;font-family:inherit;}
+.login-status{margin-top:12px;font-size:.9rem;font-weight:700;text-align:center;min-height:22px;color:#fca5a5;}
+.app-shell{display:flex;width:100%;min-height:100vh;}
+.app-sidebar{width:260px;background:var(--navy);color:#fff;padding:18px;flex-shrink:0;position:fixed;height:100vh;left:0;top:0;z-index:100;}
+.app-brand{display:flex;align-items:center;gap:10px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px solid rgba(255,255,255,.08);}
+.app-brand img{width:40px;height:40px;border-radius:50%;border:2px solid var(--gold);object-fit:cover;}
+.app-brand h3{font-size:1.05rem;color:#fff;}
+.app-brand p{font-size:.72rem;letter-spacing:1.4px;text-transform:uppercase;color:rgba(232,170,72,.8);}
+.app-menu{display:grid;gap:6px;}
+.app-menu a{width:100%;padding:11px 14px;border-radius:10px;font-weight:600;font-size:.9rem;display:flex;align-items:center;gap:10px;color:#fff;transition:all .2s;}
+.app-menu a:hover,.app-menu a.active{background:var(--gold);color:var(--navy);}
+.app-main{flex:1;margin-left:260px;padding:24px 28px;}
+.app-topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border);}
+.app-title{color:var(--navy);font-size:1.6rem;}
+.app-sub{color:var(--muted);font-size:.9rem;}
+.ghost-btn{background:#eef4ff;color:var(--blue);border:none;border-radius:12px;padding:11px 18px;font-weight:700;cursor:pointer;font-family:inherit;}
+.app-card{background:#fff;border:1px solid rgba(201,146,42,.12);border-radius:20px;padding:22px;box-shadow:0 4px 18px rgba(13,27,64,.06);margin-bottom:16px;}
+.app-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.subject-title{font-size:1.15rem;color:var(--navy);margin-bottom:14px;}
+.portal-field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;}
+.portal-field label{font-size:.74rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);}
+.portal-field input,.portal-field select,.portal-field textarea{padding:12px 14px;border-radius:12px;border:1px solid rgba(13,27,64,.14);background:#fff;color:var(--ink);font-size:.95rem;font-family:inherit;}
+.portal-field input:focus,.portal-field select:focus,.portal-field textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,146,42,.12);}
+.portal-field textarea{min-height:110px;resize:vertical;}
+.primary-btn{border:none;border-radius:12px;padding:12px 18px;font-weight:700;cursor:pointer;font-family:inherit;background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff;}
+.secondary-btn{border:none;border-radius:12px;padding:12px 18px;font-weight:700;cursor:pointer;font-family:inherit;background:linear-gradient(135deg,var(--gold),var(--gold-lt));color:#111;}
+.danger-btn{border:none;border-radius:12px;padding:11px 18px;font-weight:700;cursor:pointer;font-family:inherit;background:#fef2f2;color:#b42318;border:1px solid #fecaca;}
+.portal-status{font-size:.92rem;margin-top:10px;min-height:22px;font-weight:700;}
+.portal-status.error{color:#b42318;}
+.portal-status.success{color:#166534;}
+.mini-list{display:grid;gap:10px;max-height:520px;overflow:auto;}
+.mini-item{background:#fff;border:1px solid var(--border);border-radius:14px;padding:14px;}
+.empty-box{padding:20px;border:1px dashed #d9e2ef;border-radius:14px;background:#fbfdff;color:#5d6e83;text-align:center;}
+@media(max-width:900px){.app-sidebar{width:100%;height:auto;position:relative;}.app-main{margin-left:0;}.app-grid-2{grid-template-columns:1fr;}.app-shell{flex-direction:column;}}
+.hidden{display:none !important;}
+</style>
+</head>
+<body>
+
+<div class="login-wrap" id="loginWrap">
+  <div class="login-box">
+    <h2>Admin Portal</h2>
+    <p>Announcements Manager</p>
+    <div class="login-field"><label>Admin Email</label><input type="email" id="adminEmail" placeholder="admin@email.com"></div>
+    <div class="login-field"><label>Password</label><input type="password" id="adminPassword" placeholder="••••••••"></div>
+    <button class="login-btn" id="adminLoginBtn" type="button">Login as Admin</button>
+    <div class="login-status" id="loginStatus"></div>
+  </div>
+</div>
+
+<div class="app-shell hidden" id="appShell">
+  <aside class="app-sidebar">
+    <div class="app-brand">
+      <img src="https://pasteimg.com/images/2026/03/31/WhatsApp-Image-2026-03-19-at-6.49.19-PM.jpg" alt="Vinayak ProEdu">
+      <div><h3>Vinayak ProEdu</h3><p>Admin Panel</p></div>
+    </div>
+    <nav class="app-menu">
+      <a href="index.html">📊 Dashboard</a>
+      <a href="students.html">👥 Students</a>
+      <a href="tests.html">📝 Mocks</a>
+      <a href="lectures.html">🎬 Lectures</a>
+      <a href="live.html">🔴 Live Classes</a>
+      <a href="leaderboard.html">🏆 Leaderboard</a>
+      <a href="doubts.html">💬 Doubts</a>
+      <a href="announcements.html" class="active">📢 Announcements</a>
+    </nav>
+  </aside>
+
+  <main class="app-main">
+    <div class="app-topbar">
+      <div><h1 class="app-title">Announcements</h1><div class="app-sub">Publish to all students — shows instantly in their portal</div></div>
+      <button class="ghost-btn" id="closeBtn" type="button">Close</button>
+    </div>
+    <div class="app-grid-2">
+      <div class="app-card">
+        <h3 class="subject-title">New Announcement</h3>
+        <div class="portal-field"><label>Title *</label><input id="annTitle" placeholder="e.g. FM Mock 2 scheduled this Sunday"></div>
+        <div class="portal-field"><label>Message *</label><textarea id="annMsg" placeholder="Write the announcement..."></textarea></div>
+        <div class="portal-field"><label>Priority</label>
+          <select id="annPriority"><option value="normal">Normal</option><option value="high">🔴 High (shows red badge)</option></select>
+        </div>
+        <label style="display:flex;align-items:center;gap:10px;font-size:.9rem;font-weight:700;color:var(--navy);margin-bottom:12px;cursor:pointer;">
+          <input type="checkbox" id="annPush" style="width:auto;"> Also send push notification to all students
+        </label>
+        <button class="primary-btn" id="publishBtn" type="button">📢 Publish</button>
+        <div class="portal-status" id="annStatus"></div>
+      </div>
+      <div class="app-card">
+        <h3 class="subject-title">Published</h3>
+        <div id="annList" class="mini-list"><div class="empty-box">Loading…</div></div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script src="../firebase-config.js"></script>
+<script>
+(function(){
+  const ADMIN_EMAIL = "vinayakproedu@gmail.com";
+  const $ = id => document.getElementById(id);
+  const esc = v => String(v ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  const fmtDate = v => { if(!v) return ''; const d = v.toDate ? v.toDate() : new Date(); return d.toLocaleString('en-IN'); };
+
+  auth.onAuthStateChanged(user => {
+    if(user && user.email === ADMIN_EMAIL){
+      $('loginWrap').classList.add('hidden');
+      $('appShell').classList.remove('hidden');
+      loadAnnouncements();
+    } else {
+      if(user && user.email !== ADMIN_EMAIL) auth.signOut();
+      $('loginWrap').classList.remove('hidden');
+      $('appShell').classList.add('hidden');
+    }
+  });
+
+  $('adminLoginBtn').onclick = async () => {
+    try{
+      const cred = await auth.signInWithEmailAndPassword($('adminEmail').value.trim(), $('adminPassword').value);
+      if(cred.user.email !== ADMIN_EMAIL){ await auth.signOut(); $('loginStatus').textContent = 'Not authorized.'; return; }
+      localStorage.setItem('adminUnlocked','1'); sessionStorage.setItem('adminUnlocked','1');
+    }catch(e){ $('loginStatus').textContent = e.message; }
+  };
+  $('closeBtn').onclick = () => location.href = 'index.html';
+
+  async function loadAnnouncements(){
+    const snap = await db.collection('announcements').orderBy('createdAt','desc').limit(50).get();
+    const items = snap.docs.map(d => ({id:d.id, ...d.data()}));
+    $('annList').innerHTML = items.length ? items.map(a => `
+      <div class="mini-item">
+        <div style="display:flex;justify-content:space-between;gap:8px;align-items:flex-start;">
+          <strong style="color:var(--navy);">${esc(a.title)}</strong>
+          ${a.priority === 'high' ? '<span style="background:#fee2e2;color:#991b1b;padding:3px 10px;border-radius:999px;font-size:.7rem;font-weight:800;">HIGH</span>' : ''}
+        </div>
+        <p style="font-size:.9rem;color:#374151;margin:6px 0;">${esc(a.message)}</p>
+        <div style="font-size:.78rem;color:var(--muted);">${fmtDate(a.createdAt)}</div>
+        <div style="display:flex;gap:8px;margin-top:10px;">
+          <button class="danger-btn" style="padding:7px 12px;font-size:.8rem;" onclick="deleteAnn('${a.id}')">Delete</button>
+          <button class="secondary-btn" style="padding:7px 12px;font-size:.8rem;" onclick="resendPush('${esc(a.title)}','${esc(a.message)}')">🔔 Re-send push</button>
+        </div>
+      </div>`).join('') : '<div class="empty-box">No announcements yet.</div>';
+  }
+  window.deleteAnn = async id => {
+    if(!confirm('Delete this announcement?')) return;
+    await db.collection('announcements').doc(id).delete();
+    loadAnnouncements();
+  };
+  window.resendPush = (t, m) => sendPush(t, m);
+
+  async function sendPush(title, body){
+    const st = $('annStatus');
+    if(!window.VP_FCM_KEY || VP_FCM_KEY.indexOf('UE9TVF9ZT1VS') !== -1){
+      st.textContent = 'Push skipped: paste your FCM Server key in firebase-config.js (Console → Project settings → Cloud Messaging).';
+      st.className = 'portal-status error';
+      return false;
+    }
+    try{
+      const r = await fetch('https://fcm.googleapis.com/fcm/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: 'key=' + VP_FCM_KEY },
+        body: JSON.stringify({ to: '/topics/allStudents', notification: { title, body } })
+      });
+      if(!r.ok) throw new Error('FCM error ' + r.status);
+      return true;
+    }catch(e){
+      st.textContent = 'Push failed: ' + e.message;
+      st.className = 'portal-status error';
+      return false;
+    }
+  }
+
+  $('publishBtn').onclick = async () => {
+    const st = $('annStatus');
+    const title = $('annTitle').value.trim();
+    const message = $('annMsg').value.trim();
+    const priority = $('annPriority').value;
+    if(!title || !message){ st.textContent = 'Title and message are required.'; st.className = 'portal-status error'; return; }
+    st.textContent = 'Publishing…'; st.className = 'portal-status';
+    if($('annPush').checked){
+      st.textContent = 'Sending push…';
+      const ok = await sendPush(title, message);
+      if(!ok) return;
+    }
+    await db.collection('announcements').add({
+      title, message, priority,
+      createdBy: auth.currentUser.email,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    $('annTitle').value = ''; $('annMsg').value = ''; $('annPush').checked = false;
+    st.textContent = 'Published ✓'; st.className = 'portal-status success';
+    loadAnnouncements();
+  };
+})();
+</script>
+<script>
+if (top !== self) { top.location = self.location; }
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('../sw.js').catch(function(e){ console.warn('SW:', e); });
+  });
+}
+</script>
+</body>
+</html>
