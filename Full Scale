@@ -1,0 +1,700 @@
+/**
+ * Coaching Institute Demo Full-Stack App
+ * -------------------------------------------------
+ * Run:
+ *   1) npm init -y
+ *   2) npm i express multer
+ *   3) node server.js
+ *   4) Open http://localhost:3000
+ *
+ * This is a runnable demo with:
+ * - Premium-style React landing page
+ * - Demo login/signup flow
+ * - Student dashboard
+ * - Admin panel
+ * - Online test system
+ * - File upload (demo)
+ * - Receipt generation (demo)
+ * - WhatsApp CTA button
+ *
+ * Note: This demo uses in-memory data (not MySQL yet).
+ * It is intentionally designed so we can later swap in MySQL without rewriting the UI.
+ */
+
+const express = require('express');
+const multer = require('multer');
+const path = require('path');
+const crypto = require('crypto');
+
+const app = express();
+const upload = multer({ storage: multer.memoryStorage() });
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+const PORT = process.env.PORT || 3000;
+
+// =========================
+// Demo config (edit these)
+// =========================
+const CONFIG = {
+  instituteName: 'Premium Coaching Institute',
+  tagline: 'ACCA-style learning, modern delivery, real results.',
+  whatsappNumber: '919999999999', // change later
+  primaryCourse: 'ACCA',
+  campusCity: 'Vadodara',
+};
+
+// =========================
+// In-memory demo database
+// =========================
+const db = {
+  users: [
+    { id: 1, name: 'Admin', email: 'admin@demo.com', password: 'admin123', role: 'admin' },
+    { id: 2, name: 'Student Demo', email: 'student@demo.com', password: 'student123', role: 'student' },
+  ],
+  students: [
+    {
+      id: 1,
+      name: 'Student Demo',
+      course: 'ACCA',
+      batch: 'Weekend - B1',
+      feesStatus: 'Pending',
+      progress: 42,
+      phone: '+91 98765 43210',
+      email: 'student@demo.com',
+    },
+  ],
+  courses: [
+    { id: 1, title: 'ACCA Foundation', level: 'Beginner', duration: '6 months', price: '₹24,999' },
+    { id: 2, title: 'ACCA Applied Knowledge', level: 'Intermediate', duration: '4 months', price: '₹19,999' },
+    { id: 3, title: '11th & 12th Commerce', level: 'School', duration: '12 months', price: '₹14,999' },
+  ],
+  testQuestions: [
+    {
+      id: 1,
+      type: 'mcq',
+      question: 'Which statement best describes accrual accounting?',
+      options: [
+        'Cash is recorded only when received',
+        'Revenue and expenses are recorded when earned/incurred',
+        'Only expenses are recorded immediately',
+        'Only revenue is recorded immediately',
+      ],
+      answer: 1,
+    },
+    {
+      id: 2,
+      type: 'mcq',
+      question: 'A debit balance is normally found in which account type?',
+      options: ['Revenue', 'Capital', 'Assets', 'Sales return'],
+      answer: 2,
+    },
+    {
+      id: 3,
+      type: 'numeric',
+      question: 'If sales are ₹50,000 and returns are ₹5,000, net sales = ?',
+      answer: 45000,
+    },
+  ],
+  submissions: [],
+  receipts: [],
+};
+
+const sessions = new Map();
+const uploads = [];
+
+function makeToken() {
+  return crypto.randomBytes(24).toString('hex');
+}
+
+function auth(req, res, next) {
+  const token = req.headers.authorization?.replace('Bearer ', '') || req.query.token;
+  if (!token || !sessions.has(token)) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+  req.user = sessions.get(token);
+  next();
+}
+
+function requireRole(role) {
+  return (req, res, next) => {
+    if (!req.user || req.user.role !== role) {
+      return res.status(403).json({ error: 'Forbidden' });
+    }
+    next();
+  };
+}
+
+// =========================
+// API routes
+// =========================
+app.post('/api/auth/login', (req, res) => {
+  const { email, password } = req.body;
+  const user = db.users.find(
+    (u) => u.email.toLowerCase() === String(email || '').toLowerCase() && u.password === password
+  );
+  if (!user) return res.status(400).json({ error: 'Invalid credentials' });
+
+  const token = makeToken();
+  sessions.set(token, { id: user.id, name: user.name, email: user.email, role: user.role });
+  res.json({ token, user: { id: user.id, name: user.name, email: user.email, role: user.role } });
+});
+
+app.post('/api/auth/signup', (req, res) => {
+  const { name, email, password, role = 'student' } = req.body;
+  if (!name || !email || !password) return res.status(400).json({ error: 'Missing fields' });
+  if (db.users.some((u) => u.email.toLowerCase() === String(email).toLowerCase())) {
+    return res.status(400).json({ error: 'Email already exists' });
+  }
+  const user = { id: Date.now(), name, email, password, role };
+  db.users.push(user);
+  if (role === 'student') {
+    db.students.push({
+      id: user.id,
+      name,
+      course: CONFIG.primaryCourse,
+      batch: 'New Admission',
+      feesStatus: 'Pending',
+      progress: 0,
+      phone: '',
+      email,
+    });
+  }
+  res.json({ ok: true });
+});
+
+app.get('/api/me', auth, (req, res) => {
+  res.json({ user: req.user });
+});
+
+app.get('/api/courses', (req, res) => {
+  res.json({ courses: db.courses });
+});
+
+app.get('/api/admin/students', auth, requireRole('admin'), (req, res) => {
+  res.json({ students: db.students, submissions: db.submissions, receipts: db.receipts, uploads });
+});
+
+app.post('/api/admin/student', auth, requireRole('admin'), (req, res) => {
+  const { name, course, batch, phone, email } = req.body;
+  const id = Date.now();
+  db.students.push({
+    id,
+    name,
+    course,
+    batch,
+    phone,
+    email,
+    feesStatus: 'Pending',
+    progress: 0,
+  });
+  res.json({ ok: true, studentId: id });
+});
+
+app.patch('/api/admin/student/:id', auth, requireRole('admin'), (req, res) => {
+  const student = db.students.find((s) => String(s.id) === String(req.params.id));
+  if (!student) return res.status(404).json({ error: 'Student not found' });
+  Object.assign(student, req.body);
+  res.json({ ok: true, student });
+});
+
+app.post('/api/admin/receipt', auth, requireRole('admin'), (req, res) => {
+  const { studentName, amount, mode, note } = req.body;
+  const receipt = {
+    id: Date.now(),
+    receiptNo: `RCPT-${Date.now()}`,
+    studentName,
+    amount,
+    mode,
+    note,
+    date: new Date().toISOString().slice(0, 10),
+  };
+  db.receipts.push(receipt);
+  res.json({ ok: true, receipt });
+});
+
+app.get('/api/test', auth, (req, res) => {
+  res.json({ questions: db.testQuestions });
+});
+
+app.post('/api/test/submit', auth, (req, res) => {
+  const { answers } = req.body;
+  let score = 0;
+  const details = db.testQuestions.map((q) => {
+    const userAns = answers?.[q.id];
+    let correct = false;
+
+    if (q.type === 'mcq') {
+      correct = Number(userAns) === q.answer;
+    } else if (q.type === 'numeric') {
+      correct = Number(userAns) === Number(q.answer);
+    }
+
+    if (correct) score += 1;
+    return { id: q.id, correct, userAns };
+  });
+
+  const submission = {
+    id: Date.now(),
+    userId: req.user.id,
+    userEmail: req.user.email,
+    score,
+    total: db.testQuestions.length,
+    details,
+    submittedAt: new Date().toISOString(),
+  };
+  db.submissions.push(submission);
+  res.json({ ok: true, score, total: db.testQuestions.length, submission });
+});
+
+app.post('/api/upload', auth, upload.single('file'), (req, res) => {
+  if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
+  const record = {
+    id: Date.now(),
+    userEmail: req.user.email,
+    originalName: req.file.originalname,
+    mimeType: req.file.mimetype,
+    size: req.file.size,
+    uploadedAt: new Date().toISOString(),
+  };
+  uploads.push(record);
+  res.json({ ok: true, file: record });
+});
+
+// =========================
+// Frontend (React via CDN)
+// =========================
+const html = `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>${CONFIG.instituteName}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    :root {
+      --bg: #08111f;
+      --panel: rgba(15, 23, 42, 0.78);
+      --panel2: rgba(30, 41, 59, 0.88);
+      --text: #e5eefc;
+      --muted: #a9b8d6;
+      --accent: #8b5cf6;
+      --accent2: #14b8a6;
+      --line: rgba(148,163,184,0.18);
+      --shadow: 0 18px 70px rgba(0,0,0,0.35);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(139,92,246,0.26), transparent 26%),
+        radial-gradient(circle at top right, rgba(20,184,166,0.15), transparent 24%),
+        linear-gradient(180deg, #050914 0%, #08111f 52%, #050914 100%);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    a { color: inherit; text-decoration: none; }
+    .wrap { max-width: 1250px; margin: 0 auto; padding: 24px; }
+    .nav {
+      display:flex; justify-content:space-between; align-items:center; gap: 16px;
+      padding: 14px 18px; border:1px solid var(--line); border-radius: 20px;
+      background: rgba(8, 17, 31, 0.7); backdrop-filter: blur(14px); box-shadow: var(--shadow);
+      position: sticky; top: 12px; z-index: 10;
+    }
+    .brand { display:flex; align-items:center; gap: 12px; }
+    .logo {
+      width: 42px; height: 42px; border-radius: 14px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display:flex; align-items:center; justify-content:center; font-weight:800;
+    }
+    .pill { padding: 10px 14px; border:1px solid var(--line); border-radius: 999px; color: var(--muted); }
+    .hero {
+      margin-top: 26px;
+      display:grid; grid-template-columns: 1.15fr 0.85fr; gap: 22px;
+    }
+    .card {
+      border:1px solid var(--line);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      border-radius: 28px;
+      padding: 24px;
+    }
+    .hero h1 { font-size: clamp(40px, 6vw, 68px); line-height: 1.02; margin: 10px 0 12px; }
+    .sub { color: var(--muted); font-size: 16px; line-height: 1.7; }
+    .grid { display:grid; gap: 18px; }
+    .stats { grid-template-columns: repeat(3, 1fr); margin-top: 22px; }
+    .stat {
+      border:1px solid var(--line); border-radius: 22px; padding: 18px; background: var(--panel2);
+    }
+    .stat strong { display:block; font-size: 28px; margin-bottom: 6px; }
+    .actions { display:flex; gap: 12px; flex-wrap: wrap; margin-top: 20px; }
+    .btn {
+      border: 0; border-radius: 16px; padding: 14px 18px; font-weight: 700; cursor: pointer;
+      background: linear-gradient(135deg, var(--accent), #4f46e5); color: white;
+    }
+    .btn2 {
+      border: 1px solid var(--line); border-radius: 16px; padding: 14px 18px; font-weight: 700;
+      background: transparent; color: var(--text); cursor: pointer;
+    }
+    .section { margin-top: 22px; }
+    .section h2 { margin: 0 0 14px; font-size: 24px; }
+    .courses { grid-template-columns: repeat(3, 1fr); }
+    .course { padding: 18px; border-radius: 22px; border:1px solid var(--line); background: var(--panel2); }
+    .course small { color: var(--muted); }
+    .tabs { display:flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+    .tab {
+      padding: 10px 14px; border-radius: 999px; border:1px solid var(--line); cursor:pointer; color: var(--muted);
+      background: rgba(255,255,255,0.02);
+    }
+    .tab.active { color: white; background: rgba(139,92,246,0.22); border-color: rgba(139,92,246,0.5); }
+    .input, .select, .textarea {
+      width:100%; padding: 13px 14px; margin-top: 8px; border-radius: 14px;
+      border: 1px solid var(--line); outline: none; background: rgba(255,255,255,0.04); color: var(--text);
+    }
+    .label { display:block; margin-bottom: 12px; color: var(--muted); font-size: 14px; }
+    .two { display:grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .table { width:100%; border-collapse: collapse; overflow:hidden; }
+    .table th, .table td { padding: 12px 10px; border-bottom: 1px solid var(--line); text-align:left; }
+    .badge { display:inline-block; padding: 7px 10px; border-radius: 999px; background: rgba(20,184,166,0.15); color: #8ff3e8; font-size: 12px; }
+    .muted { color: var(--muted); }
+    .question { padding: 16px; border: 1px solid var(--line); border-radius: 20px; background: rgba(255,255,255,0.03); margin-bottom: 14px; }
+    .option { display:block; margin-top: 10px; padding: 10px 12px; border:1px solid var(--line); border-radius: 12px; cursor:pointer; }
+    .footer { margin: 28px 0 8px; color: var(--muted); font-size: 13px; text-align:center; }
+    @media (max-width: 900px) {
+      .hero, .courses, .stats, .two { grid-template-columns: 1fr; }
+      .nav { position: static; }
+    }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useEffect, useMemo, useState } = React;
+const API = '';
+
+function App() {
+  const [mode, setMode] = useState('home');
+  const [courses, setCourses] = useState([]);
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(localStorage.getItem('demo_token') || '');
+  const [login, setLogin] = useState({ email: 'student@demo.com', password: 'student123' });
+  const [signup, setSignup] = useState({ name: '', email: '', password: '', role: 'student' });
+  const [loginMsg, setLoginMsg] = useState('');
+  const [adminData, setAdminData] = useState({ students: [], submissions: [], receipts: [], uploads: [] });
+  const [testQ, setTestQ] = useState([]);
+  const [answers, setAnswers] = useState({});
+  const [testResult, setTestResult] = useState(null);
+  const [receiptForm, setReceiptForm] = useState({ studentName: '', amount: '', mode: 'Cash', note: '' });
+  const [uploadMsg, setUploadMsg] = useState('');
+
+  useEffect(() => {
+    fetch('/api/courses').then(r => r.json()).then(d => setCourses(d.courses));
+    if (token) {
+      fetch('/api/me', { headers: { Authorization: 'Bearer ' + token }})
+        .then(r => r.ok ? r.json() : Promise.reject())
+        .then(d => setUser(d.user))
+        .catch(() => { localStorage.removeItem('demo_token'); setToken(''); });
+    }
+  }, []);
+
+  async function doLogin(e) {
+    e.preventDefault();
+    setLoginMsg('');
+    const res = await fetch('/api/auth/login', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(login)
+    });
+    const data = await res.json();
+    if (!res.ok) return setLoginMsg(data.error || 'Login failed');
+    localStorage.setItem('demo_token', data.token);
+    setToken(data.token);
+    setUser(data.user);
+    setMode(data.user.role === 'admin' ? 'admin' : 'student');
+  }
+
+  async function doSignup(e) {
+    e.preventDefault();
+    const res = await fetch('/api/auth/signup', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(signup)
+    });
+    const data = await res.json();
+    if (!res.ok) return alert(data.error || 'Signup failed');
+    alert('Signup success. Now login using the same email.');
+    setMode('login');
+  }
+
+  async function loadAdmin() {
+    const res = await fetch('/api/admin/students', { headers: { Authorization: 'Bearer ' + token } });
+    const data = await res.json();
+    if (res.ok) setAdminData(data);
+  }
+
+  async function loadTest() {
+    const res = await fetch('/api/test', { headers: { Authorization: 'Bearer ' + token } });
+    const data = await res.json();
+    if (res.ok) setTestQ(data.questions);
+  }
+
+  async function submitTest() {
+    const res = await fetch('/api/test/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+      body: JSON.stringify({ answers })
+    });
+    const data = await res.json();
+    setTestResult(data);
+  }
+
+  async function saveReceipt(e) {
+    e.preventDefault();
+    const res = await fetch('/api/admin/receipt', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+      body: JSON.stringify(receiptForm)
+    });
+    const data = await res.json();
+    if (res.ok) {
+      setReceiptForm({ studentName: '', amount: '', mode: 'Cash', note: '' });
+      loadAdmin();
+      alert('Receipt generated: ' + data.receipt.receiptNo);
+    } else {
+      alert(data.error || 'Failed');
+    }
+  }
+
+  async function uploadFile(file) {
+    if (!file) return;
+    const fd = new FormData();
+    fd.append('file', file);
+    const res = await fetch('/api/upload', { method: 'POST', headers: { Authorization: 'Bearer ' + token }, body: fd });
+    const data = await res.json();
+    setUploadMsg(res.ok ? 'Uploaded: ' + data.file.originalName : (data.error || 'Upload failed'));
+    if (res.ok) loadAdmin();
+  }
+
+  function logout() {
+    localStorage.removeItem('demo_token');
+    setUser(null);
+    setToken('');
+    setMode('home');
+  }
+
+  const whatsappLink = 'https://wa.me/${CONFIG.whatsappNumber}?text=' + encodeURIComponent('Hi, I want admission details for ${CONFIG.instituteName}.');
+
+  return <div className="wrap">
+    <div className="nav">
+      <div className="brand">
+        <div className="logo">P</div>
+        <div>
+          <div style={{fontWeight:800}}>${CONFIG.instituteName}</div>
+          <div className="muted" style={{fontSize:12}}>${CONFIG.campusCity} • Premium Coaching Demo</div>
+        </div>
+      </div>
+      <div style={{display:'flex', gap:10, flexWrap:'wrap', justifyContent:'flex-end'}}>
+        <a className="pill" href="#courses">Courses</a>
+        <a className="pill" href={whatsappLink} target="_blank">WhatsApp</a>
+        {user ? <><span className="pill">{user.name} ({user.role})</span><button className="btn2" onClick={logout}>Logout</button></> : null}
+      </div>
+    </div>
+
+    <div className="hero">
+      <div className="card">
+        <span className="badge">Premium Institute Website Demo</span>
+        <h1>Build trust, manage students, and run tests from one system.</h1>
+        <div className="sub">
+          This demo shows a coaching institute platform with login, student dashboard, admin tools,
+          test engine, file upload, receipts, and WhatsApp integration — all in one place.
+        </div>
+        <div className="actions">
+          <button className="btn" onClick={() => setMode('login')}>Login</button>
+          <button className="btn2" onClick={() => setMode('signup')}>Create Demo Account</button>
+          <a className="btn2" href={whatsappLink} target="_blank">Enquire on WhatsApp</a>
+        </div>
+        <div className="grid stats">
+          <div className="stat"><strong>3</strong><span className="muted">Core roles: public, student, admin</span></div>
+          <div className="stat"><strong>1</strong><span className="muted">Single backend for the demo</span></div>
+          <div className="stat"><strong>6</strong><span className="muted">Ready modules in the prototype</span></div>
+        </div>
+      </div>
+      <div className="card">
+        <h2 style={{marginTop:0}}>Quick access</h2>
+        <div className="grid" style={{gap:12}}>
+          <div className="course"><strong>Student Demo</strong><div className="muted">student@demo.com / student123</div></div>
+          <div className="course"><strong>Admin Demo</strong><div className="muted">admin@demo.com / admin123</div></div>
+          <div className="course"><strong>Suggestion</strong><div className="muted">Open the student dashboard, then the admin panel.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div className="section card" id="courses">
+      <h2>Courses</h2>
+      <div className="grid courses">
+        {courses.map(c => <div className="course" key={c.id}>
+          <small>{c.level}</small>
+          <h3>{c.title}</h3>
+          <div className="muted">Duration: {c.duration}</div>
+          <div style={{marginTop:10, fontWeight:800}}>{c.price}</div>
+        </div>)}
+      </div>
+    </div>
+
+    <div className="section card">
+      <div className="tabs">
+        <div className={"tab " + (mode==='home' ? 'active' : '')} onClick={() => setMode('home')}>Home</div>
+        <div className={"tab " + (mode==='login' ? 'active' : '')} onClick={() => setMode('login')}>Login</div>
+        <div className={"tab " + (mode==='signup' ? 'active' : '')} onClick={() => setMode('signup')}>Signup</div>
+        <div className={"tab " + (mode==='student' ? 'active' : '')} onClick={() => { setMode('student'); if (token) loadTest(); }}>Student Dashboard</div>
+        <div className={"tab " + (mode==='admin' ? 'active' : '')} onClick={() => { setMode('admin'); if (token) loadAdmin(); }}>Admin Panel</div>
+        <div className={"tab " + (mode==='test' ? 'active' : '')} onClick={() => { setMode('test'); if (token) loadTest(); }}>Online Test</div>
+      </div>
+
+      {mode === 'home' && <div className="grid two">
+        <div>
+          <h2>Why this layout works</h2>
+          <div className="muted" style={{lineHeight:1.8}}>
+            It looks premium, keeps the public site clean, and prepares the same backend for student logins,
+            test delivery, receipts, and admin management. Later, we can connect MySQL and proper file storage.
+          </div>
+        </div>
+        <div>
+          <h2>Next upgrade path</h2>
+          <div className="muted" style={{lineHeight:1.8}}>
+            Replace in-memory demo data with MySQL tables, add secure auth, move file uploads to cloud storage,
+            and turn the test area into a real CBT engine with question bank and timer.
+          </div>
+        </div>
+      </div>}
+
+      {mode === 'login' && <div className="grid two">
+        <form onSubmit={doLogin}>
+          <h2>Login</h2>
+          <label className="label">Email<input className="input" value={login.email} onChange={e => setLogin({...login, email:e.target.value})} /></label>
+          <label className="label">Password<input className="input" type="password" value={login.password} onChange={e => setLogin({...login, password:e.target.value})} /></label>
+          <button className="btn" type="submit">Login</button>
+          <div className="muted" style={{marginTop:10}}>{loginMsg}</div>
+        </form>
+        <div className="course">
+          <h3>Demo users</h3>
+          <div className="muted">Admin: admin@demo.com / admin123</div>
+          <div className="muted">Student: student@demo.com / student123</div>
+        </div>
+      </div>}
+
+      {mode === 'signup' && <form onSubmit={doSignup}>
+        <h2>Create account</h2>
+        <div className="two">
+          <label className="label">Full name<input className="input" value={signup.name} onChange={e => setSignup({...signup, name:e.target.value})} /></label>
+          <label className="label">Email<input className="input" value={signup.email} onChange={e => setSignup({...signup, email:e.target.value})} /></label>
+          <label className="label">Password<input className="input" type="password" value={signup.password} onChange={e => setSignup({...signup, password:e.target.value})} /></label>
+          <label className="label">Role
+            <select className="select" value={signup.role} onChange={e => setSignup({...signup, role:e.target.value})}>
+              <option value="student">Student</option>
+              <option value="admin">Admin</option>
+            </select>
+          </label>
+        </div>
+        <button className="btn" type="submit">Create</button>
+      </form>}
+
+      {mode === 'student' && <div>
+        {!user ? <div className="muted">Login first to access the student dashboard.</div> : <>
+          <h2>Student Dashboard</h2>
+          <div className="grid two">
+            <div className="course">
+              <strong>Welcome, {user.name}</strong>
+              <div className="muted">This is your dashboard shell. It can later include notes, timetable, fees, tests, and progress.</div>
+            </div>
+            <div className="course">
+              <strong>Quick actions</strong>
+              <div className="muted">Use the Online Test tab, upload documents, or open WhatsApp for support.</div>
+            </div>
+          </div>
+          <div style={{marginTop:16}}>
+            <a className="btn2" href={whatsappLink} target="_blank">Message on WhatsApp</a>
+          </div>
+        </>}
+      </div>}
+
+      {mode === 'admin' && <div>
+        {!user ? <div className="muted">Login first to access the admin panel.</div> : user.role !== 'admin' ? <div className="muted">Admin access only.</div> : <>
+          <h2>Admin Panel</h2>
+          <div className="grid two">
+            <form className="course" onSubmit={saveReceipt}>
+              <h3>Generate receipt</h3>
+              <label className="label">Student name<input className="input" value={receiptForm.studentName} onChange={e => setReceiptForm({...receiptForm, studentName:e.target.value})} /></label>
+              <label className="label">Amount<input className="input" value={receiptForm.amount} onChange={e => setReceiptForm({...receiptForm, amount:e.target.value})} /></label>
+              <label className="label">Mode<select className="select" value={receiptForm.mode} onChange={e => setReceiptForm({...receiptForm, mode:e.target.value})}><option>Cash</option><option>UPI</option><option>Bank</option></select></label>
+              <label className="label">Note<input className="input" value={receiptForm.note} onChange={e => setReceiptForm({...receiptForm, note:e.target.value})} /></label>
+              <button className="btn" type="submit">Save receipt</button>
+            </form>
+            <div className="course">
+              <h3>Upload file</h3>
+              <input className="input" type="file" onChange={e => uploadFile(e.target.files[0])} />
+              <div className="muted" style={{marginTop:10}}>{uploadMsg}</div>
+              <div style={{marginTop:16}}>
+                <strong>Receipt/storage preview</strong>
+                <div className="muted">Receipts and uploads are listed below once saved.</div>
+              </div>
+            </div>
+          </div>
+          <div style={{marginTop:18, overflowX:'auto'}}>
+            <h3>Students</h3>
+            <table className="table">
+              <thead><tr><th>Name</th><th>Course</th><th>Batch</th><th>Fees</th><th>Progress</th></tr></thead>
+              <tbody>{adminData.students.map(s => <tr key={s.id}><td>{s.name}</td><td>{s.course}</td><td>{s.batch}</td><td>{s.feesStatus}</td><td>{s.progress}%</td></tr>)}</tbody>
+            </table>
+          </div>
+          <div className="grid two" style={{marginTop:18}}>
+            <div>
+              <h3>Receipts</h3>
+              {adminData.receipts.map(r => <div className="course" key={r.id}><strong>{r.receiptNo}</strong><div className="muted">{r.studentName} • {r.amount} • {r.mode}</div></div>)}
+            </div>
+            <div>
+              <h3>Uploads</h3>
+              {adminData.uploads.map(u => <div className="course" key={u.id}><strong>{u.originalName}</strong><div className="muted">{u.mimeType} • {Math.round(u.size/1024)} KB</div></div>)}
+            </div>
+          </div>
+        </>}
+      </div>}
+
+      {mode === 'test' && <div>
+        {!user ? <div className="muted">Login first to access the test system.</div> : <>
+          <h2>Online Test System</h2>
+          <div className="muted">A simple CBT-style demo with MCQ and numeric input.</div>
+          {testQ.map(q => <div className="question" key={q.id}>
+            <strong>{q.question}</strong>
+            {q.type === 'mcq' ? q.options.map((opt, idx) => <label key={idx} className="option">
+              <input type="radio" name={'q'+q.id} onChange={() => setAnswers({...answers, [q.id]: idx})} /> {opt}
+            </label>) : <input className="input" type="number" placeholder="Type answer" onChange={e => setAnswers({...answers, [q.id]: e.target.value})} />}
+          </div>)}
+          <button className="btn" onClick={submitTest}>Submit Test</button>
+          {testResult && <div className="course" style={{marginTop:16}}>
+            <strong>Score: {testResult.score}/{testResult.total}</strong>
+            <div className="muted">Submission saved in demo memory.</div>
+          </div>}
+        </>}
+      </div>}
+    </div>
+
+    <div className="footer">
+      Demo build for ${CONFIG.instituteName}. Replace placeholder details, then connect MySQL and proper auth for production.
+    </div>
+  </div>;
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>`;
+
+app.get('/', (req, res) => res.type('html').send(html));
+
+app.listen(PORT, () => {
+  console.log(`Demo app running at http://localhost:${PORT}`);
+});
