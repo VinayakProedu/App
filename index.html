@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vinayak ProEdu | Best Offline ACCA Classes in Vadodara</title>
+<meta name="description" content="Vinayak ProEdu offers premium offline ACCA coaching in Vadodara. Expert faculty, small batches, global-standard curriculum.">
+<meta name="keywords" content="ACCA classes Vadodara, ACCA coaching Vadodara, ACCA course Gujarat, best ACCA institute Vadodara">
+<meta name="author" content="Vinayak ProEdu">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://vinayakproedu.com/">
+<link rel="icon" type="image/png" href="https://pasteimg.com/images/2026/03/31/WhatsApp-Image-2026-03-19-at-6.49.19-PM.jpg">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Vinayak ProEdu | Best Offline ACCA Classes in Vadodara">
+<meta property="og:description" content="Premium offline ACCA coaching in Vadodara. Global recognition, expert faculty.">
+<meta property="og:url" content="https://vinayakproedu.com/">
+<meta property="og:site_name" content="Vinayak ProEdu">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<!-- ===== SECURITY HEADERS (static-site equivalent) ===== -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://cdn.jsdelivr.net https://ucarecdn.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://pasteimg.com https://ucarecdn.com https://*.googleapis.com https://*.gstatic.com; connect-src 'self' https://firestore.googleapis.com https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebase.googleapis.com https://firebaseinstallations.googleapis.com https://formspree.io; frame-src https://www.youtube.com https://www.youtube-nocookie.com; form-action https://formspree.io; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="permissions-policy" content="camera=(), microphone=(), geolocation=()">
+<!-- ===== PWA ===== -->
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#0D1B40">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ProEdu">
+<link rel="apple-touch-icon" href="./icon-192.png">
+
+
+<style>
+/* =============================================
+   LANDING PAGE — PHASE 1 (COMPLETE)
+   Part 1: Navbar + Hero
+   Part 2: Poster + Why ACCA
+   Part 3: ACCA Pathway
+   Part 4: Enquiry Form + Footer + Popup
+   File: index.html
+   ============================================= */
+
+:root {
+  --garnet: #1e3c72; --mahogany: #2a5298; --strawberry: #ff6b35;
+  --blush: #fde8dc; --rose-bg: #F7F5F0; --carbon: #0D1B40;
+  --ink: #1A1A2E; --muted: #6B7280; --silver: #9ca3af;
+  --smoke: #EFF1F6; --white: #FFFFFF; --gold: #C9922A;
+  --gold-lt: #E8AA48; --amber: #F5C04A; --navy: #0D1B40;
+  --navy-mid: #1a2e5e; --blue: #1e3c72;
+  --border: rgba(201,146,42,0.25); --border-md: rgba(201,146,42,0.4);
+  --shadow-sm: 0 4px 20px rgba(13,27,64,0.08);
+  --shadow-md: 0 12px 45px rgba(13,27,64,0.14);
+  --r-sm: 10px; --r-md: 16px; --r-lg: 24px; --r-xl: 32px;
+}
+
+/* ── Navbar ── */
+.navbar{
+  position:fixed; top:0; left:0; right:0; z-index:900;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:13px 40px;
+  background:rgba(13,27,64,0.92);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(201,146,42,0.18);
+  box-shadow:0 2px 18px rgba(13,27,64,0.2);
+  transition:all 0.3s;
+}
+.navbar.scrolled{ padding:9px 40px; background:rgba(13,27,64,0.98); box-shadow:0 4px 22px rgba(13,27,64,0.3); }
+.nav-brand{ display:flex; align-items:center; gap:12px; }
+.nav-brand img{ width:42px; height:42px; border-radius:50%; object-fit:cover; border:2px solid var(--gold); box-shadow:0 2px 10px rgba(201,146,42,0.3); }
+.nav-name{ color:var(--white); font-family:'Playfair Display',serif; font-size:1.05em; font-weight:700; }
+.nav-tagline{ color:var(--gold-lt); font-size:0.67em; font-weight:400; display:block; letter-spacing:1.2px; text-transform:uppercase; }
+.nav-cta{
+  background:linear-gradient(135deg,var(--gold),var(--gold-lt)); color:var(--navy);
+  font-weight:700; font-size:0.84em; padding:10px 22px; border-radius:50px;
+  box-shadow:0 4px 14px rgba(201,146,42,0.35); transition:all 0.25s; white-space:nowrap;
+}
+.nav-cta:hover{ transform:translateY(-2px); box-shadow:0 8px 22px rgba(201,146,42,0.5); }
+
+/* ── Hero ── */
+.hero{
+  min-height:100vh;
+  background:linear-gradient(135deg,var(--navy) 0%,var(--blue) 100%);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center; padding:130px 20px 90px;
+  position:relative; overflow:hidden;
+}
+.hero-ring{ position:absolute; border-radius:50%; border:1px solid rgba(201,146,42,0.06); pointer-events:none; }
+.hero-ring-1{ width:700px; height:700px; top:50%; left:50%; transform:translate(-50%,-50%); }
+.hero-ring-2{ width:480px; height:480px; top:50%; left:50%; transform:translate(-50%,-50%); }
+.hero-ring-3{ width:280px; height:280px; top:50%; left:50%; transform:translate(-50%,-50%); }
+.hero-inner{ position:relative; z-index:2; max-width:780px; }
+.hero-logo{
+  width:88px; height:88px; border-radius:50%; border:3px solid var(--gold);
+  margin:0 auto 26px; object-fit:cover;
+  box-shadow:0 0 0 10px rgba(201,146,42,0.1), 0 20px 50px rgba(0,0,0,0.4);
+  animation:pulse-ring 3.5s ease-in-out infinite;
+}
+@keyframes pulse-ring{
+  0%,100%{ box-shadow:0 0 0 10px rgba(201,146,42,0.1), 0 20px 50px rgba(0,0,0,0.4); }
+  50%{ box-shadow:0 0 0 22px rgba(201,146,42,0.04), 0 20px 50px rgba(0,0,0,0.4); }
+}
+.hero-eyebrow{
+  display:inline-flex; align-items:center; gap:8px;
+  background:rgba(201,146,42,0.12); border:1px solid rgba(201,146,42,0.35);
+  color:var(--gold-lt); font-size:0.75em; font-weight:600;
+  letter-spacing:2.5px; text-transform:uppercase;
+  padding:7px 18px; border-radius:50px; margin-bottom:22px;
+}
+.hero-eyebrow::before{ content:''; width:6px; height:6px; background:var(--gold-lt); border-radius:50%; animation:blink 2s infinite; }
+@keyframes blink{ 0%,100%{opacity:1} 50%{opacity:0.2} }
+.hero h1{ font-size:clamp(2.6em,7vw,4.6em); color:var(--white); margin-bottom:10px; letter-spacing:-1px; }
+.hero h1 span{ color:var(--gold-lt); }
+.hero-sub{ font-size:clamp(1em,3vw,1.22em); color:rgba(255,255,255,0.75); margin-bottom:10px; font-weight:300; }
+.hero-tagline{ font-size:clamp(0.8em,2.5vw,0.95em); color:rgba(255,255,255,0.45); letter-spacing:3px; text-transform:uppercase; margin-bottom:40px; }
+.hero-pills{ display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin-bottom:42px; }
+.pill{
+  background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.14);
+  color:rgba(255,255,255,0.85); font-size:0.82em; font-weight:500;
+  padding:8px 18px; border-radius:50px;
+}
+.btn-primary{
+  display:inline-flex; align-items:center; gap:10px;
+  background:linear-gradient(135deg,var(--gold),var(--gold-lt)); color:var(--navy); font-weight:700;
+  font-size:clamp(0.94em,2.5vw,1.06em);
+  padding:clamp(14px,3vw,18px) clamp(30px,6vw,50px);
+  border-radius:50px; box-shadow:0 10px 35px rgba(201,146,42,0.4);
+  transition:all 0.3s; border:none; cursor:pointer; font-family:'DM Sans',sans-serif;
+}
+.btn-primary:hover{ transform:translateY(-4px); box-shadow:0 18px 50px rgba(201,146,42,0.55); }
+.hero-stats{
+  display:flex; flex-wrap:wrap; justify-content:center; gap:clamp(22px,5vw,48px);
+  margin-top:58px; padding-top:38px; border-top:1px solid rgba(255,255,255,0.09);
+}
+.stat{ text-align:center; }
+.stat-num{ font-family:'Playfair Display',serif; font-size:clamp(1.9em,5vw,2.8em); color:var(--gold-lt); font-weight:700; display:block; }
+.stat-label{ font-size:0.74em; color:rgba(255,255,255,0.44); letter-spacing:1.5px; text-transform:uppercase; margin-top:4px; }
+
+/* ── Section Base ── */
+.section{ padding:clamp(64px,11vw,108px) 20px; }
+.section-alt{ background:var(--smoke); }
+.container{ max-width:1160px; margin:0 auto; padding:0 16px; }
+.text-center{ text-align:center; }
+.section-label{ display:inline-block; color:var(--gold); font-size:0.74em; font-weight:700; letter-spacing:3px; text-transform:uppercase; margin-bottom:12px; }
+.section-title{ font-size:clamp(1.85em,5vw,2.9em); color:var(--navy); margin-bottom:14px; }
+.section-desc{ font-size:1.03em; color:var(--muted); max-width:560px; margin:0 auto 50px; line-height:1.75; }
+.divider{ width:52px; height:3px; background:linear-gradient(90deg,var(--gold),var(--gold-lt)); border-radius:2px; margin:14px auto 0; }
+
+/* ── Poster Section ── */
+.poster-section{ background:var(--smoke); }
+.poster-wrap{ display:flex; justify-content:center; }
+.poster-card{
+  max-width:500px; width:100%;
+  background:var(--white);
+  border-radius:var(--r-lg);
+  overflow:hidden;
+  box-shadow:0 20px 60px rgba(13,27,64,0.14);
+  border:1px solid rgba(201,146,42,0.2);
+  transition:transform 0.3s, box-shadow 0.3s;
+}
+.poster-card:hover{ transform:translateY(-6px); box-shadow:0 32px 80px rgba(13,27,64,0.2); }
+.poster-img{ width:100%; display:block; object-fit:contain; }
+.poster-cta-bar{
+  background:linear-gradient(135deg,var(--navy),var(--blue));
+  padding:18px 24px;
+  display:flex; align-items:center; justify-content:space-between; gap:16px;
+  flex-wrap:wrap;
+}
+.poster-cta-txt{ color:rgba(255,255,255,0.82); font-size:0.86em; font-weight:500; }
+.poster-btn{
+  display:inline-flex; align-items:center; gap:6px;
+  background:linear-gradient(135deg,var(--gold),var(--gold-lt));
+  color:var(--navy); font-weight:700; font-size:0.84em;
+  padding:10px 22px; border-radius:50px; white-space:nowrap;
+  box-shadow:0 4px 14px rgba(201,146,42,0.35);
+  transition:all 0.25s;
+}
+.poster-btn:hover{ transform:translateY(-2px); box-shadow:0 8px 22px rgba(201,146,42,0.5); }
+
+/* ── Why ACCA Section ── */
+.why-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:22px; }
+.why-card{
+  background:var(--white); border-radius:var(--r-md); padding:34px 26px;
+  border:1px solid rgba(201,146,42,0.15); box-shadow:var(--shadow-sm);
+  transition:all 0.3s cubic-bezier(0.4,0,0.2,1); position:relative; overflow:hidden;
+}
+.why-card::after{ content:''; position:absolute; bottom:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--gold),var(--gold-lt)); transform:scaleX(0); transform-origin:left; transition:transform 0.3s; }
+.why-card:hover{ transform:translateY(-7px); box-shadow:var(--shadow-md); }
+.why-card:hover::after{ transform:scaleX(1); }
+.why-icon{
+  width:52px; height:52px; border-radius:14px;
+  background:linear-gradient(135deg,var(--navy),var(--blue));
+  display:flex; align-items:center; justify-content:center; font-size:1.45em;
+  margin-bottom:18px; box-shadow:0 8px 20px rgba(13,27,64,0.2);
+}
+.why-card h3{ font-family:'DM Sans',sans-serif; font-size:1.02em; font-weight:700; color:var(--navy); margin-bottom:10px; }
+.why-card p{ font-size:0.92em; color:var(--muted); line-height:1.7; }
+
+/* ── ACCA Pathway ── */
+.pathway-intro{
+  background:linear-gradient(135deg,var(--navy) 0%,var(--blue) 100%);
+  border-radius:var(--r-lg); padding:42px 40px; color:var(--white);
+  margin-bottom:42px; position:relative; overflow:hidden;
+}
+.pathway-intro::after{ content:'ACCA'; position:absolute; right:32px; top:50%; transform:translateY(-50%); font-family:'Playfair Display',serif; font-size:7em; font-weight:800; color:rgba(255,255,255,0.05); letter-spacing:-4px; pointer-events:none; }
+.pathway-intro h3{ font-size:1.38em; margin-bottom:10px; color:var(--gold-lt); }
+.pathway-intro p{ font-size:0.95em; color:rgba(255,255,255,0.77); max-width:640px; }
+.levels{ display:grid; grid-template-columns:repeat(auto-fit,minmax(290px,1fr)); gap:20px; margin-bottom:20px; }
+.level-card{
+  border-radius:var(--r-md); padding:26px;
+  border:1px solid rgba(201,146,42,0.15); background:var(--white);
+}
+.level-badge{
+  display:inline-flex; align-items:center; gap:8px; font-size:0.74em;
+  font-weight:700; letter-spacing:1.5px; text-transform:uppercase;
+  padding:6px 14px; border-radius:50px; margin-bottom:12px;
+}
+.level-applied{ background:rgba(34,197,94,0.1); color:#166534; }
+.level-skill{ background:rgba(59,130,246,0.1); color:#1e40af; }
+.level-pro{ background:rgba(201,146,42,0.12); color:var(--gold); }
+.level-card>p{ font-size:0.88em; color:var(--muted); margin-bottom:14px; }
+
+/* ── Accordion ── */
+.accordion-wrap{ display:flex; flex-direction:column; gap:8px; }
+.acc-item{ border-radius:var(--r-sm); overflow:hidden; border:1px solid rgba(201,146,42,0.15); }
+.acc-btn{
+  width:100%; text-align:left; padding:15px 18px;
+  display:flex; align-items:center; justify-content:space-between;
+  background:var(--smoke); border:none; cursor:pointer;
+  font-family:'DM Sans',sans-serif; font-size:0.92em; font-weight:600;
+  color:var(--ink); transition:all 0.22s; gap:10px;
+}
+.acc-btn:hover{ background:#e8eaf2; }
+.acc-btn.active{ background:var(--navy); color:var(--white); }
+.acc-left{ display:flex; align-items:center; gap:10px; }
+.acc-icon{
+  width:26px; height:26px; border-radius:50%;
+  background:rgba(13,27,64,0.08); color:var(--navy);
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.05em; flex-shrink:0; transition:all 0.25s;
+}
+.acc-btn.active .acc-icon{ background:rgba(255,255,255,0.18); color:var(--white); transform:rotate(45deg); }
+.acc-body{ max-height:0; overflow:hidden; transition:max-height 0.4s cubic-bezier(0.4,0,0.2,1); }
+.acc-body-inner{ padding:18px; background:var(--white); }
+.acc-body-inner p{ font-size:0.91em; color:var(--muted); line-height:1.8; }
+.acc-body-inner p+p{ margin-top:10px; }
+.pathway-footer{
+  text-align:center; margin-top:30px; padding:24px 22px;
+  background:var(--white); border-radius:var(--r-md);
+  border:1.5px dashed rgba(201,146,42,0.35);
+}
+.pathway-footer p{ font-size:0.98em; font-weight:600; color:var(--ink); display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:8px; }
+.pathway-footer .red{ color:var(--navy); }
+.pathway-footer .plus{ color:var(--gold); font-size:1.3em; font-weight:300; }
+
+/* ── Form Section ── */
+.form-section{
+  background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 100%);
+  position:relative; overflow:hidden;
+}
+.form-section::before{
+  content:''; position:absolute; inset:0;
+  background-image:linear-gradient(rgba(201,146,42,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(201,146,42,0.05) 1px,transparent 1px);
+  background-size:48px 48px;
+  mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black,transparent);
+}
+.form-section .container{ position:relative; z-index:2; }
+.form-header{ text-align:center; margin-bottom:42px; }
+.form-header .section-label{ color:var(--gold-lt); }
+.form-header .section-title{ color:var(--white); }
+.form-header .section-desc{ color:rgba(255,255,255,0.6); }
+.form-card{
+  max-width:660px; margin:0 auto;
+  background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12);
+  border-radius:var(--r-xl); padding:clamp(28px,6vw,50px);
+  backdrop-filter:blur(20px); box-shadow:0 40px 100px rgba(0,0,0,0.4);
+}
+.form-row{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.form-group{ display:flex; flex-direction:column; gap:5px; margin-bottom:14px; }
+.form-group label{ font-size:0.77em; font-weight:600; letter-spacing:0.5px; color:rgba(255,255,255,0.65); text-transform:uppercase; }
+.form-group input, .form-group select, .form-group textarea{
+  width:100%; padding:13px 16px;
+  background:rgba(255,255,255,0.09); border:1px solid rgba(255,255,255,0.14);
+  border-radius:var(--r-sm); color:var(--white); font-size:0.95em;
+  font-family:'DM Sans',sans-serif; transition:all 0.25s; -webkit-appearance:none;
+}
+.form-group select{ background-color:rgba(13,27,64,0.95); }
+.form-group select option{ background:#0D1B40; color:#fff; }
+.form-group input::placeholder, .form-group textarea::placeholder{ color:rgba(255,255,255,0.32); }
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus{
+  outline:none; border-color:rgba(201,146,42,0.6);
+  background:rgba(255,255,255,0.13);
+  box-shadow:0 0 0 3px rgba(201,146,42,0.15);
+}
+.form-group textarea{ min-height:105px; resize:vertical; }
+.form-submit{
+  width:100%; margin-top:6px; padding:16px; border-radius:50px; border:none; cursor:pointer;
+  background:linear-gradient(135deg,var(--gold),var(--gold-lt)); color:var(--navy);
+  font-size:1em; font-weight:700; font-family:'DM Sans',sans-serif;
+  box-shadow:0 8px 28px rgba(201,146,42,0.35); transition:all 0.3s;
+  display:flex; align-items:center; justify-content:center; gap:10px;
+}
+.form-submit:hover{ transform:translateY(-3px); box-shadow:0 16px 40px rgba(201,146,42,0.5); }
+.contact-card{
+  max-width:660px; margin:28px auto 0;
+  background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1);
+  border-radius:var(--r-lg); padding:26px 30px;
+  display:flex; flex-wrap:wrap; gap:22px; justify-content:center;
+}
+.contact-item{ display:flex; align-items:flex-start; gap:13px; flex:1; min-width:185px; }
+.contact-ico{
+  width:40px; height:40px; border-radius:10px; flex-shrink:0;
+  background:rgba(201,146,42,0.15); border:1px solid rgba(201,146,42,0.25);
+  display:flex; align-items:center; justify-content:center; font-size:1.05em;
+}
+.contact-text .label{ font-size:0.69em; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--gold-lt); margin-bottom:4px; }
+.contact-text p, .contact-text a{ font-size:0.86em; color:rgba(255,255,255,0.72); line-height:1.65; }
+.contact-text a{ color:var(--gold-lt); font-weight:600; transition:color 0.2s; }
+.contact-text a:hover{ color:#fff; }
+
+/* ── Footer ── */
+.footer{
+  background:#060d20; padding:24px 20px; text-align:center;
+  border-top:1px solid rgba(255,255,255,0.06);
+}
+.footer p{ font-size:0.8em; color:rgba(255,255,255,0.3); }
+.footer span{ color:var(--gold-lt); }
+.footer-contact{ display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:20px; margin-bottom:12px; }
+.footer-contact-item{ display:flex; align-items:center; gap:8px; color:rgba(255,255,255,0.55); font-size:0.84em; }
+.footer-contact-item a{ color:var(--gold-lt); font-weight:500; transition:color 0.2s; }
+.footer-contact-item a:hover{ color:var(--amber); }
+.insta-link{ display:inline-flex; align-items:center; gap:7px; color:var(--gold-lt); font-size:0.84em; font-weight:500; transition:color 0.2s; }
+.insta-link:hover{ color:var(--amber); }
+.insta-icon{ width:20px; height:20px; display:inline-block; vertical-align:middle; }
+.insta-icon svg{ width:100%; height:100%; }
+
+/* ── Popup ── */
+.popup-overlay{
+  position:fixed; inset:0; z-index:9999;
+  background:rgba(22,26,29,0.78); backdrop-filter:blur(6px);
+  display:flex; align-items:center; justify-content:center;
+  padding:20px; opacity:0; pointer-events:none;
+  transition:opacity 0.35s ease;
+}
+.popup-overlay.show{ opacity:1; pointer-events:all; }
+.popup-box{
+  position:relative; width:min(88vw, 340px); max-height:min(74vh, 480px);
+  overflow:hidden; border-radius:var(--r-lg);
+  box-shadow:0 40px 100px rgba(0,0,0,0.5);
+  transform:scale(0.88) translateY(24px);
+  transition:transform 0.42s cubic-bezier(0.34,1.56,0.64,1);
+  background:var(--navy);
+}
+.popup-overlay.show .popup-box{ transform:scale(1) translateY(0); }
+.popup-box img{ max-height:38vh; object-fit:contain; background:var(--navy); width:100%; display:block; }
+.popup-close{
+  position:absolute; top:10px; right:10px; width:34px; height:34px; border-radius:50%;
+  background:rgba(22,26,29,0.7); border:1.5px solid rgba(255,255,255,0.25);
+  color:#fff; font-size:1.15em; display:flex; align-items:center; justify-content:center;
+  cursor:pointer; transition:all 0.2s; backdrop-filter:blur(4px); line-height:1;
+}
+.popup-close:hover{ background:var(--navy); border-color:var(--gold); transform:scale(1.1); }
+.popup-footer{
+  background:var(--navy); padding:15px 20px;
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  border-top:2px solid var(--gold);
+}
+.popup-footer p{ color:rgba(255,255,255,0.88); font-size:0.84em; font-weight:500; }
+.popup-cta{
+  background:linear-gradient(135deg,var(--gold),var(--gold-lt)); color:var(--navy);
+  font-weight:700; font-size:0.84em; padding:9px 20px; border-radius:50px; white-space:nowrap;
+  box-shadow:0 4px 14px rgba(201,146,42,0.35); transition:all 0.2s; flex-shrink:0;
+}
+.popup-cta:hover{ box-shadow:0 8px 22px rgba(201,146,42,0.5); transform:translateY(-1px); }
+@media(max-width:480px){
+  .popup-overlay{ padding:10px; }
+  .popup-box{ width:min(90vw, 300px); max-height:min(68vh, 420px); border-radius:14px; }
+  .popup-box img{ max-height:30vh; }
+  .popup-footer{ padding:10px 12px; flex-direction:column; gap:8px; align-items:stretch; }
+  .popup-footer p{ font-size:0.72rem; text-align:center; }
+  .popup-cta{ width:100%; text-align:center; }
+  .form-row{ grid-template-columns:1fr; }
+  .contact-card{ flex-direction:column; }
+  .form-card{ padding:24px 16px; }
+}
+
+/* ── Portal FAB ── */
+.portal-fab{
+  position:fixed; right:18px; bottom:18px; z-index:12050;
+  border:none; border-radius:999px; padding:12px 20px;
+  background:linear-gradient(135deg,var(--gold),var(--gold-lt));
+  color:var(--navy); font-weight:800; font-family:'DM Sans',sans-serif;
+  box-shadow:0 14px 38px rgba(201,146,42,0.28);
+  cursor:pointer; transition:transform 0.2s;
+}
+.portal-fab:hover{ transform:translateY(-2px); }
+
+/* ── Fade In ── */
+.fade-in{ opacity:0; transform:translateY(22px); transition:opacity 0.6s ease, transform 0.6s ease; }
+.fade-in.visible{ opacity:1; transform:translateY(0); }
+
+/* ── Responsive ── */
+@media(max-width:900px){
+  .navbar{ padding:12px 20px; }
+  .pathway-intro::after{ display:none; }
+  .levels{ grid-template-columns:1fr; }
+}
+@media(max-width:640px){
+  .nav-tagline{ display:none; }
+  .hero-stats{ gap:22px; }
+  .pill{ font-size:0.78em; padding:7px 14px; }
+  .poster-cta-bar{ flex-direction:column; align-items:flex-start; gap:12px; }
+  .poster-btn{ width:100%; justify-content:center; }
+  .pathway-intro{ padding:28px 22px; }
+}
+@media(max-width:400px){ .hero-pills{ gap:7px; } }
+</style>
+<base target="_blank">
+</head>
+<body>
+
+<!-- =============================================
+     POPUP MODAL
+     ============================================= -->
+<div class="popup-overlay" id="popupOverlay" role="dialog" aria-modal="true" aria-label="Special Announcement">
+  <div class="popup-box">
+    <button class="popup-close" id="popupClose" aria-label="Close">&times;</button>
+    <img src="https://pasteimg.com/images/2026/04/02/image.png" alt="Vinayak ProEdu ACCA Batch Announcement" loading="lazy">
+    <div class="popup-footer">
+      <p>Limited seats available — enquire today!</p>
+      <a href="#enquiry" class="popup-cta" id="popupCta">Enquire Now →</a>
+    </div>
+  </div>
+</div>
+
+<!-- =============================================
+     PART 1 — NAVBAR
+     ============================================= -->
+<nav class="navbar" id="navbar" aria-label="Main Navigation">
+  <div class="nav-brand">
+    <img src="https://pasteimg.com/images/2026/03/31/WhatsApp-Image-2026-03-19-at-6.49.19-PM.jpg" alt="Vinayak ProEdu Logo">
+    <div>
+      <span class="nav-name">Vinayak ProEdu</span>
+      <span class="nav-tagline">ACCA Institute · Vadodara</span>
+    </div>
+  </div>
+  <a href="#enquiry" class="nav-cta">Enquire Now →</a>
+</nav>
+
+<!-- =============================================
+     PART 1 — HERO
+     ============================================= -->
+<section class="hero" aria-label="Hero">
+  <div class="hero-ring hero-ring-1"></div>
+  <div class="hero-ring hero-ring-2"></div>
+  <div class="hero-ring hero-ring-3"></div>
+  <div class="hero-inner">
+    <img src="https://pasteimg.com/images/2026/03/31/WhatsApp-Image-2026-03-19-at-6.49.19-PM.jpg" alt="Vinayak ProEdu" class="hero-logo">
+    <div class="hero-eyebrow">Pure Offline ACCA Coaching · Vadodara</div>
+    <h1>Vinayak <span>ProEdu</span></h1>
+    <p class="hero-sub">Your Gateway to Global Finance Careers</p>
+    <p class="hero-tagline">Global Recognition · Practical Learning · Career Momentum</p>
+    <div class="hero-pills">
+      <span class="pill">🌍 Recognised in 180+ Countries</span>
+      <span class="pill">📍 Pure Offline Classes</span>
+      <span class="pill">🎓 Expert Faculty</span>
+      <span class="pill">🔢 Small Batches</span>
+    </div>
+    <a href="#enquiry" class="btn-primary">🎯 Enquire Now — Limited Seats</a>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-num">180+</span><span class="stat-label">Countries Recognised</span></div>
+      <div class="stat"><span class="stat-num">13</span><span class="stat-label">Professional Papers</span></div>
+      <div class="stat"><span class="stat-num">36</span><span class="stat-label">Months Experience</span></div>
+      <div class="stat"><span class="stat-num">100%</span><span class="stat-label">Offline Learning</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- =============================================
+     PART 2 — POSTER / ANNOUNCEMENT
+     ============================================= -->
+<section class="poster-section section-alt" aria-label="Current Batch Poster">
+  <div class="container">
+    <div class="text-center fade-in">
+      <span class="section-label">Latest Announcement</span>
+      <h2 class="section-title">Current Batch Details</h2>
+      <div class="divider"></div>
+      <p class="section-desc">Our latest batch information — seats are limited, enquire early to secure your spot.</p>
+    </div>
+    <div class="poster-wrap fade-in">
+      <div class="poster-card">
+        <img src="https://pasteimg.com/images/2026/04/02/image.png" alt="Vinayak ProEdu — Current ACCA Batch Announcement" class="poster-img">
+        <div class="poster-cta-bar">
+          <p class="poster-cta-txt">Interested? Limited seats available — reach out today.</p>
+          <a href="#enquiry" class="poster-btn">🎯 Enquire Now</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============================================
+     PART 2 — WHY ACCA
+     ============================================= -->
+<section class="section section-alt" aria-label="Why ACCA">
+  <div class="container">
+    <div class="text-center fade-in">
+      <span class="section-label">Benefits</span>
+      <h2 class="section-title">Why ACCA Stands Out</h2>
+      <div class="divider"></div>
+      <p class="section-desc">The gold-standard professional accounting qualification that opens doors across the globe.</p>
+    </div>
+    <div class="why-grid">
+      <div class="why-card fade-in">
+        <div class="why-icon">🌍</div>
+        <h3>Trusted Worldwide</h3>
+        <p>Recognised in 180+ countries across all industries — from Big 4 firms to Fortune 500 corporations.</p>
+      </div>
+      <div class="why-card fade-in">
+        <div class="why-icon">📈</div>
+        <h3>Clear Progression</h3>
+        <p>13 Exams + Ethics Module + 36 Months Practical Experience = full ACCA membership.</p>
+      </div>
+      <div class="why-card fade-in">
+        <div class="why-icon">💼</div>
+        <h3>Real-World Learning</h3>
+        <p>Business, finance &amp; technology-focused syllabus built for the modern professional.</p>
+      </div>
+      <div class="why-card fade-in">
+        <div class="why-icon">⏳</div>
+        <h3>Flexible Journey</h3>
+        <p>Study at your own pace with lifetime access to retake opportunities — no rigid deadlines.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============================================
+     PART 3 — ACCA PATHWAY
+     ============================================= -->
+<section class="section" id="pathway" aria-label="ACCA Pathway">
+  <div class="container">
+    <div class="text-center fade-in">
+      <span class="section-label">Curriculum</span>
+      <h2 class="section-title">ACCA Professional Pathway</h2>
+      <div class="divider"></div>
+      <p class="section-desc">Complete detailed explanation by Vinayak ProEdu — explore every paper across all three levels.</p>
+    </div>
+
+    <div class="pathway-intro fade-in">
+      <h3>Complete ACCA Qualification Pathway</h3>
+      <p>ACCA is structured across three progressive levels: Applied Knowledge, Applied Skills, and Strategic Professional. Each level builds on the previous, taking you from foundational concepts to executive-level strategy and leadership.</p>
+    </div>
+
+    <div class="levels fade-in">
+      <div class="level-card">
+        <div class="level-badge level-applied">📘 Applied Knowledge</div>
+        <p>Foundational papers covering core business and accounting principles.</p>
+        <div class="accordion-wrap">
+          <div class="acc-item">
+            <button class="acc-btn" aria-expanded="false">
+              <span class="acc-left"><span>📘</span><span>Business &amp; Technology (BT)</span></span>
+              <span class="acc-icon">+</span>
+            </button>
+            <div class="acc-body"><div class="acc-body-inner">
+              <p>A business is like a big group of people working together — everyone has a role, just like players on a team. BT explains how that team works. You learn what a business actually is: it exists to earn profit and grow, but it also has responsibilities — treating employees fairly, following rules and laws, and caring about society.</p>
+              <p>You learn about different business types, management structures, leadership, communication, and how technology plays a vital role in modern organisations. Risk management and ethics are key pillars — doing the right thing, even when no one is watching. This subject builds your entire foundation for the ACCA journey.</p>
+            </div></div>
+          </div>
+          <div class="acc-item">
+            <button class="acc-btn" aria-expanded="false">
+              <span class="acc-left"><span>📘</span><span>Management Accounting (MA)</span></span>
+              <span class="acc-icon">+</span>
+            </button>
+            <div class="acc-body"><div class="acc-body-inner">
+              <p>MA is about managing money inside a business — like planning your pocket money, but at a corporate scale. You learn about costs: fixed costs that stay the same, variable costs that change, and how to calculate cost per unit to determine pricing. Break-even point analysis tells you when profit actually begins.</p>
+              <p>Budgets are prepared and then compared against actual results — differences called variances are analysed to improve performance. This subject sharpens your analytical thinking and decision-making skills, making you invaluable to any management team.</p>
+            </div></div>
+          </div>
+          <div class="acc-item">
+            <button class="acc-btn" aria-expanded="false">
+              <span class="acc-left"><span>📘</span><span>Financial Accounting (FA)</span></span>
+              <span class="acc-icon">+</span>
+            </button>
+            <div class="acc-body"><div class="acc-body-inner">
+              <p>FA is like writing a detailed record book for every financial transaction. You master the double-entry system — every transaction has two sides: debit and credit. You learn about assets (things owned), liabilities (things owed), income, and expenses.</p>
+              <p>You prepare the Profit &amp; Loss account and Balance Sheet — key reports used by investors, banks, and stakeholders to evaluate business performance. Accounting rules ensure consistency and comparability across businesses.</p>
+            </div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="level-card">
+        <div class="level-badge level-skill">🧠 Applied Skills</div>
+        <p>Intermediate papers building technical depth in key accounting disciplines.</p>
+        <div class="accordion-wrap">
+          <div class="acc-item">
+            <button class="acc-btn" aria-expanded="false">
+              <span class="acc-left"><span>🧠</span><span>Corporate &amp; Business Law (LW)</span></span>
+              <span class="acc-icon">+</span>
+            </button>
+            <div class="acc-body"><div class="acc-body-inner">
+              <p>This subject is about the legal rules governing business. You learn contract law — what makes an agreement valid and enforceable. Company law covers how companies are formed, structured, and dissolved. You study rights and duties of directors, shareholders, and employees, along with consequences for fraud and negligence.</p>
+            </div></div>
+          </div>
+          <div class="acc-item">
+            <button class="acc-btn" aria-expanded="false">
+              <span class="acc-left"><span>🧠</span><span>Performance Management (PM)</span></span>
+              <span class="acc-icon">+</span>
+            </button>
+            <div class="acc-body"><div class="acc-body-inner">
+              <p>PM advances your decision-making toolkit with advanced costing techniques, key performance indicators (KPIs), and forecasting models. You analyse performance against strategic targets, identify variances, and recommend improvements. This subject makes you the analyst every management team wants.</p>
+            </div></div>
+          </div>
+          <div class="acc-item">
+            <button class="acc-btn" aria-expanded="false">
+              <span class="acc-left"><span>🧠</span><span>Taxation (TX)</span></span>
+              <span class="acc-icon">+</span>
+            </button>
+            <div class="acc-body"><div class="acc-body-inner">
+              <p>TX demystifies the tax system for businesses and individuals. You calculate income tax, corporate tax, and VAT, and learn how to comply with tax laws while optimising liabilities. Understanding taxation is critical for financial planning and advisory roles in any organisation.</p>
+            </div></div>
+          </div>
+          <div class="acc-item">
+            <button class="acc-btn" aria-expanded="false">
+              <span class="acc-left"><span>🧠</span><span>Financial Reporting (FR)</span></span>
+              <span class="acc-icon">+</span>
+            </button>
+            <div class="acc-body"><div class="acc-body-inner">
+              <p>FR builds on FA with advanced financial statements prepared under International Financial Reporting Standards (IFRS). You analyse complex transactions, group accounts, and consolidated statements. You interpret financial performance to give meaningful insights to stakeholders.</p>
+            </div></div>
+          </div>
+          <div class="acc-item">
+            <button class="acc-btn" aria-expanded="false">
+              <span class="acc-left"><span>🧠</span><span>Audit &amp; Assurance (AA)</span></span>
+              <span class="acc-icon">+</span>
+            </button>
+            <div class="acc-body"><div class="acc-body-inner">
+              <p>AA is about independent verification. Auditors examine financial statements to ensure accuracy and compliance. You learn audit risk, internal controls, sampling techniques, and the ethical independence required to build trust among investors and regulators.</p>
+            </div></div>
+          </div>
+          <div class="acc-item">
+            <button class="acc-btn" aria-expanded="false">
+              <span class="acc-left"><span>🧠</span><span>Financial Management (FM)</span></span>
+              <span class="acc-icon">+</span>
+            </button>
+            <div class="acc-body"><div class="acc-body-inner">
+              <p>FM focuses on long-term financial strategy: evaluating investment opportunities, balancing risk and return, and selecting optimal financing structures. You assess capital investment decisions using techniques like NPV and IRR. This subject gives you the tools to help businesses grow sustainably.</p>
+            </div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="level-card fade-in" style="margin-top:20px;">
+      <div class="level-badge level-pro">👔 Strategic Professional</div>
+      <p>Advanced papers for executive-level financial leadership and strategy.</p>
+      <div class="accordion-wrap">
+        <div class="acc-item">
+          <button class="acc-btn" aria-expanded="false">
+            <span class="acc-left"><span>👔</span><span>Strategic Business Leader (SBL)</span></span>
+            <span class="acc-icon">+</span>
+          </button>
+          <div class="acc-body"><div class="acc-body-inner">
+            <p>SBL is where you think like a CEO. Through real-world integrated case studies, you analyse business scenarios, propose strategies, and make leadership decisions. You integrate knowledge from all previous subjects and apply professional judgment.</p>
+          </div></div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-btn" aria-expanded="false">
+            <span class="acc-left"><span>👔</span><span>Strategic Business Reporting (SBR)</span></span>
+            <span class="acc-icon">+</span>
+          </button>
+          <div class="acc-body"><div class="acc-body-inner">
+            <p>SBR is advanced financial reporting where professional judgment replaces simple rule-following. You apply complex IFRS standards to real scenarios, communicate financial information meaningfully, and explain the commercial substance of transactions to a range of stakeholders.</p>
+          </div></div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-btn" aria-expanded="false">
+            <span class="acc-left"><span>👔</span><span>Advanced Financial Management (AFM)</span></span>
+            <span class="acc-icon">+</span>
+          </button>
+          <div class="acc-body"><div class="acc-body-inner">
+            <p>AFM takes corporate finance to the highest level. You evaluate complex investment strategies, manage treasury risk, assess mergers and acquisitions, and advise on dividend and capital structure policy. You become the strategic CFO of any organisation.</p>
+          </div></div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-btn" aria-expanded="false">
+            <span class="acc-left"><span>👔</span><span>Advanced Performance Management (APM)</span></span>
+            <span class="acc-icon">+</span>
+          </button>
+          <div class="acc-body"><div class="acc-body-inner">
+            <p>APM links strategy to performance measurement at the highest organisational level. You evaluate strategic objectives using balanced scorecards and advanced KPIs, assess business unit performance, and advise senior management on improving strategic outcomes.</p>
+          </div></div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-btn" aria-expanded="false">
+            <span class="acc-left"><span>👔</span><span>Advanced Taxation (ATX)</span></span>
+            <span class="acc-icon">+</span>
+          </button>
+          <div class="acc-body"><div class="acc-body-inner">
+            <p>ATX elevates your tax expertise to advisory level. You plan complex tax structures for individuals and corporations, provide compliance guidance, and identify tax-saving opportunities while navigating anti-avoidance rules.</p>
+          </div></div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-btn" aria-expanded="false">
+            <span class="acc-left"><span>👔</span><span>Advanced Audit &amp; Assurance (AAA)</span></span>
+            <span class="acc-icon">+</span>
+          </button>
+          <div class="acc-body"><div class="acc-body-inner">
+            <p>AAA covers the most complex audit scenarios: group audits, public interest entities, and highly regulated industries. You apply deep professional ethics, handle contentious audit opinions, and manage audit quality across challenging engagements.</p>
+          </div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pathway-footer fade-in">
+      <p>
+        <span class="red">13 Professional Papers</span>
+        <span class="plus">+</span>
+        <span class="red">Ethics &amp; Professional Skills Module</span>
+        <span class="plus">+</span>
+        <span class="red">36 Months Practical Experience</span>
+        <span class="plus">=</span>
+        <strong>Full ACCA Membership</strong>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- =============================================
+     PART 4 — ENQUIRY FORM
+     ============================================= -->
+<section class="section form-section" id="enquiry" aria-label="Enquiry Form">
+  <div class="container">
+    <div class="form-header fade-in">
+      <span class="section-label">Get Started</span>
+      <h2 class="section-title">Start Your ACCA Journey Today</h2>
+      <div class="divider"></div>
+      <p class="section-desc">Free Counseling · Batch Details · Limited Seats Available</p>
+    </div>
+
+    <div class="form-card fade-in">
+      <form action="https://formspree.io/f/xjgpryow" method="POST" novalidate>
+        <input type="hidden" name="_subject" value="Vinayak ProEdu ACCA Enquiry - Vadodara">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="fname">Full Name *</label>
+            <input type="text" id="fname" name="name" placeholder="Your full name" required>
+          </div>
+          <div class="form-group">
+            <label for="fphone">WhatsApp Number *</label>
+            <input type="tel" id="fphone" name="phone" placeholder="+91 XXXXX XXXXX" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="femail">Email ID</label>
+          <input type="email" id="femail" name="email" placeholder="your@email.com (optional)">
+        </div>
+        <div class="form-group">
+          <label for="fcourse">Select Course *</label>
+          <select id="fcourse" name="course" required>
+            <option value="">— Choose a level —</option>
+            <option>Foundation Level (3 Papers)</option>
+            <option>Skill Level (5 Papers)</option>
+            <option>All 13 Papers</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="fmsg">Your Questions</label>
+          <textarea id="fmsg" name="message" placeholder="Any questions about batches, fees, or schedule? (Optional)"></textarea>
+        </div>
+        <button type="submit" class="form-submit">🚀 Get Free Counseling Now</button>
+      </form>
+    </div>
+
+    <div class="contact-card fade-in">
+      <div class="contact-item">
+        <div class="contact-ico">📍</div>
+        <div class="contact-text">
+          <div class="label">Location</div>
+          <p>304, VIP View Complex,<br>Opp. Bright School, VIP Road,<br>Karelibaug, Vadodara.</p>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-ico">📞</div>
+        <div class="contact-text">
+          <div class="label">Call / WhatsApp</div>
+          <a href="tel:+918320035390">+91 83200 35390</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============================================
+     PART 4 — FOOTER
+     ============================================= -->
+<footer class="footer">
+  <div class="footer-contact">
+    <span class="footer-contact-item">
+      📞 <a href="tel:+918320035390">+91 83200 35390</a>
+    </span>
+    <span class="footer-contact-item" style="color:rgba(255,255,255,0.2);">|</span>
+    <a href="https://www.instagram.com/vinayak_proedu.acca?igsh=MXF4azlqZW03ZmhvNA==&utm_source=ig_contact_invite" class="insta-link" aria-label="Instagram" target="_blank" rel="noopener">
+      <span class="insta-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+          <circle cx="12" cy="12" r="4"/>
+          <circle cx="17.5" cy="6.5" r="0.8" fill="currentColor" stroke="none"/>
+        </svg>
+      </span>
+      Follow us on Instagram
+    </a>
+  </div>
+  <p>© 2026 <span>Vinayak ProEdu</span> · ACCA Classes Vadodara · All Rights Reserved.</p>
+</footer>
+
+<!-- =============================================
+     SCRIPTS
+     ============================================= -->
+<script>
+/* Navbar scroll effect */
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', function() {
+  navbar.classList.toggle('scrolled', window.scrollY > 60);
+}, { passive: true });
+
+/* Fade-in on scroll */
+const observer = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) {
+    if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+  });
+}, { threshold: 0.08, rootMargin: '0px 0px -36px 0px' });
+document.querySelectorAll('.fade-in').forEach(function(el) { observer.observe(el); });
+
+/* Accordion */
+document.querySelectorAll('.acc-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    var body = btn.nextElementSibling;
+    var isOpen = btn.classList.contains('active');
+    var wrap = btn.closest('.accordion-wrap');
+    wrap.querySelectorAll('.acc-btn').forEach(function(b) {
+      b.classList.remove('active');
+      b.setAttribute('aria-expanded', 'false');
+      b.nextElementSibling.style.maxHeight = null;
+    });
+    if (!isOpen) {
+      btn.classList.add('active');
+      btn.setAttribute('aria-expanded', 'true');
+      body.style.maxHeight = body.scrollHeight + 'px';
+    }
+  });
+});
+
+/* Popup */
+(function() {
+  var overlay = document.getElementById('popupOverlay');
+  var closeBtn = document.getElementById('popupClose');
+  var cta = document.getElementById('popupCta');
+  function open() { overlay.classList.add('show'); }
+  function close() { overlay.classList.remove('show'); }
+  setTimeout(open, 2500);
+  closeBtn.addEventListener('click', close);
+  overlay.addEventListener('click', function(e) { if (e.target === overlay) close(); });
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') close(); });
+  cta.addEventListener('click', function(e) {
+    e.preventDefault();
+    close();
+    setTimeout(function() {
+      document.getElementById('enquiry').scrollIntoView({ behavior: 'smooth' });
+    }, 340);
+  });
+})();
+</script>
+
+<script>
+/* Anti-clickjacking: refuse to run inside another site's iframe */
+if (top !== self) { top.location = self.location; }
+/* PWA service worker */
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('./sw.js').catch(function(e){ console.warn('SW:', e); });
+  });
+}
+</script>
+</body>
+</html>
