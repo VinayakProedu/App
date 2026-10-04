@@ -516,8 +516,19 @@ document.querySelectorAll('.app-menu button[data-stu-view]').forEach(btn=>{
 /* ===== DASHBOARD ===== */
 async function loadDashboard(){
   const user = auth.currentUser; if(!user) return;
-  const userDoc = await db.collection('users').doc(user.uid).get().catch(()=>null);
-  state.userData = userDoc && userDoc.exists ? userDoc.data() : {};
+  let userDoc = await db.collection('users').doc(user.uid).get().catch(()=>null);
+  if(!userDoc || !userDoc.exists){
+    // self-healing: auto-create a trial profile (allowed by rules for role 'trial')
+    await db.collection('users').doc(user.uid).set({
+      uid: user.uid, name: user.displayName || '', email: user.email || '', phone: '',
+      role: 'trial', batchCode: '', enrolledSubjects: [], assignedLectureIds: [],
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    }).catch(()=>{});
+    userDoc = await db.collection('users').doc(user.uid).get().catch(()=>null);
+  }
+  state.userData = userDoc && userDoc.exists ? userDoc.data() : { role: 'trial' };
+  const isTrial = (state.userData.role || 'trial') !== 'student';
   const myBatch = state.userData.batchCode || '';
   const mySubjects = Array.isArray(state.userData.enrolledSubjects) ? state.userData.enrolledSubjects : [];
   const myLectures = Array.isArray(state.userData.assignedLectureIds) ? state.userData.assignedLectureIds : [];
@@ -525,12 +536,16 @@ async function loadDashboard(){
   const lectSnap = await db.collection('lectures').limit(500).get().catch(()=>null);
   let lectures = lectSnap ? lectSnap.docs.map(d=>({id:d.id,...d.data()})) : [];
 
-  if(myBatch) lectures = lectures.filter(l => { const b = l.batchCodes||[]; return !b.length || b.includes(myBatch); });
-  if(myLectures.length) lectures = lectures.filter(l => myLectures.includes(l.id));
-  else if(mySubjects.length) lectures = lectures.filter(l => {
-    const sub = l.subject || 'General';
-    return mySubjects.includes(sub) || sub === 'General';
-  });
+  if(isTrial){
+    lectures = lectures.filter(l => l.isFree === true);
+  } else {
+    if(myBatch) lectures = lectures.filter(l => { const b = l.batchCodes||[]; return !b.length || b.includes(myBatch); });
+    if(myLectures.length) lectures = lectures.filter(l => myLectures.includes(l.id));
+    else if(mySubjects.length) lectures = lectures.filter(l => {
+      const sub = l.subject || 'General';
+      return mySubjects.includes(sub) || sub === 'General';
+    });
+  }
 
   state.lectures = lectures;
   const subjects = [...new Set(lectures.map(l => l.subject || 'General'))].sort();
@@ -540,6 +555,18 @@ async function loadDashboard(){
     hasLive: lectures.filter(l => (l.subject||'General')===sub && l.meetingLink).length > 0
   }));
   renderCourses();
+  if(isTrial){
+    document.getElementById('pageSubX').textContent = '🎁 Free trial — free resources + free quiz. Enroll for full access.';
+    let b = document.getElementById('trialBannerX');
+    if(!b){
+      b = document.createElement('div');
+      b.id = 'trialBannerX';
+      b.style.cssText = 'background:linear-gradient(135deg,#C9922A,#E8AA48);color:#0D1B40;border-radius:16px;padding:16px 20px;margin-bottom:16px;font-weight:700;box-shadow:0 8px 24px rgba(201,146,42,.25);';
+      b.innerHTML = '🎓 <b>Free Trial Access</b> — watch the free resources and take the free quiz below. For the complete course, all mocks & live batches, WhatsApp <b>+91 83200 35390</b>.';
+      const home = document.getElementById('studentHomeX');
+      if(home) home.insertBefore(b, home.firstChild);
+    }
+  }
 }
 
 function renderCourses(){
