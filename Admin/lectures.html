@@ -132,6 +132,7 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
 }
 .hidden{display:none !important;}
 </style>
+<base target="_blank">
 </head>
 <body>
 
@@ -219,6 +220,10 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
           <div style="font-size:0.78rem;color:var(--muted);margin-top:4px;">Video, PDF, or any file type</div>
         </div>
 
+        <div class="portal-field" style="flex-direction:row;align-items:center;gap:10px;">
+          <input type="checkbox" id="lecFree" style="width:auto;margin:0;">
+          <label for="lecFree" style="margin:0;text-transform:none;letter-spacing:0;font-size:.9rem;color:var(--navy);font-weight:700;">🎁 Free (trial / webinar users can access)</label>
+        </div>
         <div class="btn-row">
           <button class="primary-btn" id="uploadBtn" type="button">⬆ Upload Lecture</button>
           <button class="ghost-btn" id="clearBtn" type="button">Clear</button>
@@ -382,6 +387,7 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
         fileURL: uploadedFileURL || null,
         attachment: attachment || '',
         batchCodes,
+        isFree: !!document.getElementById('lecFree').checked,
         uploadedAt: firebase.firestore.FieldValue.serverTimestamp()
       };
       await db.collection('lectures').add(payload);
@@ -394,6 +400,7 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
       document.getElementById('lecTime').value = '';
       document.getElementById('lecAttachment').value = '';
       document.getElementById('lecYoutube').value = '';
+      document.getElementById('lecFree').checked = false;
       uploadedFileURL = null;
       renderBatchCheckboxList(allBatches, 'lecBatchSelect');
 
@@ -409,6 +416,7 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
     document.getElementById('lecTime').value = '';
     document.getElementById('lecAttachment').value = '';
     document.getElementById('lecYoutube').value = '';
+    document.getElementById('lecFree').checked = false;
     uploadedFileURL = null;
     renderBatchCheckboxList(allBatches, 'lecBatchSelect');
     setStatus(document.getElementById('uploadStatus'), '');
