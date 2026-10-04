@@ -345,6 +345,7 @@ textarea{min-height:110px;resize:vertical}
   .exam-shell{padding:16px 14px 24px;}
 }
 </style>
+<base target="_blank">
 </head>
 <body>
 
@@ -469,6 +470,10 @@ textarea{min-height:110px;resize:vertical}
             </div>
             <label>Section Layout</label>
             <textarea id="paperSections" placeholder="Leave blank for ACCA defaults. Applied Skills:&#10;Section A - Objective Test&#10;Section B - Objective Test (Case)&#10;Section C - Constructed Response"></textarea>
+            <label style="display:flex;align-items:center;gap:10px;text-transform:none;letter-spacing:0;font-size:.92rem;font-weight:700;color:var(--navy);margin:0 0 12px;cursor:pointer;">
+              <input id="paperFree" type="checkbox" style="width:auto;margin:0;" />
+              🎁 Free paper (trial / webinar users can take this mock)
+            </label>
             <div class="btn-row">
               <button class="btn btn-primary" id="savePaperBtn">Save Paper</button>
               <button class="btn btn-ghost" id="clearPaperBtn">Clear</button>
@@ -857,7 +862,7 @@ function paperSummaryCard(p) {
   }
   return `
     <div class="item">
-      <div class="badge">${esc(p.code||'')}${p.locked?' · Locked':''}</div>
+      <div class="badge">${esc(p.code||'')}${p.locked?' · Locked':''}${p.isFree?' · 🎁 FREE':''}</div>
       <h3>${esc(p.title||'Mock Paper')}</h3>
       <div class="small">${esc(p.level||'')} · ${Number(p.timeLimit||0)} min · ${Number(p.totalMarks||0)} marks</div>
       <div class="small" style="margin-top:4px;">Attempts: ${Number(p.attemptLimit||1)} · Questions: ${qCount}</div>
@@ -973,7 +978,7 @@ async function savePaper() {
       'Strategic Professional':['Section A - Objective Test','Section B - Constructed Response']
     };
     const sections=sectionsText?sectionsText.split('\n').map(s=>s.trim()).filter(Boolean):(accaDefaults[level]||[]);
-    const payload={code,title,level,timeLimit,totalMarks,locked,attemptLimit:Math.max(1,Number(getVal('paperAttempts')||1)),sections,updatedAt:firebase.firestore.FieldValue.serverTimestamp()};
+    const payload={code,title,level,timeLimit,totalMarks,locked,isFree:!!el.paperFree?.checked,attemptLimit:Math.max(1,Number(getVal('paperAttempts')||1)),sections,updatedAt:firebase.firestore.FieldValue.serverTimestamp()};
     const shouldUpdate=state.paperMode==='edit'&&state.editingPaperId;
     if (shouldUpdate) {
       await db.collection('mockPapers').doc(state.editingPaperId).set(payload,{merge:true});
@@ -984,6 +989,7 @@ async function savePaper() {
     state.editingPaperId=null; state.paperMode='new';
     el.savePaperBtn.textContent='Save Paper';
     if(el.paperLocked) el.paperLocked.checked=false;
+    if(el.paperFree) el.paperFree.checked=false;
     setStatus(el.paperStatus,shouldUpdate?'Paper updated ✓':'Paper saved ✓');
     await refreshAll();
   } catch(err){setStatus(el.paperStatus,err.message,true);}
@@ -1010,6 +1016,7 @@ window.editPaper=function(id){
   el.paperTime.value=p.timeLimit||90;
   el.paperMarks.value=p.totalMarks||100;
   if(el.paperLocked) el.paperLocked.checked=!!p.locked;
+  if(el.paperFree) el.paperFree.checked=!!p.isFree;
   if(el.paperAttempts) el.paperAttempts.value=Number(p.attemptLimit||1);
   el.paperSections.value=Array.isArray(p.sections)?p.sections.join('\n'):'';
   el.savePaperBtn.textContent='Update Paper';
@@ -1487,6 +1494,7 @@ el.clearPaperBtn.addEventListener('click',()=>{
   el.paperCode.value='';el.paperTitle.value='';el.paperSections.value='';
   el.paperTime.value=90;el.paperMarks.value=100;
   if(el.paperLocked)el.paperLocked.checked=false;
+  if(el.paperFree)el.paperFree.checked=false;
   if(el.paperAttempts)el.paperAttempts.value=1;
   el.paperLevel.value='Applied Skills';
   state.editingPaperId=null;state.paperMode='new';
