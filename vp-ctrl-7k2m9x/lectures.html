@@ -145,6 +145,7 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
     <div class="login-field"><label>Password</label><input type="password" id="adminPassword" placeholder="••••••••"></div>
     <button class="login-btn" id="adminLoginBtn" type="button">Login as Admin</button>
     <div class="login-status" id="loginStatus"></div>
+    <div style="text-align:center;margin-top:10px;"><a style="color:#E8AA48;font-size:.85rem;cursor:pointer;font-weight:700;" onclick="window.__vpResetPw && window.__vpResetPw()">Forgot password?</a></div>
   </div>
 </div>
 
@@ -251,6 +252,7 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
 <script src="../firebase-config.js"></script>
 <script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js"></script>
 
@@ -301,10 +303,29 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
     window.location.href = 'index.html';
   });
 
-  auth.onAuthStateChanged(user => {
+  auth.onAuthStateChanged(async user => {
     if(user && user.email === ADMIN_EMAIL && localStorage.getItem('adminUnlocked') === '1'){
+      window.__isTeacher = false;
       showApp();
-    } else {
+      return;
+    }
+    if(user){
+      try{
+        const doc = await db.collection('users').doc(user.uid).get();
+        if(doc.exists && doc.data().role === 'teacher'){
+          window.__isTeacher = true;
+          window.__teacherSubjects = doc.data().assignedSubjects || [];
+          document.querySelectorAll('.app-menu a').forEach(a => {
+            const href = a.getAttribute('href') || '';
+            if(href.indexOf('students.html') !== -1 || href.indexOf('teachers.html') !== -1) a.style.display = 'none';
+          });
+          
+          showApp();
+          return;
+        }
+      }catch(e){}
+      await auth.signOut();
+    }
       document.getElementById('loginWrap').classList.remove('hidden');
       document.getElementById('appShell').classList.add('hidden');
     }
@@ -366,6 +387,7 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
     const batchCodes = getSelectedBatchCodes('lecBatchSelect');
 
     if(!title || !subject || !date){ setStatus(document.getElementById('uploadStatus'), 'Title, Subject, and Date are required.', true); return; }
+    if(window.__isTeacher && !(window.__teacherSubjects||[]).includes(subject)){ setStatus(document.getElementById('uploadStatus'), 'You can only upload for your assigned subjects: ' + (window.__teacherSubjects||[]).join(', '), true); return; }
 
     let videoURL = null;
     let videoId = null;
@@ -459,6 +481,10 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
   window.loadBatches = loadBatches;
 
   window.renderLibrary = function(){
+    if(window.__isTeacher){
+      const subs = window.__teacherSubjects || [];
+      allLectures = allLectures.filter(l => subs.includes(l.subject));
+    }
     const box = document.getElementById('lectureLibrary');
     const q = (document.getElementById('libSearch')?.value || '').toLowerCase();
     const filterDate = document.getElementById('libFilterDate')?.value || '';
@@ -573,6 +599,15 @@ if ('serviceWorker' in navigator) {
     if(appEl){ appEl.classList.remove('hidden'); appEl.style.display = ''; }
   }catch(e){}
 })();
+</script>
+<script>
+window.__vpResetPw = function(){
+  var el = document.getElementById('adminEmail') || document.getElementById('loginEmail');
+  var e = ((el && el.value) || '').trim() || prompt('Enter your admin/teacher email:');
+  if(!e) return;
+  auth.sendPasswordResetEmail(e.trim()).then(function(){ alert('Password reset email sent — check inbox & spam.'); })
+    .catch(function(err){ alert(err.message); });
+};
 </script>
 </body>
 </html>
