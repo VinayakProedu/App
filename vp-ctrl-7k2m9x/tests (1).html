@@ -1,0 +1,2319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="permissions-policy" content="camera=(), microphone=(), geolocation=()">
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#0D1B40">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+
+<title>Vinayak ProEdu | Mock Exam Manager</title>
+<link rel="icon" type="image/png" href="https://pasteimg.com/images/2026/03/31/WhatsApp-Image-2026-03-19-at-6.49.19-PM.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+<script src="../firebase-config.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@uploadcare/file-uploader@v1/web/uc-file-uploader-regular.min.css">
+<script>
+/* Uploadcare loader with tracking-prevention fallback */
+window._ucReady = false;
+window._ucBlocked = false;
+async function initUploadcare() {
+  if (window._ucReady || window._ucBlocked) return;
+  try {
+    const UC = await import('https://cdn.jsdelivr.net/npm/@uploadcare/file-uploader@v1/web/file-uploader.min.js');
+    UC.defineComponents(UC);
+    window._ucReady = true;
+  } catch (e) {
+    window._ucBlocked = true;
+    console.warn('[Uploadcare] Blocked by browser privacy settings. Manual URL fallback enabled.');
+  }
+}
+initUploadcare();
+</script>
+
+<style>
+:root{
+  --navy:#0D1B40; --navy-mid:#1a2e5e; --blue:#1e3c72; --gold:#C9922A; --gold-lt:#E8AA48;
+  --amber:#F5C04A; --ink:#1A1A2E; --muted:#6B7280; --smoke:#EFF1F6; --white:#FFFFFF;
+  --shadow-sm:0 4px 20px rgba(13,27,64,0.08); --shadow-md:0 12px 45px rgba(13,27,64,0.14);
+  --r-sm:10px; --r-md:16px; --r-lg:24px;
+  --card:#ffffff; --border:#e5e7eb; --text:#15223b;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;font-size:16px;}
+body{font-family:'DM Sans',sans-serif;color:var(--ink);background:#f5f7fb;line-height:1.65;overflow-x:hidden;}
+img{max-width:100%;display:block;}
+a{text-decoration:none;color:inherit;}
+h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
+
+/* Login */
+.login-wrap{position:fixed;inset:0;z-index:9999;background:linear-gradient(135deg,var(--navy) 0%,var(--blue) 100%);display:flex;align-items:center;justify-content:center;padding:20px;}
+.login-box{width:min(420px,92vw);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:var(--r-lg);padding:clamp(32px,6vw,48px);backdrop-filter:blur(20px);box-shadow:0 40px 100px rgba(0,0,0,0.4);}
+.login-box h2{font-family:'Playfair Display',serif;color:#fff;font-size:1.6rem;margin-bottom:6px;text-align:center;}
+.login-box p{color:rgba(255,255,255,0.55);font-size:0.9rem;text-align:center;margin-bottom:28px;}
+.login-field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;}
+.login-field label{font-size:0.74rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.65);}
+.login-field input{width:100%;padding:13px 16px;background:rgba(255,255,255,0.09);border:1px solid rgba(255,255,255,0.14);border-radius:var(--r-sm);color:#fff;font-size:0.95em;font-family:'DM Sans',sans-serif;transition:all 0.25s;}
+.login-field input::placeholder{color:rgba(255,255,255,0.32);}
+.login-field input:focus{outline:none;border-color:rgba(201,146,42,0.6);background:rgba(255,255,255,0.13);box-shadow:0 0 0 3px rgba(201,146,42,0.15);}
+.login-btn{width:100%;padding:15px;border-radius:50px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--gold),var(--gold-lt));color:var(--navy);font-size:1em;font-weight:700;font-family:'DM Sans',sans-serif;box-shadow:0 8px 28px rgba(201,146,42,0.35);transition:all 0.3s;}
+.login-btn:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(201,146,42,0.5);}
+.login-status{margin-top:12px;font-size:0.9rem;font-weight:700;text-align:center;min-height:22px;}
+.login-status.error{color:#fca5a5;}
+
+/* App Shell */
+.app-shell{display:flex;width:100%;min-height:100vh;}
+.app-sidebar{width:260px;background:var(--navy);color:#fff;padding:18px;overflow:auto;flex-shrink:0;position:fixed;height:100vh;left:0;top:0;z-index:100;}
+.app-brand{display:flex;align-items:center;gap:10px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px solid rgba(255,255,255,0.08);}
+.app-brand img{width:40px;height:40px;border-radius:50%;border:2px solid var(--gold);object-fit:cover;}
+.app-brand h3{font-family:'Playfair Display',serif;font-size:1.05rem;margin:0;color:#fff;}
+.app-brand p{font-size:0.72rem;letter-spacing:1.4px;text-transform:uppercase;color:rgba(232,170,72,0.8);margin-top:2px;}
+.app-menu{display:grid;gap:6px;}
+.app-menu a,.app-menu button{width:100%;border:none;background:transparent;color:#fff;padding:11px 14px;border-radius:10px;cursor:pointer;text-align:left;font-weight:600;font-size:0.9rem;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:10px;transition:all 0.2s;text-decoration:none;}
+.app-menu a:hover,.app-menu button:hover,.app-menu a.active,.app-menu button.active{background:var(--gold);color:var(--navy);}
+.app-main{flex:1;margin-left:260px;padding:24px 28px;overflow:auto;min-height:100vh;}
+
+/* Topbar */
+.app-topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid #e5e7eb;}
+.app-title{font-family:'Playfair Display',serif;color:var(--navy);font-size:1.6rem;margin:0;}
+.app-sub{color:var(--muted);font-size:0.9rem;}
+.role-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:rgba(255,255,255,0.08);color:var(--gold-lt);font-weight:800;font-size:0.82rem;margin-bottom:12px;}
+
+/* Content */
+.content{display:grid;gap:18px;}
+.view{display:none}
+.view.active{display:block}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.card,.panel,.attempt-card,.item,.question-card,.mock-paper{padding:18px;background:var(--card);border:1px solid var(--border);border-radius:var(--r-md);box-shadow:var(--shadow-sm);}
+.title{margin:0 0 14px;font-size:1.2rem;font-family:'Playfair Display',serif;color:var(--navy);}
+.sub{margin:0 0 16px;color:var(--muted);font-size:.92rem;line-height:1.6}
+label{display:block;font-size:.76rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+input,select,textarea{
+  width:100%;padding:12px 14px;border:1px solid var(--border);border-radius:12px;background:#fff;color:var(--text);margin-bottom:12px;font:inherit;outline:none;
+}
+input:focus,select:focus,textarea:focus{border-color:#b8c7ea;box-shadow:0 0 0 3px rgba(30,60,114,.07)}
+textarea{min-height:110px;resize:vertical}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.btn{
+  border:none;border-radius:12px;padding:11px 14px;cursor:pointer;font-weight:800;font:inherit;transition:transform .15s ease, box-shadow .15s ease, opacity .15s ease;
+}
+.btn:hover{transform:translateY(-1px)}
+.btn-primary{background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff;}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold-lt));color:#111;}
+.btn-ghost{background:#eff6ff;color:var(--navy);border:1px solid #dbe4f0}
+.btn-danger{background:#fef2f2;color:#b91c1c;border:1px solid #fecaca}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap}
+.stat{
+  background:linear-gradient(135deg,var(--navy) 0%, var(--blue) 100%);
+  color:#fff;border-radius:16px;padding:16px;min-height:92px;
+}
+.stat .n{font-size:2rem;font-weight:900;line-height:1}
+.stat .l{margin-top:6px;font-size:.75rem;letter-spacing:1px;text-transform:uppercase;color:#d7e6ff}
+.list{display:grid;gap:10px}
+.small{color:var(--muted);font-size:.85rem}
+.badge{
+  display:inline-block;padding:6px 10px;border-radius:999px;background:#eef4ff;color:var(--navy);font-size:.75rem;font-weight:800;margin-bottom:8px;
+}
+.section-head{
+  display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px;
+}
+.paper-head{
+  display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:flex-start;margin-bottom:14px;
+}
+.timer{
+  background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff;padding:10px 14px;border-radius:12px;font-weight:900;letter-spacing:.3px;
+}
+.option{
+  display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border:1px solid var(--border);border-radius:12px;margin:8px 0;background:#fff;transition:background .15s ease,border-color .15s ease;
+}
+.option:hover{background:#f8fbff;border-color:#d5dded}
+.option input{width:auto;margin:2px 0 0}
+.feedback{
+  margin-top:12px;padding:12px;border-radius:12px;background:#f8fafc;border:1px solid var(--border);white-space:pre-wrap;
+}
+.overlay{
+  position:fixed;inset:0;background:rgba(13,27,64,.68);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;
+}
+.auth-card{
+  width:min(440px,100%);background:#fff;border-radius:28px;box-shadow:0 28px 90px rgba(0,0,0,.28);overflow:hidden;border:1px solid rgba(201,146,42,.2);
+}
+.auth-head{
+  background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff;padding:22px 22px 18px;
+}
+.auth-head h2{margin:0;font-size:1.35rem;font-family:'Playfair Display',serif;}
+.auth-head p{margin:8px 0 0;color:#dbe8ff;line-height:1.6;font-size:.92rem}
+.auth-body{padding:22px}
+.auth-tip{margin-top:10px;color:var(--muted);font-size:.85rem;line-height:1.6}
+.auth-status{min-height:20px;margin-top:8px;font-size:.92rem;font-weight:700}
+.auth-status.error{color:#b42318}
+.auth-status.ok{color:#0f7a2a}
+.overlay-foot{padding:0 22px 22px;color:var(--muted);font-size:.8rem;line-height:1.6}
+
+/* Exam shell */
+.exam-shell{display:grid;gap:16px;}
+.exam-nav-shell{background:#fff;border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow-sm);overflow:hidden;}
+.exam-nav-shell > summary{
+  list-style:none;cursor:pointer;padding:14px 16px;font-weight:900;color:var(--navy);display:flex;align-items:center;justify-content:space-between;gap:12px;background:linear-gradient(180deg,#fff,#f8fbff);border-bottom:1px solid var(--border);
+}
+.exam-nav-shell > summary::-webkit-details-marker{display:none}
+.exam-nav-shell .exam-nav-content{padding:10px 12px 12px;}
+.exam-nav-mini{display:flex;gap:6px;flex-wrap:wrap;align-items:center;color:var(--muted);font-size:.72rem;margin-top:4px;}
+.exam-nav-top-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
+.exam-nav-top-actions .btn{padding:7px 10px;font-size:.86rem;}
+.sb-layout{display:grid;grid-template-columns:1fr 1.1fr;gap:16px;align-items:start;}
+.sb-scheme{padding:10px 12px;border:1px solid var(--border);border-radius:12px;background:#f8fafc;margin-bottom:12px;}
+
+/* Mock overlay */
+.mock-overlay{position:fixed;inset:0;background:#08111f;z-index:9998;overflow:auto;display:flex;align-items:center;justify-content:center;padding:0;}
+.mock-shell{width:100vw;height:100vh;background:#f5f7fb;border-radius:0;box-shadow:none;overflow:auto;border:none;display:flex;flex-direction:column;}
+.mock-topbar{
+  background:#ffffff;color:#111827;padding:12px 22px;display:grid;grid-template-columns:minmax(260px,1fr) auto auto;gap:18px;align-items:center;position:sticky;top:0;z-index:8;border-bottom:1px solid #d8dee9;box-shadow:0 8px 22px rgba(15,23,42,.08);
+}
+.mock-topbar h2{margin:2px 0 0;font-size:1rem;line-height:1.35;color:#111827;}
+.exam-brandline{display:flex;align-items:center;gap:14px;min-width:0;}
+.exam-logo{width:56px;height:56px;border-radius:14px;object-fit:cover;border:1px solid #e5e7eb;box-shadow:0 8px 18px rgba(15,23,42,.12);}
+.exam-kicker{font-size:.72rem;letter-spacing:1.7px;text-transform:uppercase;color:#64748b;font-weight:900;}
+.exam-meta-bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end;}
+.exam-pill{
+  display:inline-flex;align-items:center;gap:7px;min-height:38px;padding:8px 12px;border-radius:10px;background:#f8fafc;border:1px solid #e2e8f0;color:#334155;font-weight:800;font-size:.86rem;white-space:nowrap;
+}
+.exam-progress{width:180px;height:8px;overflow:hidden;border-radius:999px;background:#e2e8f0;}
+.exam-progress > span{display:block;height:100%;width:0%;border-radius:999px;background:linear-gradient(90deg,var(--gold),var(--blue));transition:width .2s ease;}
+.mock-body{max-width:none;margin:0 auto;padding:0;width:100%;flex:1 1 auto;}
+.mock-paper{margin-bottom:14px}
+.question-card h3{margin:0 0 14px;line-height:1.45}
+.empty{padding:16px;border:1px dashed #d9e2ef;border-radius:14px;background:#fbfdff;color:#5d6e83}
+.attempt-card h3,.item h3{margin:0 0 8px}
+.pill{
+  display:inline-flex;align-items:center;gap:8px;background:#f1f5ff;color:var(--navy);border:1px solid #dce4fb;padding:8px 12px;border-radius:999px;font-size:.82rem;font-weight:700;
+}
+.option-list{display:grid;gap:10px;margin-bottom:12px}
+.option-row{display:grid;grid-template-columns:38px 1fr auto;gap:10px;align-items:center}
+.pair-row{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:center}
+.area-row{display:grid;grid-template-columns:1.2fr .7fr .7fr .7fr .7fr auto;gap:8px;align-items:center}
+.opt-label{width:38px;height:38px;border-radius:10px;background:#eef4ff;color:var(--navy);display:flex;align-items:center;justify-content:center;font-weight:900}
+
+.sb-exhibit,.sb-panel{background:#fff;border:1px solid var(--border);border-radius:16px;padding:14px;box-shadow:var(--shadow-sm)}
+.sb-title{margin:0 0 10px;font-size:1rem;font-weight:900;color:var(--navy)}
+.sb-answer-list{display:grid;gap:10px}
+.sb-answer-row{display:grid;grid-template-columns:1fr 1.2fr;gap:10px;align-items:center;padding:10px;border:1px solid var(--border);border-radius:12px;background:#fbfdff}
+.sb-answer-row input,.sb-answer-row select{margin:0}
+.sb-answer-label{font-weight:800;color:var(--text)}
+.sb-exhibit-stack{display:grid;gap:10px}
+.sb-exhibit-stack .question-image{margin:0}
+.sb-exhibit-stack .question-image img{width:100%;display:block;border-radius:16px}
+.sb-inline-exam{display:grid;gap:16px;}
+.sb-inline-exam .question-image{margin:0;}
+
+.sb-custom-html{width:100%;}
+.sb-custom-html table{width:100%;border-collapse:collapse;}
+.sb-custom-html th,.sb-custom-html td{padding:8px;border:1px solid var(--border);text-align:left;vertical-align:top;}
+.sb-custom-html input,.sb-custom-html select,.sb-custom-html textarea{width:100%;margin:0;}
+.sb-custom-html .sb-block{margin-bottom:12px;}
+.sb-table-title{font-weight:900;color:#111827;margin:0 0 10px;font-size:1.05rem;}
+
+.exam-shell{gap:18px;width:min(1180px,100%);margin:0 auto;padding:22px 22px 118px;}
+.exam-nav-shell{border-radius:14px;border:1px solid #d8dee9;box-shadow:0 12px 30px rgba(15,23,42,.08);overflow:hidden;}
+.question-card.exam-question{border-radius:18px;border:1px solid #d8dee9;box-shadow:0 18px 46px rgba(15,23,42,.10);padding:0;overflow:hidden;background:#fff;}
+.exam-question-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;padding:14px 18px;border-bottom:1px solid #e2e8f0;background:linear-gradient(180deg,#ffffff,#f8fafc);}
+.exam-question-main{color:#111827;padding:18px 22px 6px;font-size:1.13rem;font-weight:800;line-height:1.5;white-space:pre-wrap;word-break:break-word;tab-size:4;background:transparent !important;}
+.exam-question-body{padding:18px 22px 22px;background:#fff;}
+.question-text-block{color:#111827;font-size:1.03rem;line-height:1.65;font-weight:400;white-space:pre-wrap;word-break:break-word;tab-size:4;margin:0 0 14px;}
+.question-text-block strong{color:#111;}
+.exam-actions{position:fixed;left:0;right:0;bottom:0;z-index:9;display:grid !important;grid-template-columns:1fr auto auto auto auto;align-items:center;gap:10px;min-height:82px;padding:14px 28px;border-top:1px solid #263244;background:#111827;box-shadow:0 -16px 34px rgba(15,23,42,.22);}
+.exam-actions .btn{min-width:116px;border-radius:10px;}
+.exam-actions::before{content:"Vinayak ProEdu Mock Exam";color:#cbd5e1;font-weight:800;justify-self:start;}
+.option{border-radius:12px;border-color:#d8dee9;padding:14px 16px;background:#fff;}
+.option:hover{background:#f8fafc;border-color:#c4cedd}
+.option input{accent-color:var(--blue);}
+.feedback{display:none;}
+
+.nav-wrap{display:grid;gap:10px}
+.nav-progress{width:100%;height:12px;overflow:hidden;border-radius:999px;background:#e5e7eb;border:1px solid #dbe4f0;}
+.nav-progress-bar{height:100%;width:0%;border-radius:999px;background:linear-gradient(135deg,var(--navy),var(--blue));transition:width .2s ease;}
+.nav-arrow-row{display:flex;justify-content:center}
+.nav-arrow{width:38px;height:32px;padding:0;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;font-size:.95rem;line-height:1;}
+.nav-panel{display:none}
+.nav-panel.open{display:block}
+.nav-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.nav-btn{border:1px solid #dbe4f0;background:#eef4ff;padding:7px 0;border-radius:10px;font-weight:800;cursor:pointer;font-size:.84rem;}
+.nav-btn.answered{background:#d1fae5;border-color:#a7f3d0}
+.nav-btn.review{background:#fef3c7;border-color:var(--gold)}
+.nav-btn.current{outline:2px solid var(--blue);background:#dbeafe}
+.nav-legend{display:flex;gap:8px;flex-wrap:wrap;font-size:.78rem;color:var(--muted);margin:8px 0 0}
+.legend-chip{display:inline-flex;align-items:center;gap:6px;padding:4px 8px;border-radius:999px;background:#f8fafc;border:1px solid var(--border)}
+.lock-screen{padding:26px;border:1px solid #fecaca;background:#fff5f5;border-radius:18px;text-align:center}
+.lock-screen h3{margin:0 0 8px}
+.fib-inline{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.fib-input{min-width:120px;width:160px;background:#111 !important;color:#fff !important;border:1px solid #111 !important;border-radius:4px !important;font-weight:800;}
+.result-shell{display:grid;gap:16px}
+.result-summary{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+.result-card{padding:16px;border:1px solid var(--border);border-radius:16px;background:#fff;box-shadow:var(--shadow-sm)}
+.result-card h3{margin:0 0 6px}
+.result-ok{background:#ecfdf5;border-color:#86efac}
+.result-bad{background:#fff1f2;border-color:#fecdd3}
+.question-image{max-width:100%;border-radius:16px;border:1px solid var(--border);margin:12px 0}
+.question-image img{width:100%;display:block;border-radius:16px}
+.question-list-item{padding:14px;border:1px solid var(--border);border-radius:14px;background:#fff;box-shadow:0 10px 22px rgba(15,23,42,.06)}
+.question-list-item .meta{font-size:.8rem;color:var(--muted);margin-top:4px}
+.question-list-item .qtext{font-weight:400;margin:8px 0}
+.question-list-item .qactions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+
+.question-shell{position:relative;padding:8px 0 28px;}
+.question-watermark{position:absolute;right:12px;bottom:10px;font-family:"Times New Roman", Georgia, serif;font-size:1.15rem;letter-spacing:.18em;color:#111;opacity:.08;pointer-events:none;user-select:none;white-space:nowrap;}
+.question-list-item .watermark-mini{position:absolute;right:12px;bottom:10px;font-family:"Times New Roman", Georgia, serif;opacity:.07;font-size:1rem;letter-spacing:.16em;pointer-events:none;user-select:none;}
+.question-list-item{position:relative;overflow:hidden;}
+
+/* Uploadcare fallback */
+.uploadcare-panel{margin:4px 0 12px;padding:12px;border:1px dashed var(--border);border-radius:14px;background:#fbfdff;}
+.uploadcare-panel uc-file-uploader-regular{display:block;margin-top:8px;}
+.uploadcare-panel .uploadcare-status{margin-top:8px;}
+.manual-url-fallback{margin-top:10px;padding:10px;border:1px solid var(--border);border-radius:10px;background:#f8fafc;}
+.manual-url-fallback label{text-transform:none;letter-spacing:0;font-size:.85rem;color:var(--navy);}
+
+.center-modal{position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(15,23,42,.62);backdrop-filter:blur(5px);}
+.center-modal-card{width:min(430px,100%);background:#fff;border:1px solid var(--border);border-radius:18px;box-shadow:0 24px 70px rgba(15,23,42,.28);padding:22px;}
+.center-modal-card h3{margin:0 0 8px;font-size:1.18rem;color:var(--navy)}
+.center-modal-card p{margin:0 0 14px;color:var(--muted);line-height:1.55}
+.center-modal-card .btn-row{justify-content:flex-end;margin-top:12px;}
+.attempt-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+.question-group{border:1px solid var(--border);border-radius:16px;background:#fff;box-shadow:var(--shadow-sm);overflow:hidden;}
+.question-group > summary{list-style:none;cursor:pointer;padding:14px 16px;display:flex;justify-content:space-between;gap:12px;align-items:center;background:linear-gradient(180deg,#fff,#f8fbff);font-weight:900;color:var(--navy);}
+.question-group > summary::-webkit-details-marker{display:none}
+.question-group-body{display:grid;gap:10px;padding:14px;border-top:1px solid var(--border)}
+.question-number-badge{display:inline-flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px;}
+
+.timer.warning{background:#fff7ed;color:#c2410c;border:1px solid #fdba74;box-shadow:0 0 0 4px rgba(249,115,22,.10);}
+.timer.critical{background:#fecaca;color:#7f1d1d;border:1px solid #f87171;box-shadow:0 0 0 4px rgba(239,68,68,.10);}
+
+.hidden{display:none !important}
+
+
+/* ACCA CBE style additions */
+.exam-acca-bar{grid-column:1 / -1;display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding:8px 12px;background:#f1f3f6;border-top:1px solid #d8dee9;border-bottom:1px solid #d8dee9;}
+.exam-acca-bar button{border:1px solid #c9d2e0;background:#fff;color:#1f2d3d;border-radius:6px;padding:6px 12px;font-weight:700;font-size:.82rem;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.exam-acca-bar button:hover{background:#eef4ff;}
+.cr-layout{align-items:stretch;}
+.cr-word{min-height:220px;border:1px solid var(--border);border-radius:12px;padding:12px 14px;background:#fff;outline:none;font-size:.95rem;line-height:1.6;}
+.cr-word:focus{border-color:#b8c7ea;box-shadow:0 0 0 3px rgba(30,60,114,.07);}
+.cr-editor-toolbar{display:flex;gap:6px;margin-bottom:8px;}
+.cr-editor-toolbar button{border:1px solid var(--border);background:#f8fafc;border-radius:8px;padding:5px 12px;cursor:pointer;font-weight:700;}
+.cr-grid-wrap{overflow:auto;border:1px solid var(--border);border-radius:12px;background:#fff;}
+.cr-grid{border-collapse:collapse;width:100%;min-width:520px;}
+.cr-grid th{background:#eef2f8;border:1px solid #dbe2ee;font-size:.75rem;padding:4px 6px;color:var(--navy);width:96px;}
+.cr-grid td{border:1px solid #e2e8f0;min-width:96px;height:28px;padding:3px 6px;font-size:.88rem;outline:none;}
+.cr-grid td:focus{background:#f8fbff;box-shadow:inset 0 0 0 2px rgba(30,60,114,.25);}
+.cr-note{margin-top:8px;}
+.scratchpad{position:fixed;right:18px;bottom:96px;width:300px;z-index:9999;background:#fffbe6;border:1px solid #e5d9a0;border-radius:14px;box-shadow:var(--shadow-md);padding:12px;display:grid;gap:8px;}
+.scratchpad textarea{min-height:140px;margin:0;background:#fffdf2;font-family:'DM Sans',sans-serif;}
+.calc-pop{position:fixed;right:18px;bottom:96px;width:240px;z-index:9999;background:#111827;border-radius:14px;padding:12px;box-shadow:var(--shadow-md);display:grid;gap:8px;}
+.calc-pop input{width:100%;margin:0;text-align:right;font-weight:800;background:#1f2937;color:#fff;border:1px solid #374151;}
+.calc-keys{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;}
+.calc-keys button{padding:10px 0;border:none;border-radius:8px;background:#374151;color:#fff;font-weight:800;cursor:pointer;}
+.calc-keys button.op{background:var(--gold);color:var(--navy);}
+.marking-card{width:min(860px,100%);max-height:88vh;overflow:auto;background:#f5f7fb;border-radius:18px;border:1px solid var(--border);box-shadow:0 24px 70px rgba(15,23,42,.28);display:flex;flex-direction:column;}
+.marking-head{background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;gap:10px;border-radius:18px 18px 0 0;position:sticky;top:0;z-index:2;}
+.marking-body{padding:16px 20px;display:grid;gap:14px;}
+.marking-q{background:#fff;border:1px solid var(--border);border-radius:14px;padding:14px;}
+.marking-answer{background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:12px;margin:10px 0;max-height:260px;overflow:auto;}
+.marking-foot{padding:0 20px 18px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;}
+@media (max-width: 980px){
+  .app-main{margin-left:0;}
+  .app-sidebar{position:relative;height:auto;width:100%;}
+  .grid-2,.grid-3,.row,.option-row{grid-template-columns:1fr}
+  .sb-layout{grid-template-columns:1fr;}
+}
+@media (max-width: 640px){
+  .app-main{padding:14px}
+  .sidebar,.card,.panel,.attempt-card,.item,.question-card,.mock-paper{padding:16px}
+}
+@media (max-width: 900px){
+  .mock-topbar{grid-template-columns:1fr;align-items:start;}
+  .exam-meta-bar{justify-content:flex-start;}
+  .exam-actions{grid-template-columns:1fr 1fr;position:sticky;}
+  .exam-actions::before{grid-column:1 / -1;}
+  .exam-actions .btn{min-width:0;width:100%;}
+  .exam-shell{padding:16px 14px 24px;}
+}
+</style>
+<base target="_blank">
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-wrap" id="loginWrap">
+  <div class="login-box">
+    <h2>Mock Exam Portal</h2>
+    <p>Admin & Student Access</p>
+    <div class="login-field"><label>Email</label><input type="email" id="loginEmail" placeholder="you@example.com"></div>
+    <div class="login-field"><label>Password</label><input type="password" id="loginPassword" placeholder="••••••••"></div>
+    <button class="login-btn" id="loginBtn" type="button">Login</button>
+    <div class="login-status" id="loginStatus"></div>
+    <div style="margin-top:14px;text-align:center;font-size:0.82rem;color:rgba(255,255,255,0.45);">
+      Admins use admin email. Students use any registered email.
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div class="app-shell hidden" id="appShell">
+  <aside class="app-sidebar">
+    <div class="app-brand">
+      <img src="https://pasteimg.com/images/2026/03/31/WhatsApp-Image-2026-03-19-at-6.49.19-PM.jpg" alt="Vinayak ProEdu">
+      <div>
+        <h3>Vinayak ProEdu</h3>
+        <p id="roleText">Admin Panel</p>
+      </div>
+    </div>
+    <div style="margin-bottom:12px">
+      <span id="roleBadge" class="role-badge">Role: student</span>
+    </div>
+    <nav class="app-menu" id="appMenu">
+      <button class="active" data-view="dashboardView">📊 Dashboard</button>
+      <button data-view="papersView">📝 Mock Papers</button>
+      <button id="adminMenuBtn" data-view="adminView" hidden>⚙️ Admin Editor</button>
+      <button data-view="attemptsView">📋 Attempts</button>
+      <button id="logoutBtn" type="button">🚪 Logout</button>
+    </nav>
+  </aside>
+
+  <main class="app-main">
+    <div class="app-topbar">
+      <div>
+        <h1 class="app-title">Mock Exam Manager</h1>
+        <div class="app-sub" id="appSub">Create papers, add questions, and review attempts</div>
+      </div>
+      <button class="btn btn-ghost" id="closeBtn" type="button">Close</button>
+    </div>
+
+    <!-- Stats -->
+    <div class="grid-3" style="margin-bottom:16px;">
+      <div class="stat"><div class="n" id="paperCount">0</div><div class="l">Papers</div></div>
+      <div class="stat"><div class="n" id="questionCount">0</div><div class="l">Questions</div></div>
+      <div class="stat"><div class="n" id="attemptCount">0</div><div class="l">Attempts</div></div>
+    </div>
+
+    <div class="content">
+      <!-- DASHBOARD -->
+      <section id="dashboardView" class="view active">
+        <div class="card">
+          <div class="section-head">
+            <div>
+              <h2 class="title">Available Papers</h2>
+              <p class="sub">Open a mock paper and start the exam.</p>
+            </div>
+          </div>
+          <div id="paperList" class="list"></div>
+        </div>
+      </section>
+
+      <!-- PAPERS -->
+      <section id="papersView" class="view">
+        <div class="card">
+          <div class="section-head">
+            <div>
+              <h2 class="title">Mock Papers</h2>
+              <p class="sub">Search and start any mock paper.</p>
+            </div>
+            <input id="paperSearch" placeholder="Search paper code or title" style="max-width:280px;">
+          </div>
+          <div id="papersPanel" class="list"></div>
+        </div>
+      </section>
+
+      <!-- ADMIN -->
+      <section id="adminView" class="view" hidden>
+        <div class="grid-2">
+          <div class="panel">
+            <h2 class="title">Create / Update Mock Paper</h2>
+            <label>Paper Code</label>
+            <input id="paperCode" placeholder="FR, SBL, PM, AA...">
+            <label>Paper Title</label>
+            <input id="paperTitle" placeholder="Financial Reporting">
+            <label>Level</label>
+            <select id="paperLevel">
+              <option>Applied Knowledge</option>
+              <option>Applied Skills</option>
+              <option>Strategic Professional</option>
+            </select>
+            <div class="row">
+              <div>
+                <label>Time Limit (minutes)</label>
+                <input id="paperTime" type="number" value="90">
+              </div>
+              <div>
+                <label>Total Marks</label>
+                <input id="paperMarks" type="number" value="100">
+              </div>
+            </div>
+            <label style="display:flex;align-items:center;gap:10px;text-transform:none;letter-spacing:0;font-size:.92rem;font-weight:700;color:var(--navy);margin:0 0 12px;">
+              <input id="paperLocked" type="checkbox" style="width:auto;margin:0;" />
+              Lock paper for students
+            </label>
+            <div class="row">
+              <div>
+                <label>Allowed Attempts</label>
+                <input id="paperAttempts" type="number" min="1" value="1" placeholder="1">
+              </div>
+              <div style="display:flex;align-items:end;padding-bottom:12px;">
+                <div class="small">Admin controls how many times a student can start this paper.</div>
+              </div>
+            </div>
+            <label>Section Layout</label>
+            <textarea id="paperSections" placeholder="Leave blank for ACCA defaults. Applied Skills:&#10;Section A - Objective Test&#10;Section B - Objective Test (Case)&#10;Section C - Constructed Response"></textarea>
+            <label style="display:flex;align-items:center;gap:10px;text-transform:none;letter-spacing:0;font-size:.92rem;font-weight:700;color:var(--navy);margin:0 0 12px;cursor:pointer;">
+              <input id="paperFree" type="checkbox" style="width:auto;margin:0;" />
+              🎁 Free paper (trial / webinar users can take this mock)
+            </label>
+            <div class="btn-row">
+              <button class="btn btn-primary" id="savePaperBtn">Save Paper</button>
+              <button class="btn btn-ghost" id="clearPaperBtn">Clear</button>
+            </div>
+            <div id="paperStatus" class="small" style="margin-top:10px"></div>
+          </div>
+
+          <div class="panel">
+            <h2 class="title">Add Question</h2>
+            <label>Select Paper</label>
+            <select id="questionPaper"></select>
+            <label>Section</label>
+            <input id="questionSection" placeholder="A, B, C">
+            <label>Question Type</label>
+            <select id="questionType">
+              <option value="mcq">MCQ</option>
+              <option value="screenshot">Screenshot MCQ</option>
+              <option value="sectionb">Section B Screenshot / Table</option>
+              <option value="multi">Multiple Response</option>
+              <option value="fill">Fill in the Blank / Screenshot FIB</option>
+              <option value="dropdown">Dropdown</option>
+              <option value="otcase">OT Case</option>
+              <option value="word">Constructed Response – Word (manual marking)</option>
+              <option value="excel">Constructed Response – Spreadsheet / Excel (manual marking)</option>
+            </select>
+            <label>Main Question / Scenario Heading</label>
+            <textarea id="mainQuestionText" placeholder="This appears in the black highlighted exam heading. Use it for the main requirement, scenario title, or instruction."></textarea>
+            <label>Normal Question Text</label>
+            <textarea id="questionText" placeholder="Paste the full question exactly as required. Line breaks and numbered points will be preserved in the exam view."></textarea>
+
+            <div id="imageUploadSection" style="display:none;">
+              <label>Question Screenshot Upload</label>
+              <div id="uploadcarePanel" class="uploadcare-panel">
+                <uc-config ctx-name="question-uploader" pubkey="9dcf4ee1bc520691123a" img-only multiple="false" max-local-file-size-bytes="5000000" use-cloud-image-editor="true"></uc-config>
+                <uc-upload-ctx-provider id="questionUploaderCtx" ctx-name="question-uploader"></uc-upload-ctx-provider>
+                <uc-file-uploader-regular ctx-name="question-uploader"></uc-file-uploader-regular>
+                <div class="small uploadcare-status" id="uploadcareStatus">Upload a screenshot or image for the question.</div>
+              </div>
+              <!-- Fallback for tracking-prevention blocked browsers -->
+              <div class="manual-url-fallback">
+                <label>Or paste image URL manually (fallback if upload is blocked)</label>
+                <input type="text" id="manualImageUrl" placeholder="https://ucarecdn.com/... or any image URL" onchange="handleManualUrl(this.value)">
+              </div>
+              <div id="imagePreviewWrap" class="question-image" style="display:none;"></div>
+            </div>
+            <label>Image Alt Text</label>
+            <input id="questionImageAlt" placeholder="Describe the image">
+
+            <div id="dynamicFields" class="option-list"></div>
+
+            <div class="section-head" style="margin-top:8px">
+              <div>
+                <h3 class="small" style="margin:0;color:var(--navy)">Answer Options</h3>
+                <div class="small">Use options only for MCQ / Multiple Response / Dropdown.</div>
+              </div>
+              <button class="btn btn-ghost" id="addOptionBtn" type="button">+ Add option</button>
+            </div>
+            <div id="optionsWrap" class="option-list"></div>
+
+            <div class="row">
+              <div>
+                <label>Correct Answer</label>
+                <input id="questionCorrect" placeholder="For MCQ use option number like 0">
+              </div>
+              <div>
+                <label>Marks</label>
+                <input id="questionMarks" type="number" value="2">
+              </div>
+            </div>
+            <label>Explanation</label>
+            <textarea id="questionExplanation"></textarea>
+            <div class="btn-row">
+              <button class="btn btn-gold" id="saveQuestionBtn">Save Question</button>
+              <button class="btn btn-ghost" id="cancelQuestionEditBtn" type="button" style="display:none;">Cancel Edit</button>
+            </div>
+            <div id="questionStatus" class="small" style="margin-top:10px"></div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:16px">
+          <h2 class="title">Existing Papers</h2>
+          <div id="adminPaperList" class="list"></div>
+        </div>
+        <div class="card" style="margin-top:16px">
+          <h2 class="title">Existing Questions</h2>
+          <div id="questionList" class="list"></div>
+        </div>
+      </section>
+
+      <!-- ATTEMPTS -->
+      <section id="attemptsView" class="view">
+        <div class="card">
+          <h2 class="title">Attempts</h2>
+          <div id="attemptList" class="list"></div>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<!-- MOCK EXAM OVERLAY -->
+<div id="mockOverlay" class="mock-overlay hidden">
+  <div class="mock-shell">
+    <div class="mock-topbar">
+      <div class="exam-brandline">
+        <img class="exam-logo" src="https://pasteimg.com/images/2026/03/31/WhatsApp-Image-2026-03-19-at-6.49.19-PM.jpg" alt="Vinayak ProEdu">
+        <div>
+          <div class="exam-kicker">Vinayak ProEdu Mock Paper</div>
+          <h2 id="overlayTitle">Paper</h2>
+        </div>
+      </div>
+      <div class="exam-meta-bar">
+        <span class="exam-pill" id="examQuestionPill">Question 1 of 1</span>
+        <span class="exam-pill" id="examMarksPill">0 marks</span>
+        <span class="exam-pill"><span id="overlayMetricLabel">Time</span> <strong class="timer" id="overlayTimer">00:00</strong></span>
+        <div id="timerWarning" class="small" style="display:none;color:#92400e;background:#fef3c7;border:1px solid #f3d18b;padding:8px 10px;border-radius:10px;">15 minutes left</div>
+      </div>
+      <div class="exam-meta-bar">
+        <span class="exam-pill"><span id="examProgressLabel">0% complete</span><span class="exam-progress"><span id="examProgressFill"></span></span></span>
+        <button class="btn btn-gold" id="submitMockBtn">Submit</button>
+      </div>
+    </div>
+    <div class="exam-acca-bar">
+      <button type="button" onclick="toggleScratchpad()">🗒 Scratch Pad</button>
+      <button type="button" onclick="insertSymbol()">$ Symbol</button>
+      <button type="button" onclick="applyFormat('hiliteColor','yellow')">🖍 Highlight</button>
+      <button type="button" onclick="applyFormat('strikeThrough')">➕ Strikethrough</button>
+      <button type="button" onclick="toggleCalculator()">🧮 Calculator</button>
+      <button type="button" onclick="toggleExamNavigator()">▦ Navigator</button>
+      <button type="button" onclick="toggleReviewFlag()">🚩 Flag for Review</button>
+      <button type="button" onclick="requestSubmitMock()">Close All</button>
+    </div>
+    <div class="mock-body">
+      <div id="overlayBody"></div>
+    </div>
+    <div id="scratchpad" class="scratchpad hidden">
+      <strong style="font-size:.85rem;color:var(--navy);">Scratch Pad</strong>
+      <textarea id="scratchpadText" placeholder="Type notes here — kept during this exam only."></textarea>
+      <button class="btn btn-ghost" type="button" onclick="document.getElementById('scratchpad').classList.add('hidden')" style="justify-self:end;">Close</button>
+    </div>
+    <div id="calcPop" class="calc-pop hidden">
+      <input id="calcDisplay" value="0" readonly>
+      <div class="calc-keys" id="calcKeys"></div>
+      <button class="btn btn-ghost" type="button" onclick="document.getElementById('calcPop').classList.add('hidden')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- MARKING OVERLAY (admin manual marking of constructed responses) -->
+<div id="markingOverlay" class="mock-overlay hidden">
+  <div class="marking-card">
+    <div class="marking-head">
+      <div><div style="font-size:.72rem;letter-spacing:1.6px;text-transform:uppercase;opacity:.75;">Manual Marking · Constructed Response</div><h3 id="markingTitle" style="margin:2px 0 0;font-size:1.05rem;">Attempt</h3></div>
+      <button class="btn btn-gold" type="button" onclick="closeMarking()">Close</button>
+    </div>
+    <div class="marking-body" id="markingBody"></div>
+    <div class="marking-foot">
+      <div class="small" id="markingStatus"></div>
+      <button class="btn btn-gold" type="button" onclick="saveMarking()">💾 Save Marks & Finalise</button>
+    </div>
+  </div>
+</div>
+
+<!-- CENTER MODAL -->
+<div id="centerModal" class="center-modal hidden" role="dialog" aria-modal="true">
+  <div class="center-modal-card">
+    <h3 id="centerModalTitle">Confirm</h3>
+    <p id="centerModalMessage"></p>
+    <div id="centerModalInputWrap" class="hidden">
+      <label>Student Name</label>
+      <input id="centerModalInput" type="text" placeholder="Enter student name">
+    </div>
+    <div class="btn-row" style="justify-content:flex-end;margin-top:12px;">
+      <button class="btn btn-ghost" id="centerModalCancelBtn" type="button">Cancel</button>
+      <button class="btn btn-primary" id="centerModalConfirmBtn" type="button">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ================= FIREBASE ================= */
+
+const auth = firebase.auth();
+const db = firebase.firestore();
+const ADMIN_EMAIL = 'vinayakproedu@gmail.com';
+auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(()=>{});
+
+/* ================= STATE ================= */
+const state = {
+  user: null, role: 'student', papers: [], questions: [], attempts: [],
+  activePaper: null, activeQuestions: [], currentIndex: 0,
+  selected: {}, reviewed: {}, examActive: false, examLocked: false,
+  examProtectionArmed: false, lockReason: '', remaining: 0,
+  timerEndAt: 0, timerWarningShown: false, submitting: false,
+  editingQuestionId: null, questionImageUrl: '', startTime: 0,
+  timer: null, editingPaperId: null, paperMode: 'new',
+  sidebarCollapsed: false, examNavOpen: false, loginIntent: false,
+  studentName: '', pendingStartPaperId: '', centerModalAction: null, uiPromptOpen: false
+};
+
+/* ================= DOM ================= */
+const el = {
+  loginWrap: document.getElementById('loginWrap'),
+  appShell: document.getElementById('appShell'),
+  loginStatus: document.getElementById('loginStatus'),
+  loginEmail: document.getElementById('loginEmail'),
+  loginPassword: document.getElementById('loginPassword'),
+  loginBtn: document.getElementById('loginBtn'),
+  logoutBtn: document.getElementById('logoutBtn'),
+  closeBtn: document.getElementById('closeBtn'),
+  roleBadge: document.getElementById('roleBadge'),
+  roleText: document.getElementById('roleText'),
+  appSub: document.getElementById('appSub'),
+  adminMenuBtn: document.getElementById('adminMenuBtn'),
+  views: [...document.querySelectorAll('.view')],
+  menuBtns: [...document.querySelectorAll('.app-menu button')],
+  paperList: document.getElementById('paperList'),
+  papersPanel: document.getElementById('papersPanel'),
+  adminPaperList: document.getElementById('adminPaperList'),
+  attemptList: document.getElementById('attemptList'),
+  paperCount: document.getElementById('paperCount'),
+  questionCount: document.getElementById('questionCount'),
+  attemptCount: document.getElementById('attemptCount'),
+  paperSearch: document.getElementById('paperSearch'),
+  paperCode: document.getElementById('paperCode'),
+  paperTitle: document.getElementById('paperTitle'),
+  paperLevel: document.getElementById('paperLevel'),
+  paperTime: document.getElementById('paperTime'),
+  paperMarks: document.getElementById('paperMarks'),
+  paperLocked: document.getElementById('paperLocked'),
+  paperAttempts: document.getElementById('paperAttempts'),
+  paperSections: document.getElementById('paperSections'),
+  paperStatus: document.getElementById('paperStatus'),
+  questionPaper: document.getElementById('questionPaper'),
+  questionSection: document.getElementById('questionSection'),
+  questionType: document.getElementById('questionType'),
+  mainQuestionText: document.getElementById('mainQuestionText'),
+  questionText: document.getElementById('questionText'),
+  questionCorrect: document.getElementById('questionCorrect'),
+  questionMarks: document.getElementById('questionMarks'),
+  questionExplanation: document.getElementById('questionExplanation'),
+  questionStatus: document.getElementById('questionStatus'),
+  questionList: document.getElementById('questionList'),
+  imageUploadSection: document.getElementById('imageUploadSection'),
+  uploadcarePanel: document.getElementById('uploadcarePanel'),
+  questionUploaderCtx: document.getElementById('questionUploaderCtx'),
+  uploadcareStatus: document.getElementById('uploadcareStatus'),
+  questionImageAlt: document.getElementById('questionImageAlt'),
+  imagePreviewWrap: document.getElementById('imagePreviewWrap'),
+  manualImageUrl: document.getElementById('manualImageUrl'),
+  cancelQuestionEditBtn: document.getElementById('cancelQuestionEditBtn'),
+  timerWarning: document.getElementById('timerWarning'),
+  dynamicFields: document.getElementById('dynamicFields'),
+  optionsWrap: document.getElementById('optionsWrap'),
+  addOptionBtn: document.getElementById('addOptionBtn'),
+  mockOverlay: document.getElementById('mockOverlay'),
+  overlayTitle: document.getElementById('overlayTitle'),
+  overlayMetricLabel: document.getElementById('overlayMetricLabel'),
+  overlayTimer: document.getElementById('overlayTimer'),
+  overlayBody: document.getElementById('overlayBody'),
+  examQuestionPill: document.getElementById('examQuestionPill'),
+  examMarksPill: document.getElementById('examMarksPill'),
+  examProgressLabel: document.getElementById('examProgressLabel'),
+  examProgressFill: document.getElementById('examProgressFill'),
+  savePaperBtn: document.getElementById('savePaperBtn'),
+  clearPaperBtn: document.getElementById('clearPaperBtn'),
+  saveQuestionBtn: document.getElementById('saveQuestionBtn'),
+  submitMockBtn: document.getElementById('submitMockBtn'),
+  centerModal: document.getElementById('centerModal'),
+  centerModalTitle: document.getElementById('centerModalTitle'),
+  centerModalMessage: document.getElementById('centerModalMessage'),
+  centerModalInputWrap: document.getElementById('centerModalInputWrap'),
+  centerModalInput: document.getElementById('centerModalInput'),
+  centerModalCancelBtn: document.getElementById('centerModalCancelBtn'),
+  centerModalConfirmBtn: document.getElementById('centerModalConfirmBtn')
+};
+
+const esc = s => String(s ?? '').replace(/[&<>'"]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[m]));
+const renderPastedText = value => esc(value).replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+const normalizeText = value => String(value ?? '').trim().toLowerCase().replace(/\s+/g, ' ');
+const getVal = id => (document.getElementById(id)?.value || '').trim();
+const pad2 = n => String(n).padStart(2, '0');
+const fmtTime = sec => `${pad2(Math.floor(sec / 60))}:${pad2(sec % 60)}`;
+
+function setStatus(node, msg, error = false) {
+  node.textContent = msg;
+  node.className = 'small ' + (error ? 'error' : 'ok');
+}
+function isAdminEmail(email) { return normalizeText(email) === normalizeText(ADMIN_EMAIL); }
+
+function showView(id) {
+  if (state.role !== 'admin' && id === 'adminView') return;
+  el.views.forEach(v => v.classList.toggle('active', v.id === id));
+  el.menuBtns.forEach(b => b.classList.toggle('active', b.dataset.view === id));
+}
+
+/* ================= AUTH ================= */
+async function doLogin() {
+  try {
+    const email = el.loginEmail.value.trim();
+    const pw = el.loginPassword.value;
+    if (!email || !pw) throw new Error('Email and password required.');
+    state.loginIntent = true;
+    sessionStorage.setItem('vp_login_intent','1');
+    await auth.signInWithEmailAndPassword(email, pw);
+  } catch (err) {
+    el.loginStatus.textContent = err.message;
+    el.loginStatus.className = 'login-status error';
+  }
+}
+
+function showApp() {
+  el.loginWrap.classList.add('hidden');
+  el.appShell.classList.remove('hidden');
+}
+
+function closeApp() {
+  el.loginWrap.classList.remove('hidden');
+  el.appShell.classList.add('hidden');
+}
+
+auth.onAuthStateChanged(async user => {
+  state.user = user || null;
+  if (user) {
+    if (!state.loginIntent && sessionStorage.getItem('vp_login_intent')!=='1') { state.role='student'; closeApp(); auth.signOut().catch(()=>{}); return; }
+    state.loginIntent = true;
+    state.role = isAdminEmail(user.email) ? 'admin' : 'student';
+    el.roleBadge.textContent = 'Role: ' + state.role;
+    el.roleText.textContent = state.role === 'admin' ? 'Admin Panel' : 'Student Portal';
+    el.appSub.textContent = state.role === 'admin' ? 'Create papers, add questions, and review attempts' : 'Take mock exams and review your performance';
+    const isAdmin = state.role === 'admin';
+    el.adminMenuBtn.hidden = !isAdmin;
+    document.getElementById('adminView').hidden = !isAdmin;
+    if (!isAdmin && document.getElementById('adminView').classList.contains('active')) showView('dashboardView');
+    showApp();
+    await refreshAll();
+  } else {
+    state.loginIntent = false;
+    state.role = 'student';
+    closeApp();
+  }
+});
+
+el.loginBtn.addEventListener('click', doLogin);
+el.logoutBtn.addEventListener('click', async () => { state.loginIntent=false; sessionStorage.removeItem('vp_login_intent'); await auth.signOut(); location.reload(); });
+el.closeBtn.addEventListener('click', () => { window.location.href='index.html'; });
+
+/* ================= DATA ================= */
+async function loadData() {
+  const isAdmin = state.role === 'admin';
+  const attemptsRef = isAdmin
+    ? db.collection('mockAttempts').orderBy('createdAt','desc')
+    : (state.user ? db.collection('mockAttempts').where('userId','==',state.user.uid) : null);
+  const [pSnap,qSnap,aSnap] = await Promise.all([
+    db.collection('mockPapers').orderBy('createdAt','desc').get().catch(()=>({docs:[]})),
+    db.collection('mockQuestions').orderBy('createdAt','asc').get().catch(()=>({docs:[]})),
+    attemptsRef ? attemptsRef.get().catch(()=>({docs:[]})) : Promise.resolve({docs:[]})
+  ]);
+  state.papers = pSnap.docs.map(d=>({id:d.id,...d.data()}));
+  state.questions = qSnap.docs.map(d=>({id:d.id,...d.data()}));
+  state.attempts = aSnap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>Number(b.createdAt?.seconds||0)-Number(a.createdAt?.seconds||0));
+  const myAttempts = state.user ? state.attempts.filter(a=>String(a.userId)===String(state.user.uid)).length : 0;
+  el.paperCount.textContent = state.papers.length;
+  el.questionCount.textContent = isAdmin ? state.questions.length : '-';
+  el.attemptCount.textContent = isAdmin ? state.attempts.length : myAttempts;
+}
+
+function populatePaperSelect() {
+  if (state.role !== 'admin') return;
+  el.questionPaper.innerHTML = '<option value="">Select paper</option>' + state.papers.map(p=>
+    `<option value="${p.id}">${esc(p.code||'')} - ${esc(p.title||'')}</option>`
+  ).join('');
+}
+
+function getQuestionsForPaper(paperId){ return state.questions.filter(q=>String(q.paperId)===String(paperId)); }
+
+function paperSummaryCard(p) {
+  const qCount = getQuestionsForPaper(p.id).length;
+  let actions = '';
+  if (state.role === 'admin') {
+    actions = `<button class="btn btn-ghost" onclick="editPaper('${p.id}')">Edit</button> <button class="btn btn-danger" onclick="deletePaper('${p.id}')">Delete</button>`;
+  } else {
+    actions = p.locked
+      ? `<button class="btn btn-ghost" disabled>Locked</button>`
+      : `<button class="btn btn-primary" onclick="startMock('${p.id}')">Start Mock</button>`;
+  }
+  return `
+    <div class="item">
+      <div class="badge">${esc(p.code||'')}${p.locked?' · Locked':''}${p.isFree?' · 🎁 FREE':''}</div>
+      <h3>${esc(p.title||'Mock Paper')}</h3>
+      <div class="small">${esc(p.level||'')} · ${Number(p.timeLimit||0)} min · ${Number(p.totalMarks||0)} marks</div>
+      <div class="small" style="margin-top:4px;">Attempts: ${Number(p.attemptLimit||1)} · Questions: ${qCount}</div>
+      <div class="btn-row" style="margin-top:10px;">${actions}</div>
+    </div>`;
+}
+
+function renderPapers() {
+  const search = el.paperSearch.value.toLowerCase();
+  const filtered = state.papers.filter(p=>`${p.code||''} ${p.title||''} ${p.level||''}`.toLowerCase().includes(search));
+  const html = filtered.length ? filtered.map(paperSummaryCard).join('') : '<div class="empty">No papers yet.</div>';
+  el.paperList.innerHTML = html;
+  el.papersPanel.innerHTML = html;
+  el.adminPaperList.innerHTML = html;
+  populatePaperSelect();
+}
+
+function renderAttempts() {
+  const visible = state.role==='admin' ? state.attempts : state.attempts.filter(a=>!state.user||String(a.userId)===String(state.user.uid));
+  el.attemptList.innerHTML = visible.length ? visible.map(a=>{
+    const student = a.studentName || a.userEmail || 'Student';
+    const created = a.createdAt?.toDate ? a.createdAt.toDate().toLocaleString() : '';
+    return `
+      <div class="attempt-card">
+        <div class="badge">${esc(a.paperCode||'')}</div>
+        <h3>${esc(student)}</h3>
+        <div class="small"><strong>${esc(a.paperTitle||'Mock Paper')}</strong></div>
+        <div class="attempt-meta">
+          <span class="pill">Marks ${Number(a.score||0)}/${Number(a.total||0)}</span>
+          <span class="pill">${Number(a.percentage||0)}%</span>
+          <span class="pill">Time ${fmtTime(Number(a.timeTakenSec||0))}</span>
+          ${a.status==='pending_marking'?'<span class="pill" style="background:#fef3c7;color:#92400e;">Awaiting manual marking</span>':(a.status==='marked'?'<span class="pill" style="background:#d1fae5;color:#166534;">Manually marked</span>':'')}
+        </div>
+        ${state.role==='admin'&&a.status==='pending_marking'?`<div class="btn-row" style="margin-top:10px;"><button class="btn btn-gold" type="button" onclick="openMarking('${a.id}')">✍️ Mark Constructed Responses</button></div>`:''}
+        <div class="small">${esc(created)}</div>
+      </div>`;
+  }).join('') : '<div class="empty">No attempts yet.</div>';
+}
+
+function renderQuestions() {
+  const list = state.questions.slice().sort((a,b)=>{
+    const ap=String(a.paperCode||''), bp=String(b.paperCode||'');
+    return ap.localeCompare(bp)||String(a.section||'').localeCompare(String(b.section||''));
+  });
+  if(!list.length){el.questionList.innerHTML='<div class="empty">No questions yet.</div>';return;}
+  const groups=new Map();
+  list.forEach(q=>{
+    const key=String(q.paperId||q.paperCode||'unassigned');
+    if(!groups.has(key)) groups.set(key,{paperCode:q.paperCode||'',paperTitle:q.paperTitle||'Mock Paper',questions:[]});
+    groups.get(key).questions.push(q);
+  });
+  el.questionList.innerHTML=[...groups.values()].map((group,groupIdx)=>{
+    const totalMarks=group.questions.reduce((sum,q)=>sum+Number(q.marks||0),0);
+    return `
+      <details class="question-group" ${groupIdx===0?'open':''}>
+        <summary><span>${esc(group.paperCode||'Mock')} - ${esc(group.paperTitle||'Mock Paper')}</span><span class="small">${group.questions.length} question(s) - ${totalMarks} marks</span></summary>
+        <div class="question-group-body">
+          ${group.questions.map((q,idx)=>`
+            <div class="question-list-item">
+              <div class="question-number-badge">
+                <span class="badge">Q${idx+1}</span>
+                <span class="badge">${Number(q.marks||0)} marks</span>
+              </div>
+              <div class="meta">Section ${esc(q.section||'-')} - ${esc(q.type||'mcq')}</div>
+              ${q.question?`<div class="qtext question-text-block">${renderPastedText(q.question||'')}</div>`:''}
+              <div class="qactions">
+                <button class="btn btn-ghost" type="button" onclick="editQuestion('${q.id}')">Edit Q${idx+1}</button>
+                <button class="btn btn-danger" type="button" onclick="deleteQuestion('${q.id}')">Delete</button>
+              </div>
+              <div class="watermark-mini">Vinayak ProEdu</div>
+            </div>
+          `).join('')}
+        </div>
+      </details>`;
+  }).join('');
+}
+
+window.editQuestion = function(id) {
+  if (state.role !== 'admin') return;
+  const q = state.questions.find(x=>x.id===id);
+  if (!q) return;
+  populateQuestionEditor(q);
+};
+window.deleteQuestion = async function(id) {
+  if (state.role !== 'admin') return;
+  const q = state.questions.find(x=>x.id===id);
+  if (!q) return;
+  if (!confirm('Delete this question?')) return;
+  await db.collection('mockQuestions').doc(id).delete();
+  if (state.editingQuestionId===id) clearQuestionForm(true);
+  await refreshAll();
+};
+
+async function refreshAll() {
+  await loadData();
+  renderPapers();
+  renderQuestions();
+  renderAttempts();
+}
+
+/* ================= PAPER CRUD ================= */
+async function savePaper() {
+  if (state.role !== 'admin') return setStatus(el.paperStatus,'Access denied.',true);
+  try {
+    const code=getVal('paperCode').toUpperCase(), title=getVal('paperTitle'), level=getVal('paperLevel');
+    const timeLimit=Number(getVal('paperTime')||0), totalMarks=Number(getVal('paperMarks')||0);
+    const locked=!!el.paperLocked?.checked;
+    const sectionsText=getVal('paperSections');
+    if (!code||!title) throw new Error('Paper code and title are required.');
+    const accaDefaults={
+      'Applied Knowledge':['Section A - Objective Test'],
+      'Applied Skills':['Section A - Objective Test','Section B - Objective Test (Case)','Section C - Constructed Response'],
+      'Strategic Professional':['Section A - Objective Test','Section B - Constructed Response']
+    };
+    const sections=sectionsText?sectionsText.split('\n').map(s=>s.trim()).filter(Boolean):(accaDefaults[level]||[]);
+    const payload={code,title,level,timeLimit,totalMarks,locked,isFree:!!el.paperFree?.checked,attemptLimit:Math.max(1,Number(getVal('paperAttempts')||1)),sections,updatedAt:firebase.firestore.FieldValue.serverTimestamp()};
+    const shouldUpdate=state.paperMode==='edit'&&state.editingPaperId;
+    if (shouldUpdate) {
+      await db.collection('mockPapers').doc(state.editingPaperId).set(payload,{merge:true});
+    } else {
+      payload.createdAt=firebase.firestore.FieldValue.serverTimestamp();
+      await db.collection('mockPapers').add(payload);
+    }
+    state.editingPaperId=null; state.paperMode='new';
+    el.savePaperBtn.textContent='Save Paper';
+    if(el.paperLocked) el.paperLocked.checked=false;
+    if(el.paperFree) el.paperFree.checked=false;
+    setStatus(el.paperStatus,shouldUpdate?'Paper updated ✓':'Paper saved ✓');
+    await refreshAll();
+  } catch(err){setStatus(el.paperStatus,err.message,true);}
+}
+
+async function deletePaper(id) {
+  if (state.role !== 'admin') return;
+  if (!confirm('Delete this paper and its questions?')) return;
+  const qSnap=await db.collection('mockQuestions').where('paperId','==',id).get();
+  const batch=db.batch();
+  qSnap.forEach(doc=>batch.delete(doc.ref));
+  batch.delete(db.collection('mockPapers').doc(id));
+  await batch.commit();
+  await refreshAll();
+}
+window.editPaper=function(id){
+  if(state.role!=='admin')return;
+  const p=state.papers.find(x=>x.id===id);
+  if(!p)return;
+  state.editingPaperId=id; state.paperMode='edit';
+  el.paperCode.value=p.code||'';
+  el.paperTitle.value=p.title||'';
+  el.paperLevel.value=p.level||'Applied Skills';
+  el.paperTime.value=p.timeLimit||90;
+  el.paperMarks.value=p.totalMarks||100;
+  if(el.paperLocked) el.paperLocked.checked=!!p.locked;
+  if(el.paperFree) el.paperFree.checked=!!p.isFree;
+  if(el.paperAttempts) el.paperAttempts.value=Number(p.attemptLimit||1);
+  el.paperSections.value=Array.isArray(p.sections)?p.sections.join('\n'):'';
+  el.savePaperBtn.textContent='Update Paper';
+  showView('adminView');
+};
+
+/* ================= QUESTION FORM ================= */
+function clearQuestionForm(resetEdit=true) {
+  el.questionPaper.value='';
+  el.questionSection.value='';
+  el.questionType.value='mcq';
+  if(el.mainQuestionText) el.mainQuestionText.value='';
+  el.questionText.value='';
+  el.questionCorrect.value='';
+  el.questionMarks.value=2;
+  el.questionExplanation.value='';
+  if(el.questionImageAlt) el.questionImageAlt.value='';
+  state.questionImageUrl='';
+  if(el.manualImageUrl) el.manualImageUrl.value='';
+  if(el.imagePreviewWrap){el.imagePreviewWrap.style.display='none';el.imagePreviewWrap.innerHTML='';}
+  const api=getUploadcareApi();
+  if(api&&typeof api.removeAllFiles==='function'){try{api.removeAllFiles();}catch(e){}}
+  clearDynamicFields();
+  el.optionsWrap.innerHTML='';
+  buildDynamicEditor();
+  if(resetEdit){state.editingQuestionId=null;updateQuestionFormMode();}
+}
+function updateQuestionFormMode(){
+  const editing=!!state.editingQuestionId;
+  el.saveQuestionBtn.textContent=editing?'Update Question':'Save Question';
+  if(el.cancelQuestionEditBtn) el.cancelQuestionEditBtn.style.display=editing?'inline-flex':'none';
+}
+function getUploadcareApi(){
+  return el.questionUploaderCtx&&typeof el.questionUploaderCtx.getAPI==='function'?el.questionUploaderCtx.getAPI():null;
+}
+function setQuestionImagePreview(url,alt='Question image'){
+  state.questionImageUrl=url||'';
+  if(!el.imagePreviewWrap)return;
+  if(state.questionImageUrl){
+    el.imagePreviewWrap.style.display='block';
+    el.imagePreviewWrap.innerHTML=`<img src="${esc(state.questionImageUrl)}" alt="${esc(alt)}">`;
+  }else{el.imagePreviewWrap.style.display='none';el.imagePreviewWrap.innerHTML='';}
+}
+/* Manual URL fallback handler */
+window.handleManualUrl = function(url){
+  if(url&&url.trim()){
+    setQuestionImagePreview(url.trim(), el.questionImageAlt?.value||'Question image');
+    if(el.uploadcareStatus) el.uploadcareStatus.textContent='Using manual URL: '+url.trim().slice(0,60)+'...';
+  }
+};
+function updateUploadcarePanelVisibility(){
+  const isScreenshotType=el.questionType.value==='screenshot';
+  const isSectionBType=el.questionType.value==='sectionb';
+  const isFillType=el.questionType.value==='fill';
+  const showUpload=isScreenshotType||isSectionBType||isFillType;
+  if(el.imageUploadSection) el.imageUploadSection.style.display=showUpload?'block':'none';
+  const questionTextLabel=el.questionText?el.questionText.previousElementSibling:null;
+  if(el.questionText){el.questionText.style.display=isScreenshotType?'none':'';if(isScreenshotType)el.questionText.value='';}
+  if(questionTextLabel&&questionTextLabel.tagName==='LABEL') questionTextLabel.style.display=isScreenshotType?'none':'';
+  if(el.uploadcarePanel) el.uploadcarePanel.style.display=showUpload?'block':'none';
+  if(!showUpload){
+    if(el.uploadcareStatus) el.uploadcareStatus.textContent='Upload a screenshot or image for the question.';
+    setQuestionImagePreview('');
+    if(el.manualImageUrl) el.manualImageUrl.value='';
+    const api=getUploadcareApi();
+    try{if(api&&typeof api.removeAllFiles==='function')api.removeAllFiles();}catch(e){}
+  }else if(state.questionImageUrl){
+    setQuestionImagePreview(state.questionImageUrl,el.questionImageAlt?.value||'Question image');
+  }
+}
+function clearDynamicFields(){el.dynamicFields.innerHTML='';}
+function addOptionRow(value=''){
+  const idx=el.optionsWrap.querySelectorAll('.option-row').length+1;
+  const row=document.createElement('div');
+  row.className='option-row';
+  row.innerHTML=`<div class="opt-label">${idx}</div><input type="text" class="option-input" placeholder="Option ${idx}" value="${esc(value)}"><button type="button" class="btn btn-danger remove-option-btn">Remove</button>`;
+  row.querySelector('.remove-option-btn').addEventListener('click',()=>{
+    row.remove();
+    [...el.optionsWrap.querySelectorAll('.option-row')].forEach((r,i)=>{
+      r.querySelector('.opt-label').textContent=String(i+1);
+      r.querySelector('.option-input').placeholder=`Option ${i+1}`;
+    });
+  });
+  el.optionsWrap.appendChild(row);
+}
+
+/* Section B helpers */
+function parseLines(raw){return String(raw||'').split('\n').map(s=>s.trim()).filter(Boolean);}
+function parseAltLines(raw){return parseLines(raw).map(line=>line.split(/[,|]/).map(v=>normalizeText(v)).filter(Boolean));}
+function splitSectionBLine(line){
+  const cleaned=String(line||'').trim();
+  if(!cleaned)return[];
+  return cleaned.includes('||')?cleaned.split('||').map(s=>s.trim()):cleaned.split('|').map(s=>s.trim());
+}
+function normalizeSectionBKind(value){
+  const v=normalizeText(value);
+  if(['row','entry','answer','field'].includes(v))return'row';
+  if(['fixed','static','display','label','value'].includes(v))return'fixed';
+  if(['text','heading','note','instruction','subheading'].includes(v))return'text';
+  if(['number','num','input','amount','currency'].includes(v))return'number';
+  if(['dropdown','select','choice'].includes(v))return'dropdown';
+  if(['mcq','radio'].includes(v))return'mcq';
+  if(['yesno','yes/no'].includes(v))return'yesno';
+  if(['total','sum'].includes(v))return'total';
+  return v||'text';
+}
+function parseSectionBHeader(line){
+  const cleaned=String(line||'').trim();
+  if(!cleaned)return null;
+  const typeMatch=cleaned.match(/^(?:type|layout)\s*=\s*(calc\s*table|statement\s*table|statement|cash\s*flow\s*table|cashflow\s*table)(?:\s*[|]\s*(.*))?$/i);
+  if(typeMatch){
+    const rawLayout=normalizeText(typeMatch[1]).replace(/\s+/g,'');
+    const layout=rawLayout.includes('calc')?'calcTable':'statementTable';
+    return{layout,title:String(typeMatch[2]||'').trim()};
+  }
+  const parts=splitSectionBLine(cleaned);
+  const key=normalizeText(parts[0]);
+  if(['calctable','calc table','statementtable','statement table','cashflowtable','cash flow table'].includes(key)){
+    const layout=key.includes('calc')?'calcTable':'statementTable';
+    const title=parts.slice(1).join(' | ').trim();
+    return{layout,title};
+  }
+  if(['title','heading'].includes(key)) return{title:parts.slice(1).join(' | ').trim()};
+  return null;
+}
+function parseSectionBRowLine(line){
+  let parts=splitSectionBLine(line);
+  if(!parts.length)return null;
+  const duplicatePrefix=()=>{
+    while(parts.length>1){
+      const p0=normalizeText(parts[0]), p1=normalizeText(parts[1]);
+      if(p0&&p0===p1&&['row','fixed','text','heading','label','total','grandtotal'].includes(p0)){parts=parts.slice(1);continue;}
+      if(p0==='row'&&['row','fixed','text','heading','label','total','grandtotal'].includes(p1)){parts=parts.slice(1);continue;}
+      break;
+    }
+  };
+  duplicatePrefix();
+  let label='', fieldType='text', options=[], correct='', marks=0, altAnswers=[];
+  const prefix=normalizeText(parts[0]);
+  const parseAlt=idx=>{const rawAlt=parts[idx];return rawAlt?String(rawAlt).split(/[,|]/).map(s=>normalizeText(s)).filter(Boolean):[];};
+  const parseOptions=idx=>{const rawOptions=parts[idx];return rawOptions?String(rawOptions).split(/[,;]/).map(s=>s.trim()).filter(Boolean):[];};
+  const asInt=value=>{const n=Number(String(value??'').trim());return Number.isFinite(n)?n:NaN;};
+  const isNumericLike=value=>/^-?\d[\d,]*(\.\d+)?$/.test(String(value??'').trim());
+  if(['row','fixed','text','heading','label','total','grandtotal'].includes(prefix)){
+    if(prefix==='row'){
+      label=parts[1]||'';
+      fieldType=normalizeSectionBKind(parts[2]||'number');
+      if(['dropdown','mcq','yesno'].includes(fieldType)){options=parseOptions(3);correct=parts[4]||'';marks=asInt(parts[5]);if(Number.isNaN(marks))marks=1;altAnswers=parseAlt(6);}
+      else if(['fixed','text','heading','label'].includes(fieldType)){correct=parts[3]||parts[2]||'';marks=0;}
+      else if(fieldType==='total'){fieldType='number';correct=parts[3]||parts[2]||'';marks=asInt(parts[4]);if(Number.isNaN(marks))marks=1;altAnswers=parseAlt(5);}
+      else{if(parts.length>=5){correct=parts[3]||'';marks=asInt(parts[4]);altAnswers=parseAlt(5);}else{correct=parts[2]||'';marks=asInt(parts[3]);altAnswers=parseAlt(4);}if(Number.isNaN(marks))marks=1;}
+    }else if(prefix==='fixed'){label=parts[1]||'';fieldType='fixed';correct=parts[2]||'';marks=0;}
+    else if(prefix==='total'||prefix==='grandtotal'){
+      fieldType='number';
+      const second=parts[1]||'', third=parts[2]||'';
+      if(!second||second==='input'||second==='blank'||second==='answer'){label='';correct=third||parts[1]||'';marks=asInt(parts[3]);}
+      else if(isNumericLike(second)&&(!third||isNumericLike(third))){label='';correct=second;marks=asInt(third);}
+      else{label=second;correct=third||second;marks=asInt(parts[3]);}
+      if(Number.isNaN(marks))marks=0;
+      altAnswers=parseAlt(4);
+    }else{fieldType='text';label=parts.slice(1).join(' | ')||parts[0]||'';correct='';marks=0;}
+  }else{
+    label=parts[0]||'';
+    fieldType=normalizeSectionBKind(parts[1]||'text');
+    if(['dropdown','mcq','yesno'].includes(fieldType)){options=parseOptions(2);correct=parts[3]||'';marks=asInt(parts[4]);if(Number.isNaN(marks))marks=1;altAnswers=parseAlt(5);}
+    else if(['fixed','text','heading','label'].includes(fieldType)){correct=parts[2]||'';marks=0;}
+    else if(fieldType==='total'){fieldType='number';correct=parts[2]||'';marks=asInt(parts[3]);if(Number.isNaN(marks))marks=0;altAnswers=parseAlt(4);}
+    else{correct=parts[2]||'';marks=asInt(parts[3]);altAnswers=parseAlt(4);if(Number.isNaN(marks))marks=1;}
+  }
+  const row={label,fieldType,options,correct,marks,altAnswers};
+  if(['text','heading','label'].includes(fieldType)&&!label)return null;
+  if(fieldType==='fixed'&&!label&&!String(correct).trim())return null;
+  return row;
+}
+function parseSectionBSpec(raw){
+  const lines=parseLines(raw);
+  let layout='', title='', startIndex=0;
+  if(lines.length){
+    const header=parseSectionBHeader(lines[0]);
+    if(header&&(header.layout||header.title)){layout=header.layout||'';title=header.title||'';startIndex=1;}
+    if(!title&&lines[startIndex]){const maybeTitle=parseSectionBHeader(lines[startIndex]);if(maybeTitle&&!maybeTitle.layout&&maybeTitle.title){title=maybeTitle.title;startIndex+=1;}}
+  }
+  const rows=[];
+  for(const line of lines.slice(startIndex)){
+    const parsed=parseSectionBRowLine(line);
+    if(!parsed)continue;
+    if(parsed.__header){if(!layout&&parsed.layout)layout=parsed.layout;if(!title&&parsed.title)title=parsed.title;continue;}
+    rows.push(parsed);
+  }
+  return{layout,title,rows};
+}
+function serializeSectionBRow(row={}){
+  const label=String(row.label||'').trim();
+  const fieldType=String(row.fieldType||'text').toLowerCase();
+  const options=Array.isArray(row.options)?row.options.map(opt=>String(opt).trim()).filter(Boolean).join(','):'';
+  const correct=row.correct??'';
+  const marks=Number(row.marks||0);
+  const alt=Array.isArray(row.altAnswers)?row.altAnswers.map(v=>String(v).trim()).filter(Boolean).join(','):'';
+  if(['text','heading','label'].includes(fieldType))return`text|${label}`;
+  if(['fixed','display'].includes(fieldType))return`fixed|${label}|${String(correct).trim()}`;
+  if(fieldType==='total')return`total|${label}|${String(correct).trim()}`;
+  if(['dropdown','mcq','yesno','radio'].includes(fieldType))return`row|${label}|${fieldType}|${options}|${String(correct).trim()}|${marks}${alt?`|${alt}`:''}`;
+  return`row|${label}|${fieldType}|${options}|${String(correct).trim()}|${marks}${alt?`|${alt}`:''}`;
+}
+function buildSectionBTextareaValue(specOrQuestion){
+  const spec=specOrQuestion&&Array.isArray(specOrQuestion.rows)?specOrQuestion:{layout:String(specOrQuestion?.sectionBLayout||'').trim(),title:String(specOrQuestion?.sectionBTitle||'').trim(),rows:Array.isArray(specOrQuestion?.sectionBRows)?specOrQuestion.sectionBRows:[]};
+  const lines=[];
+  if(spec.layout||spec.title)lines.push(spec.title?`${spec.layout||'calcTable'}|${spec.title}`:(spec.layout||'calcTable'));
+  (Array.isArray(spec.rows)?spec.rows:[]).forEach(row=>lines.push(serializeSectionBRow(row)));
+  return lines.join('\n');
+}
+function generateSectionBHtmlFromRows(rows,options={}){
+  const safeRows=Array.isArray(rows)?rows.map(r=>r).filter(Boolean):[];
+  const layout=normalizeText(options.layout||'');
+  const title=String(options.title||'').trim();
+  if(!safeRows.length)return'';
+  const renderInput=(row,idx)=>{
+    const label=row.label||`Field ${idx+1}`;
+    const type=String(row.fieldType||'text').toLowerCase();
+    const marks=Number(row.marks||0);
+    const alt=Array.isArray(row.altAnswers)&&row.altAnswers.length?row.altAnswers.join(','):'';
+    const optionList=Array.isArray(row.options)?row.options:[];
+    const answer=String(row.correct??'').trim();
+    if(['dropdown','mcq','yesno'].includes(type)){
+      const opts=optionList.length?optionList:(type==='yesno'?['Yes','No']:(answer?[answer]:['Option 1','Option 2']));
+      return`<tr><td>${esc(label)}</td><td><select data-answer="${esc(answer)}" data-marks="${marks}" data-alt="${esc(alt)}"><option value="">Select</option>${opts.map(opt=>`<option value="${esc(opt)}">${esc(opt)}</option>`).join('')}</select></td></tr>`;
+    }
+    if(type==='number'||type==='input'||type==='amount'||type==='currency'){
+      return`<tr><td>${esc(label)}</td><td><input type="number" step="any" data-answer="${esc(answer)}" data-marks="${marks}" data-alt="${esc(alt)}" placeholder="Enter answer"></td></tr>`;
+    }
+    return`<tr><td>${esc(label)}</td><td><input type="text" data-answer="${esc(answer)}" data-marks="${marks}" data-alt="${esc(alt)}" placeholder="Enter answer"></td></tr>`;
+  };
+  const bodyRows=safeRows.map((row,idx)=>{
+    const type=String(row.fieldType||'text').toLowerCase();
+    const label=String(row.label||'').trim();
+    const answer=String(row.correct??'').trim();
+    if(['text','heading','label'].includes(type)&&label)return`<tr><td colspan="2" class="sb-block" style="background:#f8fafc;font-weight:800;color:#111827;">${esc(label)}</td></tr>`;
+    if(['fixed','display'].includes(type))return`<tr><td>${esc(label)}</td><td style="font-weight:700;text-align:right;">${esc(answer)}</td></tr>`;
+    if(type==='total')return renderInput({...row,fieldType:'number'},idx);
+    return renderInput(row,idx);
+  }).join('');
+  const table=layout==='calctable'?`<table class="sb-inline-table sb-calc-table"><tbody>${bodyRows}</tbody></table>`:`<table class="sb-inline-table"><thead><tr><th style="width:46%;">Item</th><th>Answer</th></tr></thead><tbody>${bodyRows}</tbody></table>`;
+  return`${title?`<div class="sb-table-title">${esc(title)}</div>`:''}${table}`;
+}
+function getSectionBHtmlSource(q){
+  const raw=String(q?.sectionBHtml||'').trim();
+  const rawSpecRegex=/(?:^|\n)\s*(?:type\s*=\s*calcTable|layout\s*=\s*calcTable|calcTable\b|calctable\b|statementTable\b|statementtable\b|cashflowtable\b|cash flow table\b|row\s*\||fixed\s*\||text\s*\||heading\s*\||label\s*\||total\s*\||grandtotal\s*\|)/i;
+  if(raw){
+    if(/<table|<div|<tr|<td|<th/i.test(raw)&&!rawSpecRegex.test(raw))return raw;
+    const spec=parseSectionBSpec(raw);
+    if(spec&&(spec.rows.length||spec.layout||spec.title))return generateSectionBHtmlFromRows(spec.rows,{layout:spec.layout,title:spec.title});
+  }
+  const rows=Array.isArray(q?.sectionBRows)?q.sectionBRows:[];
+  const layout=String(q?.sectionBLayout||'').trim();
+  const title=String(q?.sectionBTitle||'').trim();
+  return generateSectionBHtmlFromRows(rows,{layout,title});
+}
+function getFibBlankCount(sentence){
+  const ph=[...String(sentence||'').matchAll(/\{\{(\d+)\}\}/g)].map(m=>Number(m[1]));
+  if(ph.length)return Math.max(...ph);
+  if(/\[blank\]/i.test(String(sentence||'')))return 1;
+  if(/_{3,}/g.test(String(sentence||'')))return 1;
+  return 0;
+}
+function questionTotalMarks(q){
+  if((q.type||'mcq')==='sectionb'){
+    const rowsTotal=Array.isArray(q.sectionBRows)?q.sectionBRows.reduce((sum,row)=>sum+Number(row.marks||0),0):0;
+    return rowsTotal||Number(q.marks||0);
+  }
+  return Number(q.marks||0);
+}
+
+/* ================= DYNAMIC EDITOR ================= */
+function buildDynamicEditor(){
+  clearDynamicFields();
+  el.optionsWrap.innerHTML='';
+  const type=el.questionType.value;
+  el.optionsWrap.style.display='';
+  el.addOptionBtn.style.display='';
+  el.questionCorrect.placeholder='For MCQ use option number like 0';
+  if(type==='fill'){
+    updateUploadcarePanelVisibility();
+    el.optionsWrap.style.display='none';el.addOptionBtn.style.display='none';el.questionCorrect.placeholder='Optional: leave blank';
+    el.dynamicFields.innerHTML=`<label>Sentence With Blanks</label><textarea id="fillSentenceX" placeholder="Example: The capital of France is {{1}} and the currency is {{2}}."></textarea><label>Answers (one per line, blank 1 first)</label><textarea id="fillAnswersX" placeholder="Paris&#10;Euro"></textarea><label>Acceptable Alternatives (one line per blank, comma separated)</label><textarea id="fillAltX" placeholder="PARIS, France&#10;EUR, EURO"></textarea><div class="small">Use {{1}}, {{2}}, {{3}} in the sentence for multiple blanks.</div>`;
+    return;
+  }
+  if(type==='dropdown'){
+    updateUploadcarePanelVisibility();
+    el.optionsWrap.style.display='none';el.addOptionBtn.style.display='none';el.questionCorrect.placeholder='Correct option index';
+    el.dynamicFields.innerHTML=`<label>Sentence With Blank</label><textarea id="dropSentenceX" placeholder="Example: Revenue is recognised when [blank]."></textarea><label>Dropdown Options (one per line)</label><textarea id="dropOptionsX" placeholder="control passes&#10;cash is received"></textarea><label>Correct Option Index</label><input id="dropCorrectX" type="number" min="0" value="0">`;
+    return;
+  }
+  if(type==='sectionb'){
+    updateUploadcarePanelVisibility();
+    el.optionsWrap.style.display='none';el.addOptionBtn.style.display='none';el.questionCorrect.placeholder='Leave blank';el.questionMarks.placeholder='Auto from row marks';
+    el.dynamicFields.innerHTML=`<label>Section B Screenshot URLs (one per line)</label><textarea id="sbImageUrlsX" placeholder="https://ucarecdn.com/..."></textarea><label>Section B Answer Fields</label><textarea id="sbRowsX" placeholder="calcTable|Calculation of goodwill&#10;row|Fair value of consideration transferred|input|660000|1&#10;row|Fair value of NCI at acquisition|input|165000|1"></textarea><label>Section B Marking Scheme</label><textarea id="sbSchemeX" placeholder="Auto-mark each row by its marks..."></textarea>`;
+    return;
+  }
+  if(type==='word'||type==='excel'){
+    updateUploadcarePanelVisibility();
+    el.optionsWrap.style.display='none';el.addOptionBtn.style.display='none';
+    el.questionCorrect.placeholder='Leave blank – marked manually by admin';
+    el.dynamicFields.innerHTML=`<div class="small">ACCA constructed response: students answer in a ${type==='excel'?'spreadsheet-style grid (Excel)':'word-style editor'} in a split scenario/answer screen. It is <strong>not auto-marked</strong> — the attempt is saved as “pending manual marking” and the admin awards marks from the Attempts screen. Put the marking guide in the Explanation box. Use the Main Question box for the requirement (e.g. “(a) Evaluate… (4 marks)”).</div>`;
+    return;
+  }
+  if(type==='mcq'||type==='multi'||type==='screenshot'){
+    for(let i=0;i<4;i++)addOptionRow('');
+    if(type==='screenshot')el.dynamicFields.insertAdjacentHTML('beforeend','<div class="small">Upload a screenshot below. This behaves like an MCQ with an image.</div>');
+    updateUploadcarePanelVisibility();
+    return;
+  }
+  el.dynamicFields.innerHTML='';
+  updateUploadcarePanelVisibility();
+}
+function currentDynamicValues(){
+  const type=el.questionType.value;
+  if(type==='fill'){
+    const sentence=document.getElementById('fillSentenceX')?.value.trim()||'';
+    const answers=parseLines(document.getElementById('fillAnswersX')?.value||'').map(a=>normalizeText(a));
+    const altAnswers=parseAltLines(document.getElementById('fillAltX')?.value||'');
+    return{sentence,answers,altAnswers,imageUrl:state.questionImageUrl||'',imageUrls:state.questionImageUrl?[state.questionImageUrl]:[]};
+  }
+  if(type==='dropdown'){
+    const sentence=document.getElementById('dropSentenceX')?.value.trim()||'';
+    const options=parseLines(document.getElementById('dropOptionsX')?.value||'');
+    const rawCorrect=document.getElementById('dropCorrectX')?.value;
+    const correctIndex=rawCorrect===''?NaN:Number(rawCorrect);
+    return{sentence,options,correctIndex};
+  }
+  if(type==='sectionb'){
+    const imageUrls=parseLines(document.getElementById('sbImageUrlsX')?.value||'');
+    const spec=parseSectionBSpec(document.getElementById('sbRowsX')?.value||'');
+    const scheme=document.getElementById('sbSchemeX')?.value.trim()||'';
+    const allImages=[state.questionImageUrl,...imageUrls].filter(Boolean);
+    return{sectionBRows:spec.rows,sectionBLayout:spec.layout||'',sectionBTitle:spec.title||'',sectionBHtml:generateSectionBHtmlFromRows(spec.rows,{layout:spec.layout,title:spec.title}),sectionBImageUrls:[...new Set(allImages)],sectionBMarkingScheme:scheme,imageUrls:[...new Set(allImages)],imageUrl:[...new Set(allImages)][0]||''};
+  }
+  if(type==='mcq'||type==='multi'||type==='screenshot'){
+    return{options:[...el.optionsWrap.querySelectorAll('.option-input')].map(i=>i.value.trim()).filter(Boolean)};
+  }
+  return{};
+}
+
+/* ================= SAVE QUESTION ================= */
+async function saveQuestion(){
+  if(state.role!=='admin')return setStatus(el.questionStatus,'Access denied.',true);
+  try{
+    const paperId=el.questionPaper.value;
+    const section=getVal('questionSection');
+    const type=el.questionType.value;
+    const mainQuestion=el.mainQuestionText?el.mainQuestionText.value.trim():'';
+    const question=getVal('questionText');
+    const explanation=getVal('questionExplanation');
+    let marks=Number(getVal('questionMarks')||0);
+    const imageAlt=getVal('questionImageAlt');
+    if(!paperId)throw new Error('Select a paper.');
+    if(!['screenshot','sectionb','fill','dropdown'].includes(type)&&!question)throw new Error('Question text is required.');
+    const paper=state.papers.find(p=>p.id===paperId)||{};
+    const dyn=currentDynamicValues();
+    const existingQ=state.editingQuestionId?state.questions.find(x=>x.id===state.editingQuestionId):null;
+    const imageUrl=state.questionImageUrl||(existingQ&&existingQ.imageUrl?existingQ.imageUrl:'');
+    if(type==='screenshot'&&!imageUrl)throw new Error('Screenshot image is required for screenshot MCQ.');
+    let correct=getVal('questionCorrect');
+    if(type==='word'||type==='excel')correct='';
+    if(type==='mcq'||type==='screenshot')correct=Number(correct);
+    else if(type==='multi')correct=String(correct).split(',').map(v=>Number(v.trim())).filter(v=>!Number.isNaN(v));
+    else if(type==='fill'){
+      const blankCount=getFibBlankCount(dyn.sentence);
+      if(!dyn.sentence)throw new Error('Fill sentence is required.');
+      if(blankCount===0)throw new Error('Use {{1}}, {{2}} or [blank] in the sentence.');
+      if(!dyn.answers.length)throw new Error('Enter at least one answer.');
+      if(dyn.answers.length!==blankCount)throw new Error(`Sentence has ${blankCount} blank(s) but you entered ${dyn.answers.length} answer line(s).`);
+      correct=dyn.answers;
+    }else if(type==='dropdown'){
+      if(!dyn.sentence)throw new Error('Dropdown sentence is required.');
+      if(!dyn.options||dyn.options.length<2)throw new Error('Dropdown needs at least 2 options.');
+      if(!Number.isInteger(dyn.correctIndex)||dyn.correctIndex<0||dyn.correctIndex>=dyn.options.length)throw new Error(`Correct option index must be between 0 and ${dyn.options.length-1}.`);
+      correct=dyn.correctIndex;
+    }else if(type==='sectionb'){
+      const rows=Array.isArray(dyn.sectionBRows)?dyn.sectionBRows:[];
+      const sectionBImageUrls=Array.isArray(dyn.sectionBImageUrls)?dyn.sectionBImageUrls.filter(Boolean):[];
+      const sectionBLayout=String(dyn.sectionBLayout||'').trim();
+      const sectionBTitle=String(dyn.sectionBTitle||'').trim();
+      if(!rows.length)throw new Error('Section B needs at least one answer field.');
+      if(!sectionBImageUrls.length&&!imageUrl)throw new Error('Section B needs at least one exhibit screenshot.');
+      correct=rows.map(r=>r.correct);
+      if(!marks||Number.isNaN(marks)||marks<=0)marks=rows.reduce((sum,row)=>sum+Number(row.marks||1),0);
+      if(sectionBLayout==='calcTable'&&!sectionBTitle&&!mainQuestion)throw new Error('Calculation table needs a title.');
+    }
+    const payload={
+      paperId,paperCode:paper.code||'',paperTitle:paper.title||'',section,type,
+      mainQuestion:type==='sectionb'&&dyn.sectionBLayout==='calcTable'?(dyn.sectionBTitle||mainQuestion||question||''):mainQuestion,
+      question:type==='sectionb'?(dyn.sectionBLayout==='calcTable'?'':(question||'Section B')):question,
+      imageUrl:type==='sectionb'?(dyn.sectionBImageUrls[0]||imageUrl||''):imageUrl,
+      imageUrls:type==='sectionb'?dyn.sectionBImageUrls:undefined,
+      imageAlt,...dyn,
+      sectionBLayout:type==='sectionb'?dyn.sectionBLayout:undefined,
+      sectionBTitle:type==='sectionb'?(dyn.sectionBLayout==='calcTable'?(dyn.sectionBTitle||mainQuestion||''):dyn.sectionBTitle):undefined,
+      sectionBRows:type==='sectionb'?dyn.sectionBRows:undefined,
+      sectionBHtml:type==='sectionb'?generateSectionBHtmlFromRows(dyn.sectionBRows||[],{layout:dyn.sectionBLayout||'',title:dyn.sectionBTitle||mainQuestion||''}):undefined,
+      sectionBMarkingScheme:type==='sectionb'?(dyn.sectionBMarkingScheme||''):undefined,
+      correct,explanation,requiresManualMark:(type==='word'||type==='excel'),marks:type==='sectionb'?Number(marks||0):marks,
+      updatedAt:firebase.firestore.FieldValue.serverTimestamp()
+    };
+    Object.keys(payload).forEach(key=>{if(payload[key]===undefined)delete payload[key];});
+    if(type==='dropdown'&&Number.isInteger(dyn.correctIndex))payload.correctIndex=dyn.correctIndex;
+    if(state.editingQuestionId){
+      await db.collection('mockQuestions').doc(state.editingQuestionId).set(payload,{merge:true});
+    }else{
+      payload.createdAt=firebase.firestore.FieldValue.serverTimestamp();
+      await db.collection('mockQuestions').add(payload);
+    }
+    setStatus(el.questionStatus,state.editingQuestionId?'Question updated ✓':'Question saved ✓');
+    clearQuestionForm(true);
+    await refreshAll();
+  }catch(err){setStatus(el.questionStatus,err.message,true);}
+}
+
+function populateQuestionEditor(q){
+  state.editingQuestionId=q.id;
+  el.questionPaper.value=q.paperId||'';
+  el.questionSection.value=q.section||'';
+  el.questionType.value=q.type||'mcq';
+  if(el.mainQuestionText)el.mainQuestionText.value=q.mainQuestion||q.mainQuestionText||'';
+  el.questionText.value=q.question||'';
+  el.questionMarks.value=Number(q.marks||2);
+  el.questionExplanation.value=q.explanation||'';
+  el.questionCorrect.value='';
+  if(el.questionImageAlt)el.questionImageAlt.value=q.imageAlt||'';
+  if(el.imagePreviewWrap){
+    if(q.imageUrl){el.imagePreviewWrap.style.display='block';el.imagePreviewWrap.innerHTML=`<img src="${esc(q.imageUrl)}" alt="${esc(q.imageAlt||q.question||'Question image')}">`;}
+    else{el.imagePreviewWrap.style.display='none';el.imagePreviewWrap.innerHTML='';}
+  }
+  if(el.manualImageUrl) el.manualImageUrl.value = q.imageUrl || '';
+  buildDynamicEditor();
+  if(q.type==='mcq'||q.type==='multi'||q.type==='screenshot'){
+    el.optionsWrap.innerHTML='';
+    (Array.isArray(q.options)?q.options:[]).forEach(opt=>addOptionRow(opt));
+    const correct=Array.isArray(q.correct)?q.correct.join(','):(q.correct??'');
+    el.questionCorrect.value=correct;
+    state.questionImageUrl=q.imageUrl||'';
+    setQuestionImagePreview(state.questionImageUrl,q.imageAlt||q.question||'Question image');
+  }else if(q.type==='fill'){
+    const sentence=q.sentence||q.question||'';
+    const answers=Array.isArray(q.answers)&&q.answers.length?q.answers:(q.answer?[q.answer]:[]);
+    const altAnswers=Array.isArray(q.altAnswers)?q.altAnswers:[];
+    const blanks=getFibBlankCount(sentence)||Math.max(answers.length,1);
+    if(document.getElementById('fillSentenceX'))document.getElementById('fillSentenceX').value=sentence;
+    if(document.getElementById('fillAnswersX'))document.getElementById('fillAnswersX').value=answers.join('\n');
+    if(document.getElementById('fillAltX')){
+      const altLines=Array.from({length:blanks},(_,i)=>{const item=altAnswers[i];if(Array.isArray(item))return item.join(', ');if(typeof item==='string')return item;return'';});
+      document.getElementById('fillAltX').value=altLines.join('\n');
+    }
+    state.questionImageUrl=q.imageUrl||'';
+    setQuestionImagePreview(state.questionImageUrl,q.imageAlt||q.question||'Question image');
+  }else if(q.type==='dropdown'){
+    if(document.getElementById('dropSentenceX'))document.getElementById('dropSentenceX').value=q.sentence||q.question||'';
+    if(document.getElementById('dropOptionsX'))document.getElementById('dropOptionsX').value=Array.isArray(q.options)?q.options.join('\n'):'';
+    if(document.getElementById('dropCorrectX'))document.getElementById('dropCorrectX').value=Number(q.correctIndex??q.correct??0);
+  }else if(q.type==='sectionb'){
+    if(document.getElementById('sbImageUrlsX')){
+      const urls=Array.isArray(q.imageUrls)&&q.imageUrls.length?q.imageUrls:(q.imageUrl?[q.imageUrl]:[]);
+      document.getElementById('sbImageUrlsX').value=urls.join('\n');
+    }
+    if(document.getElementById('sbRowsX'))document.getElementById('sbRowsX').value=buildSectionBTextareaValue(q);
+    if(document.getElementById('sbSchemeX'))document.getElementById('sbSchemeX').value=q.sectionBMarkingScheme||'';
+  }
+  updateQuestionFormMode();
+  showView('adminView');
+}
+
+/* ================= EVENT WIRING ================= */
+el.menuBtns.forEach(btn=>btn.addEventListener('click',()=>showView(btn.dataset.view)));
+el.savePaperBtn.addEventListener('click',savePaper);
+el.clearPaperBtn.addEventListener('click',()=>{
+  el.paperCode.value='';el.paperTitle.value='';el.paperSections.value='';
+  el.paperTime.value=90;el.paperMarks.value=100;
+  if(el.paperLocked)el.paperLocked.checked=false;
+  if(el.paperFree)el.paperFree.checked=false;
+  if(el.paperAttempts)el.paperAttempts.value=1;
+  el.paperLevel.value='Applied Skills';
+  state.editingPaperId=null;state.paperMode='new';
+  el.savePaperBtn.textContent='Save Paper';
+  setStatus(el.paperStatus,'');
+});
+el.saveQuestionBtn.addEventListener('click',saveQuestion);
+if(el.cancelQuestionEditBtn)el.cancelQuestionEditBtn.addEventListener('click',()=>{clearQuestionForm(true);setStatus(el.questionStatus,'');});
+if(el.questionUploaderCtx){
+  el.questionUploaderCtx.addEventListener('change',(e)=>{
+    const detail=e.detail||{};
+    const success=Array.isArray(detail.successEntries)?detail.successEntries:[];
+    const first=success[0]||null;
+    const cdnUrl=first?.cdnUrl||first?.originalUrl||'';
+    if(cdnUrl){
+      setQuestionImagePreview(cdnUrl,el.questionImageAlt?.value||'Question image');
+      if(el.manualImageUrl) el.manualImageUrl.value = cdnUrl;
+      if(el.uploadcareStatus)el.uploadcareStatus.textContent='Screenshot uploaded successfully.';
+    }else{
+      setQuestionImagePreview('');
+      if(el.uploadcareStatus)el.uploadcareStatus.textContent='Upload a screenshot or image for the question.';
+    }
+  });
+}
+el.addOptionBtn.addEventListener('click',()=>addOptionRow(''));
+el.questionType.addEventListener('change',buildDynamicEditor);
+el.paperSearch.addEventListener('input',renderPapers);
+
+/* ================= EXAM ENGINE (from mock-portal) ================= */
+function openCenterModal({title,message,input=false,inputValue='',confirmText='Confirm',onConfirm}){
+  state.centerModalAction=typeof onConfirm==='function'?onConfirm:null;
+  el.centerModalTitle.textContent=title||'Confirm';
+  el.centerModalMessage.textContent=message||'';
+  el.centerModalConfirmBtn.textContent=confirmText||'Confirm';
+  el.centerModalInputWrap.classList.toggle('hidden',!input);
+  el.centerModalInput.value=inputValue||'';
+  el.centerModal.classList.remove('hidden');
+  setTimeout(()=>{if(input)el.centerModalInput.focus();else el.centerModalConfirmBtn.focus();},0);
+}
+function closeCenterModal(){el.centerModal.classList.add('hidden');state.centerModalAction=null;}
+
+function confirmStartMock(paperId){
+  const paper=state.papers.find(p=>p.id===paperId);
+  if(!paper)return;
+  state.pendingStartPaperId=paperId;
+  const defaultName=state.studentName||(state.user?.displayName||'').trim();
+  openCenterModal({
+    title:'Start Test',
+    message:`Enter the student name before starting ${paper.code||''} ${paper.title||'this test'}.`,
+    input:true,
+    inputValue:defaultName,
+    confirmText:'Start Test',
+    onConfirm:()=>{
+      const name=el.centerModalInput.value.trim();
+      if(!name){el.centerModalInput.focus();el.centerModalInput.style.borderColor='#ef4444';return false;}
+      el.centerModalInput.style.borderColor='';
+      state.studentName=name;
+      closeCenterModal();
+      beginMock(state.pendingStartPaperId);
+      return true;
+    }
+  });
+}
+
+function requestSubmitMock(){
+  if(!state.examActive||state.submitting)return;
+  const hasCR=state.activeQuestions.some(q=>q.type==='word'||q.type==='excel');
+  openCenterModal({
+    title:'Are you sure?',
+    message:hasCR?'Objective-test questions will be auto-marked now. Word / Spreadsheet constructed responses are NOT auto-marked — they will be sent to the tutor for manual marking.':'Once submitted, this attempt will be scored and saved automatically.',
+    confirmText:'Submit Paper',
+    onConfirm:()=>{closeCenterModal();submitMock(true);return true;}
+  });
+}
+
+function updateTimerDisplay(){
+  if(!state.examActive||state.examLocked)return;
+  const secondsLeft=Math.max(0,Math.ceil((state.timerEndAt-Date.now())/1000));
+  state.remaining=secondsLeft;
+  if(el.overlayMetricLabel)el.overlayMetricLabel.textContent='Time';
+  el.overlayTimer.textContent=fmtTime(secondsLeft);
+  el.overlayTimer.classList.toggle('warning',secondsLeft<=900&&secondsLeft>300);
+  el.overlayTimer.classList.toggle('critical',secondsLeft<=300&&secondsLeft>0);
+  if(el.timerWarning){
+    if(secondsLeft<=900&&secondsLeft>300){el.timerWarning.style.display='inline-flex';el.timerWarning.textContent='Warning: 15 minutes left';}
+    else if(secondsLeft<=300&&secondsLeft>0){el.timerWarning.style.display='inline-flex';el.timerWarning.textContent='Urgent: 5 minutes left';}
+    else{el.timerWarning.style.display='none';}
+  }
+  if(secondsLeft<=0){state.remaining=0;clearInterval(state.timer);submitMock(true);}
+}
+function startTimer(){
+  clearInterval(state.timer);
+  state.timerEndAt=Date.now()+(Number(state.remaining||0)*1000);
+  updateTimerDisplay();
+  state.timer=setInterval(updateTimerDisplay,1000);
+}
+
+function questionHasAnswer(q){
+  const ans=state.selected[q.id];
+  const type=q.type||'mcq';
+  if(type==='fill'){const arr=Array.isArray(ans)?ans:[];return arr.some(v=>String(v??'').trim()!=='');}
+  if(type==='sectionb'){const arr=Array.isArray(ans)?ans:[];return arr.some(v=>String(v??'').trim()!=='');}
+  if(type==='word')return String(ans||'').replace(/<[^>]*>/g,'').trim()!=='';
+  if(type==='excel')return Array.isArray(ans)&&ans.some(row=>Array.isArray(row)&&row.some(v=>String(v??'').trim()!==''));
+  if(type==='multi')return Array.isArray(ans)?ans.length>0:false;
+  if(type==='mcq'||type==='dropdown')return ans!==undefined&&ans!==null&&String(ans)!=='';
+  return Array.isArray(ans)?ans.length>0:String(ans||'').trim()!=='';
+}
+function navButtonClass(q,idx){
+  const parts=['nav-btn'];
+  if(idx===state.currentIndex)parts.push('current');
+  if(questionHasAnswer(q))parts.push('answered');
+  if(state.reviewed[q.id])parts.push('review');
+  return parts.join(' ');
+}
+
+function renderNavigator(){
+  const total=state.activeQuestions.length;
+  const answered=state.activeQuestions.filter(questionHasAnswer).length;
+  const reviewed=state.activeQuestions.filter(q=>state.reviewed[q.id]).length;
+  const progress=total?Math.round((answered/total)*100):0;
+  const isOpen=!!state.examNavOpen;
+  return `
+    <div class="exam-nav-shell">
+      <div class="exam-nav-content">
+        <div class="section-head" style="margin-bottom:10px;">
+          <span style="font-weight:900;color:var(--navy);">Question Navigator</span>
+          <span class="small" id="navCurrentCount">${state.currentIndex+1}/${total}</span>
+        </div>
+        <div class="exam-nav-mini">
+          <span class="legend-chip">Answered: <strong id="navAnsweredCount">${answered}</strong>/${total}</span>
+          <span class="legend-chip">Review: <strong id="navReviewCount">${reviewed}</strong></span>
+        </div>
+        <div class="nav-wrap" style="margin-top:12px;">
+          <div class="nav-progress" aria-label="Answered progress"><div class="nav-progress-bar" id="navProgressBar" style="width:${progress}%"></div></div>
+          <div class="nav-arrow-row">
+            <button class="btn btn-ghost nav-arrow" id="navToggleBtn" type="button" onclick="toggleExamNavigator()" aria-expanded="${isOpen}" aria-label="${isOpen?'Collapse':'Open'} navigator">${isOpen?'▲':'▼'}</button>
+          </div>
+          <div class="nav-panel ${isOpen?'open':''}" id="navPanel">
+            <div class="nav-grid" style="margin-top:2px;">
+              ${state.activeQuestions.map((q,idx)=>`<button type="button" class="${navButtonClass(q,idx)}" data-idx="${idx}" onclick="gotoQuestion(${idx})">${idx+1}${state.reviewed[q.id]?' ★':''}</button>`).join('')}
+            </div>
+            <div class="exam-nav-top-actions">
+              <button class="btn btn-ghost" type="button" onclick="prevQ()">Previous</button>
+              <button class="btn btn-primary" type="button" onclick="nextQ()">Next</button>
+              <button class="btn btn-gold" type="button" onclick="toggleReviewFlag()">${state.reviewed[state.activeQuestions[state.currentIndex]?.id]?'Unflag Review':'Flag for Review'}</button>
+              <button class="btn btn-ghost" type="button" onclick="requestSubmitMock()">Submit</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+window.toggleExamNavigator=function(){
+  state.examNavOpen=!state.examNavOpen;
+  const panel=document.getElementById('navPanel');
+  const toggle=document.getElementById('navToggleBtn');
+  if(panel)panel.classList.toggle('open',state.examNavOpen);
+  if(toggle){toggle.textContent=state.examNavOpen?'▲':'▼';toggle.setAttribute('aria-expanded',String(state.examNavOpen));}
+};
+function updateNavigatorVisuals(){
+  document.querySelectorAll('.nav-btn[data-idx]').forEach(btn=>{
+    const idx=Number(btn.dataset.idx);
+    const q=state.activeQuestions[idx];
+    btn.className=navButtonClass(q,idx);
+    btn.textContent=`${idx+1}${state.reviewed[q.id]?' ★':''}`;
+  });
+  const navCounter=document.getElementById('navCurrentCount');
+  if(navCounter)navCounter.textContent=`${state.currentIndex+1}/${state.activeQuestions.length}`;
+  const reviewBtn=document.querySelector('.exam-nav-top-actions .btn.btn-gold');
+  if(reviewBtn){const q=state.activeQuestions[state.currentIndex];reviewBtn.textContent=state.reviewed[q?.id]?'Unflag Review':'Flag for Review';}
+  const answerCount=document.getElementById('navAnsweredCount');
+  const answered=state.activeQuestions.filter(questionHasAnswer).length;
+  if(answerCount)answerCount.textContent=String(answered);
+  const progressBar=document.getElementById('navProgressBar');
+  if(progressBar){const total=state.activeQuestions.length||1;progressBar.style.width=`${Math.round((answered/total)*100)}%`;}
+  const reviewCount=document.getElementById('navReviewCount');
+  if(reviewCount)reviewCount.textContent=String(state.activeQuestions.filter(q=>state.reviewed[q.id]).length);
+  updateExamHeaderStats();
+}
+function updateExamHeaderStats(){
+  const total=state.activeQuestions.length||0;
+  const q=state.activeQuestions[state.currentIndex];
+  const answered=state.activeQuestions.filter(questionHasAnswer).length;
+  const progress=total?Math.round((answered/total)*100):0;
+  if(el.examQuestionPill)el.examQuestionPill.textContent=`Question ${Math.min(state.currentIndex+1,total||1)} of ${total||1}`;
+  if(el.examMarksPill)el.examMarksPill.textContent=`${q?questionTotalMarks(q):0} marks`;
+  if(el.examProgressLabel)el.examProgressLabel.textContent=`${progress}% complete`;
+  if(el.examProgressFill)el.examProgressFill.style.width=`${progress}%`;
+}
+function getDisplayMainQuestion(q){return String(q?.mainQuestion||q?.mainQuestionText||'').trim();}
+
+function renderFillInline(q,selected){
+  const sentence=String(q.sentence||q.question||'');
+  const values=Array.isArray(selected)?selected:[];
+  const safeSentence=renderPastedText(sentence);
+  const placeholderMatches=[...sentence.matchAll(/\{\{(\d+)\}\}/g)].map(m=>Number(m[1]));
+  if(placeholderMatches.length){
+    const html=safeSentence.replace(/\{\{(\d+)\}\}/g,(_,n)=>{const idx=Number(n)-1;const value=values[idx]??'';return`<input type="text" class="fib-input" data-idx="${idx}" value="${esc(value)}" style="display:inline-block;min-width:120px;max-width:180px;padding:8px 10px;margin:0 4px;border:1px solid var(--border);border-radius:10px;background:#fff;">`;});
+    return`<div class="question-text-block">${html}</div>`;
+  }
+  if(/\[blank\]/i.test(sentence)){const value=values[0]??'';const html=safeSentence.replace(/\[blank\]/i,`<input type="text" class="fib-input" data-idx="0" value="${esc(value)}" style="display:inline-block;min-width:120px;max-width:180px;padding:8px 10px;margin:0 4px;border:1px solid var(--border);border-radius:10px;background:#fff;">`);return`<div class="question-text-block">${html}</div>`;}
+  if(/_{3,}/.test(sentence)){const value=values[0]??'';const html=safeSentence.replace(/_{3,}/,`<input type="text" class="fib-input" data-idx="0" value="${esc(value)}" style="display:inline-block;min-width:120px;max-width:180px;padding:8px 10px;margin:0 4px;border:1px solid var(--border);border-radius:10px;background:#fff;">`);return`<div class="question-text-block">${html}</div>`;}
+  const blankCount=Array.isArray(q.answers)&&q.answers.length?q.answers.length:(q.answer?1:0);
+  if(!blankCount)return`<div class="question-text-block">${renderPastedText(sentence)}</div>`;
+  return`<div class="question-text-block">${renderPastedText(sentence)}</div><div class="option-list">${Array.from({length:blankCount},(_,i)=>`<label style="display:block;"><span class="small" style="display:block;margin-bottom:6px;">Blank ${i+1}</span><input type="text" class="fib-input" data-idx="${i}" value="${esc(values[i]??'')}"></label>`).join('')}</div>`;
+}
+function renderDropdownInline(q,selected){
+  const options=Array.isArray(q.options)?q.options:[];
+  const selectHtml=`<select id="dropAnswer" style="margin-top:10px;"><option value="">Select</option>${options.map((opt,idx)=>`<option value="${idx}" ${String(selected)===String(idx)?'selected':''}>${esc(opt)}</option>`).join('')}</select>`;
+  const sentence=String(q.sentence||q.question||'');
+  const safeSentence=renderPastedText(sentence);
+  if(sentence.includes('[blank]'))return`<div class="question-text-block">${safeSentence.replace(/\[blank\]/i,selectHtml)}</div>`;
+  if(sentence.match(/\{\{1\}\}/))return`<div class="question-text-block">${safeSentence.replace(/\{\{1\}\}/,selectHtml)}</div>`;
+  return`<div class="question-text-block">${safeSentence}</div>${selectHtml}`;
+}
+
+function normalizeComparable(value){
+  return normalizeText(value).normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/[₹$£€,%]/g,'').replace(/,/g,'').replace(/[^\w.\- ]+/g,' ').replace(/\s+/g,' ').trim();
+}
+function numericComparable(value){
+  const text=String(value??'').trim().replace(/[₹$£€,%\s,]/g,'');
+  if(!text||!/^-?\d+(\.\d+)?$/.test(text))return null;
+  const num=Number(text);
+  return Number.isFinite(num)?num:null;
+}
+function answerMatches(given,expected,alternatives=[]){
+  const cleanGiven=normalizeComparable(given);
+  const accepted=[expected,...(Array.isArray(alternatives)?alternatives:[])].map(v=>normalizeComparable(v)).filter(Boolean);
+  if(!cleanGiven||!accepted.length)return false;
+  const givenNum=numericComparable(given);
+  if(givenNum!==null){
+    return [expected,...(Array.isArray(alternatives)?alternatives:[])].some(v=>{
+      const expectedNum=numericComparable(v);
+      return expectedNum!==null&&Math.abs(givenNum-expectedNum)<=0.0001;
+    });
+  }
+  return accepted.includes(cleanGiven);
+}
+
+function sectionBAnswerFields(root=document){
+  const selector='[data-answer], [data-sb-answer]';
+  const scopedSelector='.sb-custom-html [data-answer], .sb-custom-html [data-sb-answer]';
+  const rootIsAnswerArea=root!==document&&root.matches&&root.matches('.sb-custom-html');
+  const scoped=rootIsAnswerArea?[...root.querySelectorAll(selector)]:[...root.querySelectorAll(scopedSelector)];
+  if(scoped.length||root===document||rootIsAnswerArea)return scoped;
+  return[...root.querySelectorAll(selector)];
+}
+function normalizeFieldValue(field){
+  if(!field)return'';
+  if(field.tagName==='SELECT')return String(field.value??'').trim();
+  if(field.type==='checkbox')return field.checked?'true':'';
+  if(field.type==='radio')return field.checked?String(field.value??'').trim():'';
+  return String(field.value??'').trim();
+}
+function sectionBFieldExpected(field){return String(field?.dataset?.answer||field?.dataset?.sbAnswer||'').trim();}
+function sectionBFieldAlt(field){
+  const raw=String(field?.dataset?.alt||field?.dataset?.sbAlt||'').trim();
+  return raw?raw.split(/[,|]/).map(v=>normalizeComparable(v)).filter(Boolean):[];
+}
+function fillSectionBFields(q,values,root=document){
+  const fields=sectionBAnswerFields(root);
+  const arr=Array.isArray(values)?values:[];
+  fields.forEach((field,idx)=>{
+    const value=arr[idx]??'';
+    if(field.type==='checkbox'){field.checked=String(value)==='true';}
+    else if(field.type==='radio'){field.checked=String(field.value)===String(value);}
+    else if(field.tagName==='SELECT'){field.value=value;}
+    else if(field.tagName==='TEXTAREA'){field.value=value;field.textContent=value;}
+    else{field.value=value;field.setAttribute('value',value);}
+  });
+}
+function scoreSectionBHtml(q,values,root=document){
+  const temp=document.createElement('div');
+  temp.innerHTML=`<div class="sb-custom-html">${getSectionBHtmlSource(q)}</div>`;
+  const fields=sectionBAnswerFields(temp);
+  fillSectionBFields(q,values,temp);
+  let gained=0,total=0;
+  fields.forEach(field=>{
+    const marks=Number(field?.dataset?.marks||field?.dataset?.sbMarks||1);
+    const expected=sectionBFieldExpected(field);
+    const alt=sectionBFieldAlt(field);
+    const given=normalizeFieldValue(field);
+    total+=marks;
+    if(answerMatches(given,expected,alt))gained+=marks;
+  });
+  return{gained,total};
+}
+function renderSectionBHtmlBlock(q,selected,readonly=false,mode='student'){
+  const urls=Array.isArray(q?.imageUrls)&&q.imageUrls.length?q.imageUrls:(q?.imageUrl?[q.imageUrl]:[]);
+  const images=urls.filter(Boolean);
+  const html=getSectionBHtmlSource(q);
+  const exhibitHtml=images.length?`<div class="sb-exhibit-stack">${images.map((url,idx)=>`<div class="question-image"><img src="${esc(url)}" alt="${esc(q.imageAlt||q.question||'Exhibit')} ${idx+1}"></div>`).join('')}</div>`:'<div class="empty">No exhibit images.</div>';
+  if(!html&&!images.length)return'<div class="empty">No Section B content found.</div>';
+  const tmp=document.createElement('div');
+  tmp.innerHTML=html||'<div class="empty">No Section B content found.</div>';
+  const fields=sectionBAnswerFields(tmp);
+  const values=Array.isArray(selected)?selected:[];
+  if(mode==='correct'&&fields.length){
+    fields.forEach(field=>{
+      const expected=sectionBFieldExpected(field);
+      if(field.type==='checkbox')field.checked=expected==='true';
+      else if(field.type==='radio')field.checked=String(field.value)===expected;
+      else field.value=expected;
+      if(readonly&&'disabled' in field)field.disabled=true;
+    });
+  }else{
+    fillSectionBFields(q,values,tmp);
+    if(readonly)fields.forEach(field=>{if('disabled' in field)field.disabled=true;});
+  }
+  const markingScheme=String(q.sectionBMarkingScheme||'').trim();
+  return`<div class="sb-layout"><div class="sb-exhibit"><h4 class="sb-title">Exhibit</h4>${exhibitHtml}</div><div class="sb-panel"><h4 class="sb-title">Answer Area</h4>${markingScheme?`<div class="sb-scheme"><strong>Marking scheme:</strong> ${esc(markingScheme)}</div>`:''}<div class="sb-custom-html">${tmp.innerHTML}</div></div></div>`;
+}
+
+/* ================= CONSTRUCTED RESPONSE (WORD / EXCEL) ================= */
+const CR_COLS=['A','B','C','D','E'];
+const CR_ROWS=10;
+function renderCrScenario(q){
+  const mediaUrls=Array.isArray(q.imageUrls)&&q.imageUrls.length?q.imageUrls:(q.imageUrl?[q.imageUrl]:[]);
+  const media=mediaUrls.length?`<div class="sb-exhibit-stack">${mediaUrls.map((url,idx)=>`<div class="question-image"><img src="${esc(url)}" alt="${esc(q.imageAlt||'Exhibit')} ${idx+1}"></div>`).join('')}</div>`:'';
+  return`<div class="sb-exhibit"><h4 class="sb-title">Scenario</h4><div class="question-text-block">${renderPastedText(q.question||'')}</div>${media}</div>`;
+}
+function renderWordResponse(q,selected){
+  const value=String(selected||'');
+  return`<div class="sb-layout cr-layout">${renderCrScenario(q)}
+    <div class="sb-panel"><h4 class="sb-title">Answer Area (Word)</h4>
+      <div class="cr-editor-toolbar"><button type="button" data-cmd="bold"><b>B</b></button><button type="button" data-cmd="italic"><i>I</i></button><button type="button" data-cmd="underline"><u>U</u></button><button type="button" data-cmd="insertUnorderedList">• List</button></div>
+      <div id="wordAnswer" class="cr-word" contenteditable="true">${value}</div>
+      <div class="small cr-note">Constructed response — <strong>not auto-marked</strong>. Your answer will be sent to the tutor for manual marking.</div>
+    </div></div>`;
+}
+function renderExcelResponse(q,selected){
+  const grid=Array.isArray(selected)&&selected.length?selected:Array.from({length:CR_ROWS},()=>Array(CR_COLS.length).fill(''));
+  const head=`<tr><th></th>${CR_COLS.map(c=>`<th>${c}</th>`).join('')}</tr>`;
+  const body=Array.from({length:CR_ROWS},(_,r)=>`<tr><th>${r+1}</th>${CR_COLS.map((_,c)=>{const v=grid[r]&&grid[r][c]!=null?grid[r][c]:'';return`<td class="cr-cell" contenteditable="true" data-r="${r}" data-c="${c}">${esc(v)}</td>`;}).join('')}</tr>`).join('');
+  return`<div class="sb-layout cr-layout">${renderCrScenario(q)}
+    <div class="sb-panel"><h4 class="sb-title">Answer Area (Spreadsheet)</h4>
+      <div class="cr-grid-wrap"><table class="cr-grid">${head}${body}</table></div>
+      <div class="small cr-note">Constructed response — <strong>not auto-marked</strong>. Use Scratch Pad / Calculator if needed; your workings will be manually marked.</div>
+    </div></div>`;
+}
+function renderCrAnswerReadonly(q,ans){
+  const type=q.type||'mcq';
+  if(type==='excel'){
+    const grid=Array.isArray(ans)?ans:[];
+    const head=`<tr><th></th>${CR_COLS.map(c=>`<th>${c}</th>`).join('')}</tr>`;
+    const rows=Math.max(CR_ROWS,grid.length);
+    const body=Array.from({length:rows},(_,r)=>`<tr><th>${r+1}</th>${CR_COLS.map((_,c)=>{const v=grid[r]&&grid[r][c]!=null?grid[r][c]:'';return`<td>${esc(v)}</td>`;}).join('')}</tr>`).join('');
+    return`<div class="cr-grid-wrap"><table class="cr-grid">${head}${body}</table></div>`;
+  }
+  if(type==='word'){
+    const html=String(ans||'');
+    const text=html.replace(/<[^>]*>/g,'').trim();
+    return text?`<div class="question-text-block">${html}</div>`:'<div class="empty">No answer submitted.</div>';
+  }
+  return'<div class="empty">—</div>';
+}
+function renderQuestionBody(q){
+  const selected=state.selected[q.id];
+  const type=q.type||'mcq';
+  const mediaUrls=Array.isArray(q.imageUrls)&&q.imageUrls.length?q.imageUrls:(q.imageUrl?[q.imageUrl]:[]);
+  const media=mediaUrls.length?`<div class="question-image">${mediaUrls.map((url,idx)=>`<img src="${esc(url)}" alt="${esc(q.imageAlt||q.question||'Question image')} ${idx+1}" style="${idx>0?'margin-top:10px;':''}">`).join('')}</div>`:'';
+  if(type==='mcq'||type==='screenshot'){const options=Array.isArray(q.options)?q.options:[];return`${media}<div class="option-list">${options.map((opt,idx)=>`<label class="option"><input type="radio" name="answer" value="${idx}" ${String(selected)===String(idx)?'checked':''}><span>${esc(opt)}</span></label>`).join('')}</div>`;}
+  if(type==='multi'){const options=Array.isArray(q.options)?q.options:[];const picked=Array.isArray(selected)?selected:[];return`${media}<div class="option-list">${options.map((opt,idx)=>`<label class="option"><input type="checkbox" class="multiBox" value="${idx}" ${picked.includes(idx)?'checked':''}><span>${esc(opt)}</span></label>`).join('')}</div>`;}
+  if(type==='fill')return`${media}${renderFillInline(q,selected)}`;
+  if(type==='sectionb')return`${renderSectionBHtmlBlock(q,selected)}`;
+  if(type==='dropdown')return`${media}${renderDropdownInline(q,selected)}`;
+  if(type==='word')return renderWordResponse(q,selected);
+  if(type==='excel')return renderExcelResponse(q,selected);
+  return`${media}<textarea id="freeAnswer" placeholder="Type your answer here">${esc(selected||'')}</textarea>`;
+}
+
+function wireQuestionInputs(){
+  const q=state.activeQuestions[state.currentIndex];
+  if(!q)return;
+  const type=q.type||'mcq';
+  if(type==='mcq'||type==='screenshot'){
+    document.querySelectorAll('input[name="answer"]').forEach(r=>{r.addEventListener('change',()=>{captureAnswer();updateNavigatorVisuals();});});
+  }
+  if(type==='multi'){
+    document.querySelectorAll('.multiBox').forEach(cb=>{cb.addEventListener('change',()=>{captureAnswer();updateNavigatorVisuals();});});
+  }
+  if(type==='fill'){
+    document.querySelectorAll('.fib-input').forEach(input=>{input.addEventListener('input',()=>{captureAnswer();updateNavigatorVisuals();});});
+  }
+  if(type==='dropdown'){
+    const node=document.getElementById('dropAnswer');
+    if(node){node.addEventListener('change',()=>{captureAnswer();updateNavigatorVisuals();});}
+  }
+  if(type==='sectionb'){
+    document.querySelectorAll('.sb-custom-html [data-answer], .sb-custom-html [data-sb-answer]').forEach(field=>{
+      field.addEventListener('input',()=>{captureAnswer();updateNavigatorVisuals();});
+      field.addEventListener('change',()=>{captureAnswer();updateNavigatorVisuals();});
+    });
+  }
+  if(type==='word'){
+    const ed=document.getElementById('wordAnswer');
+    if(ed){ed.addEventListener('input',()=>{captureAnswer();updateNavigatorVisuals();});
+      document.querySelectorAll('.cr-editor-toolbar [data-cmd]').forEach(btn=>btn.addEventListener('mousedown',e=>{e.preventDefault();document.execCommand(btn.dataset.cmd,false,null);ed.focus();}));}
+  }
+  if(type==='excel'){
+    document.querySelectorAll('.cr-cell').forEach(cell=>{cell.addEventListener('input',()=>{captureAnswer();updateNavigatorVisuals();});});
+  }
+  const free=document.getElementById('freeAnswer');
+  if(free){free.addEventListener('input',()=>{captureAnswer();});}
+}
+
+function renderMockQuestion(){
+  if(!state.examActive)return;
+  if(state.examLocked){
+    el.overlayBody.innerHTML=`<div class="lock-screen"><h3>Exam Locked</h3><p>${esc(state.lockReason||'The exam lost focus.')}</p><p>The attempt is frozen because the browser tab or window changed.</p><div class="btn-row" style="justify-content:center;margin-top:14px;"><button class="btn btn-gold" onclick="requestSubmitMock()">Submit Now</button></div></div>`;
+    return;
+  }
+  const q=state.activeQuestions[state.currentIndex];
+  if(!q){el.overlayBody.innerHTML='<div class="empty">No question found.</div>';return;}
+  const nav=renderNavigator();
+  const body=renderQuestionBody(q);
+  const reviewed=!!state.reviewed[q.id];
+  const mainQuestion=getDisplayMainQuestion(q);
+  const crType=(q.type==='word'||q.type==='excel');
+  const normalQuestion=crType?'':String(q.question||'').trim();
+  updateExamHeaderStats();
+  el.overlayBody.innerHTML=`
+    <div class="exam-shell">
+      ${nav}
+      <div class="question-card exam-question">
+        <div class="exam-question-head">
+          <div><div class="small" style="font-weight:800;color:#111827;">Section ${esc(q.section||'-')}</div></div>
+          <div class="small">Question ${state.currentIndex+1} of ${state.activeQuestions.length}</div>
+        </div>
+        ${normalQuestion?`<div class="question-text-block" style="padding:12px 14px 4px;margin:0;">${renderPastedText(normalQuestion)}</div>`:''}
+        ${mainQuestion?`<div class="exam-question-main">${renderPastedText(mainQuestion)}</div>`:''}
+        <div class="exam-question-body">
+          <div class="question-shell">
+            <div class="question-watermark">Vinayak ProEdu</div>
+            ${body}
+          </div>
+          <div class="feedback">${esc(q.explanation||'')}</div>
+          <div class="btn-row exam-actions" style="margin-top:14px;">
+            <button class="btn btn-ghost" onclick="prevQ()">Previous</button>
+            <button class="btn btn-primary" onclick="nextQ()">Next</button>
+            <button class="btn btn-gold" id="reviewToggleBtn" onclick="toggleReviewFlag()">${reviewed?'Unflag Review':'Flag for Review'}</button>
+            <button class="btn btn-ghost" onclick="requestSubmitMock()">Submit Paper</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  wireQuestionInputs();
+  updateNavigatorVisuals();
+}
+
+function captureAnswer(){
+  const q=state.activeQuestions[state.currentIndex];
+  if(!q)return;
+  const type=q.type||'mcq';
+  let answer=null;
+  if(type==='mcq'||type==='screenshot'){const checked=document.querySelector('input[name="answer"]:checked');answer=checked?Number(checked.value):null;}
+  else if(type==='multi'){answer=[...document.querySelectorAll('.multiBox:checked')].map(c=>Number(c.value));}
+  else if(type==='fill'){const inputs=[...document.querySelectorAll('.fib-input')];if(!inputs.length)return;answer=inputs.map(i=>i.value.trim());}
+  else if(type==='sectionb'){const fields=sectionBAnswerFields(document);if(!fields.length)return;answer=fields.map(field=>normalizeFieldValue(field));}
+  else if(type==='dropdown'){const node=document.getElementById('dropAnswer');if(!node)return;answer=node&&node.value!==''?Number(node.value):null;}
+  else if(type==='word'){const node=document.getElementById('wordAnswer');if(!node)return;answer=node.innerHTML.trim();}
+  else if(type==='excel'){const cells=[...document.querySelectorAll('.cr-cell')];if(!cells.length)return;const grid=[];cells.forEach(c=>{const r=Number(c.dataset.r),col=Number(c.dataset.c);if(!grid[r])grid[r]=[];grid[r][col]=c.textContent.trim();});answer=grid.map(row=>row||[]);}
+  else{const node=document.getElementById('freeAnswer');if(!node)return;answer=node?node.value.trim():'';}
+  state.selected[q.id]=answer;
+}
+function gotoQuestion(idx){if(idx<0||idx>=state.activeQuestions.length)return;captureAnswer();state.currentIndex=idx;renderMockQuestion();}
+window.gotoQuestion=gotoQuestion;
+window.nextQ=function(){captureAnswer();if(state.currentIndex<state.activeQuestions.length-1){state.currentIndex++;renderMockQuestion();}};
+window.prevQ=function(){captureAnswer();if(state.currentIndex>0){state.currentIndex--;renderMockQuestion();}};
+window.toggleReviewFlag=function(){const q=state.activeQuestions[state.currentIndex];if(!q)return;state.reviewed[q.id]=!state.reviewed[q.id];renderMockQuestion();};
+
+function lockExam(reason){if(!state.examActive||state.examLocked||!state.examProtectionArmed||state.uiPromptOpen)return;state.examLocked=true;state.lockReason=reason||'Focus changed';renderMockQuestion();}
+function enterFullscreen(){const root=document.documentElement;const request=root.requestFullscreen||root.webkitRequestFullscreen||root.msRequestFullscreen;if(!request)return;try{const result=request.call(root);if(result&&typeof result.catch==='function')result.catch(()=>{});}catch(err){}}
+function exitFullscreen(){const exit=document.exitFullscreen||document.webkitExitFullscreen||document.msRequestFullscreen;if(!document.fullscreenElement||!exit)return;try{const result=exit.call(document);if(result&&typeof result.catch==='function')result.catch(()=>{});}catch(err){}}
+
+window.startMock=async function(paperId){
+  const paper=state.papers.find(p=>p.id===paperId);
+  const questions=getQuestionsForPaper(paperId);
+  if(!paper){alert('Paper not found');return;}
+  if(paper.locked){alert('This test is locked by the admin.');return;}
+  if(!questions.length){alert('No questions uploaded for this paper yet');return;}
+  const usedAttempts=state.attempts.filter(a=>String(a.paperId)===String(paperId)&&String(a.userId)===String(state.user?.uid||'')).length;
+  const maxAttempts=Math.max(1,Number(paper.attemptLimit||1));
+  if(usedAttempts>=maxAttempts){alert(`You have already used all ${maxAttempts} allowed attempt(s) for this paper.`);return;}
+  confirmStartMock(paperId);
+};
+
+async function beginMock(paperId){
+  const paper=state.papers.find(p=>p.id===paperId);
+  const questions=getQuestionsForPaper(paperId);
+  if(!paper||!questions.length)return;
+  state.activePaper=paper;
+  state.activeQuestions=questions;
+  state.currentIndex=0;
+  state.selected={};
+  state.reviewed={};
+  state.examActive=true;
+  state.examLocked=false;
+  state.examProtectionArmed=false;
+  state.lockReason='';
+  state.resultData=null;
+  state.remaining=Number(paper.timeLimit||90)*60;
+  state.startTime=Date.now();
+  state.timerWarningShown=false;
+  state.submitting=false;
+  state.examNavOpen=false;
+  el.overlayTitle.textContent=`${paper.code} - ${paper.title}`;
+  if(el.overlayMetricLabel)el.overlayMetricLabel.textContent='Time';
+  el.mockOverlay.classList.remove('hidden');
+  document.body.style.overflow='hidden';
+  enterFullscreen();
+  setTimeout(()=>{if(state.examActive&&!state.examLocked)state.examProtectionArmed=true;},3000);
+  renderMockQuestion();
+  startTimer();
+}
+
+function closeMock(){
+  closeCenterModal();
+  el.mockOverlay.classList.add('hidden');
+  document.body.style.overflow='';
+  clearInterval(state.timer);
+  state.examActive=false;
+  state.examLocked=false;
+  state.examProtectionArmed=false;
+  state.lockReason='';
+  state.resultData=null;
+  state.submitting=false;
+  state.timerWarningShown=false;
+  state.examNavOpen=false;
+  if(el.timerWarning)el.timerWarning.style.display='none';
+  if(el.overlayTimer)el.overlayTimer.classList.remove('warning','critical');
+  exitFullscreen();
+}
+
+function formatAnswerForResult(q,ans){
+  const type=q.type||'mcq';
+  if(type==='mcq'||type==='screenshot'){const idx=Number(ans);return esc(Array.isArray(q.options)&&q.options[idx]!=null?q.options[idx]:'');}
+  if(type==='dropdown'){const idx=Number(ans);return esc(Array.isArray(q.options)&&q.options[idx]!=null?q.options[idx]:'');}
+  if(type==='multi'){const indices=Array.isArray(ans)?ans:[];const labels=indices.map(i=>(Array.isArray(q.options)&&q.options[i]!=null)?q.options[i]:String(i));return esc(labels.join(', '));}
+  if(type==='fill'){const values=Array.isArray(ans)?ans:[ans];return esc(values.join(' | '));}
+  if(type==='sectionb')return renderSectionBHtmlBlock(q,ans,'student');
+  return esc(String(ans||''));
+}
+function formatCorrectAnswerForResult(q){
+  const type=q.type||'mcq';
+  if(type==='mcq'||type==='screenshot'){const idx=Number(q.correct);return esc(Array.isArray(q.options)&&q.options[idx]!=null?q.options[idx]:'');}
+  if(type==='dropdown'){const idx=Number(q.correctIndex??q.correct);return esc(Array.isArray(q.options)&&q.options[idx]!=null?q.options[idx]:'');}
+  if(type==='multi'){const indices=Array.isArray(q.correct)?q.correct:[];const labels=indices.map(i=>(Array.isArray(q.options)&&q.options[i]!=null)?q.options[i]:String(i));return esc(labels.join(', '));}
+  if(type==='fill'){const answers=Array.isArray(q.answers)&&q.answers.length?q.answers:(q.answer?[q.answer]:[]);return esc(answers.join(' | '));}
+  if(type==='sectionb')return renderSectionBHtmlBlock(q,[],'correct');
+  return esc(String(q.correct??q.answer??''));
+}
+
+async function submitMock(){
+  if(state.submitting)return;
+  state.submitting=true;
+  captureAnswer();
+  clearInterval(state.timer);
+  let score=0,total=0,hasPendingManual=false;
+  for(let i=0;i<state.activeQuestions.length;i++){
+    const q=state.activeQuestions[i];
+    const marks=questionTotalMarks(q);
+    total+=marks;
+    const ans=state.selected[q.id];
+    const type=q.type||'mcq';
+    let correct=false,gained=0;
+    if(type==='mcq'||type==='screenshot'){correct=String(ans)!==''&&String(ans)===String(q.correct);gained=correct?marks:0;}
+    else if(type==='dropdown'){const correctIndex=Number(q.correctIndex??q.correct);correct=String(ans)!==''&&String(ans)===String(correctIndex);gained=correct?marks:0;}
+    else if(type==='multi'){const student=JSON.stringify((Array.isArray(ans)?ans:[]).map(v=>String(v)).sort());const correctArr=JSON.stringify((Array.isArray(q.correct)?q.correct:[]).map(v=>String(v)).sort());correct=student===correctArr;gained=correct?marks:0;}
+    else if(type==='fill'){
+      const given=Array.isArray(ans)?ans:[ans];
+      const corrects=Array.isArray(q.answers)&&q.answers.length?q.answers:(q.answer?[q.answer]:[]);
+      const altRaw=Array.isArray(q.altAnswers)?q.altAnswers:[];
+      const altLists=corrects.map((_,idx)=>{const item=altRaw[idx];if(Array.isArray(item))return item;if(typeof item==='string')return item.split(/[,|]/).map(v=>v.trim()).filter(Boolean);return[];});
+      const matchedCount=corrects.filter((correct,idx)=>answerMatches(given[idx]||'',correct,altLists[idx])).length;
+      const allMatch=corrects.length>0&&matchedCount===corrects.length;
+      correct=allMatch;gained=corrects.length?Math.round((marks*matchedCount/corrects.length)*100)/100:0;
+    }else if(type==='sectionb'){
+      const scored=scoreSectionBHtml(q,Array.isArray(ans)?ans:[]);
+      correct=scored.total>0&&scored.gained===scored.total;
+      gained=scored.gained;
+    }else if(type==='word'||type==='excel'){
+      correct=false;gained=0;hasPendingManual=true;
+    }else{
+      correct=answerMatches(ans||'',q.correct||q.answer||'',Array.isArray(q.altAnswers)?q.altAnswers:[]);
+      gained=correct?marks:0;
+    }
+    score+=gained;
+  }
+  const paperTotal=Number(state.activePaper?.totalMarks||0);
+  const totalForResult=paperTotal>0?paperTotal:total;
+  const percentage=totalForResult?Math.round((score/totalForResult)*100):0;
+  const answered=state.activeQuestions.filter(questionHasAnswer).length;
+  const reviewed=Object.keys(state.reviewed||{}).filter(k=>state.reviewed[k]).length;
+  const timeTakenSec=Math.max(0,Math.round((Date.now()-(state.startTime||Date.now()))/1000));
+  const studentName=(state.studentName||state.user?.displayName||state.user?.email||'Student').trim();
+  await db.collection('mockAttempts').add({
+    userId:state.user?state.user.uid:'',userEmail:state.user?state.user.email||'':'',studentName,
+    paperId:state.activePaper.id,paperCode:state.activePaper.code||'',paperTitle:state.activePaper.title||'',
+    score,total:totalForResult,percentage,answered,reviewedCount:reviewed,timeTakenSec,
+    status:hasPendingManual?'pending_marking':'auto_marked',
+    autoScore:score,autoTotal:totalForResult,pendingManualMarking:hasPendingManual,
+    answers:state.selected,reviewed:state.reviewed,createdAt:firebase.firestore.FieldValue.serverTimestamp()
+  });
+  state.examActive=false;state.submitting=false;
+  state.resultData={paperCode:state.activePaper.code||'',paperTitle:state.activePaper.title||'',studentName,score,total:totalForResult,percentage,answered,reviewed,timeTakenSec,pending:hasPendingManual};
+  state.activeQuestions=[];state.currentIndex=0;
+  el.mockOverlay.classList.remove('hidden');
+  document.body.style.overflow='hidden';
+  exitFullscreen();
+  renderResultPage();
+  await refreshAll();
+}
+
+function renderResultPage(){
+  const rd=state.resultData;
+  if(!rd)return;
+  el.overlayTitle.textContent='Exam Results';
+  if(el.overlayMetricLabel)el.overlayMetricLabel.textContent='Score';
+  el.overlayTimer.textContent=`${rd.score}/${rd.total}`;
+  el.overlayBody.innerHTML=`
+    <div class="result-shell">
+      <div class="card">
+        <div class="section-head">
+          <div>
+            <h2 class="title" style="margin-bottom:6px;">${esc(rd.paperTitle||'Exam Results')}</h2>
+            <p class="sub" style="margin-bottom:0;">${esc(rd.paperCode||'')} - ${esc(rd.studentName||'Student')} - Completed attempt</p>
+          </div>
+          <div class="btn-row"><button class="btn btn-ghost" onclick="closeMock()">Back to Dashboard</button></div>
+        </div>
+        <div class="result-summary">
+          <div class="result-card result-ok"><h3>Score</h3><div style="font-size:2rem;font-weight:900;">${rd.score}/${rd.total}</div></div>
+          <div class="result-card"><h3>Percentage</h3><div style="font-size:2rem;font-weight:900;">${rd.percentage}%</div></div>
+          <div class="result-card"><h3>Answered</h3><div style="font-size:2rem;font-weight:900;">${rd.answered}</div></div>
+          <div class="result-card"><h3>Student</h3><div style="font-size:1.35rem;font-weight:900;word-break:break-word;">${esc(rd.studentName||'Student')}</div></div>
+          <div class="result-card"><h3>Time Taken</h3><div style="font-size:2rem;font-weight:900;">${fmtTime(rd.timeTakenSec||0)}</div></div>
+          ${rd.pending?'<div class="result-card" style="grid-column:1/-1;background:#fef3c7;border-color:#f3d18b;"><h3>⏳ Manual Marking Pending</h3><div style="font-weight:700;">Constructed-response (Word / Spreadsheet) answers are not auto-marked in ACCA Skills & Professional papers. Your objective-test score is shown above; the final score will be updated after the tutor manually marks your constructed responses.</div></div>':''}
+        </div>
+      </div>
+    </div>`;
+}
+
+/* Global event listeners for exam protection */
+window.addEventListener('blur',()=>{if(state.examActive)lockExam('Browser focus changed.');});
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&state.examActive)lockExam('Tab switch detected.');});
+window.addEventListener('beforeunload',e=>{if(state.examActive){e.preventDefault();e.returnValue='';}});
+
+/* Modal events */
+el.submitMockBtn.addEventListener('click',requestSubmitMock);
+el.centerModalCancelBtn.addEventListener('click',closeCenterModal);
+el.centerModalConfirmBtn.addEventListener('click',()=>{if(typeof state.centerModalAction==='function'){const ok=state.centerModalAction();if(ok===false)return;}closeCenterModal();});
+el.centerModalInput.addEventListener('keydown',e=>{if(e.key==='Enter')el.centerModalConfirmBtn.click();});
+
+/* ================= ACCA CBE TOOLBAR ================= */
+window.toggleScratchpad=function(){document.getElementById('scratchpad')?.classList.toggle('hidden');};
+window._uiPrompt=function(fn){state.uiPromptOpen=true;try{return fn();}finally{setTimeout(()=>{state.uiPromptOpen=false;},400);}};
+window.insertSymbol=function(){
+  const sym=window._uiPrompt(()=>prompt('Enter symbol to insert (e.g. $, €, £, %)','$'));if(!sym)return;
+  const ae=document.activeElement;
+  if(ae&&ae.isContentEditable){document.execCommand('insertText',false,sym);return;}
+  if(ae&&(ae.tagName==='TEXTAREA'||ae.tagName==='INPUT')){
+    const s=ae.selectionStart??ae.value.length,e=ae.selectionEnd??s;
+    ae.value=ae.value.slice(0,s)+sym+ae.value.slice(e);
+    ae.dispatchEvent(new Event('input',{bubbles:true}));
+    return;
+  }
+  const ed=document.getElementById('wordAnswer');
+  if(ed){ed.focus();document.execCommand('insertText',false,sym);ed.dispatchEvent(new Event('input',{bubbles:true}));return;}
+  const cell=document.querySelector('.cr-cell');
+  if(cell){cell.focus();document.execCommand('insertText',false,sym);cell.dispatchEvent(new Event('input',{bubbles:true}));return;}
+  window._uiPrompt(()=>alert('Open a Word/Spreadsheet answer or the Scratch Pad, place the cursor, then insert the symbol.'));
+};
+window.applyFormat=function(cmd,val){
+  const sel=window.getSelection();
+  if(!sel||!sel.rangeCount||sel.isCollapsed){window._uiPrompt(()=>alert('Select some text in the scenario or answer first, then apply.'));return;}
+  try{
+    if(cmd==='strikeThrough'||cmd==='hiliteColor'){
+      const span=document.createElement('span');
+      if(cmd==='strikeThrough')span.style.textDecoration='line-through';
+      else span.style.background=val||'yellow';
+      sel.getRangeAt(0).surroundContents(span);
+      sel.removeAllRanges();
+    }else{
+      document.execCommand(cmd,false,val||null);
+    }
+  }catch(e){try{document.execCommand(cmd,false,val||null);}catch(_){}}
+  const ae=document.activeElement;if(ae)ae.dispatchEvent(new Event('input',{bubbles:true}));
+};
+window.toggleCalculator=function(){
+  const pop=document.getElementById('calcPop');if(!pop)return;
+  pop.classList.toggle('hidden');
+  if(!pop.dataset.built){
+    pop.dataset.built='1';
+    const box=document.getElementById('calcKeys');
+    ['C','(',')','/','7','8','9','*','4','5','6','-','1','2','3','+','0','.','=','⌫'].forEach(k=>{
+      const b=document.createElement('button');b.type='button';b.textContent=k;
+      if('/*-+'.includes(k)||k==='=')b.classList.add('op');
+      b.onclick=()=>calcKey(k);box.appendChild(b);
+    });
+  }
+};
+window.calcKey=function(k){
+  const d=document.getElementById('calcDisplay');if(!d)return;
+  if(k==='C'){d.value='0';return;}
+  if(k==='⌫'){d.value=d.value.length>1?d.value.slice(0,-1):'0';return;}
+  if(k==='='){try{const r=Function('"use strict";return('+d.value+')')();d.value=String(r);}catch(e){d.value='Error';}return;}
+  d.value=(d.value==='0'||d.value==='Error')?k:d.value+k;
+};
+
+/* ================= MANUAL MARKING (ADMIN) ================= */
+let markingAttemptId=null;
+window.openMarking=function(attemptId){
+  if(state.role!=='admin')return;
+  const a=state.attempts.find(x=>x.id===attemptId);
+  if(!a)return;
+  markingAttemptId=attemptId;
+  const qs=state.questions.filter(q=>String(q.paperId)===String(a.paperId)&&(q.type==='word'||q.type==='excel'));
+  document.getElementById('markingTitle').textContent=`${a.paperCode||''} ${a.paperTitle||''} — ${a.studentName||a.userEmail||'Student'}`;
+  const body=document.getElementById('markingBody');
+  if(!qs.length){body.innerHTML='<div class="empty">No constructed-response questions found for this paper.</div>';}
+  else body.innerHTML=qs.map((q,i)=>{
+    const given=a.answers?a.answers[q.id]:null;
+    const pre=a.manualScores&&a.manualScores[q.id]!=null?Number(a.manualScores[q.id]):'';
+    return`<div class="marking-q">
+      <div class="question-number-badge"><span class="badge">Q${i+1}</span><span class="badge">${Number(q.marks||0)} marks</span><span class="badge">${q.type==='excel'?'Spreadsheet':'Word'}</span></div>
+      <div class="question-text-block"><strong>Requirement:</strong> ${renderPastedText(q.mainQuestion||'(see scenario)')}</div>
+      ${q.question?`<div class="question-text-block"><strong>Scenario:</strong> ${renderPastedText(q.question)}</div>`:''}
+      ${q.imageUrl?`<div class="question-image"><img src="${esc(q.imageUrl)}" alt="Exhibit"></div>`:''}
+      ${q.explanation?`<div class="sb-scheme"><strong>Marking guide:</strong> ${esc(q.explanation)}</div>`:''}
+      <div class="marking-answer">${renderCrAnswerReadonly(q,given)}</div>
+      <label>Awarded marks (max ${Number(q.marks||0)})</label>
+      <input type="number" min="0" max="${Number(q.marks||0)}" step="0.5" class="mark-input" data-qid="${q.id}" value="${pre}">
+    </div>`;
+  }).join('');
+  document.getElementById('markingStatus').textContent=`Auto-marked OT score: ${Number(a.autoScore??a.score??0)} · Award constructed-response marks below, then Save & Finalise.`;
+  document.getElementById('markingOverlay').classList.remove('hidden');
+  document.body.style.overflow='hidden';
+};
+window.closeMarking=function(){
+  document.getElementById('markingOverlay').classList.add('hidden');
+  if(!state.examActive)document.body.style.overflow='';
+  markingAttemptId=null;
+};
+window.saveMarking=async function(){
+  if(state.role!=='admin'||!markingAttemptId)return;
+  const a=state.attempts.find(x=>x.id===markingAttemptId);
+  if(!a)return;
+  const qs=state.questions.filter(q=>String(q.paperId)===String(a.paperId)&&(q.type==='word'||q.type==='excel'));
+  const manualScores={};let manualSum=0;
+  document.querySelectorAll('.mark-input').forEach(inp=>{
+    const q=qs.find(x=>x.id===inp.dataset.qid);if(!q)return;
+    let v=Number(inp.value);if(Number.isNaN(v)||v<0)v=0;
+    if(v>Number(q.marks||0))v=Number(q.marks||0);
+    manualScores[q.id]=v;manualSum+=v;
+  });
+  const autoScore=Number(a.autoScore??a.score??0);
+  const total=Number(a.total||0);
+  const finalScore=Math.round((autoScore+manualSum)*100)/100;
+  const percentage=total?Math.round((finalScore/total)*100):0;
+  try{
+    await db.collection('mockAttempts').doc(markingAttemptId).update({
+      manualScores,manualScore:manualSum,
+      score:finalScore,percentage,
+      status:'marked',markedAt:firebase.firestore.FieldValue.serverTimestamp(),
+      markedBy:state.user?state.user.email:'admin'
+    });
+    closeMarking();
+    await refreshAll();
+    alert('Marks saved. Attempt finalised: '+finalScore+'/'+total+' ('+percentage+'%).');
+  }catch(err){document.getElementById('markingStatus').textContent=err.message;}
+};
+
+/* ================= INIT ================= */
+buildDynamicEditor();
+updateQuestionFormMode();
+refreshAll();
+</script>
+<script>
+if (top !== self) { top.location = self.location; }
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('../sw.js').catch(function(e){ console.warn('SW:', e); });
+  });
+}
+/* One-tap PWA install button */
+(function(){
+  var deferredPrompt = null;
+  window.addEventListener('beforeinstallprompt', function(e){
+    e.preventDefault(); deferredPrompt = e; showBtn();
+  });
+  function showBtn(){
+    if (document.getElementById('vpInstallBtn')) return;
+    var b = document.createElement('button');
+    b.id = 'vpInstallBtn';
+    b.textContent = '📲 Install App';
+    b.style.cssText = "position:fixed;left:18px;bottom:18px;z-index:15000;border:none;border-radius:999px;padding:12px 20px;background:linear-gradient(135deg,#C9922A,#E8AA48);color:#0D1B40;font:800 14px 'DM Sans',sans-serif;box-shadow:0 10px 28px rgba(13,27,64,.35);cursor:pointer;";
+    b.onclick = function(){
+      if (deferredPrompt) { deferredPrompt.prompt(); deferredPrompt = null; }
+      b.remove();
+    };
+    document.body.appendChild(b);
+  }
+  window.__vpShowInstall = showBtn;
+  /* If already installed, the prompt never fires - hide nothing, just don't show */
+})();
+</script>
+<script>
+/* Skip login flash for returning admin (auth will re-verify and correct if needed) */
+(function(){
+  try{
+    var ok = localStorage.getItem('adminUnlocked') === '1' || sessionStorage.getItem('adminUnlocked') === '1';
+    if(!ok) return;
+    var loginEl = document.getElementById('loginWrap') || document.getElementById('loginScreen');
+    var appEl = document.getElementById('appShell') || document.getElementById('adminApp');
+    if(loginEl){ loginEl.style.display = 'none'; loginEl.classList.add('hidden'); }
+    if(appEl){ appEl.classList.remove('hidden'); appEl.style.display = ''; }
+  }catch(e){}
+})();
+</script>
+</body>
+</html>
