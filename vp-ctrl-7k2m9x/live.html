@@ -137,6 +137,7 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
 }
 .hidden{display:none !important;}
 </style>
+<base target="_blank">
 </head>
 <body>
 
@@ -149,6 +150,7 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
     <div class="login-field"><label>Password</label><input type="password" id="adminPassword" placeholder="••••••••"></div>
     <button class="login-btn" id="adminLoginBtn" type="button">Login as Admin</button>
     <div class="login-status" id="loginStatus"></div>
+    <div style="text-align:center;margin-top:10px;"><a style="color:#E8AA48;font-size:.85rem;cursor:pointer;font-weight:700;" onclick="window.__vpResetPw && window.__vpResetPw()">Forgot password?</a></div>
   </div>
 </div>
 
@@ -238,6 +240,7 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
 <script src="../firebase-config.js"></script>
 
 <script>
@@ -275,10 +278,29 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
     window.location.href = 'index.html';
   });
 
-  auth.onAuthStateChanged(user => {
+  auth.onAuthStateChanged(async user => {
     if(user && user.email === ADMIN_EMAIL && localStorage.getItem('adminUnlocked') === '1'){
+      window.__isTeacher = false;
       showApp();
-    } else {
+      return;
+    }
+    if(user){
+      try{
+        const doc = await db.collection('users').doc(user.uid).get();
+        if(doc.exists && doc.data().role === 'teacher'){
+          window.__isTeacher = true;
+          window.__teacherSubjects = doc.data().assignedSubjects || [];
+          document.querySelectorAll('.app-menu a').forEach(a => {
+            const href = a.getAttribute('href') || '';
+            if(href.indexOf('students.html') !== -1 || href.indexOf('teachers.html') !== -1) a.style.display = 'none';
+          });
+          
+          showApp();
+          return;
+        }
+      }catch(e){}
+      await auth.signOut();
+    }
       document.getElementById('loginWrap').classList.remove('hidden');
       document.getElementById('appShell').classList.add('hidden');
     }
@@ -323,6 +345,7 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
     const batchCodes = getSelectedBatchCodes('liveBatchSelect');
 
     if(!title || !subject || !date || !time || !link){ setStatus(document.getElementById('scheduleStatus'), 'Fill all required fields.', true); return; }
+    if(window.__isTeacher && !(window.__teacherSubjects||[]).includes(subject)){ setStatus(document.getElementById('scheduleStatus'), 'Only your assigned subjects: ' + (window.__teacherSubjects||[]).join(', '), true); return; }
 
     try{
       const payload = {
@@ -397,6 +420,10 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
   window.loadBatches = loadBatches;
 
   window.renderClasses = function(){
+    if(window.__isTeacher){
+      const subs = window.__teacherSubjects || [];
+      allClasses = allClasses.filter(c => subs.includes(c.subject));
+    }
     const box = document.getElementById('liveList');
     const q = (document.getElementById('liveSearch')?.value || '').toLowerCase();
     const batchFilter = document.getElementById('batchFilter')?.value || '';
@@ -502,6 +529,15 @@ if ('serviceWorker' in navigator) {
     if(appEl){ appEl.classList.remove('hidden'); appEl.style.display = ''; }
   }catch(e){}
 })();
+</script>
+<script>
+window.__vpResetPw = function(){
+  var el = document.getElementById('adminEmail') || document.getElementById('loginEmail');
+  var e = ((el && el.value) || '').trim() || prompt('Enter your admin/teacher email:');
+  if(!e) return;
+  auth.sendPasswordResetEmail(e.trim()).then(function(){ alert('Password reset email sent — check inbox & spam.'); })
+    .catch(function(err){ alert(err.message); });
+};
 </script>
 </body>
 </html>
