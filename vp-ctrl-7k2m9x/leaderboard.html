@@ -123,6 +123,7 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
 }
 .hidden{display:none !important;}
 </style>
+<base target="_blank">
 </head>
 <body>
 
@@ -292,7 +293,8 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
       }
 
       const attemptSnap = await db.collection('attempts').orderBy('createdAt','desc').limit(500).get();
-      const allAttempts = attemptSnap.docs.map(d => d.data());
+      let allAttempts = attemptSnap.docs.map(d => d.data());
+      if(window.__isTeacher){ const subs = window.__teacherSubjects || []; allAttempts = allAttempts.filter(a => subs.includes(a.subject)); }
       const batchAttempts = allAttempts.filter(a => studentIds.includes(a.userId));
 
       const ranking = {};
