@@ -6,135 +6,187 @@
 <meta name="robots" content="noindex, nofollow, noarchive">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="permissions-policy" content="camera=(), microphone=(), geolocation=()">
-<title>Manage Teachers | Vinayak ProEdu Admin</title>
-<link rel="icon" type="image/png" href="https://pasteimg.com/images/2026/03/31/WhatsApp-Image-2026-03-19-at-6.49.19-PM.jpg">
 <link rel="manifest" href="./manifest.json">
 <meta name="theme-color" content="#0D1B40">
+<meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
+
+<title>Dashboard | Vinayak ProEdu Admin</title>
+<link rel="icon" type="image/png" href="https://pasteimg.com/images/2026/03/31/WhatsApp-Image-2026-03-19-at-6.49.19-PM.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--navy:#0D1B40;--blue:#1e3c72;--gold:#C9922A;--gold-lt:#E8AA48;--ink:#1A1A2E;--muted:#6B7280;}
+:root{
+  --navy:#0D1B40; --navy-mid:#1a2e5e; --blue:#1e3c72; --gold:#C9922A; --gold-lt:#E8AA48;
+  --amber:#F5C04A; --ink:#1A1A2E; --muted:#6B7280; --smoke:#EFF1F6; --white:#FFFFFF;
+  --shadow-sm:0 4px 20px rgba(13,27,64,0.08); --shadow-md:0 12px 45px rgba(13,27,64,0.14);
+  --r-sm:10px; --r-md:16px; --r-lg:24px;
+}
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'DM Sans',sans-serif;color:var(--ink);background:#f5f7fb;line-height:1.65;}
-h1,h2,h3{font-family:'Playfair Display',serif;}
+html{scroll-behavior:smooth;font-size:16px;}
+body{font-family:'DM Sans',sans-serif;color:var(--ink);background:#f5f7fb;line-height:1.65;overflow-x:hidden;}
+img{max-width:100%;display:block;}
 a{text-decoration:none;color:inherit;}
-.hidden{display:none !important;}
-.login-wrap{position:fixed;inset:0;z-index:9999;background:linear-gradient(135deg,var(--navy),var(--blue));display:flex;align-items:center;justify-content:center;padding:20px;}
-.login-box{width:min(420px,92vw);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:24px;padding:clamp(32px,6vw,48px);backdrop-filter:blur(20px);box-shadow:0 40px 100px rgba(0,0,0,.4);}
-.login-box h2{color:#fff;font-size:1.6rem;margin-bottom:6px;text-align:center;}
-.login-box>p{color:rgba(255,255,255,.55);font-size:.9rem;text-align:center;margin-bottom:28px;}
+h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
+
+/* Login */
+.login-wrap{position:fixed;inset:0;z-index:9999;background:linear-gradient(135deg,var(--navy) 0%,var(--blue) 100%);display:flex;align-items:center;justify-content:center;padding:20px;}
+.login-box{width:min(420px,92vw);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:var(--r-lg);padding:clamp(32px,6vw,48px);backdrop-filter:blur(20px);box-shadow:0 40px 100px rgba(0,0,0,0.4);}
+.login-box h2{font-family:'Playfair Display',serif;color:#fff;font-size:1.6rem;margin-bottom:6px;text-align:center;}
+.login-box p{color:rgba(255,255,255,0.55);font-size:0.9rem;text-align:center;margin-bottom:28px;}
 .login-field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;}
-.login-field label{font-size:.74rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.65);}
-.login-field input{padding:13px 16px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.14);border-radius:10px;color:#fff;font-size:.95em;font-family:inherit;}
-.login-field input:focus{outline:none;border-color:rgba(201,146,42,.6);}
-.login-btn{width:100%;padding:15px;border-radius:50px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--gold),var(--gold-lt));color:var(--navy);font-size:1em;font-weight:700;font-family:inherit;}
-.login-status{margin-top:12px;font-size:.9rem;font-weight:700;text-align:center;min-height:22px;color:#fca5a5;}
-.forgot{text-align:center;margin-top:10px;}
-.forgot a{color:var(--gold-lt);font-size:.85rem;cursor:pointer;}
+.login-field label{font-size:0.74rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.65);}
+.login-field input{width:100%;padding:13px 16px;background:rgba(255,255,255,0.09);border:1px solid rgba(255,255,255,0.14);border-radius:var(--r-sm);color:#fff;font-size:0.95em;font-family:'DM Sans',sans-serif;transition:all 0.25s;}
+.login-field input::placeholder{color:rgba(255,255,255,0.32);}
+.login-field input:focus{outline:none;border-color:rgba(201,146,42,0.6);background:rgba(255,255,255,0.13);box-shadow:0 0 0 3px rgba(201,146,42,0.15);}
+.login-btn{width:100%;padding:15px;border-radius:50px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--gold),var(--gold-lt));color:var(--navy);font-size:1em;font-weight:700;font-family:'DM Sans',sans-serif;box-shadow:0 8px 28px rgba(201,146,42,0.35);transition:all 0.3s;}
+.login-btn:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(201,146,42,0.5);}
+.login-status{margin-top:12px;font-size:0.9rem;font-weight:700;text-align:center;min-height:22px;}
+.login-status.error{color:#fca5a5;}
+
+/* App Shell */
 .app-shell{display:flex;width:100%;min-height:100vh;}
-.app-sidebar{width:260px;background:var(--navy);color:#fff;padding:18px;flex-shrink:0;position:fixed;height:100vh;left:0;top:0;z-index:100;}
-.app-brand{display:flex;align-items:center;gap:10px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px solid rgba(255,255,255,.08);}
+.app-sidebar{width:260px;background:var(--navy);color:#fff;padding:18px;overflow:auto;flex-shrink:0;position:fixed;height:100vh;left:0;top:0;z-index:100;}
+.app-brand{display:flex;align-items:center;gap:10px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px solid rgba(255,255,255,0.08);}
 .app-brand img{width:40px;height:40px;border-radius:50%;border:2px solid var(--gold);object-fit:cover;}
-.app-brand h3{font-size:1.05rem;color:#fff;}
-.app-brand p{font-size:.72rem;letter-spacing:1.4px;text-transform:uppercase;color:rgba(232,170,72,.8);}
+.app-brand h3{font-family:'Playfair Display',serif;font-size:1.05rem;margin:0;color:#fff;}
+.app-brand p{font-size:0.72rem;letter-spacing:1.4px;text-transform:uppercase;color:rgba(232,170,72,0.8);margin-top:2px;}
 .app-menu{display:grid;gap:6px;}
-.app-menu a{width:100%;padding:11px 14px;border-radius:10px;font-weight:600;font-size:.9rem;display:flex;align-items:center;gap:10px;color:#fff;transition:all .2s;}
-.app-menu a:hover,.app-menu a.active{background:var(--gold);color:var(--navy);}
-.app-main{flex:1;margin-left:260px;padding:24px 28px;}
-.app-topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid rgba(201,146,42,.25);}
-.app-title{color:var(--navy);font-size:1.6rem;}
-.app-sub{color:var(--muted);font-size:.9rem;}
-.ghost-btn{background:#eef4ff;color:var(--blue);border:none;border-radius:12px;padding:11px 18px;font-weight:700;cursor:pointer;font-family:inherit;}
-.app-card{background:#fff;border:1px solid rgba(201,146,42,.12);border-radius:20px;padding:22px;box-shadow:0 4px 18px rgba(13,27,64,.06);margin-bottom:16px;}
-.app-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-.subject-title{font-size:1.15rem;color:var(--navy);margin-bottom:14px;}
-.portal-field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;}
-.portal-field label{font-size:.74rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);}
-.portal-field input,.portal-field select,.portal-field textarea{padding:12px 14px;border-radius:12px;border:1px solid rgba(13,27,64,.14);background:#fff;color:var(--ink);font-size:.95rem;font-family:inherit;}
-.portal-field input:focus,.portal-field select:focus,.portal-field textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,146,42,.12);}
-.portal-field textarea{min-height:90px;resize:vertical;}
-.primary-btn,.secondary-btn,.danger-btn,.ghost2{border:none;border-radius:12px;padding:11px 18px;font-weight:700;cursor:pointer;font-family:inherit;font-size:.9rem;}
-.primary-btn{background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff;}
-.secondary-btn{background:linear-gradient(135deg,var(--gold),var(--gold-lt));color:#111;}
-.danger-btn{background:#fef2f2;color:#b42318;border:1px solid #fecaca;}
-.portal-status{font-size:.92rem;margin-top:10px;min-height:22px;font-weight:700;}
-.portal-status.error{color:#b42318;}
-.portal-status.success{color:#166534;}
-.mini-list{display:grid;gap:10px;max-height:520px;overflow:auto;}
-.mini-item{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:14px;}
-.enrolment-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:10px 0 14px;}
-.enrolment-option{display:flex;gap:8px;align-items:center;padding:10px 12px;background:#EFF1F6;border:1px solid #e1e7f0;border-radius:10px;font-size:.88rem;color:var(--navy);font-weight:600;cursor:pointer;}
-.enrolment-option input{cursor:pointer;}
-.empty-box{padding:20px;border:1px dashed #d9e2ef;border-radius:14px;background:#fbfdff;color:#5d6e83;text-align:center;}
-.hint{font-size:.85rem;color:var(--muted);line-height:1.6;background:#f8fafc;border:1px solid #e5e7eb;border-radius:12px;padding:12px 14px;margin-bottom:14px;}
-@media(max-width:900px){.app-sidebar{width:100%;height:auto;position:relative;}.app-main{margin-left:0;}.app-grid-2{grid-template-columns:1fr;}.app-shell{flex-direction:column;}}
+.app-menu a,.app-menu button{width:100%;border:none;background:transparent;color:#fff;padding:11px 14px;border-radius:10px;cursor:pointer;text-align:left;font-weight:600;font-size:0.9rem;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:10px;transition:all 0.2s;text-decoration:none;}
+.app-menu a:hover,.app-menu button:hover,.app-menu a.active,.app-menu button.active{background:var(--gold);color:var(--navy);}
+.app-main{flex:1;margin-left:260px;padding:24px 28px;overflow:auto;min-height:100vh;}
+
+/* Topbar */
+.app-topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid #e5e7eb;}
+.app-title{font-family:'Playfair Display',serif;color:var(--navy);font-size:1.6rem;margin:0;}
+.app-sub{color:var(--muted);font-size:0.9rem;}
+
+/* Metric Card */
+.metric-card{background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff;border-radius:20px;padding:28px;text-align:center;box-shadow:var(--shadow-md);margin-bottom:24px;max-width:320px;}
+.metric-card .n{font-family:'Playfair Display',serif;font-size:3rem;font-weight:800;line-height:1;}
+.metric-card .l{font-size:0.85rem;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.6);margin-top:8px;}
+
+/* Quick Link Grid */
+.link-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;}
+.link-card{background:#fff;border:1px solid #e5e7eb;border-radius:18px;padding:24px;text-align:center;cursor:pointer;transition:all 0.25s;position:relative;overflow:hidden;text-decoration:none;display:block;}
+.link-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);border-color:var(--gold);}
+.link-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold-lt));transform:scaleX(0);transform-origin:left;transition:transform 0.3s;}
+.link-card:hover::after{transform:scaleX(1);}
+.link-icon{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,var(--navy),var(--blue));display:grid;place-items:center;margin:0 auto 14px;color:#fff;font-size:1.4rem;}
+.link-name{font-family:'Playfair Display',serif;color:var(--navy);font-size:1.05rem;font-weight:700;margin-bottom:4px;}
+.link-desc{color:var(--muted);font-size:0.82rem;}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:6px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:rgba(13,27,64,0.2);border-radius:10px;}
+
+/* Responsive */
+@media(max-width:900px){
+  .app-sidebar{width:100%;height:auto;position:relative;}
+  .app-main{margin-left:0;}
+  .app-shell{flex-direction:column;}
+}
+@media(max-width:640px){
+  .app-main{padding:16px;}
+  .link-grid{grid-template-columns:1fr 1fr;}
+}
+.hidden{display:none !important;}
 </style>
 <base target="_blank">
 </head>
 <body>
 
+<!-- LOGIN -->
 <div class="login-wrap" id="loginWrap">
   <div class="login-box">
     <h2>Admin Portal</h2>
-    <p>Manage Teachers</p>
+    <p>Vinayak ProEdu Dashboard</p>
     <div class="login-field"><label>Admin Email</label><input type="email" id="adminEmail" placeholder="admin@email.com"></div>
     <div class="login-field"><label>Password</label><input type="password" id="adminPassword" placeholder="••••••••"></div>
     <button class="login-btn" id="adminLoginBtn" type="button">Login as Admin</button>
     <div class="login-status" id="loginStatus"></div>
-    <div class="forgot"><a onclick="window.__vpResetPw()">Forgot password?</a></div>
+    <div style="text-align:center;margin-top:10px;"><a style="color:#E8AA48;font-size:.85rem;cursor:pointer;font-weight:700;" onclick="window.__vpResetPw && window.__vpResetPw()">Forgot password?</a></div>
   </div>
 </div>
 
+<!-- APP -->
 <div class="app-shell hidden" id="appShell">
   <aside class="app-sidebar">
     <div class="app-brand">
       <img src="https://pasteimg.com/images/2026/03/31/WhatsApp-Image-2026-03-19-at-6.49.19-PM.jpg" alt="Vinayak ProEdu">
-      <div><h3>Vinayak ProEdu</h3><p>Admin Panel</p></div>
+      <div>
+        <h3>Vinayak ProEdu</h3>
+        <p>Admin Panel</p>
+      </div>
     </div>
     <nav class="app-menu">
-      <a href="index.html">📊 Dashboard</a>
-      <a href="students.html">👥 Students</a>
-      <a href="teachers.html" class="active"><span>👨‍🏫</span> Teachers</a>
-      <a href="tests.html">📝 Mocks</a>
-      <a href="lectures.html">🎬 Lectures</a>
-      <a href="live.html">🔴 Live Classes</a>
-      <a href="leaderboard.html">🏆 Leaderboard</a>
-      <a href="doubts.html">💬 Doubts</a>
-      <a href="announcements.html">📢 Announcements</a>
+      <a href="index.html" target="_self" class="active">📊 Dashboard</a>
+      <a href="students.html" target="_self">👥 Students</a>
+      <a href="tests.html" target="_self">📝 Tests</a>
+      <a href="lectures.html" target="_self">🎬 Lectures</a>
+      <a href="live.html" target="_self">🔴 Live Classes</a>
+      <a href="leaderboard.html" target="_self">🏆 Leaderboard</a>
+      <a href="doubts.html" target="_self">💬 Doubts</a>
+      <a href="announcements.html"><span>📢</span> Announcements</a>
+      <button id="logoutBtn" type="button">🚪 Logout</button>
     </nav>
   </aside>
 
   <main class="app-main">
     <div class="app-topbar">
-      <div><h1 class="app-title">Manage Teachers</h1><div class="app-sub">Create teacher roles and assign their subjects</div></div>
-      <button class="ghost-btn" onclick="location.href='index.html'" type="button">Close</button>
+      <div>
+        <h1 class="app-title">Dashboard</h1>
+        <div class="app-sub">Welcome back, Admin</div>
+      </div>
+      <button class="ghost-btn" id="closeBtn" type="button">Close</button>
     </div>
 
-    <div class="hint">🪜 <b>How to add a teacher:</b><br>
-    1️⃣ Firebase Console → Authentication → Users → <b>Add user</b> (teacher's email + any temporary password)<br>
-    2️⃣ Come back here, enter that email → tick their subjects → <b>Add as Teacher</b><br>
-    3️⃣ Click <b>📧 Send set-password email</b> so the teacher can choose their own password (they use the same secret admin link to log in)</div>
+    <!-- Total Students -->
+    <div class="metric-card">
+      <div class="n" id="studentCount">0</div>
+      <div class="l">Total Students</div>
+    </div>
 
-    <div class="app-grid-2">
-      <div class="app-card">
-        <h3 class="subject-title">➕ Add / Update Teacher</h3>
-        <div class="portal-field"><label>Teacher Email *</label><input id="tEmail" type="email" placeholder="teacher@gmail.com"></div>
-        <div class="portal-field"><label>Display Name</label><input id="tName" type="text" placeholder="e.g. CA Priya Sharma"></div>
-        <label style="font-size:.74rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px;">Assigned Subjects * (they can only manage these)</label>
-        <div class="enrolment-grid" id="tSubjects"><span style="font-size:.85rem;color:var(--muted)">Loading subjects…</span></div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap;">
-          <button class="primary-btn" type="button" onclick="saveTeacher()">💾 Save Teacher</button>
-          <button class="secondary-btn" type="button" onclick="autoCreateTeacher()">🔐 Auto-create account &amp; email</button>
-        </div>
-        <div class="hint" style="margin-top:10px;">⚡ <b>Auto-create</b> makes the Firebase login for you, assigns subjects, generates a random password and emails it to the teacher — no Firebase Console needed.</div>
-        <div class="portal-status" id="tStatus"></div>
-      </div>
-      <div class="app-card">
-        <h3 class="subject-title">👨‍🏫 Existing Teachers</h3>
-        <div id="tList" class="mini-list"><div class="empty-box">Loading…</div></div>
-      </div>
+    <!-- Quick Links -->
+    <h2 style="font-family:'Playfair Display',serif;color:var(--navy);font-size:1.3rem;margin-bottom:16px;">Quick Links</h2>
+    <div class="link-grid">
+      <a href="students.html" target="_self" class="link-card">
+        <div class="link-icon">👥</div>
+        <div class="link-name">Students</div>
+        <div class="link-desc">Manage enrolments & access</div>
+      </a>
+      <a href="teachers.html" target="_self" class="link-card">
+        <div class="link-icon">👨‍🏫</div>
+        <div class="link-name">Teachers</div>
+        <div class="link-desc">Assign subjects &amp; roles</div>
+      </a>
+      <a href="tests.html" target="_self" class="link-card">
+        <div class="link-icon">📝</div>
+        <div class="link-name">Tests</div>
+        <div class="link-desc">Create papers & questions</div>
+      </a>
+      <a href="lectures.html" target="_self" class="link-card">
+        <div class="link-icon">🎬</div>
+        <div class="link-name">Lectures</div>
+        <div class="link-desc">Upload videos & files</div>
+      </a>
+      <a href="live.html" target="_self" class="link-card">
+        <div class="link-icon">🔴</div>
+        <div class="link-name">Live Classes</div>
+        <div class="link-desc">Schedule meetings</div>
+      </a>
+      <a href="leaderboard.html" target="_self" class="link-card">
+        <div class="link-icon">🏆</div>
+        <div class="link-name">Leaderboard</div>
+        <div class="link-desc">Batch-wise rankings</div>
+      </a>
+      <a href="doubts.html" target="_self" class="link-card">
+        <div class="link-icon">💬</div>
+        <div class="link-name">Doubts</div>
+        <div class="link-desc">Reply to students</div>
+      </a>
     </div>
   </main>
 </div>
@@ -144,158 +196,78 @@ a{text-decoration:none;color:inherit;}
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
 <script src="../firebase-config.js"></script>
+
 <script>
 (function(){
-  const ADMIN_EMAIL = 'vinayakproedu@gmail.com';
-  const $ = id => document.getElementById(id);
-  const esc = v => String(v ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  const ADMIN_EMAIL = "vinayakproedu@gmail.com";
 
-  window.__vpResetPw = function(){
-    const e = (($('adminEmail')||{}).value || '').trim() || prompt('Enter your admin email:');
-    if(!e) return;
-    auth.sendPasswordResetEmail(e.trim()).then(()=>{ ($('loginStatus').textContent='Reset email sent — check inbox.'); $('loginStatus').style.color='#a7f3d0'; })
-      .catch(err=>{ $('loginStatus').textContent = err.message; $('loginStatus').style.color='#fca5a5'; });
-  };
+  // Firebase
+  
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+
+  // Auth
+  document.getElementById('adminLoginBtn').addEventListener('click', async () => {
+    const email = (document.getElementById('adminEmail').value || '').trim();
+    const pw = document.getElementById('adminPassword').value;
+    if(!email || !pw){ document.getElementById('loginStatus').textContent = 'Email and password required.'; document.getElementById('loginStatus').className = 'login-status error'; return; }
+    try{
+      const cred = await auth.signInWithEmailAndPassword(email, pw);
+      // Teachers are allowed — onAuthStateChanged (below) routes them to the teacher view.
+      // Only reject if Firebase itself says the login is bad.
+      if(!cred.user){ throw new Error('Login failed'); }
+      sessionStorage.setItem('adminUnlocked', '1'); localStorage.setItem('adminUnlocked', '1');
+      showApp();
+    }catch(err){ document.getElementById('loginStatus').textContent = err.message; document.getElementById('loginStatus').className = 'login-status error'; }
+  });
+
+  document.getElementById('logoutBtn').addEventListener('click', async () => {
+    sessionStorage.removeItem('adminUnlocked'); localStorage.removeItem('adminUnlocked');
+    await auth.signOut();
+    location.reload();
+  });
+
+  document.getElementById('closeBtn').addEventListener('click', () => {
+    window.location.href = '../index.html';
+  });
 
   auth.onAuthStateChanged(async user => {
-    if(user && user.email === ADMIN_EMAIL){
-      $('loginWrap').classList.add('hidden'); $('appShell').classList.remove('hidden');
-      localStorage.setItem('adminUnlocked','1'); sessionStorage.setItem('adminUnlocked','1');
-      await loadAll();
-    } else {
-      if(user) auth.signOut();
-      $('loginWrap').classList.remove('hidden'); $('appShell').classList.add('hidden');
+    if(user && user.email === ADMIN_EMAIL && (sessionStorage.getItem('adminUnlocked') === '1' || localStorage.getItem('adminUnlocked') === '1')){
+      showApp();
+      return;
     }
-  });
-  $('adminLoginBtn').onclick = async () => {
-    try{
-      const c = await auth.signInWithEmailAndPassword($('adminEmail').value.trim(), $('adminPassword').value);
-      if(c.user.email !== ADMIN_EMAIL){ await auth.signOut(); $('loginStatus').textContent='Admin only.'; return; }
-    }catch(e){ $('loginStatus').textContent = e.message; }
-  };
-
-  let allSubjects = [];
-  async function loadAll(){
-    const [lSnap, uSnap] = await Promise.all([
-      db.collection('lectures').limit(500).get(),
-      db.collection('users').where('role','==','teacher').get()
-    ]);
-    const set = new Set();
-    lSnap.docs.forEach(d => { const s = d.data().subject; if(s) set.add(s); });
-    allSubjects = [...set].sort();
-    $('tSubjects').innerHTML = allSubjects.length ? allSubjects.map(s =>
-      `<label class="enrolment-option"><input type="checkbox" class="t-subj" value="${esc(s)}"><span>${esc(s)}</span></label>`).join('')
-      : '<span style="font-size:.85rem;color:var(--muted)">No subjects found yet — upload a lecture first, or type subjects when adding lectures later. You can still add the teacher and tick subjects afterward.</span>';
-    const teachers = uSnap.docs.map(d => ({id:d.id, ...d.data()}));
-    $('tList').innerHTML = teachers.length ? teachers.map(t => `
-      <div class="mini-item">
-        <strong style="color:var(--navy)">${esc(t.name || t.email)}</strong>
-        <span style="font-size:.8rem;color:var(--muted)"> · ${esc(t.email)}</span><br>
-        <span style="font-size:.82rem">${(t.assignedSubjects||[]).map(s=>`<span style="background:#eef4ff;color:#1e3c72;border-radius:999px;padding:2px 8px;font-size:.72rem;font-weight:700;margin:2px 4px 2px 0;display:inline-block">${esc(s)}</span>`).join('') || '<i style="color:#9ca3af">no subjects</i>'}</span>
-        <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
-          <button class="secondary-btn" style="padding:7px 12px;font-size:.8rem;" onclick="sendTeacherReset('${esc(t.email)}')">📧 Set-password email</button>
-          <button class="danger-btn" style="padding:7px 12px;font-size:.8rem;" onclick="removeTeacher('${t.id}','${esc(t.email)}')">Remove</button>
-        </div>
-      </div>`).join('') : '<div class="empty-box">No teachers yet.</div>';
-  }
-
-  window.saveTeacher = async function(){
-    const st = $('tStatus'); st.className='portal-status';
-    const email = $('tEmail').value.trim().toLowerCase();
-    const name = $('tName').value.trim();
-    const subs = [...document.querySelectorAll('.t-subj:checked')].map(i => i.value);
-    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ st.textContent='Enter a valid email.'; st.classList.add('error'); return; }
-    if(!subs.length){ st.textContent='Tick at least one subject.'; st.classList.add('error'); return; }
-    try{
-      st.textContent = 'Saving…';
-      // find auth uid by listing is not possible client-side; require the auth account to exist
-      const signIn = await auth.fetchSignInMethodsForEmail(email).catch(()=>[]);
-      if(!signIn || signIn.length === 0){
-        st.textContent = '⚠️ No Firebase login exists for this email. Create it first: Firebase Console → Authentication → Users → Add user. Then come back and save.';
-        st.classList.add('error'); return;
-      }
-      // resolve uid via a temp query is not possible; store teacher profile keyed by email and let a cloud-less approach:
-      // we look up users collection by email field
-      const q = await db.collection('users').where('email','==',email).limit(1).get();
-      const payload = { name: name || email.split('@')[0], email, role:'teacher', assignedSubjects: subs,
-        batchCode:'', enrolledSubjects:[], assignedLectureIds:[],
-        accessUpdatedAt: firebase.firestore.FieldValue.serverTimestamp() };
-      if(q.empty){
-        await db.collection('users').add(Object.assign({ createdAt: firebase.firestore.FieldValue.serverTimestamp() }, payload));
-      } else {
-        await db.collection('users').doc(q.docs[0].id).update(payload);
-      }
-      st.textContent = '✅ Teacher saved.'; st.classList.add('success');
-      $('tEmail').value=''; $('tName').value='';
-      document.querySelectorAll('.t-subj:checked').forEach(i => i.checked=false);
-      loadAll();
-    }catch(e){ st.textContent = e.message; st.classList.add('error'); }
-  };
-
-  /* ===== AUTO-CREATE: account + profile + email in one click ===== */
-  const WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbzP0nRFMGSbt6E18gJE8N0nh2EjnTgcnWgl3SopkT1dF_yM7p9AnrUviyIQoqt_WNU2/exec';   // ← from Apps Script deployment (ends in /exec)
-  const API_KEY = 'AIzaSyCwZGVK9I_GQmJkRatZOyMs0gdcZ8nSouc';
-  function genPass(){
-    const c='abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ23456789';
-    let x=''; for(let i=0;i<9;i++) x+=c.charAt(Math.floor(Math.random()*c.length));
-    return x+'@2';
-  }
-  window.autoCreateTeacher = async function(){
-    const st = $('tStatus'); st.className='portal-status';
-    const email = $('tEmail').value.trim().toLowerCase();
-    const name = $('tName').value.trim();
-    const subs = [...document.querySelectorAll('.t-subj:checked')].map(i => i.value);
-    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ st.textContent='Enter a valid email.'; st.classList.add('error'); return; }
-    if(!subs.length){ st.textContent='Tick at least one subject.'; st.classList.add('error'); return; }
-    if(WEBHOOK_URL.indexOf('PASTE') !== -1){ st.textContent='Setup needed: paste your Web App URL into teachers.html (search WEBHOOK_URL). Steps are in apps-script-addon.gs.'; st.classList.add('error'); return; }
-    const password = genPass();
-    try{
-      st.textContent = 'Creating Firebase login…';
-      const r = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' + API_KEY,
-        { method:'POST', headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({ email, password, returnSecureToken:true }) });
-      const d = await r.json();
-      if(d.error){
-        if(d.error.message.indexOf('EMAIL_EXISTS') !== -1){
-          st.textContent = 'Account already exists — emailing a password reset instead…';
-          await fetch(WEBHOOK_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain'},
-            body: JSON.stringify({ key:'vp-teach-2026', email, name, password:'(use the reset link — a set-password email is on its way)', subjects: subs.join(', ') }) });
-          auth.sendPasswordResetEmail(email).catch(()=>{});
-          st.textContent = '✅ Account existed — reset email sent to ' + email; st.classList.add('success'); return;
+    if(user){
+      // Teacher? (role == 'teacher' in users doc)
+      try{
+        const doc = await db.collection('users').doc(user.uid).get();
+        if(doc.exists && doc.data().role === 'teacher'){
+          document.getElementById('loginWrap').classList.add('hidden');
+          document.getElementById('appShell').classList.remove('hidden');
+          const subs = doc.data().assignedSubjects || [];
+          document.querySelectorAll('.link-card').forEach(c => {
+            if(c.getAttribute('href') === 'students.html' || c.getAttribute('href') === 'teachers.html') c.style.display = 'none';
+          });
+          document.getElementById('appSub').textContent = 'Teacher mode — subjects: ' + (subs.join(', ') || 'none assigned yet');
+          return;
         }
-        throw new Error(d.error.message);
-      }
-      const uid = d.localId;
-      st.textContent = 'Creating teacher profile…';
-      const adminTok = await auth.currentUser.getIdToken();
-      const fr = await fetch('https://firestore.googleapis.com/v1/projects/vinayak-proedu/databases/(default)/documents/users/' + uid,
-        { method:'PATCH', headers:{'Content-Type':'application/json', Authorization:'Bearer ' + adminTok},
-          body: JSON.stringify({ fields: {
-            uid:{stringValue:uid}, name:{stringValue:name || email.split('@')[0]}, email:{stringValue:email},
-            phone:{stringValue:''}, role:{stringValue:'teacher'}, batchCode:{stringValue:''},
-            enrolledSubjects:{arrayValue:{values:[]}}, assignedLectureIds:{arrayValue:{values:[]}},
-            assignedSubjects:{arrayValue:{values:subs.map(s=>({stringValue:s}))}},
-            source:{stringValue:'admin-auto'}, createdAt:{timestampValue:new Date().toISOString()}
-          }}) });
-      if(fr.status >= 400) throw new Error('Profile save failed (' + fr.status + '). Check the Firestore rules were published.');
-      st.textContent = 'Emailing teacher…';
-      await fetch(WEBHOOK_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain'},
-        body: JSON.stringify({ key:'vp-teach-2026', email, name, password, subjects: subs.join(', ') }) });
-      st.textContent = '✅ Done! ' + email + ' / ' + password + ' — login emailed too.'; st.classList.add('success');
-      $('tEmail').value=''; $('tName').value='';
-      document.querySelectorAll('.t-subj:checked').forEach(i => i.checked=false);
-      loadAll();
-    }catch(e){ st.textContent = e.message; st.classList.add('error'); }
-  };
+      }catch(e){}
+      await auth.signOut();
+    }
+    document.getElementById('loginWrap').classList.remove('hidden');
+    document.getElementById('appShell').classList.add('hidden');
+  });
 
-  window.sendTeacherReset = function(email){
-    auth.sendPasswordResetEmail(email).then(()=>alert('Password-reset email sent to '+email)).catch(e=>alert(e.message));
-  };
-  window.removeTeacher = async function(id, email){
-    if(!confirm('Remove teacher access for '+email+'? (Their login stays in Firebase — they just lose the teacher role.)')) return;
-    await db.collection('users').doc(id).update({ role:'trial', assignedSubjects: [] });
-    loadAll();
-  };
+  async function showApp(){
+    document.getElementById('loginWrap').classList.add('hidden');
+    document.getElementById('appShell').classList.remove('hidden');
+    // Load total students
+    try{
+      const snap = await db.collection('users').where('role','==','student').get();
+      document.getElementById('studentCount').textContent = snap.size;
+    }catch(e){
+      document.getElementById('studentCount').textContent = '—';
+    }
+  }
 })();
 </script>
 <script>
@@ -305,6 +277,49 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('../sw.js').catch(function(e){ console.warn('SW:', e); });
   });
 }
+/* One-tap PWA install button */
+(function(){
+  var deferredPrompt = null;
+  window.addEventListener('beforeinstallprompt', function(e){
+    e.preventDefault(); deferredPrompt = e; showBtn();
+  });
+  function showBtn(){
+    if (document.getElementById('vpInstallBtn')) return;
+    var b = document.createElement('button');
+    b.id = 'vpInstallBtn';
+    b.textContent = '📲 Install App';
+    b.style.cssText = "position:fixed;left:18px;bottom:18px;z-index:15000;border:none;border-radius:999px;padding:12px 20px;background:linear-gradient(135deg,#C9922A,#E8AA48);color:#0D1B40;font:800 14px 'DM Sans',sans-serif;box-shadow:0 10px 28px rgba(13,27,64,.35);cursor:pointer;";
+    b.onclick = function(){
+      if (deferredPrompt) { deferredPrompt.prompt(); deferredPrompt = null; }
+      b.remove();
+    };
+    document.body.appendChild(b);
+  }
+  window.__vpShowInstall = showBtn;
+  /* If already installed, the prompt never fires - hide nothing, just don't show */
+})();
+</script>
+<script>
+/* Skip login flash for returning admin (auth will re-verify and correct if needed) */
+(function(){
+  try{
+    var ok = localStorage.getItem('adminUnlocked') === '1' || sessionStorage.getItem('adminUnlocked') === '1';
+    if(!ok) return;
+    var loginEl = document.getElementById('loginWrap') || document.getElementById('loginScreen');
+    var appEl = document.getElementById('appShell') || document.getElementById('adminApp');
+    if(loginEl){ loginEl.classList.add('hidden'); loginEl.style.removeProperty('display'); }
+    if(appEl){ appEl.classList.remove('hidden'); }
+  }catch(e){}
+})();
+</script>
+<script>
+window.__vpResetPw = function(){
+  var el = document.getElementById('adminEmail') || document.getElementById('loginEmail');
+  var e = ((el && el.value) || '').trim() || prompt('Enter your admin/teacher email:');
+  if(!e) return;
+  auth.sendPasswordResetEmail(e.trim()).then(function(){ alert('Password reset email sent — check inbox & spam.'); })
+    .catch(function(err){ alert(err.message); });
+};
 </script>
 </body>
 </html>
