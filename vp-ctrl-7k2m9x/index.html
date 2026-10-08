@@ -305,8 +305,8 @@ if ('serviceWorker' in navigator) {
     if(!ok) return;
     var loginEl = document.getElementById('loginWrap') || document.getElementById('loginScreen');
     var appEl = document.getElementById('appShell') || document.getElementById('adminApp');
-    if(loginEl){ loginEl.style.display = 'none'; loginEl.classList.add('hidden'); }
-    if(appEl){ appEl.classList.remove('hidden'); appEl.style.display = ''; }
+    if(loginEl){ loginEl.classList.add('hidden'); loginEl.style.removeProperty('display'); }
+    if(appEl){ appEl.classList.remove('hidden'); }
   }catch(e){}
 })();
 </script>
