@@ -124,7 +124,11 @@ a{text-decoration:none;color:inherit;}
         <div class="portal-field"><label>Display Name</label><input id="tName" type="text" placeholder="e.g. CA Priya Sharma"></div>
         <label style="font-size:.74rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px;">Assigned Subjects * (they can only manage these)</label>
         <div class="enrolment-grid" id="tSubjects"><span style="font-size:.85rem;color:var(--muted)">Loading subjects…</span></div>
-        <button class="primary-btn" type="button" onclick="saveTeacher()">💾 Save Teacher</button>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="primary-btn" type="button" onclick="saveTeacher()">💾 Save Teacher</button>
+          <button class="secondary-btn" type="button" onclick="autoCreateTeacher()">🔐 Auto-create account &amp; email</button>
+        </div>
+        <div class="hint" style="margin-top:10px;">⚡ <b>Auto-create</b> makes the Firebase login for you, assigns subjects, generates a random password and emails it to the teacher — no Firebase Console needed.</div>
         <div class="portal-status" id="tStatus"></div>
       </div>
       <div class="app-card">
@@ -222,6 +226,62 @@ a{text-decoration:none;color:inherit;}
         await db.collection('users').doc(q.docs[0].id).update(payload);
       }
       st.textContent = '✅ Teacher saved.'; st.classList.add('success');
+      $('tEmail').value=''; $('tName').value='';
+      document.querySelectorAll('.t-subj:checked').forEach(i => i.checked=false);
+      loadAll();
+    }catch(e){ st.textContent = e.message; st.classList.add('error'); }
+  };
+
+  /* ===== AUTO-CREATE: account + profile + email in one click ===== */
+  const WEBHOOK_URL = 'PASTE_YOUR_WEB_APP_URL_HERE';   // ← from Apps Script deployment (ends in /exec)
+  const API_KEY = 'AIzaSyCwZGVK9I_GQmJkRatZOyMs0gdcZ8nSouc';
+  function genPass(){
+    const c='abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ23456789';
+    let x=''; for(let i=0;i<9;i++) x+=c.charAt(Math.floor(Math.random()*c.length));
+    return x+'@2';
+  }
+  window.autoCreateTeacher = async function(){
+    const st = $('tStatus'); st.className='portal-status';
+    const email = $('tEmail').value.trim().toLowerCase();
+    const name = $('tName').value.trim();
+    const subs = [...document.querySelectorAll('.t-subj:checked')].map(i => i.value);
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ st.textContent='Enter a valid email.'; st.classList.add('error'); return; }
+    if(!subs.length){ st.textContent='Tick at least one subject.'; st.classList.add('error'); return; }
+    if(WEBHOOK_URL.indexOf('PASTE') !== -1){ st.textContent='Setup needed: paste your Web App URL into teachers.html (search WEBHOOK_URL). Steps are in apps-script-addon.gs.'; st.classList.add('error'); return; }
+    const password = genPass();
+    try{
+      st.textContent = 'Creating Firebase login…';
+      const r = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' + API_KEY,
+        { method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ email, password, returnSecureToken:true }) });
+      const d = await r.json();
+      if(d.error){
+        if(d.error.message.indexOf('EMAIL_EXISTS') !== -1){
+          st.textContent = 'Account already exists — emailing a password reset instead…';
+          await fetch(WEBHOOK_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain'},
+            body: JSON.stringify({ key:'vp-teach-2026', email, name, password:'(use the reset link — a set-password email is on its way)', subjects: subs.join(', ') }) });
+          auth.sendPasswordResetEmail(email).catch(()=>{});
+          st.textContent = '✅ Account existed — reset email sent to ' + email; st.classList.add('success'); return;
+        }
+        throw new Error(d.error.message);
+      }
+      const uid = d.localId;
+      st.textContent = 'Creating teacher profile…';
+      const adminTok = await auth.currentUser.getIdToken();
+      const fr = await fetch('https://firestore.googleapis.com/v1/projects/vinayak-proedu/databases/(default)/documents/users/' + uid,
+        { method:'PATCH', headers:{'Content-Type':'application/json', Authorization:'Bearer ' + adminTok},
+          body: JSON.stringify({ fields: {
+            uid:{stringValue:uid}, name:{stringValue:name || email.split('@')[0]}, email:{stringValue:email},
+            phone:{stringValue:''}, role:{stringValue:'teacher'}, batchCode:{stringValue:''},
+            enrolledSubjects:{arrayValue:{values:[]}}, assignedLectureIds:{arrayValue:{values:[]}},
+            assignedSubjects:{arrayValue:{values:subs.map(s=>({stringValue:s}))}},
+            source:{stringValue:'admin-auto'}, createdAt:{timestampValue:new Date().toISOString()}
+          }}) });
+      if(fr.status >= 400) throw new Error('Profile save failed (' + fr.status + '). Check the Firestore rules were published.');
+      st.textContent = 'Emailing teacher…';
+      await fetch(WEBHOOK_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain'},
+        body: JSON.stringify({ key:'vp-teach-2026', email, name, password, subjects: subs.join(', ') }) });
+      st.textContent = '✅ Done! ' + email + ' / ' + password + ' — login emailed too.'; st.classList.add('success');
       $('tEmail').value=''; $('tName').value='';
       document.querySelectorAll('.t-subj:checked').forEach(i => i.checked=false);
       loadAll();
