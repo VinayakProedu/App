@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>Calendar | Faculty Portal</title>
+<link rel="icon" type="image/png" href="https://pasteimg.com/images/2026/03/31/WhatsApp-Image-2026-03-19-at-6.49.19-PM.jpg">
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#0D1B40">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0D1B40;--blue:#1e3c72;--gold:#C9922A;--gold-lt:#E8AA48;--ink:#1A1A2E;--muted:#6B7280;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;color:var(--ink);background:#f5f7fb;line-height:1.65;}
+.hidden{display:none !important;}
+.login-wrap{position:fixed;inset:0;z-index:9999;background:linear-gradient(135deg,var(--navy),var(--blue));display:flex;align-items:center;justify-content:center;padding:20px;}
+.login-box{width:min(420px,92vw);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:24px;padding:clamp(32px,6vw,48px);backdrop-filter:blur(20px);box-shadow:0 40px 100px rgba(0,0,0,.4);}
+.login-box h2{color:#fff;font-family:'Playfair Display',serif;font-size:1.6rem;margin-bottom:6px;text-align:center;}
+.login-box>p{color:rgba(255,255,255,.55);font-size:.9rem;text-align:center;margin-bottom:28px;}
+.lf{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;}
+.lf label{font-size:.74rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.65);}
+.lf input{padding:13px 16px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.14);border-radius:10px;color:#fff;font-size:.95em;font-family:inherit;}
+.lf input:focus{outline:none;border-color:rgba(201,146,42,.6);}
+.login-btn{width:100%;padding:15px;border-radius:50px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--gold),var(--gold-lt));color:var(--navy);font-size:1em;font-weight:700;font-family:inherit;}
+.login-status{margin-top:12px;font-size:.9rem;font-weight:700;text-align:center;min-height:22px;color:#fca5a5;}
+.forgot{text-align:center;margin-top:10px;}
+.forgot a{color:var(--gold-lt);font-size:.85rem;cursor:pointer;font-weight:700;}
+.app-shell{display:flex;min-height:100vh;}
+.sidebar{width:240px;background:var(--navy);color:#fff;padding:18px;flex-shrink:0;}
+.brand{display:flex;align-items:center;gap:10px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,.08);}
+.brand img{width:38px;height:38px;border-radius:50%;border:2px solid var(--gold);object-fit:cover;}
+.brand h3{font-family:'Playfair Display',serif;font-size:1rem;}
+.brand p{font-size:.68rem;letter-spacing:1.2px;text-transform:uppercase;color:rgba(232,170,72,.8);}
+.menu a{display:block;padding:11px 14px;border-radius:10px;font-weight:600;font-size:.9rem;color:#fff;text-decoration:none;margin-bottom:4px;}
+.menu a:hover,.menu a.active{background:var(--gold);color:var(--navy);}
+.main{flex:1;padding:24px 28px;overflow:auto;}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid rgba(201,146,42,.25);}
+h1{font-family:'Playfair Display',serif;color:var(--navy);font-size:1.5rem;}
+.sub{color:var(--muted);font-size:.88rem;}
+.card{background:#fff;border:1px solid rgba(201,146,42,.12);border-radius:18px;padding:18px;box-shadow:0 4px 18px rgba(13,27,64,.06);margin-bottom:16px;}
+table{width:100%;border-collapse:collapse;font-size:.88rem;}
+th,td{padding:9px 12px;border-bottom:1px solid #eef2f7;text-align:left;}
+th{background:#f8fafc;color:var(--navy);font-size:.76rem;text-transform:uppercase;letter-spacing:.5px;}
+.empty{padding:20px;border:1px dashed #d9e2ef;border-radius:14px;background:#fbfdff;color:#5d6e83;text-align:center;}
+.chip{display:inline-block;background:#eef4ff;color:#1e3c72;border-radius:999px;padding:4px 10px;font-size:.72rem;font-weight:800;margin:2px 4px 2px 0;}
+@media(max-width:800px){.sidebar{width:100%;height:auto;}.app-shell{flex-direction:column;}}
+</style>
+</head>
+<body>
+<div class="login-wrap" id="loginWrap">
+  <div class="login-box">
+    <h2>Faculty Portal</h2>
+    <p>Calendar · Teachers only</p>
+    <div class="lf"><label>Email</label><input type="email" id="lEmail" placeholder="you@gmail.com"></div>
+    <div class="lf"><label>Password</label><input type="password" id="lPass" placeholder="••••••••"></div>
+    <button class="login-btn" id="loginBtn" type="button">Login</button>
+    <div class="login-status" id="lStatus"></div>
+    <div class="forgot"><a onclick="resetPw()">Forgot password?</a></div>
+  </div>
+</div>
+<div class="app-shell hidden" id="appShell">
+  <aside class="sidebar">
+    <div class="brand">
+      <img src="https://pasteimg.com/images/2026/03/31/WhatsApp-Image-2026-03-19-at-6.49.19-PM.jpg" alt="Vinayak ProEdu">
+      <div><h3>Vinayak ProEdu</h3><p>Faculty Portal</p></div>
+    </div>
+    <div class="menu">
+      <a href="./index.html">📊 Dashboard</a>
+      <a href="./lectures.html">🎬 Lectures</a>
+      <a href="./live.html">🔴 Live Classes</a>
+      <a href="./leaderboard.html">🏆 Leaderboard</a>
+      <a href="./doubts.html">💬 Doubts</a>
+      <a href="./mocks.html" >📝 Mocks</a>
+      <a href="./calendar.html" class="active">📅 Calendar</a>
+    </div>
+  </aside>
+  <main class="main">
+    <div class="top"><div><h1>Calendar</h1><div class="sub" id="pageSub">Your assigned subjects only</div></div></div>
+    <div class="card"><strong style="color:var(--navy)">📅 Upcoming live classes</strong><div id="liveBox" style="margin-top:10px;"><div class="empty">Loading…</div></div></div>
+<div class="card"><strong style="color:var(--navy)">🎬 Latest recorded lectures</strong><div id="lecBox" style="margin-top:10px;"><div class="empty">Loading…</div></div></div>
+  </main>
+</div>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script src="../firebase-config.js"></script>
+<script>
+const esc = v => String(v ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const fmtDate = v => { if(!v) return ''; const d = v.toDate ? v.toDate() : new Date(v.seconds ? v.seconds*1000 : v); return d.toLocaleString('en-IN'); };
+
+document.getElementById('loginBtn').onclick = () => {
+  auth.signInWithEmailAndPassword(document.getElementById('lEmail').value.trim(), document.getElementById('lPass').value).catch(e => { document.getElementById('lStatus').textContent = e.message; });
+};
+window.resetPw = function(){
+  const e = (document.getElementById('lEmail').value || '').trim() || prompt('Enter your email:');
+  if(!e) return;
+  auth.sendPasswordResetEmail(e.trim()).then(()=>{ document.getElementById('lStatus').textContent='Reset email sent.'; document.getElementById('lStatus').style.color='#a7f3d0'; }).catch(err=>{ document.getElementById('lStatus').textContent = err.message; });
+};
+auth.onAuthStateChanged(async user => {
+  if(!user){ document.getElementById('loginWrap').classList.remove('hidden'); document.getElementById('appShell').classList.add('hidden'); return; }
+  try{
+    const tq = await db.collection('users').where('email','==',user.email).limit(1).get();
+    const tdoc = tq.empty ? null : tq.docs[0];
+    if(tdoc && tdoc.data().role === 'teacher'){
+      window.__teacherSubjects = tdoc.data().assignedSubjects || [];
+      document.getElementById('loginWrap').classList.add('hidden');
+      document.getElementById('appShell').classList.remove('hidden');
+      loadAll();
+      return;
+    }
+  }catch(e){}
+  await auth.signOut();
+  document.getElementById('lStatus').textContent = 'Teacher accounts only.';
+});
+
+async function loadAll(){
+  const subs = window.__teacherSubjects || [];
+  document.getElementById('pageSub').textContent = 'Subjects: ' + (subs.join(', ') || 'none assigned');
+  try{
+    const now = new Date(); now.setHours(0,0,0,0);
+    const lSnap = await db.collection('lectures').limit(300).get();
+    const all = lSnap.docs.map(d => ({id:d.id, ...d.data()})).filter(l => subs.includes(l.subject));
+    const live = all.filter(l => l.meetingLink && l.lectureDate && new Date(l.lectureDate+'T'+(l.lectureTime||'00:00')) >= now)
+      .sort((a,b) => String(a.lectureDate).localeCompare(String(b.lectureDate)));
+    document.getElementById('liveBox').innerHTML = live.length ? live.map(l => '<div style="padding:12px;border:1px solid #e5e7eb;border-radius:12px;margin-bottom:10px;"><span class="chip">'+esc(l.subject)+'</span> <strong style="color:var(--navy)">'+esc(l.title)+'</strong><br><span style="font-size:.85rem;color:var(--muted)">'+esc(l.lectureDate)+' · '+esc(l.lectureTime||'')+'</span> <a href="'+esc(l.meetingLink)+'" target="_blank" style="color:var(--gold);font-weight:700;font-size:.85rem;">Join →</a></div>').join('') : '<div class="empty">No upcoming live classes for your subjects.</div>';
+    const rec = all.filter(l => !l.meetingLink).sort((a,b) => String(b.lectureDate||'').localeCompare(String(a.lectureDate||''))).slice(0,12);
+    document.getElementById('lecBox').innerHTML = rec.length ? '<table><tr><th>Subject</th><th>Title</th><th>Date</th></tr>' + rec.map(l => '<tr><td><span class="chip">'+esc(l.subject)+'</span></td><td>'+esc(l.title)+'</td><td>'+esc(l.lectureDate||'')+'</td></tr>').join('') + '</table>' : '<div class="empty">No recorded lectures for your subjects yet.</div>';
+  }catch(e){ document.getElementById('liveBox').innerHTML = '<div class="empty">Error: '+esc(e.message)+'</div>'; }
+}
+</script>
+<script>
+if (top !== self) { top.location = self.location; }
+if ('serviceWorker' in navigator) { window.addEventListener('load', function(){ navigator.serviceWorker.register('../sw.js').catch(function(){}); }); }
+</script>
+</body>
+</html>
