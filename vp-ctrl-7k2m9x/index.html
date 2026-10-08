@@ -213,7 +213,9 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
     if(!email || !pw){ document.getElementById('loginStatus').textContent = 'Email and password required.'; document.getElementById('loginStatus').className = 'login-status error'; return; }
     try{
       const cred = await auth.signInWithEmailAndPassword(email, pw);
-      if(cred.user.email !== ADMIN_EMAIL){ await auth.signOut(); document.getElementById('loginStatus').textContent = 'Not authorized.'; document.getElementById('loginStatus').className = 'login-status error'; return; }
+      // Teachers are allowed — onAuthStateChanged (below) routes them to the teacher view.
+      // Only reject if Firebase itself says the login is bad.
+      if(!cred.user){ throw new Error('Login failed'); }
       sessionStorage.setItem('adminUnlocked', '1'); localStorage.setItem('adminUnlocked', '1');
       showApp();
     }catch(err){ document.getElementById('loginStatus').textContent = err.message; document.getElementById('loginStatus').className = 'login-status error'; }
