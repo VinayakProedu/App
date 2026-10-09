@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="permissions-policy" content="camera=(), microphone=(), geolocation=()">
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#0D1B40">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+
+<title>Doubts | Vinayak ProEdu Admin</title>
+<link rel="icon" type="image/png" href="https://pasteimg.com/images/2026/03/31/WhatsApp-Image-2026-03-19-at-6.49.19-PM.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0D1B40; --navy-mid:#1a2e5e; --blue:#1e3c72; --gold:#C9922A; --gold-lt:#E8AA48;
+  --amber:#F5C04A; --ink:#1A1A2E; --muted:#6B7280; --smoke:#EFF1F6; --white:#FFFFFF;
+  --shadow-sm:0 4px 20px rgba(13,27,64,0.08); --shadow-md:0 12px 45px rgba(13,27,64,0.14);
+  --r-sm:10px; --r-md:16px; --r-lg:24px;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;font-size:16px;}
+body{font-family:'DM Sans',sans-serif;color:var(--ink);background:#f5f7fb;line-height:1.65;overflow-x:hidden;}
+img{max-width:100%;display:block;}
+a{text-decoration:none;color:inherit;}
+h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
+
+/* Login */
+.login-wrap{position:fixed;inset:0;z-index:9999;background:linear-gradient(135deg,var(--navy) 0%,var(--blue) 100%);display:flex;align-items:center;justify-content:center;padding:20px;}
+.login-box{width:min(420px,92vw);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:var(--r-lg);padding:clamp(32px,6vw,48px);backdrop-filter:blur(20px);box-shadow:0 40px 100px rgba(0,0,0,0.4);}
+.login-box h2{font-family:'Playfair Display',serif;color:#fff;font-size:1.6rem;margin-bottom:6px;text-align:center;}
+.login-box p{color:rgba(255,255,255,0.55);font-size:0.9rem;text-align:center;margin-bottom:28px;}
+.login-field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;}
+.login-field label{font-size:0.74rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.65);}
+.login-field input{width:100%;padding:13px 16px;background:rgba(255,255,255,0.09);border:1px solid rgba(255,255,255,0.14);border-radius:var(--r-sm);color:#fff;font-size:0.95em;font-family:'DM Sans',sans-serif;transition:all 0.25s;}
+.login-field input::placeholder{color:rgba(255,255,255,0.32);}
+.login-field input:focus{outline:none;border-color:rgba(201,146,42,0.6);background:rgba(255,255,255,0.13);box-shadow:0 0 0 3px rgba(201,146,42,0.15);}
+.login-btn{width:100%;padding:15px;border-radius:50px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--gold),var(--gold-lt));color:var(--navy);font-size:1em;font-weight:700;font-family:'DM Sans',sans-serif;box-shadow:0 8px 28px rgba(201,146,42,0.35);transition:all 0.3s;}
+.login-btn:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(201,146,42,0.5);}
+.login-status{margin-top:12px;font-size:0.9rem;font-weight:700;text-align:center;min-height:22px;}
+.login-status.error{color:#fca5a5;}
+
+/* App Shell */
+.app-shell{display:flex;width:100%;min-height:100vh;}
+.app-sidebar{width:260px;background:var(--navy);color:#fff;padding:18px;overflow:auto;flex-shrink:0;position:fixed;height:100vh;left:0;top:0;z-index:100;}
+.app-brand{display:flex;align-items:center;gap:10px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px solid rgba(255,255,255,0.08);}
+.app-brand img{width:40px;height:40px;border-radius:50%;border:2px solid var(--gold);object-fit:cover;}
+.app-brand h3{font-family:'Playfair Display',serif;font-size:1.05rem;margin:0;color:#fff;}
+.app-brand p{font-size:0.72rem;letter-spacing:1.4px;text-transform:uppercase;color:rgba(232,170,72,0.8);margin-top:2px;}
+.app-menu{display:grid;gap:6px;}
+.app-menu a,.app-menu button{width:100%;border:none;background:transparent;color:#fff;padding:11px 14px;border-radius:10px;cursor:pointer;text-align:left;font-weight:600;font-size:0.9rem;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:10px;transition:all 0.2s;text-decoration:none;}
+.app-menu a:hover,.app-menu button:hover,.app-menu a.active,.app-menu button.active{background:var(--gold);color:var(--navy);}
+.app-main{flex:1;margin-left:260px;padding:24px 28px;overflow:auto;min-height:100vh;}
+
+/* Topbar */
+.app-topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid #e5e7eb;}
+.app-title{font-family:'Playfair Display',serif;color:var(--navy);font-size:1.6rem;margin:0;}
+.app-sub{color:var(--muted);font-size:0.9rem;}
+
+/* Cards */
+.app-card{background:#fff;border:1px solid rgba(201,146,42,0.12);border-radius:20px;padding:22px;box-shadow:var(--shadow-sm);margin-bottom:16px;}
+.subject-title{font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--navy);margin:0 0 14px;}
+
+/* Buttons */
+.primary-btn,.secondary-btn,.ghost-btn,.back-btn,.danger-btn{border:none;border-radius:12px;padding:11px 18px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:0.9rem;transition:all 0.2s;display:inline-flex;align-items:center;gap:6px;}
+.primary-btn{background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff;}
+.secondary-btn{background:linear-gradient(135deg,var(--gold),var(--gold-lt));color:var(--navy);}
+.ghost-btn{background:#eef4ff;color:var(--blue);}
+.back-btn{background:#f1f5f9;color:var(--navy);margin-bottom:16px;}
+.danger-btn{background:#fef2f2;color:#b42318;border:1px solid #fecaca;}
+.primary-btn:hover,.secondary-btn:hover,.ghost-btn:hover,.back-btn:hover,.danger-btn:hover{transform:translateY(-1px);opacity:0.95;}
+
+/* Batch filter bar */
+.filter-bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px;}
+.filter-bar select{padding:10px 14px;border-radius:10px;border:1px solid #d7ddea;background:#fff;font:inherit;color:var(--ink);min-width:200px;}
+.filter-bar select:focus{outline:3px solid rgba(201,146,42,0.22);border-color:var(--gold);}
+
+/* Doubt Cards */
+.doubt-card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:18px;margin-bottom:12px;transition:all 0.2s;}
+.doubt-card:hover{box-shadow:var(--shadow-sm);}
+.doubt-card.closed{opacity:0.65;background:#fafafa;}
+.doubt-header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:10px;}
+.doubt-subject{font-family:'Playfair Display',serif;color:var(--navy);font-size:1rem;font-weight:700;}
+.doubt-badge{display:inline-flex;align-items:center;padding:4px 12px;border-radius:999px;font-size:0.72rem;font-weight:800;letter-spacing:0.5px;text-transform:uppercase;}
+.doubt-badge.open{background:#dbeafe;color:#1e40af;}
+.doubt-badge.answered{background:#d1fae5;color:#166534;}
+.doubt-badge.closed{background:#f3f4f6;color:#6b7280;}
+.doubt-meta{color:var(--muted);font-size:0.82rem;margin-bottom:8px;}
+.doubt-text{color:var(--ink);font-size:0.92rem;line-height:1.7;margin-bottom:10px;}
+.doubt-img{max-width:280px;border-radius:10px;border:1px solid #e5e7eb;margin:8px 0;cursor:pointer;}
+
+/* Reply Thread */
+.reply-thread{margin-top:14px;padding-left:14px;border-left:3px solid var(--gold);}
+.reply-item{background:#f8fafc;border-radius:10px;padding:12px;margin-bottom:8px;}
+.reply-by{font-size:0.78rem;font-weight:700;color:var(--navy);margin-bottom:4px;}
+.reply-by.faculty{color:var(--gold);}
+.reply-text{font-size:0.88rem;color:var(--ink);line-height:1.6;}
+.reply-at{font-size:0.75rem;color:var(--muted);margin-top:4px;}
+
+/* Reply Form */
+.reply-form{margin-top:14px;padding-top:14px;border-top:1px solid #e5e7eb;}
+.reply-form input[type="text"]{width:100%;padding:11px 14px;border:1px solid #d7ddea;border-radius:10px;font:inherit;margin-bottom:8px;}
+.reply-form input[type="text"]:focus{outline:3px solid rgba(201,146,42,0.22);border-color:var(--gold);}
+
+/* Search */
+.practice-search{width:100%;padding:11px 14px;border:1px solid #d7ddea;border-radius:10px;font:inherit;color:var(--ink);background:#fff;margin-bottom:14px;}
+.practice-search:focus{outline:3px solid rgba(201,146,42,0.22);border-color:var(--gold);}
+
+/* Status */
+.portal-status{font-size:0.92rem;margin-top:10px;min-height:22px;font-weight:700;}
+.portal-status.error{color:#b42318;}
+.portal-status.success{color:#166534;}
+
+/* Empty */
+.empty-box{padding:20px;border:1px dashed #d9e2ef;border-radius:14px;background:#fbfdff;color:#5d6e83;text-align:center;font-size:0.9rem;}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:6px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:rgba(13,27,64,0.2);border-radius:10px;}
+
+/* Responsive */
+@media(max-width:900px){
+  .app-sidebar{width:100%;height:auto;position:relative;}
+  .app-main{margin-left:0;}
+  .app-shell{flex-direction:column;}
+}
+@media(max-width:640px){
+  .app-main{padding:16px;}
+}
+.hidden{display:none !important;}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-wrap" id="loginWrap">
+  <div class="login-box">
+    <h2>Admin Portal</h2>
+    <p>Student Doubts by Batch</p>
+    <div class="login-field"><label>Admin Email</label><input type="email" id="adminEmail" placeholder="admin@email.com"></div>
+    <div class="login-field"><label>Password</label><input type="password" id="adminPassword" placeholder="••••••••"></div>
+    <button class="login-btn" id="adminLoginBtn" type="button">Login as Admin</button>
+    <div class="login-status" id="loginStatus"></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div class="app-shell hidden" id="appShell">
+  <aside class="app-sidebar">
+    <div class="app-brand">
+      <img src="https://pasteimg.com/images/2026/03/31/WhatsApp-Image-2026-03-19-at-6.49.19-PM.jpg" alt="Vinayak ProEdu">
+      <div>
+        <h3>Vinayak ProEdu</h3>
+        <p>Admin Panel</p>
+      </div>
+    </div>
+    <nav class="app-menu">
+      <a href="./index.html">📊 Dashboard</a>
+      <a href="./lectures.html">🎬 Lectures</a>
+      <a href="./live.html">🔴 Live Classes</a>
+      <a href="./leaderboard.html">🏆 Leaderboard</a>
+      <a href="./doubts.html">💬 Doubts</a>
+      <a href="./mocks.html">📝 Mocks</a>
+      <a href="./calendar.html">📅 Calendar</a>
+      <a href="#" onclick="auth.signOut();return false;">🚪 Logout</a>
+    </nav>
+  </aside>
+
+  <main class="app-main">
+    <div class="app-topbar">
+      <div>
+        <h1 class="app-title">Student Doubts</h1>
+        <div class="app-sub">Select a batch to view and reply to doubts</div>
+      </div>
+      <button class="ghost-btn" id="closeBtn" type="button">Close</button>
+    </div>
+
+    <div class="app-card">
+      <h3 class="subject-title">Select a Batch</h3>
+      <div class="filter-bar">
+        <select id="batchSelect" onchange="onBatchChange()"><option value="">-- Choose Batch --</option></select>
+        <button class="ghost-btn" type="button" onclick="window.loadBatches()" style="padding:8px 12px;font-size:0.85rem;">🔄 Refresh Batches</button>
+        <span id="batchLoadStatus" style="font-size:0.82rem;color:var(--muted);align-self:center;"></span>
+      </div>
+      <div class="filter-bar" style="margin-top:8px;">
+        <button class="primary-btn" type="button" onclick="loadDoubts()">Load Doubts</button>
+        <button class="danger-btn" type="button" onclick="purgeOldDoubts()">🧹 Purge Old Closed</button>
+      </div>
+      <div class="portal-status" id="batchStatus"></div>
+    </div>
+
+    <div id="doubtsView" style="display:none;">
+      <div class="app-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px;">
+          <h3 class="subject-title" id="doubtBatchName" style="margin:0;">Batch Name</h3>
+          <span id="doubtStat" style="font-size:0.85rem;color:var(--muted);">0 doubts</span>
+        </div>
+        <input type="search" class="practice-search" id="doubtSearch" placeholder="Search student, subject, or doubt text..." oninput="renderDoubts()">
+        <div id="doubtList"></div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+<script src="../firebase-config.js"></script>
+
+<script>
+(function(){
+  const ADMIN_EMAIL = "vinayakproedu@gmail.com";
+
+  
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+  const storage = firebase.storage();
+
+  function esc(v){ return String(v ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function val(id){ const n = document.getElementById(id); return n ? n.value.trim() : ''; }
+  function fmtDate(v){ if(!v) return ''; const d = v.toDate ? v.toDate() : new Date(v.seconds ? v.seconds*1000 : v); return d.toLocaleString(); }
+
+  /* Auth */
+  document.getElementById('adminLoginBtn').addEventListener('click', async () => {
+    const email = val('adminEmail');
+    const pw = document.getElementById('adminPassword').value;
+    if(!email || !pw){ document.getElementById('loginStatus').textContent = 'Email and password required.'; document.getElementById('loginStatus').className = 'login-status error'; return; }
+    try{
+      const cred = await auth.signInWithEmailAndPassword(email, pw);
+      /* role verified in onAuthStateChanged */
+      localStorage.setItem('adminUnlocked', '1');
+      showApp();
+    }catch(err){ document.getElementById('loginStatus').textContent = err.message; document.getElementById('loginStatus').className = 'login-status error'; }
+  });
+
+  document.getElementById('logoutBtn').addEventListener('click', async () => {
+    localStorage.removeItem('adminUnlocked');
+    await auth.signOut();
+    location.reload();
+  });
+
+  document.getElementById('closeBtn').addEventListener('click', () => {
+    window.location.href = 'index.html';
+  });
+
+  auth.onAuthStateChanged(async user => {
+    if(!user){
+      document.getElementById('loginWrap').classList.remove('hidden');
+      document.getElementById('appShell').classList.add('hidden');
+      return;
+    }
+    try{
+      const tq = await db.collection('users').where('email','==',user.email).limit(1).get();
+      const tdoc = tq.empty ? null : tq.docs[0];
+      if(tdoc && tdoc.data().role === 'teacher'){
+        window.__isTeacher = true;
+        window.__teacherSubjects = tdoc.data().assignedSubjects || [];
+        document.querySelectorAll('[onclick="purgeOldDoubts()"]').forEach(b => b.style.display = 'none');
+        showApp();
+        return;
+      }
+    }catch(e){}
+    await auth.signOut();
+    var st = document.getElementById('loginStatus'); if(st){ st.textContent = 'Teacher accounts only.'; st.className = 'login-status error'; }
+    document.getElementById('loginWrap').classList.remove('hidden');
+    document.getElementById('appShell').classList.add('hidden');
+  });
+
+  function showApp(){
+    document.getElementById('loginWrap').classList.add('hidden');
+    document.getElementById('appShell').classList.remove('hidden');
+    loadBatches();
+    setTimeout(loadBatches, 1200); // safety fallback
+  }
+
+  /* Batches */
+  async function loadBatches(){
+    const statusEl = document.getElementById('batchLoadStatus');
+    try {
+      if(statusEl) statusEl.textContent = 'Loading batches...';
+      const snap = await db.collection('batches').orderBy('createdAt','desc').get();
+      const batches = snap.docs.map(d => ({...d.data(), id: d.id}));
+      const sel = document.getElementById('batchSelect');
+      if(!sel){ if(statusEl) statusEl.textContent = 'Batch dropdown not found'; return; }
+      const current = sel.value;
+      sel.innerHTML = '<option value="">-- Choose Batch --</option>' + 
+        batches.map(b => `<option value="${esc(b.code)}">${esc(b.code)} - ${esc(b.name || 'Unnamed')}</option>`).join('');
+      if(current && batches.some(b => b.code === current)) sel.value = current;
+      if(statusEl) statusEl.textContent = batches.length ? `${batches.length} batch(es) ready` : 'No batches found. Create one in Students → Batches.';
+    } catch(err) {
+      console.error('loadBatches error', err);
+      if(statusEl) statusEl.textContent = 'Error loading batches: ' + err.message;
+    }
+  }
+  window.loadBatches = loadBatches;
+
+  window.onBatchChange = function(){
+    document.getElementById('doubtsView').style.display = 'none';
+  };
+
+  /* Doubts */
+  let currentBatchCode = '';
+  let currentDoubts = [];
+
+  window.loadDoubts = async function(){
+    const batchCode = document.getElementById('batchSelect').value;
+    if(!window.__isTeacher && !batchCode){ document.getElementById('batchStatus').textContent = 'Select a batch first.'; document.getElementById('batchStatus').className = 'portal-status error'; return; }
+    currentBatchCode = batchCode;
+    document.getElementById('batchStatus').textContent = 'Loading...';
+    document.getElementById('batchStatus').className = 'portal-status';
+    document.getElementById('doubtsView').style.display = 'block';
+    document.getElementById('doubtBatchName').textContent = window.__isTeacher ? ('Your subjects: ' + (window.__teacherSubjects||[]).join(', ')) : batchCode;
+    const list = document.getElementById('doubtList');
+    list.innerHTML = '<div class="empty-box">Loading doubts...</div>';
+    try{
+      let doubts = [];
+      if(window.__isTeacher){
+        const subs = window.__teacherSubjects || [];
+        const snap = await db.collection('studentDoubts').orderBy('createdAt','desc').limit(300).get();
+        doubts = snap.docs.map(d => ({id:d.id, ...d.data()})).filter(d => subs.includes(d.courseSubject));
+      } else {
+        const userSnap = await db.collection('users').where('role','==','student').where('batchCode','==',batchCode).limit(200).get();
+        const studentIds = userSnap.docs.map(d => d.id);
+        if(!studentIds.length){ list.innerHTML = '<div class="empty-box">No students in this batch.</div>'; document.getElementById('batchStatus').textContent=''; return; }
+        const doubtSnap = await db.collection('studentDoubts').orderBy('createdAt','desc').limit(300).get();
+        doubts = doubtSnap.docs.map(d => ({id:d.id, ...d.data()})).filter(d => studentIds.includes(d.userId));
+      }
+      currentDoubts = doubts;
+      renderDoubts();
+      document.getElementById('batchStatus').textContent = '';
+    }catch(err){
+      document.getElementById('doubtList').innerHTML = '<div class="empty-box">Error: ' + esc(err.message) + '</div>';
+      document.getElementById('batchStatus').textContent = err.message;
+      document.getElementById('batchStatus').className = 'portal-status error';
+    }
+  };
+
+  window.renderDoubts = function(){
+    const list = document.getElementById('doubtList');
+    const q = (document.getElementById('doubtSearch')?.value || '').toLowerCase();
+
+    let filtered = currentDoubts.filter(d => {
+      if(!q) return true;
+      return [d.studentName, d.courseSubject, d.message].join(' ').toLowerCase().includes(q);
+    });
+
+    const now = new Date();
+    filtered = filtered.map(d => {
+      const isClosed = d.status === 'closed' || (d.autoCloseAt && d.autoCloseAt.toDate && d.autoCloseAt.toDate() < now);
+      return {...d, _isClosed: isClosed};
+    });
+
+    document.getElementById('doubtStat').textContent = `${filtered.length} doubt${filtered.length !== 1 ? 's' : ''}`;
+
+    if(!filtered.length){
+      list.innerHTML = '<div class="empty-box">No doubts from this batch yet.</div>';
+      return;
+    }
+
+    list.innerHTML = filtered.map(d => {
+      const replies = Array.isArray(d.replies) ? d.replies : [];
+      const isClosed = d._isClosed;
+      const status = isClosed ? 'closed' : (replies.length && replies[replies.length-1].by === 'faculty' ? 'answered' : 'open');
+
+      return `<div class="doubt-card ${isClosed ? 'closed' : ''}">
+        <div class="doubt-header">
+          <div>
+            <div class="doubt-subject">${esc(d.courseSubject || d.subject || 'General')}</div>
+            <div class="doubt-meta">${esc(d.studentName || 'Student')} · ${fmtDate(d.createdAt)} · Batch: ${esc(currentBatchCode)}</div>
+          </div>
+          <span class="doubt-badge ${status}">${status}</span>
+        </div>
+        <div class="doubt-text">${esc(d.message || '')}</div>
+        ${d.screenshotUrl ? `<a href="${esc(d.screenshotUrl)}" target="_blank"><img src="${esc(d.screenshotUrl)}" class="doubt-img" alt="Screenshot"></a>` : ''}
+
+        ${replies.length ? `<div class="reply-thread">
+          ${replies.map(r => `
+            <div class="reply-item">
+              <div class="reply-by ${r.by === 'faculty' ? 'faculty' : ''}">${esc(r.by || 'Student')}</div>
+              <div class="reply-text">${esc(r.text || '')}</div>
+              ${r.attachmentUrl ? `<a href="${esc(r.attachmentUrl)}" target="_blank" style="font-size:0.8rem;color:var(--gold);font-weight:600;">📎 ${esc(r.attachmentName || 'Attachment')}</a>` : ''}
+              <div class="reply-at">${fmtDate(r.at)}</div>
+            </div>
+          `).join('')}
+        </div>` : ''}
+
+        ${!isClosed ? `<div class="reply-form">
+          <input type="text" id="replyText-${d.id}" placeholder="Write your reply...">
+          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:8px;">
+            <input type="file" id="replyFile-${d.id}" style="font-size:0.8rem;max-width:180px;">
+            <button class="primary-btn" type="button" onclick="replyToDoubt('${d.id}')">Reply</button>
+            <button class="ghost-btn" type="button" onclick="closeDoubt('${d.id}')">Mark Closed</button>
+          </div>
+          <div id="replyStatus-${d.id}" class="portal-status"></div>
+        </div>` : '<div style="font-size:0.82rem;color:var(--muted);margin-top:10px;font-style:italic;">This doubt is closed. No further replies.</div>'}
+      </div>`;
+    }).join('');
+  };
+
+  window.replyToDoubt = async function(doubtId){
+    const text = document.getElementById(`replyText-${doubtId}`)?.value.trim();
+    const file = document.getElementById(`replyFile-${doubtId}`)?.files?.[0];
+    const statusEl = document.getElementById(`replyStatus-${doubtId}`);
+    if(!text && !file){ if(statusEl) statusEl.textContent = 'Type a reply or attach a file.'; return; }
+
+    try{
+      if(statusEl) statusEl.textContent = 'Sending...';
+      const reply = { text: text || '', by: 'faculty', at: firebase.firestore.FieldValue.serverTimestamp() };
+
+      if(file){
+        if(file.size > 8*1024*1024) throw new Error('File must be under 8 MB.');
+        const safe = Date.now() + '-' + file.name.replace(/[^a-zA-Z0-9._-]/g,'_');
+        const ref = storage.ref(`doubt-attachments/${doubtId}/${safe}`);
+        await ref.put(file);
+        reply.attachmentUrl = await ref.getDownloadURL();
+        reply.attachmentName = file.name;
+      }
+
+      const docRef = db.collection('studentDoubts').doc(doubtId);
+      const snap = await docRef.get();
+      const data = snap.data() || {};
+      const replies = Array.isArray(data.replies) ? data.replies : [];
+      replies.push(reply);
+
+      const sevenDays = new Date(Date.now() + 7*24*60*60*1000);
+      await docRef.update({
+        replies: replies,
+        status: 'answered',
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        autoCloseAt: firebase.firestore.Timestamp.fromDate(sevenDays)
+      });
+
+      if(statusEl) statusEl.textContent = 'Reply sent ✅';
+      await loadDoubts();
+    }catch(err){
+      if(statusEl) statusEl.textContent = err.message || 'Failed to send.';
+    }
+  };
+
+  window.closeDoubt = async function(doubtId){
+    if(!confirm('Mark this doubt as closed?')) return;
+    await db.collection('studentDoubts').doc(doubtId).update({
+      status: 'closed',
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    await loadDoubts();
+  };
+
+  window.purgeOldDoubts = async function(){
+    if(!confirm('Delete all closed doubts older than 7 days? This cannot be undone.')) return;
+    try{
+      const cutoff = new Date(Date.now() - 7*24*60*60*1000);
+      const snap = await db.collection('studentDoubts').where('status','==','closed').limit(200).get();
+      const batch = db.batch();
+      let count = 0;
+      snap.docs.forEach(doc => {
+        const data = doc.data();
+        const updated = data.updatedAt?.toDate ? data.updatedAt.toDate() : new Date();
+        if(updated < cutoff){ batch.delete(doc.ref); count++; }
+      });
+      if(count) await batch.commit();
+      alert(`Deleted ${count} old closed doubt(s).`);
+      await loadDoubts();
+    }catch(err){ alert('Purge failed: ' + err.message); }
+  };
+})();
+</script>
+<script>
+if (top !== self) { top.location = self.location; }
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('../sw.js').catch(function(e){ console.warn('SW:', e); });
+  });
+}
+/* One-tap PWA install button */
+(function(){
+  var deferredPrompt = null;
+  window.addEventListener('beforeinstallprompt', function(e){
+    e.preventDefault(); deferredPrompt = e; showBtn();
+  });
+  function showBtn(){
+    if (document.getElementById('vpInstallBtn')) return;
+    var b = document.createElement('button');
+    b.id = 'vpInstallBtn';
+    b.textContent = '📲 Install App';
+    b.style.cssText = "position:fixed;left:18px;bottom:18px;z-index:15000;border:none;border-radius:999px;padding:12px 20px;background:linear-gradient(135deg,#C9922A,#E8AA48);color:#0D1B40;font:800 14px 'DM Sans',sans-serif;box-shadow:0 10px 28px rgba(13,27,64,.35);cursor:pointer;";
+    b.onclick = function(){
+      if (deferredPrompt) { deferredPrompt.prompt(); deferredPrompt = null; }
+      b.remove();
+    };
+    document.body.appendChild(b);
+  }
+  window.__vpShowInstall = showBtn;
+  /* If already installed, the prompt never fires - hide nothing, just don't show */
+})();
+</script>
+<script>
+/* Skip login flash for returning admin (auth will re-verify and correct if needed) */
+(function(){
+  try{
+    var ok = localStorage.getItem('adminUnlocked') === '1' || sessionStorage.getItem('adminUnlocked') === '1';
+    if(!ok) return;
+    var loginEl = document.getElementById('loginWrap') || document.getElementById('loginScreen');
+    var appEl = document.getElementById('appShell') || document.getElementById('adminApp');
+    if(loginEl){ loginEl.style.display = 'none'; loginEl.classList.add('hidden'); }
+    if(appEl){ appEl.classList.remove('hidden'); appEl.style.display = ''; }
+  }catch(e){}
+})();
+</script>
+</body>
+</html>
