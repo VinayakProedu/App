@@ -343,6 +343,7 @@ textarea{min-height:110px;resize:vertical}
   .exam-shell{padding:16px 14px 24px;}
 }
 </style>
+<base target="_blank">
 </head>
 <body>
 
@@ -402,6 +403,7 @@ textarea{min-height:110px;resize:vertical}
               <h2 class="title">Available Papers</h2>
               <p class="sub">Open a mock paper and start the exam.</p>
             </div>
+            <input type="search" id="paperSearch" placeholder="Search papers by code, title, level..." style="max-width:320px;margin:0;">
           </div>
           <div id="paperList" class="list"></div>
         </div>
@@ -773,7 +775,7 @@ auth.onAuthStateChanged(async user => {
     state.loginIntent = true;
     if (!isAdminEmail(user.email)) { await auth.signOut(); return; }
     state.role = 'admin';
-    el.roleBadge.textContent = 'Role: admin';
+    if (el.roleBadge) el.roleBadge.textContent = 'Role: admin';
     el.roleText.textContent = 'Admin Panel';
     el.appSub.textContent = 'Scroll to manage papers, questions and attempts — or use search';
     showApp();
@@ -839,7 +841,7 @@ function paperSummaryCard(p) {
 }
 
 function renderPapers() {
-  const search = el.paperSearch.value.toLowerCase();
+  const search = (el.paperSearch ? el.paperSearch.value : '').toLowerCase();
   const filtered = state.papers.filter(p=>`${p.code||''} ${p.title||''} ${p.level||''}`.toLowerCase().includes(search));
   const html = filtered.length ? filtered.map(paperSummaryCard).join('') : '<div class="empty">No papers yet.</div>';
   el.paperList.innerHTML = html;
@@ -1488,7 +1490,7 @@ if(el.questionUploaderCtx){
 }
 el.addOptionBtn.addEventListener('click',()=>addOptionRow(''));
 el.questionType.addEventListener('change',buildDynamicEditor);
-el.paperSearch.addEventListener('input',renderPapers);
+if (el.paperSearch) el.paperSearch.addEventListener('input',renderPapers);
 
 /* ================= EXAM ENGINE (from mock-portal) ================= */
 function openCenterModal({title,message,input=false,inputValue='',confirmText='Confirm',onConfirm}){
