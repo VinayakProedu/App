@@ -123,8 +123,17 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
 }
 .hidden{display:none !important;}
 </style>
+<style>
+/* Sidebar removed: full-width clean layout */
+.app-sidebar{display:none !important;}
+.app-main{margin-left:0 !important;}
+@media(max-width:900px){.app-main{margin-left:0 !important;}}
+</style>
+<base target="_blank">
 </head>
 <body>
+<button id="logoutBtn" type="button" style="position:fixed;top:14px;right:16px;z-index:12000;border:none;border-radius:999px;padding:9px 18px;background:#fef2f2;color:#b42318;border:1px solid #fecaca;font:700 13px 'DM Sans',sans-serif;cursor:pointer;box-shadow:0 4px 14px rgba(13,27,64,.12);">🚪 Logout</button>
+
 
 <!-- LOGIN -->
 <div class="login-wrap" id="loginWrap" style="display:none">
@@ -140,27 +149,7 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
 
 <!-- APP -->
 <div class="app-shell hidden" id="appShell">
-  <aside class="app-sidebar">
-    <div class="app-brand">
-      <img src="https://pasteimg.com/images/2026/03/31/WhatsApp-Image-2026-03-19-at-6.49.19-PM.jpg" alt="Vinayak ProEdu">
-      <div>
-        <h3>Vinayak ProEdu</h3>
-        <p>Admin Panel</p>
-      </div>
-    </div>
-    <nav class="app-menu">
-      <a href="students.html"><span>📦</span> Batches</a>
-      <a href="index.html">📊 Dashboard</a>
-      <a href="students.html">👥 Students</a>
-      <a href="tests.html">📝 Mocks</a>
-      <a href="lectures.html">🎬 Lectures</a>
-      <a href="live.html">🔴 Live Classes</a>
-      <a href="leaderboard.html" class="active">🏆 Leaderboard</a>
-      <a href="doubts.html">💬 Doubts</a>
-      <a href="announcements.html"><span>📢</span> Announcements</a>
-      <button id="logoutBtn" type="button">🚪 Logout</button>
-    </nav>
-  </aside>
+  
 
   <main class="app-main">
     <div class="app-topbar">
@@ -232,7 +221,7 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
   });
 
   document.getElementById('closeBtn').addEventListener('click', () => {
-    window.location.href = 'index.html';
+    __vpToDash();
   });
 
   auth.onAuthStateChanged(user => {
@@ -388,6 +377,13 @@ if ('serviceWorker' in navigator) {
     if(appEl){ appEl.classList.remove('hidden'); appEl.style.display=''; }
   }catch(e){}
 })();
+</script>
+<script>
+/* Back to dashboard = end session, ask password again */
+window.__vpToDash = function(){
+  try{ localStorage.removeItem('adminUnlocked'); sessionStorage.removeItem('adminUnlocked'); }catch(e){}
+  location.href = 'index.html';
+};
 </script>
 </body>
 </html>
