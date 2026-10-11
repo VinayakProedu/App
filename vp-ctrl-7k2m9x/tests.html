@@ -757,30 +757,33 @@ async function doLogin() {
 }
 
 function showApp() {
-  el.loginWrap.classList.add('hidden');
-  el.appShell.classList.remove('hidden');
+  el.loginWrap.classList.add('hidden'); el.loginWrap.style.display = 'none';
+  el.appShell.classList.remove('hidden'); el.appShell.style.display = '';
 }
 
 function closeApp() {
-  el.loginWrap.classList.remove('hidden');
-  el.appShell.classList.add('hidden');
+  el.appShell.classList.add('hidden'); el.appShell.style.display = 'none';
+  el.loginWrap.classList.remove('hidden'); el.loginWrap.style.display = '';
 }
 
 auth.onAuthStateChanged(async user => {
   state.user = user || null;
-  if (user) {
-    if (!state.loginIntent && sessionStorage.getItem('vp_login_intent')!=='1') { state.role='student'; closeApp(); auth.signOut().catch(()=>{}); return; }
+  const unlocked = state.loginIntent
+    || sessionStorage.getItem('vp_login_intent') === '1'
+    || localStorage.getItem('adminUnlocked') === '1';
+  if (user && isAdminEmail(user.email) && unlocked) {
     state.loginIntent = true;
-    if (!isAdminEmail(user.email)) { await auth.signOut(); return; }
     state.role = 'admin';
+    localStorage.setItem('adminUnlocked', '1');
     if (el.roleBadge) el.roleBadge.textContent = 'Role: admin';
-    el.roleText.textContent = 'Admin Panel';
-    el.appSub.textContent = 'Scroll to manage papers, questions and attempts — or use search';
+    if (el.roleText) el.roleText.textContent = 'Admin Panel';
+    if (el.appSub) el.appSub.textContent = 'Scroll to manage papers, questions and attempts — or use search';
     showApp();
     await refreshAll();
   } else {
     state.loginIntent = false;
     state.role = 'student';
+    if (user) await auth.signOut();
     closeApp();
   }
 });
