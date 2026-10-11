@@ -127,6 +127,13 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2}
 }
 .hidden{display:none !important}
 </style>
+<style>
+/* Sidebar removed: full-width clean layout */
+.app-sidebar{display:none !important;}
+.app-main{margin-left:0 !important;}
+@media(max-width:900px){.app-main{margin-left:0 !important;}}
+</style>
+<base target="_blank">
 </head>
 <body>
 
@@ -143,25 +150,7 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2}
 </div>
 
 <div class="app-shell hidden" id="adminApp">
-  <aside class="app-sidebar" id="appSidebar">
-    <button class="sidebar-toggle" id="sidebarToggle" type="button">☰ Menu</button>
-    <div class="app-brand">
-      <img src="https://pasteimg.com/images/2026/03/31/WhatsApp-Image-2026-03-19-at-6.49.19-PM.jpg" alt="Logo">
-      <div><h3>Vinayak ProEdu</h3><p>Admin Panel</p></div>
-    </div>
-    <nav class="app-menu">
-      <a href="index.html"><span>📊</span> Dashboard</a>
-      <a href="tests.html"><span>📝</span> Mocks</a>
-      <a href="lectures.html"><span>🎬</span> Lectures</a>
-      <a href="live.html"><span>🔴</span> Live Classes</a>
-      <a href="students.html" class="active" id="menuStudents"><span>👨‍🎓</span> Students</a>
-      <a href="#" id="menuBatches" onclick="showView('batchView');return false;"><span>📦</span> Batches</a>
-      <a href="leaderboard.html"><span>🏆</span> Leaderboard</a>
-      <a href="doubts.html"><span>💬</span> Doubts</a>
-      <a href="announcements.html"><span>📢</span> Announcements</a>
-      <button class="logout-btn" id="adminLogoutBtn" type="button"><span>🚪</span> Logout</button>
-    </nav>
-  </aside>
+  
 
   <main class="app-main">
     <div class="app-topbar">
@@ -291,7 +280,7 @@ $('adminLoginBtn').onclick = async () => {
 function setLoginStatus(msg, err){ const el=$('adminLoginStatus'); el.textContent=msg; el.className='login-status '+(err?'error':''); }
 
 $('adminLogoutBtn').onclick = async () => { localStorage.removeItem('adminUnlocked'); await auth.signOut(); location.reload(); };
-$('closeAdminBtn').onclick = () => { if(confirm('Close admin panel?')) window.location.href='index.html'; };
+$('closeAdminBtn').onclick = () => { if(confirm('Close admin panel?')) window.__vpToDash(); };
 $('refreshBtn').onclick = () => refreshStudents();
 
 $('sidebarToggle').onclick = () => $('appSidebar').classList.toggle('open');
@@ -594,6 +583,18 @@ if ('serviceWorker' in navigator) {
     if(appEl){ appEl.classList.remove('hidden'); appEl.style.display=''; }
   }catch(e){}
 })();
+</script>
+<script>
+/* Back to dashboard = end session, ask password again */
+window.__vpToDash = function(){
+  try{ localStorage.removeItem('adminUnlocked'); sessionStorage.removeItem('adminUnlocked'); }catch(e){}
+  location.href = 'index.html';
+};
+</script>
+<script>
+window.addEventListener('load', function(){
+  try{ if(new URLSearchParams(location.search).get('view')==='batches' && window.showView){ showView('batchView'); } }catch(e){}
+});
 </script>
 </body>
 </html>
