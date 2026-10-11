@@ -139,7 +139,7 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
 <body>
 
 <!-- LOGIN -->
-<div class="login-wrap" id="loginWrap">
+<div class="login-wrap" id="loginWrap" style="display:none">
   <div class="login-box">
     <h2>Admin Portal</h2>
     <p>Student Doubts by Batch</p>
@@ -180,7 +180,7 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
         <h1 class="app-title">Student Doubts</h1>
         <div class="app-sub">Select a batch to view and reply to doubts</div>
       </div>
-      <button class="ghost-btn" id="closeBtn" type="button">Close</button>
+      <button class="ghost-btn" id="closeBtn" type="button">← Dashboard</button>
     </div>
 
     <div class="app-card">
@@ -256,7 +256,7 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
     if(user && user.email === ADMIN_EMAIL && localStorage.getItem('adminUnlocked') === '1'){
       showApp();
     } else {
-      document.getElementById('loginWrap').classList.remove('hidden');
+      var _lw=document.getElementById('loginWrap');if(_lw){_lw.classList.remove('hidden');_lw.style.display='';}
       document.getElementById('appShell').classList.add('hidden');
     }
   });
@@ -270,6 +270,7 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
 
   /* Batches */
   async function loadBatches(){
+    if(!auth.currentUser){ setTimeout(function(){ if(window.loadBatches) window.loadBatches(); else loadBatches(); }, 1500); return; }
     const statusEl = document.getElementById('batchLoadStatus');
     try {
       if(statusEl) statusEl.textContent = 'Loading batches...';
@@ -491,15 +492,15 @@ if ('serviceWorker' in navigator) {
 })();
 </script>
 <script>
-/* Skip login flash for returning admin (auth will re-verify and correct if needed) */
+/* Instant session restore: pages never flash the login box (auth verifies in background) */
 (function(){
   try{
-    var ok = localStorage.getItem('adminUnlocked') === '1' || sessionStorage.getItem('adminUnlocked') === '1';
+    var ok = localStorage.getItem('adminUnlocked')==='1' || sessionStorage.getItem('adminUnlocked')==='1';
     if(!ok) return;
     var loginEl = document.getElementById('loginWrap') || document.getElementById('loginScreen');
     var appEl = document.getElementById('appShell') || document.getElementById('adminApp');
-    if(loginEl){ loginEl.style.display = 'none'; loginEl.classList.add('hidden'); }
-    if(appEl){ appEl.classList.remove('hidden'); appEl.style.display = ''; }
+    if(loginEl){ loginEl.classList.add('hidden'); loginEl.style.display='none'; }
+    if(appEl){ appEl.classList.remove('hidden'); appEl.style.display=''; }
   }catch(e){}
 })();
 </script>

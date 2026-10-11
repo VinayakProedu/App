@@ -89,8 +89,6 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
 
 /* Content */
 .content{display:grid;gap:18px;}
-.view{display:none}
-.view.active{display:block}
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
 .card,.panel,.attempt-card,.item,.question-card,.mock-paper{padding:18px;background:var(--card);border:1px solid var(--border);border-radius:var(--r-md);box-shadow:var(--shadow-sm);}
@@ -345,12 +343,11 @@ textarea{min-height:110px;resize:vertical}
   .exam-shell{padding:16px 14px 24px;}
 }
 </style>
-<base target="_blank">
 </head>
 <body>
 
 <!-- LOGIN -->
-<div class="login-wrap" id="loginWrap">
+<div class="login-wrap" id="loginWrap" style="display:none">
   <div class="login-box">
     <h2>Mock Exam Portal</h2>
     <p>Admin & Student Access</p>
@@ -374,14 +371,8 @@ textarea{min-height:110px;resize:vertical}
         <p id="roleText">Admin Panel</p>
       </div>
     </div>
-    <div style="margin-bottom:12px">
-      <span id="roleBadge" class="role-badge">Role: student</span>
-    </div>
+    
     <nav class="app-menu" id="appMenu">
-      <button class="active" data-view="dashboardView">📊 Dashboard</button>
-      <button data-view="papersView">📝 Mock Papers</button>
-      <button id="adminMenuBtn" data-view="adminView" hidden>⚙️ Admin Editor</button>
-      <button data-view="attemptsView">📋 Attempts</button>
       <button id="logoutBtn" type="button">🚪 Logout</button>
     </nav>
   </aside>
@@ -390,9 +381,9 @@ textarea{min-height:110px;resize:vertical}
     <div class="app-topbar">
       <div>
         <h1 class="app-title">Mock Exam Manager</h1>
-        <div class="app-sub" id="appSub">Create papers, add questions, and review attempts</div>
+        <div class="app-sub" id="appSub">All tools on one page — scroll or search below</div>
       </div>
-      <button class="btn btn-ghost" id="closeBtn" type="button">Close</button>
+      <button class="btn btn-ghost" id="closeBtn" type="button">← Dashboard</button>
     </div>
 
     <!-- Stats -->
@@ -404,7 +395,7 @@ textarea{min-height:110px;resize:vertical}
 
     <div class="content">
       <!-- DASHBOARD -->
-      <section id="dashboardView" class="view active">
+      <section id="dashboardView">
         <div class="card">
           <div class="section-head">
             <div>
@@ -416,22 +407,8 @@ textarea{min-height:110px;resize:vertical}
         </div>
       </section>
 
-      <!-- PAPERS -->
-      <section id="papersView" class="view">
-        <div class="card">
-          <div class="section-head">
-            <div>
-              <h2 class="title">Mock Papers</h2>
-              <p class="sub">Search and start any mock paper.</p>
-            </div>
-            <input id="paperSearch" placeholder="Search paper code or title" style="max-width:280px;">
-          </div>
-          <div id="papersPanel" class="list"></div>
-        </div>
-      </section>
-
       <!-- ADMIN -->
-      <section id="adminView" class="view" hidden>
+      <section id="adminView">
         <div class="grid-2">
           <div class="panel">
             <h2 class="title">Create / Update Mock Paper</h2>
@@ -564,7 +541,7 @@ textarea{min-height:110px;resize:vertical}
       </section>
 
       <!-- ATTEMPTS -->
-      <section id="attemptsView" class="view">
+      <section id="attemptsView">
         <div class="card">
           <h2 class="title">Attempts</h2>
           <div id="attemptList" class="list"></div>
@@ -612,12 +589,12 @@ textarea{min-height:110px;resize:vertical}
     <div id="scratchpad" class="scratchpad hidden">
       <strong style="font-size:.85rem;color:var(--navy);">Scratch Pad</strong>
       <textarea id="scratchpadText" placeholder="Type notes here — kept during this exam only."></textarea>
-      <button class="btn btn-ghost" type="button" onclick="document.getElementById('scratchpad').classList.add('hidden')" style="justify-self:end;">Close</button>
+      <button class="btn btn-ghost" type="button" onclick="document.getElementById('scratchpad').classList.add('hidden')" style="justify-self:end;">← Dashboard</button>
     </div>
     <div id="calcPop" class="calc-pop hidden">
       <input id="calcDisplay" value="0" readonly>
       <div class="calc-keys" id="calcKeys"></div>
-      <button class="btn btn-ghost" type="button" onclick="document.getElementById('calcPop').classList.add('hidden')">Close</button>
+      <button class="btn btn-ghost" type="button" onclick="document.getElementById('calcPop').classList.add('hidden')">← Dashboard</button>
     </div>
   </div>
 </div>
@@ -627,7 +604,7 @@ textarea{min-height:110px;resize:vertical}
   <div class="marking-card">
     <div class="marking-head">
       <div><div style="font-size:.72rem;letter-spacing:1.6px;text-transform:uppercase;opacity:.75;">Manual Marking · Constructed Response</div><h3 id="markingTitle" style="margin:2px 0 0;font-size:1.05rem;">Attempt</h3></div>
-      <button class="btn btn-gold" type="button" onclick="closeMarking()">Close</button>
+      <button class="btn btn-gold" type="button" onclick="closeMarking()">← Dashboard</button>
     </div>
     <div class="marking-body" id="markingBody"></div>
     <div class="marking-foot">
@@ -687,11 +664,9 @@ const el = {
   roleBadge: document.getElementById('roleBadge'),
   roleText: document.getElementById('roleText'),
   appSub: document.getElementById('appSub'),
-  adminMenuBtn: document.getElementById('adminMenuBtn'),
   views: [...document.querySelectorAll('.view')],
   menuBtns: [...document.querySelectorAll('.app-menu button')],
   paperList: document.getElementById('paperList'),
-  papersPanel: document.getElementById('papersPanel'),
   adminPaperList: document.getElementById('adminPaperList'),
   attemptList: document.getElementById('attemptList'),
   paperCount: document.getElementById('paperCount'),
@@ -764,11 +739,7 @@ function setStatus(node, msg, error = false) {
 }
 function isAdminEmail(email) { return normalizeText(email) === normalizeText(ADMIN_EMAIL); }
 
-function showView(id) {
-  if (state.role !== 'admin' && id === 'adminView') return;
-  el.views.forEach(v => v.classList.toggle('active', v.id === id));
-  el.menuBtns.forEach(b => b.classList.toggle('active', b.dataset.view === id));
-}
+function showView(){} /* single-page layout */
 
 /* ================= AUTH ================= */
 async function doLogin() {
@@ -800,14 +771,11 @@ auth.onAuthStateChanged(async user => {
   if (user) {
     if (!state.loginIntent && sessionStorage.getItem('vp_login_intent')!=='1') { state.role='student'; closeApp(); auth.signOut().catch(()=>{}); return; }
     state.loginIntent = true;
-    state.role = isAdminEmail(user.email) ? 'admin' : 'student';
-    el.roleBadge.textContent = 'Role: ' + state.role;
-    el.roleText.textContent = state.role === 'admin' ? 'Admin Panel' : 'Student Portal';
-    el.appSub.textContent = state.role === 'admin' ? 'Create papers, add questions, and review attempts' : 'Take mock exams and review your performance';
-    const isAdmin = state.role === 'admin';
-    el.adminMenuBtn.hidden = !isAdmin;
-    document.getElementById('adminView').hidden = !isAdmin;
-    if (!isAdmin && document.getElementById('adminView').classList.contains('active')) showView('dashboardView');
+    if (!isAdminEmail(user.email)) { await auth.signOut(); return; }
+    state.role = 'admin';
+    el.roleBadge.textContent = 'Role: admin';
+    el.roleText.textContent = 'Admin Panel';
+    el.appSub.textContent = 'Scroll to manage papers, questions and attempts — or use search';
     showApp();
     await refreshAll();
   } else {
@@ -875,7 +843,6 @@ function renderPapers() {
   const filtered = state.papers.filter(p=>`${p.code||''} ${p.title||''} ${p.level||''}`.toLowerCase().includes(search));
   const html = filtered.length ? filtered.map(paperSummaryCard).join('') : '<div class="empty">No papers yet.</div>';
   el.paperList.innerHTML = html;
-  el.papersPanel.innerHTML = html;
   el.adminPaperList.innerHTML = html;
   populatePaperSelect();
 }
@@ -1488,7 +1455,7 @@ function populateQuestionEditor(q){
 }
 
 /* ================= EVENT WIRING ================= */
-el.menuBtns.forEach(btn=>btn.addEventListener('click',()=>showView(btn.dataset.view)));
+
 el.savePaperBtn.addEventListener('click',savePaper);
 el.clearPaperBtn.addEventListener('click',()=>{
   el.paperCode.value='';el.paperTitle.value='';el.paperSections.value='';
@@ -2303,15 +2270,15 @@ if ('serviceWorker' in navigator) {
 })();
 </script>
 <script>
-/* Skip login flash for returning admin (auth will re-verify and correct if needed) */
+/* Instant session restore: pages never flash the login box (auth verifies in background) */
 (function(){
   try{
-    var ok = localStorage.getItem('adminUnlocked') === '1' || sessionStorage.getItem('adminUnlocked') === '1';
+    var ok = localStorage.getItem('adminUnlocked')==='1' || sessionStorage.getItem('adminUnlocked')==='1';
     if(!ok) return;
     var loginEl = document.getElementById('loginWrap') || document.getElementById('loginScreen');
     var appEl = document.getElementById('appShell') || document.getElementById('adminApp');
-    if(loginEl){ loginEl.style.display = 'none'; loginEl.classList.add('hidden'); }
-    if(appEl){ appEl.classList.remove('hidden'); appEl.style.display = ''; }
+    if(loginEl){ loginEl.classList.add('hidden'); loginEl.style.display='none'; }
+    if(appEl){ appEl.classList.remove('hidden'); appEl.style.display=''; }
   }catch(e){}
 })();
 </script>

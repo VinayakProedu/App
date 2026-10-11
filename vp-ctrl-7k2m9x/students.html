@@ -130,7 +130,7 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2}
 </head>
 <body>
 
-<div class="login-screen" id="loginScreen">
+<div class="login-screen" id="loginScreen" style="display:none">
   <div class="login-card">
     <img src="https://pasteimg.com/images/2026/03/31/WhatsApp-Image-2026-03-19-at-6.49.19-PM.jpg" alt="Vinayak ProEdu" class="login-logo">
     <h2>Admin Portal</h2>
@@ -168,7 +168,7 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2}
       <div><h2 class="app-title" id="pageTitle">Students</h2><div class="app-sub" id="pageSub">Manage enrolled students and access control</div></div>
       <div class="topbar-actions">
         <button class="ghost-btn" id="refreshBtn" type="button">🔄 Refresh</button>
-        <button class="ghost-btn" id="closeAdminBtn" type="button">✕ Close</button>
+        <button class="ghost-btn" id="closeAdminBtn" type="button">← Dashboard</button>
       </div>
     </div>
 
@@ -269,7 +269,7 @@ auth.onAuthStateChanged(user => {
   } else {
     if(user && user.email !== ADMIN_EMAIL) auth.signOut();
     localStorage.removeItem('adminUnlocked');
-    $('loginScreen').classList.remove('hidden');
+    $('loginScreen').classList.remove('hidden');$('loginScreen').style.display='';
     $('adminApp').classList.add('hidden');
   }
 });
@@ -317,6 +317,7 @@ async function loadLectures(){ const snap=await db.collection('lectures').get().
 
 /* ================= BATCHES ================= */
 async function loadBatches(){
+    if(!auth.currentUser){ setTimeout(function(){ if(window.loadBatches) window.loadBatches(); else loadBatches(); }, 1500); return; }
   try{
     const snap = await db.collection('batches').orderBy('createdAt','desc').get();
     allBatches = snap.docs.map(d => ({id: d.id, ...d.data()}));
@@ -582,15 +583,15 @@ if ('serviceWorker' in navigator) {
 })();
 </script>
 <script>
-/* Skip login flash for returning admin (auth will re-verify and correct if needed) */
+/* Instant session restore: pages never flash the login box (auth verifies in background) */
 (function(){
   try{
-    var ok = localStorage.getItem('adminUnlocked') === '1' || sessionStorage.getItem('adminUnlocked') === '1';
+    var ok = localStorage.getItem('adminUnlocked')==='1' || sessionStorage.getItem('adminUnlocked')==='1';
     if(!ok) return;
     var loginEl = document.getElementById('loginWrap') || document.getElementById('loginScreen');
     var appEl = document.getElementById('appShell') || document.getElementById('adminApp');
-    if(loginEl){ loginEl.style.display = 'none'; loginEl.classList.add('hidden'); }
-    if(appEl){ appEl.classList.remove('hidden'); appEl.style.display = ''; }
+    if(loginEl){ loginEl.classList.add('hidden'); loginEl.style.display='none'; }
+    if(appEl){ appEl.classList.remove('hidden'); appEl.style.display=''; }
   }catch(e){}
 })();
 </script>

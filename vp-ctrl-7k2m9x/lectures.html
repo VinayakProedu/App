@@ -132,12 +132,11 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
 }
 .hidden{display:none !important;}
 </style>
-<base target="_blank">
 </head>
 <body>
 
 <!-- LOGIN -->
-<div class="login-wrap" id="loginWrap">
+<div class="login-wrap" id="loginWrap" style="display:none">
   <div class="login-box">
     <h2>Admin Portal</h2>
     <p>Lecture Manager</p>
@@ -179,7 +178,7 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
         <h1 class="app-title">Lecture Manager</h1>
         <div class="app-sub">Upload videos, files, and manage your course library</div>
       </div>
-      <button class="ghost-btn" id="closeBtn" type="button">Close</button>
+      <button class="ghost-btn" id="closeBtn" type="button">← Dashboard</button>
     </div>
 
     <div class="app-grid-2">
@@ -304,31 +303,20 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
   });
 
   auth.onAuthStateChanged(async user => {
-    if(user && user.email === ADMIN_EMAIL && localStorage.getItem('adminUnlocked') === '1'){
+    var lw = document.getElementById('loginWrap');
+    var ap = document.getElementById('appShell');
+    if(user && user.email === ADMIN_EMAIL){
       window.__isTeacher = false;
+      localStorage.setItem('adminUnlocked','1');
+      lw.classList.add('hidden'); lw.style.display='none';
+      ap.classList.remove('hidden'); ap.style.display='';
       showApp();
       return;
     }
-    if(user){
-      try{
-        const doc = await db.collection('users').doc(user.uid).get();
-        if(doc.exists && doc.data().role === 'teacher'){
-          window.__isTeacher = true;
-          window.__teacherSubjects = doc.data().assignedSubjects || [];
-          document.querySelectorAll('.app-menu a').forEach(a => {
-            const href = a.getAttribute('href') || '';
-            if(href.indexOf('students.html') !== -1 || href.indexOf('teachers.html') !== -1) a.style.display = 'none';
-          });
-          
-          showApp();
-          return;
-        }
-      }catch(e){}
-      await auth.signOut();
-    }
-      document.getElementById('loginWrap').classList.remove('hidden');
-      document.getElementById('appShell').classList.add('hidden');
-    }
+    if(user) await auth.signOut();
+    localStorage.removeItem('adminUnlocked');
+    ap.classList.add('hidden');
+    lw.classList.remove('hidden'); lw.style.display='';
   });
 
   function showApp(){
@@ -455,6 +443,7 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
   }
 
   async function loadBatches(){
+    if(!auth.currentUser){ setTimeout(function(){ if(window.loadBatches) window.loadBatches(); else loadBatches(); }, 1500); return; }
     const statusEl = document.getElementById('batchLoadStatus');
     const filterStatus = document.getElementById('batchFilterStatus');
     try {
@@ -542,7 +531,7 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
     if(vid){
       const modal = document.createElement('div');
       modal.innerHTML = `<div style="position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:20000;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:20px;" onclick="this.remove()">
-        <button style="position:absolute;top:20px;right:20px;background:#fff;border:none;padding:10px 16px;border-radius:8px;cursor:pointer;font-weight:700;" onclick="this.parentElement.remove()">✕ Close</button>
+        <button style="position:absolute;top:20px;right:20px;background:#fff;border:none;padding:10px 16px;border-radius:8px;cursor:pointer;font-weight:700;" onclick="this.parentElement.remove()">← Dashboard</button>
         <iframe width="80%" height="80%" style="border-radius:12px;border:none;max-width:900px;" src="https://www.youtube.com/embed/${vid}?autoplay=1&modestbranding=1&rel=0" allowfullscreen></iframe>
       </div>`;
       document.body.appendChild(modal.firstElementChild);
@@ -588,26 +577,17 @@ if ('serviceWorker' in navigator) {
 })();
 </script>
 <script>
-/* Skip login flash for returning admin (auth will re-verify and correct if needed) */
+/* Instant session restore: pages never flash the login box (auth verifies in background) */
 (function(){
   try{
-    var ok = localStorage.getItem('adminUnlocked') === '1' || sessionStorage.getItem('adminUnlocked') === '1';
+    var ok = localStorage.getItem('adminUnlocked')==='1' || sessionStorage.getItem('adminUnlocked')==='1';
     if(!ok) return;
     var loginEl = document.getElementById('loginWrap') || document.getElementById('loginScreen');
     var appEl = document.getElementById('appShell') || document.getElementById('adminApp');
-    if(loginEl){ loginEl.style.display = 'none'; loginEl.classList.add('hidden'); }
-    if(appEl){ appEl.classList.remove('hidden'); appEl.style.display = ''; }
+    if(loginEl){ loginEl.classList.add('hidden'); loginEl.style.display='none'; }
+    if(appEl){ appEl.classList.remove('hidden'); appEl.style.display=''; }
   }catch(e){}
 })();
-</script>
-<script>
-window.__vpResetPw = function(){
-  var el = document.getElementById('adminEmail') || document.getElementById('loginEmail');
-  var e = ((el && el.value) || '').trim() || prompt('Enter your admin/teacher email:');
-  if(!e) return;
-  auth.sendPasswordResetEmail(e.trim()).then(function(){ alert('Password reset email sent — check inbox & spam.'); })
-    .catch(function(err){ alert(err.message); });
-};
 </script>
 </body>
 </html>
