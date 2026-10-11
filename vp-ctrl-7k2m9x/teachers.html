@@ -123,6 +123,7 @@ a{text-decoration:none;color:inherit;}
         <div class="portal-field"><label>Teacher Email *</label><input id="tEmail" type="email" placeholder="teacher@gmail.com"></div>
         <div class="portal-field"><label>Display Name</label><input id="tName" type="text" placeholder="e.g. CA Priya Sharma"></div>
         <label style="font-size:.74rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px;">Assigned Subjects * (they can only manage these)</label>
+        <div class="enrolment-grid" id="tBatches"><span style="font-size:.85rem;color:var(--muted)">Loading batches…</span></div>
         <div class="enrolment-grid" id="tSubjects"><span style="font-size:.85rem;color:var(--muted)">Loading subjects…</span></div>
         <div style="display:flex;gap:10px;flex-wrap:wrap;">
           <button class="primary-btn" type="button" onclick="saveTeacher()">💾 Save Teacher</button>
@@ -183,6 +184,11 @@ a{text-decoration:none;color:inherit;}
     const set = new Set();
     lSnap.docs.forEach(d => { const s = d.data().subject; if(s) set.add(s); });
     allSubjects = [...set].sort();
+    try{
+      const bSnap = await db.collection('batches').get();
+      const allB = bSnap.docs.map(d => d.data().code || d.id).sort();
+      document.getElementById('tBatches').innerHTML = '<label style="grid-column:1/-1;font-size:.74rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);">Assigned Batches (restrict where they publish)</label>' + allB.map(b => '<label class="enrolment-option"><input type="checkbox" class="t-bat" value="'+esc(b)+'"><span>'+esc(b)+'</span></label>').join('');
+    }catch(e){ document.getElementById('tBatches').innerHTML = ''; }
     $('tSubjects').innerHTML = allSubjects.length ? allSubjects.map(s =>
       `<label class="enrolment-option"><input type="checkbox" class="t-subj" value="${esc(s)}"><span>${esc(s)}</span></label>`).join('')
       : '<span style="font-size:.85rem;color:var(--muted)">No subjects found yet — upload a lecture first, or type subjects when adding lectures later. You can still add the teacher and tick subjects afterward.</span>';
@@ -204,6 +210,7 @@ a{text-decoration:none;color:inherit;}
     const email = $('tEmail').value.trim().toLowerCase();
     const name = $('tName').value.trim();
     const subs = [...document.querySelectorAll('.t-subj:checked')].map(i => i.value);
+    const bats = [...document.querySelectorAll('.t-bat:checked')].map(i => i.value);
     if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ st.textContent='Enter a valid email.'; st.classList.add('error'); return; }
     if(!subs.length){ st.textContent='Tick at least one subject.'; st.classList.add('error'); return; }
     try{
@@ -217,7 +224,7 @@ a{text-decoration:none;color:inherit;}
       // resolve uid via a temp query is not possible; store teacher profile keyed by email and let a cloud-less approach:
       // we look up users collection by email field
       const q = await db.collection('users').where('email','==',email).limit(1).get();
-      const payload = { name: name || email.split('@')[0], email, role:'teacher', assignedSubjects: subs,
+      const payload = { name: name || email.split('@')[0], email, role:'teacher', assignedSubjects: subs, assignedBatches: bats,
         batchCode:'', enrolledSubjects:[], assignedLectureIds:[],
         accessUpdatedAt: firebase.firestore.FieldValue.serverTimestamp() };
       if(q.empty){
@@ -233,7 +240,7 @@ a{text-decoration:none;color:inherit;}
   };
 
   /* ===== AUTO-CREATE: account + profile + email in one click ===== */
-  const WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycby3dgv6rpdEs1FSe7gqw5eTH3P4nE-nTk6cC5AmfI9ko9TMjITzGzgTcuuM7CePnXBr/exec';   // ← from Apps Script deployment (ends in /exec)
+  const WEBHOOK_URL = 'PASTE_YOUR_WEB_APP_URL_HERE';   // ← from Apps Script deployment (ends in /exec)
   const API_KEY = 'AIzaSyCwZGVK9I_GQmJkRatZOyMs0gdcZ8nSouc';
   function genPass(){
     const c='abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ23456789';
