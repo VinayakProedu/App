@@ -89,6 +89,7 @@ $('tLogin').onclick = () => {
   auth.signInWithEmailAndPassword($('tEmail').value.trim(), $('tPass').value).catch(e=>{ $('tStatus').textContent = e.message; });
 };
 $('tLogout').onclick = () => auth.signOut();
+if(localStorage.getItem('vp_staff_sess')){ $('loginWrap').style.display='none'; }
 auth.onAuthStateChanged(async user => {
   if(!user){ $('loginWrap').classList.remove('hidden'); $('appShell').classList.add('hidden'); return; }
   try{
@@ -96,8 +97,10 @@ auth.onAuthStateChanged(async user => {
     const tdoc = tq.empty ? null : tq.docs[0];
     if(tdoc && tdoc.data().role === 'teacher'){
       const subs = tdoc.data().assignedSubjects || [];
+      const bats = tdoc.data().assignedBatches || [];
+      localStorage.setItem('vp_staff_sess', user.email);
       $('helloSub').textContent = 'Welcome, ' + (tdoc.data().name || user.email);
-      $('subjChips').innerHTML = subs.map(s => '<span class="chip">'+s+'</span>').join('') || '<span class="chip" style="background:#fef3c7;color:#92400e;">No subjects assigned yet — contact admin</span>';
+      $('subjChips').innerHTML = subs.map(s => '<span class="chip">'+s+'</span>').join('') + (bats.length ? ' <span class="chip" style="background:#d1fae5;color:#166534;">Batches: '+bats.join(', ')+'</span>' : '') || '<span class="chip" style="background:#fef3c7;color:#92400e;">No subjects assigned yet — contact admin</span>';
       $('loginWrap').classList.add('hidden'); $('appShell').classList.remove('hidden');
       return;
     }
