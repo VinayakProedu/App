@@ -90,6 +90,19 @@ details.grp>summary::-webkit-details-marker{display:none;}
 .grp-body{display:grid;gap:10px;padding:14px;}
 details.grp[open]>summary{border-bottom:1px solid var(--border);}
 
+/* role gating */
+body.student .admin-only{display:none !important;}
+.lockscreen{padding:30px;border:1px solid #fecaca;background:#fff5f5;border-radius:14px;text-align:center;}
+.scratch{position:fixed;right:18px;bottom:90px;width:300px;z-index:9600;background:#fffbe6;border:1px solid #e5d9a0;border-radius:14px;box-shadow:var(--shadow-md);padding:12px;}
+.calc{position:fixed;right:18px;bottom:90px;width:230px;z-index:9600;background:#111827;border-radius:14px;padding:12px;box-shadow:var(--shadow-md);}
+.calc input{width:100%;margin:0 0 8px;text-align:right;font-weight:800;background:#1f2937;color:#fff;border:1px solid #374151;}
+.calc .keys{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;}
+.calc .keys button{padding:9px 0;border:none;border-radius:8px;background:#374151;color:#fff;font-weight:800;}
+.calc .keys button.op{background:var(--gold);color:var(--navy);}
+.rev-item{border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:10px;background:#fff;}
+.rev-ok{color:#166534;font-weight:800;}
+.rev-bad{color:#b42318;font-weight:800;}
+
 /* Logout (top right, fixed) */
 .logout-fixed{position:fixed;top:14px;right:16px;z-index:12000;}
 
@@ -169,7 +182,7 @@ details.grp[open]>summary{border-bottom:1px solid var(--border);}
       </div>
     </div>
 
-    <div class="grid-3" style="margin-bottom:18px;">
+    <div class="grid-3 admin-only" style="margin-bottom:18px;">
       <div class="stat"><div class="n" id="statPapers">0</div><div class="l">Papers</div></div>
       <div class="stat"><div class="n" id="statQuestions">0</div><div class="l">Questions</div></div>
       <div class="stat"><div class="n" id="statAttempts">0</div><div class="l">Attempts</div></div>
@@ -185,7 +198,7 @@ details.grp[open]>summary{border-bottom:1px solid var(--border);}
     </div>
 
     <!-- ADMIN TOOLS -->
-    <div class="grid-2">
+    <div class="grid-2 admin-only">
       <div class="card">
         <h2>Create / Update Paper</h2>
         <div class="frow"><label>Paper Code *</label><input id="pCode" placeholder="FR, SBL, PM, AA..."></div>
@@ -259,7 +272,7 @@ details.grp[open]>summary{border-bottom:1px solid var(--border);}
     </div>
 
     <!-- QUESTIONS -->
-    <div class="card">
+    <div class="card admin-only">
       <h2>Existing Questions</h2>
       <div class="sub">Grouped by paper. Click Edit to modify.</div>
       <div id="questionList" class="list"></div>
@@ -286,6 +299,12 @@ details.grp[open]>summary{border-bottom:1px solid var(--border);}
       <span class="timer" id="examTimer">00:00</span>
     </div>
     <div class="pillbar">
+      <button class="btn btn-ghost btn-sm" id="btnScratch" type="button">🗒 Scratch</button>
+      <button class="btn btn-ghost btn-sm" id="btnCalc" type="button">🧮 Calc</button>
+      <button class="btn btn-ghost btn-sm" id="btnHi" type="button">🖍 Highlight</button>
+      <button class="btn btn-ghost btn-sm" id="btnStrike" type="button">➕ Strike</button>
+      <button class="btn btn-ghost btn-sm" id="btnSym" type="button">$ Symbol</button>
+      <span class="pill" id="timeWarn" style="display:none;background:#fef3c7;color:#92400e;border-color:#f3d18b;"></span>
       <button class="btn btn-gold btn-sm" id="examSubmitTop" type="button">Submit</button>
     </div>
   </div>
@@ -308,6 +327,17 @@ details.grp[open]>summary{border-bottom:1px solid var(--border);}
 </div>
 
 <!-- RESULTS rendered inside exam overlay -->
+<div class="scratch hidden" id="scratchPad">
+  <strong style="font-size:.85rem;color:var(--navy);">Scratch Pad</strong>
+  <textarea id="scratchText" style="min-height:130px;margin:8px 0;" placeholder="Notes — kept during this exam only..."></textarea>
+  <button class="btn btn-ghost btn-sm" type="button" onclick="document.getElementById('scratchPad').classList.add('hidden')">Close</button>
+</div>
+<div class="calc hidden" id="calcPop">
+  <input id="calcDisp" value="0" readonly>
+  <div class="keys" id="calcKeys"></div>
+  <button class="btn btn-ghost btn-sm" style="margin-top:8px;width:100%;" type="button" onclick="document.getElementById('calcPop').classList.add('hidden')">Close</button>
+</div>
+
 <!-- MARKING MODAL -->
 <div class="modal-wrap" id="markModal">
   <div class="modal">
@@ -385,10 +415,17 @@ function showLogin(){
   $('appShell').classList.add('hidden');
   $('loginWrap').style.display = '';
 }
+var IS_ADMIN = false;
 auth.onAuthStateChanged(function(user){
   var unlocked = sessionStorage.getItem('vp_login_intent') === '1' || localStorage.getItem('adminUnlocked') === '1';
-  if(user && norm(user.email) === norm(ADMIN_EMAIL) && unlocked){
+  var isAdmin = user && norm(user.email) === norm(ADMIN_EMAIL);
+  if(user && isAdmin && unlocked){
+    IS_ADMIN = true;
     localStorage.setItem('adminUnlocked','1');
+    showApp();
+  } else if(user && !isAdmin && sessionStorage.getItem('vp_login_intent') === '1'){
+    IS_ADMIN = false;
+    document.body.classList.add('student');
     showApp();
   } else {
     if(user) auth.signOut().catch(function(){});
@@ -403,7 +440,7 @@ on('loginBtn','click', function(){
   st.textContent = '';
   auth.signInWithEmailAndPassword(email, pw).then(function(){
     sessionStorage.setItem('vp_login_intent','1');
-    localStorage.setItem('adminUnlocked','1');
+    if(norm(email) === norm(ADMIN_EMAIL)) localStorage.setItem('adminUnlocked','1');
   }).catch(function(e){ st.textContent = e.message; });
 });
 on('logoutBtn','click', function(){
@@ -450,9 +487,11 @@ function renderPapers(){
       '<h3 style="font-size:1.05rem;color:var(--navy);margin:4px 0;">'+esc(p.title)+'</h3>'+
       '<div class="small">'+esc(p.level||'')+' · '+Number(p.timeLimit||0)+' min · '+Number(p.totalMarks||0)+' marks · '+nq+' questions · '+Number(p.attemptLimit||1)+' attempt(s)</div>'+
       '<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">'+
-        '<button class="btn btn-primary btn-sm" onclick="VP.startExam(\''+p.id+'\')">Start Mock</button>'+
-        '<button class="btn btn-ghost btn-sm" onclick="VP.editPaper(\''+p.id+'\')">Edit</button>'+
-        '<button class="btn btn-danger btn-sm" onclick="VP.delPaper(\''+p.id+'\')">Delete</button>'+
+        (p.locked && !IS_ADMIN
+          ? '<button class="btn btn-ghost btn-sm" disabled>🔒 Locked</button>'
+          : '<button class="btn btn-primary btn-sm" onclick="VP.startExam(\''+p.id+'\')">Start Mock</button>')+
+        (IS_ADMIN ? '<button class="btn btn-ghost btn-sm" onclick="VP.editPaper(\''+p.id+'\')">Edit</button>'+
+        '<button class="btn btn-danger btn-sm" onclick="VP.delPaper(\''+p.id+'\')">Delete</button>' : '')+
       '</div></div>';
   }).join('');
   $('paperList').innerHTML = html || '<div class="empty">No papers found.</div>';
@@ -795,8 +834,11 @@ function fmtDate(v){
   return d.toLocaleString('en-IN');
 }
 function renderAttempts(){
-  if(!S.attempts.length){ $('attemptList').innerHTML = '<div class="empty">No attempts yet.</div>'; return; }
-  $('attemptList').innerHTML = S.attempts.map(function(a){
+  var list = IS_ADMIN ? S.attempts : S.attempts.filter(function(a){
+    return auth.currentUser && String(a.userId) === String(auth.currentUser.uid);
+  });
+  if(!list.length){ $('attemptList').innerHTML = '<div class="empty">No attempts yet.</div>'; return; }
+  $('attemptList').innerHTML = list.map(function(a){
     var st = a.status === 'pending_marking' ? '<span class="badge warn">Awaiting manual marking</span>'
       : (a.status === 'marked' ? '<span class="badge okb">Manually marked</span>' : '');
     return '<div class="item">'+
@@ -891,10 +933,20 @@ VP.startExam = function(paperId){
   if(name === null) return;
   name = name.trim();
   if(!name){ alert('Student name is required to start.'); return; }
+  var maxAttempts = Math.max(1, Number(p.attemptLimit || 1));
+  var used = S.attempts.filter(function(a){
+    if(String(a.paperId) !== String(paperId)) return false;
+    return IS_ADMIN ? String(a.studentName) === String(name)
+      : (auth.currentUser && String(a.userId) === String(auth.currentUser.uid));
+  }).length;
+  if(used >= maxAttempts){ alert('Attempt limit reached: ' + maxAttempts + ' attempt(s) allowed for this paper.'); return; }
   var E = S.exam;
   E.active = true; E.paper = p; E.qs = qs; E.idx = 0;
   E.sel = {}; E.rev = {}; E.name = name; E.submitting = false;
+  E.locked = false; E.armed = false;
   E.endAt = Date.now() + Number(p.timeLimit || 90) * 60000;
+  try{ var rt = document.documentElement; if(rt.requestFullscreen) rt.requestFullscreen().catch(function(){}); }catch(e){}
+  setTimeout(function(){ if(S.exam.active) S.exam.armed = true; }, 3000);
   $('examTitle').textContent = (p.code || '') + ' — ' + (p.title || '');
   $('examOverlay').classList.add('open');
   document.body.style.overflow = 'hidden';
@@ -903,10 +955,28 @@ VP.startExam = function(paperId){
   E.timer = setInterval(function(){
     var left = Math.max(0, Math.ceil((E.endAt - Date.now())/1000));
     $('examTimer').textContent = fmtTime(left);
+    var wb = $('timeWarn');
+    if(left <= 300){ wb.textContent = '⚠ ' + fmtTime(left) + ' left'; wb.style.display = ''; wb.style.background = '#fecaca'; wb.style.color = '#7f1d1d'; }
+    else if(left <= 900){ wb.textContent = '15-minute warning'; wb.style.display = ''; }
+    else { wb.style.display = 'none'; }
     if(left <= 0){ clearInterval(E.timer); submitExam(); }
   }, 1000);
   $('examTimer').textContent = fmtTime(Number(p.timeLimit||90)*60);
 };
+
+function lockExam(reason){
+  var E = S.exam;
+  if(!E.active || E.locked || !E.armed || E.submitting) return;
+  E.locked = true;
+  clearInterval(E.timer);
+  $('examQcard').innerHTML = '<div class="lockscreen"><h3 style="color:#7f1d1d;">Exam Locked</h3><p>'+esc(reason || 'Focus changed')+'</p>'+
+    '<p class="small">The attempt is frozen because the browser tab or window changed. Submit to finish.</p>'+
+    '<div style="margin-top:14px;"><button class="btn btn-gold" onclick="VP.lockSubmit()">Submit Now</button></div></div>';
+}
+VP.lockSubmit = function(){ S.exam.armed = false; submitExam(); };
+window.addEventListener('blur', function(){ lockExam('Browser focus changed.'); });
+document.addEventListener('visibilitychange', function(){ if(document.hidden) lockExam('Tab switch detected.'); });
+window.addEventListener('beforeunload', function(e){ if(S.exam.active){ e.preventDefault(); e.returnValue = ''; } });
 
 function renderNav(){
   var E = S.exam;
@@ -1070,50 +1140,124 @@ function capture(){
   } else { var f = $('freeAns'); E.sel[q.id] = f ? f.value.trim() : ''; }
 }
 
-VP.goQ = function(i){ if(i < 0 || i >= S.exam.qs.length) return; capture(); S.exam.idx = i; renderQuestion(); };
-on('examNext','click', function(){ capture(); if(S.exam.idx < S.exam.qs.length-1){ S.exam.idx++; renderQuestion(); } });
-on('examPrev','click', function(){ capture(); if(S.exam.idx > 0){ S.exam.idx--; renderQuestion(); } });
+VP.goQ = function(i){ if(S.exam.locked) return; if(i < 0 || i >= S.exam.qs.length) return; capture(); S.exam.idx = i; renderQuestion(); };
+on('examNext','click', function(){ if(S.exam.locked) return; capture(); if(S.exam.idx < S.exam.qs.length-1){ S.exam.idx++; renderQuestion(); } });
+on('examPrev','click', function(){ if(S.exam.locked) return; capture(); if(S.exam.idx > 0){ S.exam.idx--; renderQuestion(); } });
 on('examFlag','click', function(){ var q = S.exam.qs[S.exam.idx]; S.exam.rev[q.id] = !S.exam.rev[q.id]; renderQuestion(); });
 on('examSubmit','click', function(){ if(confirm('Submit the paper? This ends the attempt.')) submitExam(); });
 on('examSubmitTop','click', function(){ if(confirm('Submit the paper? This ends the attempt.')) submitExam(); });
 
+on('btnScratch','click', function(){ $('scratchPad').classList.toggle('hidden'); });
+on('btnCalc','click', function(){
+  var p = $('calcPop'); p.classList.toggle('hidden');
+  if(!p.dataset.built){
+    p.dataset.built = '1';
+    var keys = ['C','(',')','/','7','8','9','*','4','5','6','-','1','2','3','+','0','.','=','⌫'];
+    $('calcKeys').innerHTML = keys.map(function(k){ return '<button type="button" data-k="'+k+'" class="'+('/*-+='.indexOf(k)!==-1?'op':'')+'">'+k+'</button>'; }).join('');
+    Array.prototype.forEach.call($('calcKeys').children, function(b){
+      b.addEventListener('click', function(){
+        var d = $('calcDisp'), k = b.dataset.k;
+        if(k === 'C'){ d.value = '0'; return; }
+        if(k === '⌫'){ d.value = d.value.length > 1 ? d.value.slice(0,-1) : '0'; return; }
+        if(k === '='){ try{ d.value = String(Function('"use strict";return ('+d.value+')')()); }catch(e){ d.value = 'Error'; } return; }
+        d.value = (d.value === '0' || d.value === 'Error') ? k : d.value + k;
+      });
+    });
+  }
+});
+function applyFmt(cmd){
+  var sel = window.getSelection();
+  if(!sel || !sel.rangeCount || sel.isCollapsed){ alert('Select some text first (scenario or your answer), then apply.'); return; }
+  try{ document.execCommand(cmd, false, cmd === 'hiliteColor' ? 'yellow' : null); }catch(e){}
+}
+on('btnHi','click', function(){ applyFmt('hiliteColor'); });
+on('btnStrike','click', function(){ applyFmt('strikeThrough'); });
+on('btnSym','click', function(){
+  var sym = prompt('Symbol to insert:', '$'); if(!sym) return;
+  var ae = document.activeElement;
+  if(ae && ae.isContentEditable){ document.execCommand('insertText', false, sym); return; }
+  if(ae && (ae.tagName === 'TEXTAREA' || ae.tagName === 'INPUT')){
+    var s = ae.selectionStart || 0, e2 = ae.selectionEnd || s;
+    ae.value = ae.value.slice(0, s) + sym + ae.value.slice(e2);
+    ae.dispatchEvent(new Event('input', {bubbles:true}));
+    return;
+  }
+  var w = $('wAns');
+  if(w){ w.focus(); document.execCommand('insertText', false, sym); return; }
+  var c = document.querySelector('.cr-cell');
+  if(c){ c.focus(); document.execCommand('insertText', false, sym); }
+});
+
 function closeExam(){
   clearInterval(S.exam.timer);
-  S.exam.active = false;
+  var E = S.exam;
+  E.active = false; E.locked = false; E.armed = false; E.submitting = false;
   $('examOverlay').classList.remove('open');
   document.body.style.overflow = '';
+  try{ if(document.exitFullscreen) document.exitFullscreen().catch(function(){}); }catch(e){}
+  ['scratchPad','calcPop'].forEach(function(i){ var n = $(i); if(n) n.classList.add('hidden'); });
+  var wb = $('timeWarn'); if(wb) wb.style.display = 'none';
 }
 
+function optText(q, idx){
+  var o = q.options || [];
+  return (o[idx] != null) ? String(o[idx]) : '';
+}
 function submitExam(){
   var E = S.exam;
   if(E.submitting) return;
   E.submitting = true;
+  E.armed = false;
   capture();
   clearInterval(E.timer);
   var score = 0, total = 0, pending = false;
-  E.qs.forEach(function(q){
+  var review = [];
+  E.qs.forEach(function(q, qi){
     var m = qTotal(q); total += m;
     var a = E.sel[q.id], t = q.type;
-    if(t === 'mcq' || t === 'screenshot'){ if(String(a) !== '' && String(a) === String(q.correct)) score += m; }
-    else if(t === 'dropdown'){ if(String(a) !== '' && String(a) === String(q.correctIndex != null ? q.correctIndex : q.correct)) score += m; }
+    var gained = 0, givenTxt = '', correctTxt = '', isPending = false;
+    if(t === 'mcq' || t === 'screenshot'){
+      givenTxt = (a !== null && a !== undefined && a !== '') ? optText(q, Number(a)) : '';
+      correctTxt = optText(q, Number(q.correct));
+      if(String(a) !== '' && String(a) === String(q.correct)) gained = m;
+    }
+    else if(t === 'dropdown'){
+      var ci = Number(q.correctIndex != null ? q.correctIndex : q.correct);
+      givenTxt = (a !== null && a !== undefined && a !== '') ? optText(q, Number(a)) : '';
+      correctTxt = optText(q, ci);
+      if(String(a) !== '' && String(a) === String(ci)) gained = m;
+    }
     else if(t === 'multi'){
+      givenTxt = (Array.isArray(a) ? a : []).map(function(i){ return optText(q, Number(i)); }).filter(Boolean).join(', ');
+      correctTxt = (Array.isArray(q.correct) ? q.correct : []).map(function(i){ return optText(q, Number(i)); }).filter(Boolean).join(', ');
       var s1 = JSON.stringify((Array.isArray(a)?a:[]).map(String).sort());
       var s2 = JSON.stringify((Array.isArray(q.correct)?q.correct:[]).map(String).sort());
-      if(s1 === s2) score += m;
+      if(s1 === s2) gained = m;
     }
     else if(t === 'fill'){
-      var given = Array.isArray(a) ? a : [a];
+      givenTxt = (Array.isArray(a) ? a : [a]).join(' | ');
       var corr = (q.answers && q.answers.length) ? q.answers : (q.correct || []);
+      correctTxt = corr.join(' | ');
       var alts = q.altAnswers || [];
       var matched = 0;
       corr.forEach(function(c, i){
-        var alt = alts[i] || [];
-        if(answerMatches(given[i] || '', c, alt)) matched++;
+        if(answerMatches((Array.isArray(a) ? a : [])[i] || '', c, alts[i] || [])) matched++;
       });
-      if(corr.length) score += Math.round((m * matched / corr.length) * 100) / 100;
+      if(corr.length) gained = Math.round((m * matched / corr.length) * 100) / 100;
     }
-    else if(t === 'sectionb'){ var sc = scoreSb(q, a); score += sc.gained; }
-    else if(t === 'word' || t === 'excel'){ pending = true; }
+    else if(t === 'sectionb'){
+      var sc = scoreSb(q, a);
+      gained = sc.gained;
+      givenTxt = (Array.isArray(a) ? a : []).join(' | ');
+      correctTxt = (q.sectionBRows || []).map(function(r){ return r.correct != null ? String(r.correct) : ''; }).join(' | ');
+    }
+    else if(t === 'word' || t === 'excel'){
+      pending = true; isPending = true;
+      givenTxt = t === 'word' ? String(a || '').replace(/<[^>]*>/g,'').trim() : '(spreadsheet answer)';
+    }
+    score += gained;
+    review.push({num: qi+1, section: q.section || '-', type: t, main: q.mainQuestion || '', qtext: q.question || '',
+      given: givenTxt, correct: correctTxt, gained: gained, max: m, pending: isPending});
   });
   var paperTotal = Number(E.paper.totalMarks || 0);
   var totFor = paperTotal > 0 ? paperTotal : total;
@@ -1134,7 +1278,7 @@ function submitExam(){
     answers: E.sel, reviewed: E.rev,
     createdAt: firebase.firestore.FieldValue.serverTimestamp()
   }).then(function(){
-    renderResult(score, totFor, pct, answered, timeTaken, pending);
+    renderResult(score, totFor, pct, answered, timeTaken, pending, review);
     refreshAll();
   }).catch(function(e){
     E.submitting = false;
@@ -1142,7 +1286,7 @@ function submitExam(){
   });
 }
 
-function renderResult(score, total, pct, answered, timeTaken, pending){
+function renderResult(score, total, pct, answered, timeTaken, pending, review){
   var E = S.exam, p = E.paper;
   $('examTitle').textContent = 'Results — ' + (p.code || '');
   $('examQcard').innerHTML =
@@ -1156,6 +1300,19 @@ function renderResult(score, total, pct, answered, timeTaken, pending){
       '<div class="sumcard"><div class="v">'+E.qs.length+'</div><div class="k">Questions</div></div>'+
     '</div>'+
     (pending ? '<div class="empty" style="background:#fef3c7;border-color:#f3d18b;text-align:left;">⏳ <b>Manual marking pending.</b> Constructed-response answers will be marked by your tutor; the score above is the auto-marked objective-test score.</div>' : '')+
+    '<h3 style="margin:20px 0 10px;">Question Review</h3>'+
+    (review || []).map(function(r){
+      var verdict, cls;
+      if(r.pending){ verdict = '⏳ pending manual marking'; cls = ''; }
+      else { verdict = r.gained + '/' + r.max + (r.max > 0 && r.gained >= r.max ? ' ✓' : ' ✗'); cls = (r.max > 0 && r.gained >= r.max) ? 'rev-ok' : 'rev-bad'; }
+      return '<div class="rev-item">'+
+        '<div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;"><strong>Q'+r.num+' · Section '+esc(r.section)+' · '+esc(r.type)+'</strong><span class="'+cls+'">'+verdict+'</span></div>'+
+        (r.main ? '<div style="font-weight:700;color:var(--navy);margin:6px 0;white-space:pre-wrap;">'+esc(r.main)+'</div>' : '')+
+        '<div class="small" style="margin-top:6px;"><b>Your answer:</b> '+esc(r.given || '—')+'</div>'+
+        (r.pending ? '' : '<div class="small"><b>Correct:</b> '+esc(r.correct || '—')+'</div>')+
+        (r.qtext ? '<div class="small" style="margin-top:4px;color:#9ca3af;">'+esc(String(r.qtext).slice(0,180))+'</div>' : '')+
+      '</div>';
+    }).join('')+
     '<div style="text-align:center;margin-top:18px;"><button class="btn btn-primary" onclick="VP.closeExam()">Back to Manager</button></div>';
   $('navGrid').innerHTML = '';
   $('navCount').textContent = '';
