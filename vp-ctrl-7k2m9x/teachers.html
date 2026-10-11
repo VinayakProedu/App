@@ -71,6 +71,13 @@ a{text-decoration:none;color:inherit;}
 .hint{font-size:.85rem;color:var(--muted);line-height:1.6;background:#f8fafc;border:1px solid #e5e7eb;border-radius:12px;padding:12px 14px;margin-bottom:14px;}
 @media(max-width:900px){.app-sidebar{width:100%;height:auto;position:relative;}.app-main{margin-left:0;}.app-grid-2{grid-template-columns:1fr;}.app-shell{flex-direction:column;}}
 </style>
+<style>
+/* Sidebar removed: full-width clean layout */
+.app-sidebar{display:none !important;}
+.app-main{margin-left:0 !important;}
+@media(max-width:900px){.app-main{margin-left:0 !important;}}
+</style>
+<base target="_blank">
 </head>
 <body>
 
@@ -87,28 +94,12 @@ a{text-decoration:none;color:inherit;}
 </div>
 
 <div class="app-shell hidden" id="appShell">
-  <aside class="app-sidebar">
-    <div class="app-brand">
-      <img src="https://pasteimg.com/images/2026/03/31/WhatsApp-Image-2026-03-19-at-6.49.19-PM.jpg" alt="Vinayak ProEdu">
-      <div><h3>Vinayak ProEdu</h3><p>Admin Panel</p></div>
-    </div>
-    <nav class="app-menu">
-      <a href="index.html">📊 Dashboard</a>
-      <a href="students.html">👥 Students</a>
-      <a href="teachers.html" class="active"><span>👨‍🏫</span> Teachers</a>
-      <a href="tests.html">📝 Mocks</a>
-      <a href="lectures.html">🎬 Lectures</a>
-      <a href="live.html">🔴 Live Classes</a>
-      <a href="leaderboard.html">🏆 Leaderboard</a>
-      <a href="doubts.html">💬 Doubts</a>
-      <a href="announcements.html">📢 Announcements</a>
-    </nav>
-  </aside>
+  
 
   <main class="app-main">
     <div class="app-topbar">
       <div><h1 class="app-title">Manage Teachers</h1><div class="app-sub">Create teacher roles and assign their subjects</div></div>
-      <button class="ghost-btn" onclick="location.href='index.html'" type="button">← Dashboard</button>
+      <button class="ghost-btn" onclick="__vpToDash()" type="button">← Dashboard</button>
     </div>
 
     <div class="hint">🪜 <b>How to add a teacher:</b><br>
@@ -324,6 +315,13 @@ if ('serviceWorker' in navigator) {
     if(appEl){ appEl.classList.remove('hidden'); appEl.style.display=''; }
   }catch(e){}
 })();
+</script>
+<script>
+/* Back to dashboard = end session, ask password again */
+window.__vpToDash = function(){
+  try{ localStorage.removeItem('adminUnlocked'); sessionStorage.removeItem('adminUnlocked'); }catch(e){}
+  location.href = 'index.html';
+};
 </script>
 </body>
 </html>
