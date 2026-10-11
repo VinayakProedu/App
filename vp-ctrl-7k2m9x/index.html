@@ -8,7 +8,7 @@
 <meta name="permissions-policy" content="camera=(), microphone=(), geolocation=()">
 <link rel="manifest" href="./manifest.json">
 <meta name="theme-color" content="#0D1B40">
-<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 
 <title>Dashboard | Vinayak ProEdu Admin</title>
@@ -18,82 +18,62 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --navy:#0D1B40; --navy-mid:#1a2e5e; --blue:#1e3c72; --gold:#C9922A; --gold-lt:#E8AA48;
-  --amber:#F5C04A; --ink:#1A1A2E; --muted:#6B7280; --smoke:#EFF1F6; --white:#FFFFFF;
+  --navy:#0D1B40; --blue:#1e3c72; --gold:#C9922A; --gold-lt:#E8AA48;
+  --ink:#1A1A2E; --muted:#6B7280;
   --shadow-sm:0 4px 20px rgba(13,27,64,0.08); --shadow-md:0 12px 45px rgba(13,27,64,0.14);
-  --r-sm:10px; --r-md:16px; --r-lg:24px;
 }
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;font-size:16px;}
-body{font-family:'DM Sans',sans-serif;color:var(--ink);background:#f5f7fb;line-height:1.65;overflow-x:hidden;}
-img{max-width:100%;display:block;}
+body{font-family:'DM Sans',sans-serif;color:var(--ink);background:#f5f7fb;line-height:1.65;min-height:100vh;}
 a{text-decoration:none;color:inherit;}
-h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
+h1,h2,h3{font-family:'Playfair Display',serif;}
 
 /* Login */
 .login-wrap{position:fixed;inset:0;z-index:9999;background:linear-gradient(135deg,var(--navy) 0%,var(--blue) 100%);display:flex;align-items:center;justify-content:center;padding:20px;}
-.login-box{width:min(420px,92vw);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:var(--r-lg);padding:clamp(32px,6vw,48px);backdrop-filter:blur(20px);box-shadow:0 40px 100px rgba(0,0,0,0.4);}
-.login-box h2{font-family:'Playfair Display',serif;color:#fff;font-size:1.6rem;margin-bottom:6px;text-align:center;}
+.login-box{width:min(420px,92vw);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:24px;padding:clamp(32px,6vw,48px);backdrop-filter:blur(20px);box-shadow:0 40px 100px rgba(0,0,0,0.4);}
+.login-box h2{color:#fff;font-size:1.6rem;margin-bottom:6px;text-align:center;font-family:'Playfair Display',serif;}
 .login-box p{color:rgba(255,255,255,0.55);font-size:0.9rem;text-align:center;margin-bottom:28px;}
 .login-field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;}
 .login-field label{font-size:0.74rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.65);}
-.login-field input{width:100%;padding:13px 16px;background:rgba(255,255,255,0.09);border:1px solid rgba(255,255,255,0.14);border-radius:var(--r-sm);color:#fff;font-size:0.95em;font-family:'DM Sans',sans-serif;transition:all 0.25s;}
+.login-field input{width:100%;padding:13px 16px;background:rgba(255,255,255,0.09);border:1px solid rgba(255,255,255,0.14);border-radius:10px;color:#fff;font-size:0.95em;font-family:inherit;}
 .login-field input::placeholder{color:rgba(255,255,255,0.32);}
-.login-field input:focus{outline:none;border-color:rgba(201,146,42,0.6);background:rgba(255,255,255,0.13);box-shadow:0 0 0 3px rgba(201,146,42,0.15);}
-.login-btn{width:100%;padding:15px;border-radius:50px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--gold),var(--gold-lt));color:var(--navy);font-size:1em;font-weight:700;font-family:'DM Sans',sans-serif;box-shadow:0 8px 28px rgba(201,146,42,0.35);transition:all 0.3s;}
-.login-btn:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(201,146,42,0.5);}
+.login-field input:focus{outline:none;border-color:rgba(201,146,42,0.6);}
+.login-btn{width:100%;padding:15px;border-radius:50px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--gold),var(--gold-lt));color:var(--navy);font-size:1em;font-weight:700;font-family:inherit;}
 .login-status{margin-top:12px;font-size:0.9rem;font-weight:700;text-align:center;min-height:22px;}
 .login-status.error{color:#fca5a5;}
 
-/* App Shell */
-.app-shell{display:flex;width:100%;min-height:100vh;}
-.app-sidebar{width:260px;background:var(--navy);color:#fff;padding:18px;overflow:auto;flex-shrink:0;position:fixed;height:100vh;left:0;top:0;z-index:100;}
-.app-brand{display:flex;align-items:center;gap:10px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px solid rgba(255,255,255,0.08);}
-.app-brand img{width:40px;height:40px;border-radius:50%;border:2px solid var(--gold);object-fit:cover;}
-.app-brand h3{font-family:'Playfair Display',serif;font-size:1.05rem;margin:0;color:#fff;}
-.app-brand p{font-size:0.72rem;letter-spacing:1.4px;text-transform:uppercase;color:rgba(232,170,72,0.8);margin-top:2px;}
-.app-menu{display:grid;gap:6px;}
-.app-menu a,.app-menu button{width:100%;border:none;background:transparent;color:#fff;padding:11px 14px;border-radius:10px;cursor:pointer;text-align:left;font-weight:600;font-size:0.9rem;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:10px;transition:all 0.2s;text-decoration:none;}
-.app-menu a:hover,.app-menu button:hover,.app-menu a.active,.app-menu button.active{background:var(--gold);color:var(--navy);}
-.app-main{flex:1;margin-left:260px;padding:24px 28px;overflow:auto;min-height:100vh;}
+/* Centered hub */
+.hub{max-width:860px;margin:0 auto;padding:clamp(24px,6vh,64px) 20px 60px;display:flex;flex-direction:column;align-items:center;}
+.hub-brand{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.hub-brand img{width:52px;height:52px;border-radius:50%;border:2px solid var(--gold);object-fit:cover;}
+.hub-brand h1{font-size:1.5rem;color:var(--navy);}
+.hub-brand p{font-size:0.72rem;letter-spacing:1.4px;text-transform:uppercase;color:var(--gold);}
+.hub-sub{color:var(--muted);font-size:0.9rem;margin-bottom:26px;text-align:center;}
 
-/* Topbar */
-.app-topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid #e5e7eb;}
-.app-title{font-family:'Playfair Display',serif;color:var(--navy);font-size:1.6rem;margin:0;}
-.app-sub{color:var(--muted);font-size:0.9rem;}
+/* Search */
+.hub-search{width:min(520px,100%);position:relative;margin-bottom:36px;}
+.hub-search input{width:100%;padding:15px 20px 15px 48px;border-radius:999px;border:1px solid #e5e7eb;background:#fff;font-size:0.98rem;font-family:inherit;color:var(--ink);box-shadow:var(--shadow-sm);transition:all .2s;}
+.hub-search input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,146,42,0.15),var(--shadow-sm);}
+.hub-search span{position:absolute;left:18px;top:50%;transform:translateY(-50%);font-size:1.1rem;opacity:.55;pointer-events:none;}
+.hub-count{font-size:0.82rem;color:var(--muted);margin:-24px 0 26px;min-height:18px;}
 
-/* Metric Card */
-.metric-card{background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff;border-radius:20px;padding:28px;text-align:center;box-shadow:var(--shadow-md);margin-bottom:24px;max-width:320px;}
-.metric-card .n{font-family:'Playfair Display',serif;font-size:3rem;font-weight:800;line-height:1;}
-.metric-card .l{font-size:0.85rem;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.6);margin-top:8px;}
-
-/* Quick Link Grid */
-.link-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;}
-.link-card{background:#fff;border:1px solid #e5e7eb;border-radius:18px;padding:24px;text-align:center;cursor:pointer;transition:all 0.25s;position:relative;overflow:hidden;text-decoration:none;display:block;}
+/* Tiles */
+.link-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px;width:100%;}
+.link-card{background:#fff;border:1px solid #e5e7eb;border-radius:18px;padding:28px 20px;text-align:center;cursor:pointer;transition:all 0.25s;position:relative;overflow:hidden;display:block;}
 .link-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);border-color:var(--gold);}
 .link-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold-lt));transform:scaleX(0);transform-origin:left;transition:transform 0.3s;}
 .link-card:hover::after{transform:scaleX(1);}
-.link-icon{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,var(--navy),var(--blue));display:grid;place-items:center;margin:0 auto 14px;color:#fff;font-size:1.4rem;}
+.link-icon{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,var(--navy),var(--blue));display:grid;place-items:center;margin:0 auto 14px;font-size:1.4rem;}
 .link-name{font-family:'Playfair Display',serif;color:var(--navy);font-size:1.05rem;font-weight:700;margin-bottom:4px;}
 .link-desc{color:var(--muted);font-size:0.82rem;}
+.link-card.hide{display:none;}
+.no-results{padding:24px;border:1px dashed #d9e2ef;border-radius:14px;background:#fbfdff;color:#5d6e83;text-align:center;width:100%;}
 
-/* Scrollbar */
-::-webkit-scrollbar{width:6px;}
-::-webkit-scrollbar-track{background:transparent;}
-::-webkit-scrollbar-thumb{background:rgba(13,27,64,0.2);border-radius:10px;}
-
-/* Responsive */
-@media(max-width:900px){
-  .app-sidebar{width:100%;height:auto;position:relative;}
-  .app-main{margin-left:0;}
-  .app-shell{flex-direction:column;}
-}
-@media(max-width:640px){
-  .app-main{padding:16px;}
-  .link-grid{grid-template-columns:1fr 1fr;}
-}
+.hub-foot{margin-top:36px;display:flex;gap:10px;align-items:center;}
+.logout-btn{border:none;border-radius:999px;padding:10px 22px;font-weight:700;cursor:pointer;font-family:inherit;font-size:0.85rem;background:#fef2f2;color:#b42318;border:1px solid #fecaca;}
+.logout-btn:hover{background:#fee2e2;}
 .hidden{display:none !important;}
 </style>
+<base target="_blank">
 </head>
 <body>
 
@@ -106,88 +86,72 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
     <div class="login-field"><label>Password</label><input type="password" id="adminPassword" placeholder="••••••••"></div>
     <button class="login-btn" id="adminLoginBtn" type="button">Login as Admin</button>
     <div class="login-status" id="loginStatus"></div>
-    <div style="text-align:center;margin-top:10px;"><a style="color:#E8AA48;font-size:.85rem;cursor:pointer;font-weight:700;" onclick="window.__vpResetPw && window.__vpResetPw()">Forgot password?</a></div>
   </div>
 </div>
 
-<!-- APP -->
-<div class="app-shell hidden" id="appShell">
-  <aside class="app-sidebar">
-    <div class="app-brand">
-      <img src="https://pasteimg.com/images/2026/03/31/WhatsApp-Image-2026-03-19-at-6.49.19-PM.jpg" alt="Vinayak ProEdu">
-      <div>
-        <h3>Vinayak ProEdu</h3>
-        <p>Admin Panel</p>
-      </div>
+<!-- APP : only the white tiles + search -->
+<div class="hub hidden" id="appShell">
+  <div class="hub-brand">
+    <img src="https://pasteimg.com/images/2026/03/31/WhatsApp-Image-2026-03-19-at-6.49.19-PM.jpg" alt="Vinayak ProEdu">
+    <div>
+      <h1>Vinayak ProEdu</h1>
+      <p>Admin Panel</p>
     </div>
-    <nav class="app-menu">
-      <a href="index.html" target="_self" class="active">📊 Dashboard</a>
-      <a href="students.html" target="_self">👥 Students</a>
-      <a href="tests.html" target="_self">📝 Tests</a>
-      <a href="lectures.html" target="_self">🎬 Lectures</a>
-      <a href="live.html" target="_self">🔴 Live Classes</a>
-      <a href="leaderboard.html" target="_self">🏆 Leaderboard</a>
-      <a href="doubts.html" target="_self">💬 Doubts</a>
-      <a href="announcements.html"><span>📢</span> Announcements</a>
-      <button id="logoutBtn" type="button">🚪 Logout</button>
-    </nav>
-  </aside>
+  </div>
 
-  <main class="app-main">
-    <div class="app-topbar">
-      <div>
-        <h1 class="app-title">Dashboard</h1>
-        <div class="app-sub">Welcome back, Admin</div>
-      </div>
-      <button class="ghost-btn" id="closeBtn" type="button">← Dashboard</button>
-    </div>
+  <div class="hub-search">
+    <span>🔍</span>
+    <input type="search" id="hubSearch" placeholder="Search — students, tests, lectures, doubts..." autocomplete="off">
+  </div>
+  <div class="hub-count" id="hubCount"></div>
 
-    <!-- Total Students -->
-    <div class="metric-card">
-      <div class="n" id="studentCount">0</div>
-      <div class="l">Total Students</div>
-    </div>
+  <div class="link-grid" id="linkGrid">
+    <a href="students.html" class="link-card" data-keys="students batches enrolments access manage">
+      <div class="link-icon">👥</div>
+      <div class="link-name">Students</div>
+      <div class="link-desc">Manage enrolments & access</div>
+    </a>
+    <a href="teachers.html" class="link-card" data-keys="teachers faculty assign subjects roles">
+      <div class="link-icon">👨‍🏫</div>
+      <div class="link-name">Teachers</div>
+      <div class="link-desc">Assign subjects &amp; roles</div>
+    </a>
+    <a href="tests.html" class="link-card" data-keys="tests mocks papers questions exams">
+      <div class="link-icon">📝</div>
+      <div class="link-name">Tests</div>
+      <div class="link-desc">Create papers & questions</div>
+    </a>
+    <a href="lectures.html" class="link-card" data-keys="lectures videos files upload library">
+      <div class="link-icon">🎬</div>
+      <div class="link-name">Lectures</div>
+      <div class="link-desc">Upload videos & files</div>
+    </a>
+    <a href="live.html" class="link-card" data-keys="live classes meetings schedule zoom">
+      <div class="link-icon">🔴</div>
+      <div class="link-name">Live Classes</div>
+      <div class="link-desc">Schedule meetings</div>
+    </a>
+    <a href="leaderboard.html" class="link-card" data-keys="leaderboard rankings batch toppers">
+      <div class="link-icon">🏆</div>
+      <div class="link-name">Leaderboard</div>
+      <div class="link-desc">Batch-wise rankings</div>
+    </a>
+    <a href="doubts.html" class="link-card" data-keys="doubts queries reply students">
+      <div class="link-icon">💬</div>
+      <div class="link-name">Doubts</div>
+      <div class="link-desc">Reply to students</div>
+    </a>
+    <a href="announcements.html" class="link-card" data-keys="announcements publish notify notice">
+      <div class="link-icon">📢</div>
+      <div class="link-name">Announcements</div>
+      <div class="link-desc">Publish to all students</div>
+    </a>
+  </div>
+  <div class="no-results hidden" id="noResults">No matching module — try another search.</div>
 
-    <!-- Quick Links -->
-    <h2 style="font-family:'Playfair Display',serif;color:var(--navy);font-size:1.3rem;margin-bottom:16px;">Quick Links</h2>
-    <div class="link-grid">
-      <a href="students.html" target="_self" class="link-card">
-        <div class="link-icon">👥</div>
-        <div class="link-name">Students</div>
-        <div class="link-desc">Manage enrolments & access</div>
-      </a>
-      <a href="teachers.html" target="_self" class="link-card">
-        <div class="link-icon">👨‍🏫</div>
-        <div class="link-name">Teachers</div>
-        <div class="link-desc">Assign subjects &amp; roles</div>
-      </a>
-      <a href="tests.html" target="_self" class="link-card">
-        <div class="link-icon">📝</div>
-        <div class="link-name">Tests</div>
-        <div class="link-desc">Create papers & questions</div>
-      </a>
-      <a href="lectures.html" target="_self" class="link-card">
-        <div class="link-icon">🎬</div>
-        <div class="link-name">Lectures</div>
-        <div class="link-desc">Upload videos & files</div>
-      </a>
-      <a href="live.html" target="_self" class="link-card">
-        <div class="link-icon">🔴</div>
-        <div class="link-name">Live Classes</div>
-        <div class="link-desc">Schedule meetings</div>
-      </a>
-      <a href="leaderboard.html" target="_self" class="link-card">
-        <div class="link-icon">🏆</div>
-        <div class="link-name">Leaderboard</div>
-        <div class="link-desc">Batch-wise rankings</div>
-      </a>
-      <a href="doubts.html" target="_self" class="link-card">
-        <div class="link-icon">💬</div>
-        <div class="link-name">Doubts</div>
-        <div class="link-desc">Reply to students</div>
-      </a>
-    </div>
-  </main>
+  <div class="hub-foot">
+    <button class="logout-btn" id="logoutBtn" type="button">🚪 Logout</button>
+  </div>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
@@ -199,25 +163,20 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
 <script>
 (function(){
   const ADMIN_EMAIL = "vinayakproedu@gmail.com";
-
-  // Firebase
-  
   const auth = firebase.auth();
   const db = firebase.firestore();
 
-  // Auth
   document.getElementById('adminLoginBtn').addEventListener('click', async () => {
     const email = (document.getElementById('adminEmail').value || '').trim();
     const pw = document.getElementById('adminPassword').value;
-    if(!email || !pw){ document.getElementById('loginStatus').textContent = 'Email and password required.'; document.getElementById('loginStatus').className = 'login-status error'; return; }
+    const st = document.getElementById('loginStatus');
+    if(!email || !pw){ st.textContent = 'Email and password required.'; st.className = 'login-status error'; return; }
     try{
       const cred = await auth.signInWithEmailAndPassword(email, pw);
-      // Teachers are allowed — onAuthStateChanged (below) routes them to the teacher view.
-      // Only reject if Firebase itself says the login is bad.
       if(!cred.user){ throw new Error('Login failed'); }
       sessionStorage.setItem('adminUnlocked', '1'); localStorage.setItem('adminUnlocked', '1');
       showApp();
-    }catch(err){ document.getElementById('loginStatus').textContent = err.message; document.getElementById('loginStatus').className = 'login-status error'; }
+    }catch(err){ st.textContent = err.message; st.className = 'login-status error'; }
   });
 
   document.getElementById('logoutBtn').addEventListener('click', async () => {
@@ -226,47 +185,42 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
     location.reload();
   });
 
-  document.getElementById('closeBtn').addEventListener('click', () => {
-    window.location.href = '../index.html';
-  });
-
   auth.onAuthStateChanged(async user => {
-    if(user && user.email === ADMIN_EMAIL && (sessionStorage.getItem('adminUnlocked') === '1' || localStorage.getItem('adminUnlocked') === '1')){
+    const unlocked = sessionStorage.getItem('adminUnlocked') === '1' || localStorage.getItem('adminUnlocked') === '1';
+    if(user && user.email === ADMIN_EMAIL && unlocked){
       showApp();
       return;
     }
-    if(user){
-      // Teacher? (role == 'teacher' in users doc)
-      try{
-        const doc = await db.collection('users').doc(user.uid).get();
-        if(doc.exists && doc.data().role === 'teacher'){
-          document.getElementById('loginWrap').classList.add('hidden');
-          document.getElementById('appShell').classList.remove('hidden');
-          const subs = doc.data().assignedSubjects || [];
-          document.querySelectorAll('.link-card').forEach(c => {
-            if(c.getAttribute('href') === 'students.html' || c.getAttribute('href') === 'teachers.html') c.style.display = 'none';
-          });
-          document.getElementById('appSub').textContent = 'Teacher mode — subjects: ' + (subs.join(', ') || 'none assigned yet');
-          return;
-        }
-      }catch(e){}
-      await auth.signOut();
-    }
-    var _lw=document.getElementById('loginWrap');if(_lw){_lw.classList.remove('hidden');_lw.style.display='';}
+    if(user){ await auth.signOut(); }
+    var lw = document.getElementById('loginWrap');
+    lw.classList.remove('hidden'); lw.style.display = '';
     document.getElementById('appShell').classList.add('hidden');
   });
 
   async function showApp(){
     document.getElementById('loginWrap').classList.add('hidden');
     document.getElementById('appShell').classList.remove('hidden');
-    // Load total students
     try{
       const snap = await db.collection('users').where('role','==','student').get();
-      document.getElementById('studentCount').textContent = snap.size;
-    }catch(e){
-      document.getElementById('studentCount').textContent = '—';
-    }
+      document.getElementById('hubCount').textContent = snap.size + ' students enrolled';
+    }catch(e){}
   }
+
+  /* Live tile search */
+  const searchInput = document.getElementById('hubSearch');
+  const cards = [...document.querySelectorAll('.link-card')];
+  const noResults = document.getElementById('noResults');
+  searchInput.addEventListener('input', () => {
+    const q = searchInput.value.trim().toLowerCase();
+    let visible = 0;
+    cards.forEach(c => {
+      const hay = (c.textContent + ' ' + (c.dataset.keys || '')).toLowerCase();
+      const show = !q || hay.includes(q);
+      c.classList.toggle('hide', !show);
+      if(show) visible++;
+    });
+    noResults.classList.toggle('hidden', visible > 0);
+  });
 })();
 </script>
 <script>
@@ -276,7 +230,6 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('../sw.js').catch(function(e){ console.warn('SW:', e); });
   });
 }
-/* One-tap PWA install button */
 (function(){
   var deferredPrompt = null;
   window.addEventListener('beforeinstallprompt', function(e){
@@ -295,17 +248,15 @@ if ('serviceWorker' in navigator) {
     document.body.appendChild(b);
   }
   window.__vpShowInstall = showBtn;
-  /* If already installed, the prompt never fires - hide nothing, just don't show */
 })();
 </script>
 <script>
-/* Instant session restore: pages never flash the login box (auth verifies in background) */
 (function(){
   try{
     var ok = localStorage.getItem('adminUnlocked')==='1' || sessionStorage.getItem('adminUnlocked')==='1';
     if(!ok) return;
-    var loginEl = document.getElementById('loginWrap') || document.getElementById('loginScreen');
-    var appEl = document.getElementById('appShell') || document.getElementById('adminApp');
+    var loginEl = document.getElementById('loginWrap');
+    var appEl = document.getElementById('appShell');
     if(loginEl){ loginEl.classList.add('hidden'); loginEl.style.display='none'; }
     if(appEl){ appEl.classList.remove('hidden'); appEl.style.display=''; }
   }catch(e){}
