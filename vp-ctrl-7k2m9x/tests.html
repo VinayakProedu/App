@@ -4,8 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="permissions-policy" content="camera=(), microphone=(), geolocation=()">
+<link rel="manifest" href="./manifest.json">
 <meta name="theme-color" content="#0D1B40">
-<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+
 <title>Vinayak ProEdu | Mock Exam Manager</title>
 <link rel="icon" type="image/png" href="https://pasteimg.com/images/2026/03/31/WhatsApp-Image-2026-03-19-at-6.49.19-PM.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,1326 +20,259 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
 <script src="../firebase-config.js"></script>
+
 <style>
 :root{
-  --navy:#0D1B40; --blue:#1e3c72; --gold:#C9922A; --gold-lt:#E8AA48;
-  --ink:#1A1A2E; --muted:#6B7280; --border:#e5e7eb;
+  --navy:#0D1B40; --navy-mid:#1a2e5e; --blue:#1e3c72; --gold:#C9922A; --gold-lt:#E8AA48;
+  --amber:#F5C04A; --ink:#1A1A2E; --muted:#6B7280; --smoke:#EFF1F6; --white:#FFFFFF;
   --shadow-sm:0 4px 20px rgba(13,27,64,0.08); --shadow-md:0 12px 45px rgba(13,27,64,0.14);
+  --r-sm:10px; --r-md:16px; --r-lg:24px;
+  --card:#ffffff; --border:#e5e7eb; --text:#15223b;
 }
-*{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'DM Sans',sans-serif;color:var(--ink);background:#f5f7fb;line-height:1.65;}
-h1,h2,h3{font-family:'Playfair Display',serif;}
-button{font-family:inherit;cursor:pointer;}
-input,select,textarea{width:100%;padding:11px 13px;border:1px solid var(--border);border-radius:10px;background:#fff;color:var(--ink);font:inherit;font-size:.93rem;}
-input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,146,42,.12);}
-textarea{min-height:96px;resize:vertical;}
-label{display:block;font-size:.72rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin:0 0 5px;}
-.hidden{display:none !important;}
-.small{font-size:.84rem;color:var(--muted);}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;font-size:16px;}
+body{font-family:'DM Sans',sans-serif;color:var(--ink);background:#f5f7fb;line-height:1.65;overflow-x:hidden;}
+img{max-width:100%;display:block;}
+a{text-decoration:none;color:inherit;}
+h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
 
 /* Login */
-.login-wrap{position:fixed;inset:0;z-index:9999;background:linear-gradient(135deg,var(--navy),var(--blue));display:flex;align-items:center;justify-content:center;padding:20px;}
-.login-box{width:min(420px,92vw);background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.13);border-radius:24px;padding:clamp(30px,6vw,46px);backdrop-filter:blur(18px);box-shadow:0 40px 100px rgba(0,0,0,.4);}
-.login-box h2{color:#fff;font-size:1.6rem;text-align:center;margin-bottom:6px;}
-.login-box>p{color:rgba(255,255,255,.55);font-size:.9rem;text-align:center;margin-bottom:26px;}
-.lf{margin-bottom:15px;}
-.lf label{color:rgba(255,255,255,.65);margin-bottom:6px;}
-.lf input{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.15);color:#fff;}
-.lf input::placeholder{color:rgba(255,255,255,.32);}
-.login-btn{width:100%;padding:14px;border-radius:50px;border:none;background:linear-gradient(135deg,var(--gold),var(--gold-lt));color:var(--navy);font-size:1em;font-weight:700;margin-top:4px;}
-.login-status{margin-top:12px;font-size:.9rem;font-weight:700;text-align:center;min-height:20px;color:#fca5a5;}
+.login-wrap{position:fixed;inset:0;z-index:9999;background:linear-gradient(135deg,var(--navy) 0%,var(--blue) 100%);display:flex;align-items:center;justify-content:center;padding:20px;}
+.login-box{width:min(420px,92vw);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:var(--r-lg);padding:clamp(32px,6vw,48px);backdrop-filter:blur(20px);box-shadow:0 40px 100px rgba(0,0,0,0.4);}
+.login-box h2{font-family:'Playfair Display',serif;color:#fff;font-size:1.6rem;margin-bottom:6px;text-align:center;}
+.login-box p{color:rgba(255,255,255,0.55);font-size:0.9rem;text-align:center;margin-bottom:28px;}
+.login-field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;}
+.login-field label{font-size:0.74rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.65);}
+.login-field input{width:100%;padding:13px 16px;background:rgba(255,255,255,0.09);border:1px solid rgba(255,255,255,0.14);border-radius:var(--r-sm);color:#fff;font-size:0.95em;font-family:'DM Sans',sans-serif;transition:all 0.25s;}
+.login-field input::placeholder{color:rgba(255,255,255,0.32);}
+.login-field input:focus{outline:none;border-color:rgba(201,146,42,0.6);background:rgba(255,255,255,0.13);box-shadow:0 0 0 3px rgba(201,146,42,0.15);}
+.login-btn{width:100%;padding:15px;border-radius:50px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--gold),var(--gold-lt));color:var(--navy);font-size:1em;font-weight:700;font-family:'DM Sans',sans-serif;box-shadow:0 8px 28px rgba(201,146,42,0.35);transition:all 0.3s;}
+.login-btn:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(201,146,42,0.5);}
+.login-status{margin-top:12px;font-size:0.9rem;font-weight:700;text-align:center;min-height:22px;}
+.login-status.error{color:#fca5a5;}
 
-/* Layout */
-.app-main{max-width:1180px;margin:0 auto;padding:20px 22px 80px;}
-.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--border);}
-.topbar h1{color:var(--navy);font-size:1.55rem;}
-.topbar .sub{color:var(--muted);font-size:.88rem;}
-.topbar-actions{display:flex;gap:8px;flex-wrap:wrap;}
-.btn{border:none;border-radius:10px;padding:10px 16px;font-weight:700;font-size:.88rem;display:inline-flex;align-items:center;gap:6px;text-decoration:none;transition:all .15s;}
-.btn:hover{transform:translateY(-1px);opacity:.94;}
-.btn-primary{background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff;}
-.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold-lt));color:var(--navy);}
-.btn-ghost{background:#eef4ff;color:var(--blue);}
-.btn-danger{background:#fef2f2;color:#b91c1c;border:1px solid #fecaca;}
-.btn-sm{padding:6px 11px;font-size:.78rem;}
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-@media(max-width:900px){.grid-2{grid-template-columns:1fr;}}
-.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
-@media(max-width:700px){.grid-3{grid-template-columns:1fr;}}
-.card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:20px;box-shadow:var(--shadow-sm);margin-bottom:18px;}
-.card h2{font-size:1.18rem;color:var(--navy);margin-bottom:4px;}
-.card .sub{margin-bottom:14px;}
-.section-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px;}
-.frow{margin-bottom:13px;}
-.frow-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-@media(max-width:640px){.frow-row{grid-template-columns:1fr;}}
-.stat{background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff;border-radius:14px;padding:16px;text-align:center;}
-.stat .n{font-size:2rem;font-weight:900;line-height:1;}
-.stat .l{font-size:.72rem;letter-spacing:1px;text-transform:uppercase;color:#d7e6ff;margin-top:5px;}
-.status{min-height:20px;font-size:.88rem;font-weight:700;margin-top:8px;}
-.status.error{color:#b42318;}
-.status.ok{color:#166534;}
-.empty{padding:18px;border:1px dashed #d9e2ef;border-radius:12px;background:#fbfdff;color:#5d6e83;text-align:center;font-size:.9rem;}
-.list{display:grid;gap:10px;}
-.item{background:#fff;border:1px solid var(--border);border-radius:14px;padding:16px;box-shadow:var(--shadow-sm);}
-.badge{display:inline-block;padding:5px 10px;border-radius:999px;background:#eef4ff;color:var(--navy);font-size:.73rem;font-weight:800;margin:0 6px 6px 0;}
-.badge.warn{background:#fef3c7;color:#92400e;}
-.badge.okb{background:#d1fae5;color:#166534;}
-.opt-row{display:grid;grid-template-columns:36px 1fr auto;gap:8px;align-items:center;margin-bottom:8px;}
-.opt-num{width:36px;height:36px;border-radius:9px;background:#eef4ff;color:var(--navy);display:flex;align-items:center;justify-content:center;font-weight:900;}
-.pill{display:inline-flex;align-items:center;gap:6px;background:#f1f5ff;border:1px solid #dce4fb;color:var(--navy);padding:6px 11px;border-radius:999px;font-size:.78rem;font-weight:700;margin:3px 6px 3px 0;}
-.qtype-note{font-size:.8rem;color:var(--muted);background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin-bottom:12px;}
-details.grp{border:1px solid var(--border);border-radius:14px;background:#fff;box-shadow:var(--shadow-sm);overflow:hidden;}
-details.grp>summary{list-style:none;cursor:pointer;padding:13px 16px;font-weight:900;color:var(--navy);display:flex;justify-content:space-between;gap:10px;background:linear-gradient(180deg,#fff,#f8fbff);border-bottom:1px solid var(--border);}
-details.grp>summary::-webkit-details-marker{display:none;}
-.grp-body{display:grid;gap:10px;padding:14px;}
-details.grp[open]>summary{border-bottom:1px solid var(--border);}
+/* App Shell */
+.app-shell{display:flex;width:100%;min-height:100vh;}
+.app-sidebar{width:260px;background:var(--navy);color:#fff;padding:18px;overflow:auto;flex-shrink:0;position:fixed;height:100vh;left:0;top:0;z-index:100;}
+.app-brand{display:flex;align-items:center;gap:10px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px solid rgba(255,255,255,0.08);}
+.app-brand img{width:40px;height:40px;border-radius:50%;border:2px solid var(--gold);object-fit:cover;}
+.app-brand h3{font-family:'Playfair Display',serif;font-size:1.05rem;margin:0;color:#fff;}
+.app-brand p{font-size:0.72rem;letter-spacing:1.4px;text-transform:uppercase;color:rgba(232,170,72,0.8);margin-top:2px;}
+.app-menu{display:grid;gap:6px;}
+.app-menu a,.app-menu button{width:100%;border:none;background:transparent;color:#fff;padding:11px 14px;border-radius:10px;cursor:pointer;text-align:left;font-weight:600;font-size:0.9rem;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:10px;transition:all 0.2s;text-decoration:none;}
+.app-menu a:hover,.app-menu button:hover,.app-menu a.active,.app-menu button.active{background:var(--gold);color:var(--navy);}
+.app-main{flex:1;margin-left:260px;padding:24px 28px;overflow:auto;min-height:100vh;}
 
-/* role gating */
-body.student .admin-only{display:none !important;}
-.lockscreen{padding:30px;border:1px solid #fecaca;background:#fff5f5;border-radius:14px;text-align:center;}
-.scratch{position:fixed;right:18px;bottom:90px;width:300px;z-index:9600;background:#fffbe6;border:1px solid #e5d9a0;border-radius:14px;box-shadow:var(--shadow-md);padding:12px;}
-.calc{position:fixed;right:18px;bottom:90px;width:230px;z-index:9600;background:#111827;border-radius:14px;padding:12px;box-shadow:var(--shadow-md);}
-.calc input{width:100%;margin:0 0 8px;text-align:right;font-weight:800;background:#1f2937;color:#fff;border:1px solid #374151;}
-.calc .keys{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;}
-.calc .keys button{padding:9px 0;border:none;border-radius:8px;background:#374151;color:#fff;font-weight:800;}
-.calc .keys button.op{background:var(--gold);color:var(--navy);}
-.rev-item{border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:10px;background:#fff;}
-.rev-ok{color:#166534;font-weight:800;}
-.rev-bad{color:#b42318;font-weight:800;}
+/* Topbar */
+.app-topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid #e5e7eb;}
+.app-title{font-family:'Playfair Display',serif;color:var(--navy);font-size:1.6rem;margin:0;}
+.app-sub{color:var(--muted);font-size:0.9rem;}
+.role-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:rgba(255,255,255,0.08);color:var(--gold-lt);font-weight:800;font-size:0.82rem;margin-bottom:12px;}
 
-/* Logout (top right, fixed) */
-.logout-fixed{position:fixed;top:14px;right:16px;z-index:12000;}
+/* Content */
+.content{display:grid;gap:18px;}
+.view{display:none}
+.view.active{display:block}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.stat{background:linear-gradient(135deg,var(--navy) 0%, var(--blue) 100%);color:#fff;border-radius:16px;padding:16px;min-height:92px;}
+.stat .n{font-size:2rem;font-weight:900;line-height:1}
+.stat .l{margin-top:6px;font-size:.75rem;letter-spacing:1px;text-transform:uppercase;color:#d7e6ff}
+.small{color:#6B7280;font-size:.85rem;}
+.hidden{display:none !important;}
 
-/* Exam overlay */
-.overlay{position:fixed;inset:0;background:#f5f7fb;z-index:9000;overflow:auto;display:none;}
-.overlay.open{display:block;}
-.exam-top{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid var(--border);box-shadow:0 8px 22px rgba(15,23,42,.07);padding:12px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;}
-.exam-top h2{font-size:1rem;color:var(--navy);}
-.pillbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
-.timer{background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff;padding:8px 14px;border-radius:10px;font-weight:900;}
-.exam-body{max-width:900px;margin:0 auto;padding:22px 20px 140px;}
-.nav-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;margin-top:10px;}
-@media(max-width:640px){.nav-grid{grid-template-columns:repeat(5,1fr);}}
-.nav-btn{border:1px solid #dbe4f0;background:#eef4ff;padding:8px 0;border-radius:9px;font-weight:800;font-size:.84rem;}
-.nav-btn.answered{background:#d1fae5;border-color:#a7f3d0;}
-.nav-btn.review{background:#fef3c7;border-color:var(--gold);}
-.nav-btn.current{outline:2px solid var(--blue);}
-.qcard{background:#fff;border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow-sm);padding:20px;}
-.qhead{display:flex;justify-content:space-between;gap:10px;margin-bottom:12px;font-size:.85rem;color:var(--muted);font-weight:700;}
-.qmain{background:var(--navy);color:#fff;padding:14px 16px;border-radius:10px;font-weight:800;margin:12px 0;white-space:pre-wrap;}
-.qtext{white-space:pre-wrap;font-size:.98rem;margin-bottom:14px;}
-.option{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border:1px solid var(--border);border-radius:11px;margin:8px 0;background:#fff;}
-.option:hover{background:#f8fbff;}
-.option input{width:auto;margin-top:3px;}
-.qimg{max-width:100%;border-radius:12px;border:1px solid var(--border);margin:10px 0;}
-.fib-input{display:inline-block;min-width:130px;max-width:200px;padding:8px 10px;margin:0 4px;}
-.exam-actions{position:fixed;left:0;right:0;bottom:0;background:#111827;padding:12px 20px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;z-index:11;}
-.exam-actions .btn{min-width:120px;justify-content:center;}
-.sb-table{width:100%;border-collapse:collapse;margin:10px 0;}
-.sb-table th{background:#eef2f8;border:1px solid #dbe2ee;font-size:.78rem;padding:6px;color:var(--navy);}
-.sb-table td{border:1px solid #e2e8f0;padding:4px 6px;}
-.sb-table input,.sb-table select{margin:0;padding:8px;}
-.cr-grid{border-collapse:collapse;width:100%;min-width:480px;}
-.cr-grid th{background:#eef2f8;border:1px solid #dbe2ee;font-size:.75rem;padding:4px 6px;color:var(--navy);width:96px;}
-.cr-grid td{border:1px solid #e2e8f0;min-width:96px;height:28px;padding:3px 6px;font-size:.88rem;outline:none;}
-.cr-grid td:focus{background:#f8fbff;box-shadow:inset 0 0 0 2px rgba(30,60,114,.25);}
-.cr-word{min-height:200px;border:1px solid var(--border);border-radius:12px;padding:14px;background:#fff;outline:none;}
-.summary5{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin:14px 0;}
-@media(max-width:800px){.summary5{grid-template-columns:repeat(2,1fr);}}
-.sumcard{background:#fff;border:1px solid var(--border);border-radius:14px;padding:14px;text-align:center;}
-.sumcard .v{font-size:1.6rem;font-weight:900;color:var(--navy);}
-.sumcard .k{font-size:.72rem;text-transform:uppercase;letter-spacing:1px;color:var(--muted);}
-.modal-wrap{position:fixed;inset:0;background:rgba(15,23,42,.55);backdrop-filter:blur(4px);z-index:9500;display:none;align-items:center;justify-content:center;padding:18px;}
-.modal-wrap.open{display:flex;}
-.modal{background:#fff;border-radius:16px;box-shadow:0 24px 70px rgba(15,23,42,.3);padding:22px;width:min(560px,100%);max-height:88vh;overflow:auto;}
-.modal h3{color:var(--navy);margin-bottom:8px;}
-.mark-q{border:1px solid var(--border);border-radius:12px;padding:13px;margin-bottom:12px;background:#fbfdff;}
-.mark-ans{background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:10px;margin:9px 0;max-height:220px;overflow:auto;font-size:.9rem;}
+@media (max-width: 980px){
+  .app-main{margin-left:0;}
+  .app-sidebar{position:relative;height:auto;width:100%;}
+  .grid-3{grid-template-columns:1fr;}
+}
+@media (max-width: 640px){
+  .app-main{padding:14px}
+}
 </style>
+<base target="_blank">
 </head>
 <body>
 
-<!-- LOGIN (visible by default; hidden by JS only after auth verified) -->
+<!-- LOGIN -->
 <div class="login-wrap" id="loginWrap">
   <div class="login-box">
     <h2>Mock Exam Portal</h2>
-    <p>Admin access — Vinayak ProEdu</p>
-    <div class="lf"><label>Email</label><input type="email" id="loginEmail" placeholder="admin@email.com" autocomplete="username"></div>
-    <div class="lf"><label>Password</label><input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password"></div>
+    <p>Admin &amp; Student Access</p>
+    <div class="login-field"><label>Email</label><input type="email" id="loginEmail" placeholder="you@example.com"></div>
+    <div class="login-field"><label>Password</label><input type="password" id="loginPassword" placeholder="••••••••"></div>
     <button class="login-btn" id="loginBtn" type="button">Login</button>
     <div class="login-status" id="loginStatus"></div>
+    <div style="margin-top:14px;text-align:center;font-size:0.82rem;color:rgba(255,255,255,0.45);">
+      Admins use admin email. Students use any registered email.
+    </div>
   </div>
 </div>
 
 <!-- APP -->
-<div id="appShell" class="hidden">
-  <button class="btn btn-danger btn-sm logout-fixed" id="logoutBtn" type="button">🚪 Logout</button>
-  <div class="app-main">
-    <div class="topbar">
+<div class="app-shell hidden" id="appShell">
+  <aside class="app-sidebar">
+    <div class="app-brand">
+      <img src="https://pasteimg.com/images/2026/03/31/WhatsApp-Image-2026-03-19-at-6.49.19-PM.jpg" alt="Vinayak ProEdu">
       <div>
-        <h1>Mock Exam Manager</h1>
-        <div class="sub">Papers, questions &amp; attempts — all on one page</div>
-      </div>
-      <div class="topbar-actions">
-        <button class="btn btn-ghost" id="dashBtn" type="button">← Dashboard</button>
+        <h3>Vinayak ProEdu</h3>
+        <p id="roleText">Admin Panel</p>
       </div>
     </div>
-
-    <div class="grid-3 admin-only" style="margin-bottom:18px;">
-      <div class="stat"><div class="n" id="statPapers">0</div><div class="l">Papers</div></div>
-      <div class="stat"><div class="n" id="statQuestions">0</div><div class="l">Questions</div></div>
-      <div class="stat"><div class="n" id="statAttempts">0</div><div class="l">Attempts</div></div>
+    <div style="margin-bottom:12px">
+      <span id="roleBadge" class="role-badge">Role: student</span>
     </div>
+    <nav class="app-menu" id="appMenu">
+      <button class="active" data-view="dashboardView">📊 Dashboard</button>
+      <button id="adminMenuBtn" data-view="adminView" hidden>⚙️ Admin Editor</button>
+      <button data-view="attemptsView">📋 Attempts</button>
+      <button id="logoutBtn" type="button">🚪 Logout</button>
+    </nav>
+  </aside>
 
-    <!-- PAPERS -->
-    <div class="card">
-      <div class="section-head">
-        <div><h2>Available Papers</h2><div class="sub">Search, open or manage mock papers.</div></div>
-        <input type="search" id="paperSearch" placeholder="Search papers..." style="max-width:300px;margin:0;">
+  <main class="app-main">
+    <div class="app-topbar">
+      <div>
+        <h1 class="app-title">Mock Exam Manager</h1>
+        <div class="app-sub" id="appSub">Create papers, add questions, and review attempts</div>
       </div>
-      <div id="paperList" class="list"></div>
+      <button class="btn btn-ghost" id="closeBtn" type="button" style="border:none;border-radius:12px;padding:10px 16px;cursor:pointer;font-weight:800;font-family:inherit;background:#eff6ff;color:var(--navy);border:1px solid #dbe4f0;">Close</button>
     </div>
 
-    <!-- ADMIN TOOLS -->
-    <div class="grid-2 admin-only">
-      <div class="card">
-        <h2>Create / Update Paper</h2>
-        <div class="frow"><label>Paper Code *</label><input id="pCode" placeholder="FR, SBL, PM, AA..."></div>
-        <div class="frow"><label>Paper Title *</label><input id="pTitle" placeholder="Financial Reporting"></div>
-        <div class="frow-row">
-          <div class="frow"><label>Level</label>
-            <select id="pLevel"><option>Applied Knowledge</option><option selected>Applied Skills</option><option>Strategic Professional</option></select>
-          </div>
-          <div class="frow"><label>Time Limit (min)</label><input id="pTime" type="number" value="90"></div>
-        </div>
-        <div class="frow-row">
-          <div class="frow"><label>Total Marks</label><input id="pMarks" type="number" value="100"></div>
-          <div class="frow"><label>Allowed Attempts</label><input id="pAttempts" type="number" min="1" value="1"></div>
-        </div>
-        <div class="frow"><label>Section Layout (one per line)</label><textarea id="pSections" placeholder="Section A - Objective Test&#10;Section B - Objective Test (Case)&#10;Section C - Constructed Response"></textarea></div>
-        <label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-size:.9rem;font-weight:700;color:var(--navy);margin-bottom:10px;">
-          <input type="checkbox" id="pLocked" style="width:auto;"> 🔒 Lock paper for students
-        </label>
-        <label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-size:.9rem;font-weight:700;color:var(--navy);margin-bottom:14px;">
-          <input type="checkbox" id="pFree" style="width:auto;"> 🎁 Free paper
-        </label>
-        <div style="display:flex;gap:10px;flex-wrap:wrap;">
-          <button class="btn btn-primary" id="savePaperBtn" type="button">Save Paper</button>
-          <button class="btn btn-ghost" id="clearPaperBtn" type="button">Clear</button>
-        </div>
-        <div class="status" id="paperStatus"></div>
-      </div>
-
-      <div class="card">
-        <h2>Add Question</h2>
-        <div class="frow"><label>Select Paper *</label><select id="qPaper"><option value="">— choose paper —</option></select></div>
-        <div class="frow-row">
-          <div class="frow"><label>Section</label><input id="qSection" placeholder="A, B, C"></div>
-          <div class="frow"><label>Question Type</label>
-            <select id="qType">
-              <option value="mcq">MCQ</option>
-              <option value="screenshot">Screenshot MCQ</option>
-              <option value="multi">Multiple Response</option>
-              <option value="fill">Fill in the Blank</option>
-              <option value="dropdown">Dropdown</option>
-              <option value="sectionb">Section B (Exhibit + Table)</option>
-              <option value="word">Constructed Response – Word</option>
-              <option value="excel">Constructed Response – Spreadsheet</option>
-            </select>
-          </div>
-        </div>
-        <div class="frow"><label>Main Question / Requirement</label><textarea id="qMain" placeholder="e.g. (a) Evaluate the performance... (4 marks)"></textarea></div>
-        <div class="frow" id="qTextWrap"><label>Question Text / Scenario</label><textarea id="qText"></textarea></div>
-
-        <div id="dynArea"></div>
-
-        <div class="frow" id="optionsBlock">
-          <div class="section-head" style="margin-bottom:8px;">
-            <label style="margin:0;">Answer Options</label>
-            <button class="btn btn-ghost btn-sm" id="addOptBtn" type="button">+ Add option</button>
-          </div>
-          <div id="optionsWrap"></div>
-        </div>
-
-        <div class="frow-row">
-          <div class="frow"><label>Correct Answer</label><input id="qCorrect" placeholder="MCQ: 0 · Multi: 0,2 · else leave blank"></div>
-          <div class="frow"><label>Marks</label><input id="qMarks" type="number" value="2"></div>
-        </div>
-        <div class="frow"><label>Explanation / Marking Guide</label><textarea id="qExpl"></textarea></div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap;">
-          <button class="btn btn-gold" id="saveQBtn" type="button">Save Question</button>
-          <button class="btn btn-ghost hidden" id="cancelEditBtn" type="button">Cancel Edit</button>
-        </div>
-        <div class="status" id="qStatus"></div>
-      </div>
+    <div class="grid-3" style="margin-bottom:16px;">
+      <div class="stat"><div class="n" id="paperCount">0</div><div class="l">Papers</div></div>
+      <div class="stat"><div class="n" id="questionCount">0</div><div class="l">Questions</div></div>
+      <div class="stat"><div class="n" id="attemptCount">0</div><div class="l">Attempts</div></div>
     </div>
 
-    <!-- QUESTIONS -->
-    <div class="card admin-only">
-      <h2>Existing Questions</h2>
-      <div class="sub">Grouped by paper. Click Edit to modify.</div>
-      <div id="questionList" class="list"></div>
-    </div>
+    <div class="content">
+      <!-- DASHBOARD (admin sees paper manager here) -->
+      <section id="dashboardView" class="view active">
+        <div id="hostPapers"></div>
+        <div id="studentNote" class="hidden" style="padding:18px;background:#fff;border:1px solid #e5e7eb;border-radius:16px;">
+          <strong style="color:#0D1B40;">👋 Student access</strong>
+          <p class="small" style="margin-top:6px;">Mock exams are taken on the student portal (the page that loads <code>cbe-student.js</code>). Your results appear under <strong>Attempts</strong> once you have taken a mock.</p>
+        </div>
+      </section>
 
-    <!-- ATTEMPTS -->
-    <div class="card">
-      <h2>Attempts</h2>
-      <div id="attemptList" class="list"></div>
+      <!-- ADMIN EDITOR -->
+      <section id="adminView" class="view" hidden>
+        <div id="hostAdmin"></div>
+      </section>
+
+      <!-- ATTEMPTS -->
+      <section id="attemptsView" class="view">
+        <div id="hostAttempts"></div>
+      </section>
     </div>
-  </div>
+  </main>
 </div>
 
-<!-- EXAM OVERLAY -->
-<div class="overlay" id="examOverlay">
-  <div class="exam-top">
-    <div>
-      <div style="font-size:.7rem;letter-spacing:1.6px;text-transform:uppercase;color:var(--muted);font-weight:800;">Vinayak ProEdu Mock</div>
-      <h2 id="examTitle">Paper</h2>
-    </div>
-    <div class="pillbar">
-      <span class="pill" id="examQnum">Q 1/1</span>
-      <span class="pill" id="examMarks">0 marks</span>
-      <span class="timer" id="examTimer">00:00</span>
-    </div>
-    <div class="pillbar">
-      <button class="btn btn-ghost btn-sm" id="btnScratch" type="button">🗒 Scratch</button>
-      <button class="btn btn-ghost btn-sm" id="btnCalc" type="button">🧮 Calc</button>
-      <button class="btn btn-ghost btn-sm" id="btnHi" type="button">🖍 Highlight</button>
-      <button class="btn btn-ghost btn-sm" id="btnStrike" type="button">➕ Strike</button>
-      <button class="btn btn-ghost btn-sm" id="btnSym" type="button">$ Symbol</button>
-      <span class="pill" id="timeWarn" style="display:none;background:#fef3c7;color:#92400e;border-color:#f3d18b;"></span>
-      <button class="btn btn-gold btn-sm" id="examSubmitTop" type="button">Submit</button>
-    </div>
-  </div>
-  <div class="exam-body">
-    <div class="card" style="padding:14px 16px;">
-      <div class="section-head" style="margin-bottom:6px;">
-        <strong style="color:var(--navy);">Navigator</strong>
-        <span class="small" id="navCount"></span>
-      </div>
-      <div class="nav-grid" id="navGrid"></div>
-    </div>
-    <div class="qcard" id="examQcard" style="margin-top:16px;"></div>
-    <div class="exam-actions">
-      <button class="btn btn-ghost" id="examPrev" type="button">Previous</button>
-      <button class="btn btn-primary" id="examNext" type="button">Next</button>
-      <button class="btn btn-gold" id="examFlag" type="button">Flag for Review</button>
-      <button class="btn btn-danger" id="examSubmit" type="button">Submit Paper</button>
-    </div>
-  </div>
-</div>
-
-<!-- RESULTS rendered inside exam overlay -->
-<div class="scratch hidden" id="scratchPad">
-  <strong style="font-size:.85rem;color:var(--navy);">Scratch Pad</strong>
-  <textarea id="scratchText" style="min-height:130px;margin:8px 0;" placeholder="Notes — kept during this exam only..."></textarea>
-  <button class="btn btn-ghost btn-sm" type="button" onclick="document.getElementById('scratchPad').classList.add('hidden')">Close</button>
-</div>
-<div class="calc hidden" id="calcPop">
-  <input id="calcDisp" value="0" readonly>
-  <div class="keys" id="calcKeys"></div>
-  <button class="btn btn-ghost btn-sm" style="margin-top:8px;width:100%;" type="button" onclick="document.getElementById('calcPop').classList.add('hidden')">Close</button>
-</div>
-
-<!-- MARKING MODAL -->
-<div class="modal-wrap" id="markModal">
-  <div class="modal">
-    <h3 id="markTitle">Manual Marking</h3>
-    <div class="small" id="markSub" style="margin-bottom:12px;"></div>
-    <div id="markBody"></div>
-    <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:14px;">
-      <button class="btn btn-ghost" id="markCancel" type="button">Cancel</button>
-      <button class="btn btn-gold" id="markSave" type="button">Save &amp; Finalise</button>
-    </div>
-    <div class="status" id="markStatus"></div>
-  </div>
-</div>
-
+<!-- ================= APP LOGIC (login + shell only) ================= -->
 <script>
-/* ============================================================
-   VINAYAK PROEDU — MOCK EXAM MANAGER (clean rewrite)
-   ============================================================ */
-(function(){
-'use strict';
+const auth = firebase.auth();
+const ADMIN_EMAIL = 'vinayakproedu@gmail.com';
+auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(() => {});
 
-/* ---------- helpers ---------- */
-var $ = function(id){ return document.getElementById(id); };
-function on(id, ev, fn){ var n = $(id); if(n) n.addEventListener(ev, fn); return n; }
-function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]; }); }
-function norm(s){ return String(s == null ? '' : s).trim().toLowerCase().replace(/\s+/g,' '); }
-function lines(s){ return String(s || '').split('\n').map(function(x){return x.trim();}).filter(Boolean); }
-function pad2(n){ return String(n).padStart(2,'0'); }
-function fmtTime(sec){ sec = Math.max(0, Math.floor(sec)); return pad2(Math.floor(sec/60)) + ':' + pad2(sec%60); }
-function setStatus(id, msg, ok){ var n = $(id); if(!n) return; n.textContent = msg; n.className = 'status ' + (ok ? 'ok' : 'error'); }
-function parseAlt(s){ return lines(s).map(function(l){ return l.split(/[,|]/).map(norm).filter(Boolean); }); }
-function normalizeComparable(v){
-  return norm(v).normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/[₹$£€,%]/g,'').replace(/,/g,'').replace(/[^\w.\- ]+/g,' ').replace(/\s+/g,' ').trim();
-}
-function numeric(v){
-  var t = String(v == null ? '' : v).trim().replace(/[₹$£€,%\s,]/g,'');
-  if(!t || !/^-?\d+(\.\d+)?$/.test(t)) return null;
-  var n = Number(t); return isFinite(n) ? n : null;
-}
-function answerMatches(given, expected, alts){
-  var g = normalizeComparable(given);
-  var acc = [expected].concat(Array.isArray(alts) ? alts : []).map(normalizeComparable).filter(Boolean);
-  if(!g || !acc.length) return false;
-  var gn = numeric(given);
-  if(gn !== null){
-    return [expected].concat(Array.isArray(alts) ? alts : []).some(function(v){ var en = numeric(v); return en !== null && Math.abs(gn - en) <= 0.0001; });
-  }
-  return acc.indexOf(g) !== -1;
-}
-
-/* ---------- firebase guard ---------- */
-if(typeof firebase === 'undefined' || !firebase.apps.length){
-  var st = $('loginStatus'); if(st){ st.textContent = 'Firebase failed to load — check firebase-config.js path.'; }
-  return;
-}
-var auth = firebase.auth();
-var db = firebase.firestore();
-var ADMIN_EMAIL = 'vinayakproedu@gmail.com';
-
-/* ---------- state ---------- */
-var S = {
-  papers: [], questions: [], attempts: [],
-  editingPaperId: null, editingQId: null,
-  // exam
-  exam: { active:false, paper:null, qs:[], idx:0, sel:{}, rev:{}, endAt:0, timer:null, name:'', submitting:false }
+const el = {
+  loginWrap: document.getElementById('loginWrap'),
+  appShell: document.getElementById('appShell'),
+  loginStatus: document.getElementById('loginStatus'),
+  loginEmail: document.getElementById('loginEmail'),
+  loginPassword: document.getElementById('loginPassword'),
+  loginBtn: document.getElementById('loginBtn'),
+  logoutBtn: document.getElementById('logoutBtn'),
+  closeBtn: document.getElementById('closeBtn'),
+  roleBadge: document.getElementById('roleBadge'),
+  roleText: document.getElementById('roleText'),
+  appSub: document.getElementById('appSub'),
+  adminMenuBtn: document.getElementById('adminMenuBtn'),
+  studentNote: document.getElementById('studentNote'),
+  views: [...document.querySelectorAll('.view')],
+  menuBtns: [...document.querySelectorAll('.app-menu button')]
 };
+const norm = v => String(v || '').trim().toLowerCase();
 
-/* ---------- auth ---------- */
-function showApp(){
-  $('loginWrap').style.display = 'none';
-  $('appShell').classList.remove('hidden');
-  refreshAll();
+function showView(id){
+  if(id === 'adminView' && el.adminMenuBtn.hidden) return;
+  el.views.forEach(v => v.classList.toggle('active', v.id === id));
+  el.menuBtns.forEach(b => b.classList.toggle('active', b.dataset.view === id));
 }
-function showLogin(){
-  $('appShell').classList.add('hidden');
-  $('loginWrap').style.display = '';
+el.menuBtns.forEach(btn => btn.addEventListener('click', () => showView(btn.dataset.view)));
+
+async function doLogin(){
+  try{
+    const email = el.loginEmail.value.trim(), pw = el.loginPassword.value;
+    if(!email || !pw) throw new Error('Email and password required.');
+    await auth.signInWithEmailAndPassword(email, pw);
+  }catch(err){
+    el.loginStatus.textContent = err.message;
+    el.loginStatus.className = 'login-status error';
+  }
 }
-var IS_ADMIN = false;
-auth.onAuthStateChanged(function(user){
-  var unlocked = sessionStorage.getItem('vp_login_intent') === '1' || localStorage.getItem('adminUnlocked') === '1';
-  var isAdmin = user && norm(user.email) === norm(ADMIN_EMAIL);
-  if(user && isAdmin && unlocked){
-    IS_ADMIN = true;
-    localStorage.setItem('adminUnlocked','1');
-    showApp();
-  } else if(user && !isAdmin && sessionStorage.getItem('vp_login_intent') === '1'){
-    IS_ADMIN = false;
-    document.body.classList.add('student');
-    showApp();
-  } else {
-    if(user) auth.signOut().catch(function(){});
-    sessionStorage.removeItem('vp_login_intent');
-    showLogin();
+el.loginBtn.addEventListener('click', doLogin);
+el.loginPassword.addEventListener('keydown', e => { if(e.key === 'Enter') doLogin(); });
+el.logoutBtn.addEventListener('click', async () => { await auth.signOut(); location.reload(); });
+el.closeBtn.addEventListener('click', () => { window.location.href = 'index.html'; });
+
+auth.onAuthStateChanged(user => {
+  if(user){
+    const isAdmin = norm(user.email) === norm(ADMIN_EMAIL);
+    el.loginWrap.classList.add('hidden');
+    el.appShell.classList.remove('hidden');
+    el.roleBadge.textContent = 'Role: ' + (isAdmin ? 'admin' : 'student');
+    el.roleText.textContent = isAdmin ? 'Admin Panel' : 'Student Portal';
+    el.appSub.textContent = isAdmin ? 'Create papers, add questions, and review attempts' : 'View your mock attempts';
+    el.adminMenuBtn.hidden = !isAdmin;
+    document.getElementById('adminView').hidden = !isAdmin;
+    el.studentNote.classList.toggle('hidden', isAdmin);
+    showView('dashboardView');
+  }else{
+    el.loginWrap.classList.remove('hidden');
+    el.appShell.classList.add('hidden');
   }
 });
-on('loginBtn','click', function(){
-  var st = $('loginStatus');
-  var email = ($('loginEmail').value || '').trim(), pw = $('loginPassword').value;
-  if(!email || !pw){ st.textContent = 'Email and password required.'; return; }
-  st.textContent = '';
-  auth.signInWithEmailAndPassword(email, pw).then(function(){
-    sessionStorage.setItem('vp_login_intent','1');
-    if(norm(email) === norm(ADMIN_EMAIL)) localStorage.setItem('adminUnlocked','1');
-  }).catch(function(e){ st.textContent = e.message; });
-});
-on('logoutBtn','click', function(){
-  localStorage.removeItem('adminUnlocked'); sessionStorage.removeItem('vp_login_intent');
-  auth.signOut().then(function(){ location.reload(); }).catch(function(){ location.reload(); });
-});
-on('dashBtn','click', function(){
-  try{ localStorage.removeItem('adminUnlocked'); sessionStorage.removeItem('vp_login_intent'); }catch(e){}
-  location.href = 'index.html';
-});
-
-/* ---------- data ---------- */
-function loadAll(){
-  return Promise.all([
-    db.collection('mockPapers').orderBy('createdAt','desc').get().catch(function(){return {docs:[]};}),
-    db.collection('mockQuestions').get().catch(function(){return {docs:[]};}),
-    db.collection('mockAttempts').orderBy('createdAt','desc').limit(300).get().catch(function(){return {docs:[]};})
-  ]).then(function(res){
-    S.papers = res[0].docs.map(function(d){ return Object.assign({id:d.id}, d.data()); });
-    S.questions = res[1].docs.map(function(d){ return Object.assign({id:d.id}, d.data()); });
-    S.attempts = res[2].docs.map(function(d){ return Object.assign({id:d.id}, d.data()); });
-  });
-}
-function refreshAll(){
-  return loadAll().then(function(){
-    $('statPapers').textContent = S.papers.length;
-    $('statQuestions').textContent = S.questions.length;
-    $('statAttempts').textContent = S.attempts.length;
-    renderPapers(); renderQSelect(); renderQuestions(); renderAttempts();
-  });
-}
-
-/* ---------- papers ---------- */
-function renderPapers(){
-  var q = norm($('paperSearch').value);
-  var list = S.papers.filter(function(p){ return !q || norm(p.code+' '+p.title+' '+p.level).indexOf(q) !== -1; });
-  var html = list.map(function(p){
-    var nq = S.questions.filter(function(x){ return String(x.paperId) === String(p.id); }).length;
-    var badges = '<span class="badge">'+esc(p.code)+'</span>' +
-      (p.locked ? '<span class="badge warn">Locked</span>' : '') +
-      (p.isFree ? '<span class="badge okb">Free</span>' : '');
-    return '<div class="item">'+
-      '<div>'+badges+'</div>'+
-      '<h3 style="font-size:1.05rem;color:var(--navy);margin:4px 0;">'+esc(p.title)+'</h3>'+
-      '<div class="small">'+esc(p.level||'')+' · '+Number(p.timeLimit||0)+' min · '+Number(p.totalMarks||0)+' marks · '+nq+' questions · '+Number(p.attemptLimit||1)+' attempt(s)</div>'+
-      '<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">'+
-        (p.locked && !IS_ADMIN
-          ? '<button class="btn btn-ghost btn-sm" disabled>🔒 Locked</button>'
-          : '<button class="btn btn-primary btn-sm" onclick="VP.startExam(\''+p.id+'\')">Start Mock</button>')+
-        (IS_ADMIN ? '<button class="btn btn-ghost btn-sm" onclick="VP.editPaper(\''+p.id+'\')">Edit</button>'+
-        '<button class="btn btn-danger btn-sm" onclick="VP.delPaper(\''+p.id+'\')">Delete</button>' : '')+
-      '</div></div>';
-  }).join('');
-  $('paperList').innerHTML = html || '<div class="empty">No papers found.</div>';
-}
-function renderQSelect(){
-  $('qPaper').innerHTML = '<option value="">— choose paper —</option>' + S.papers.map(function(p){
-    return '<option value="'+p.id+'">'+esc(p.code)+' - '+esc(p.title)+'</option>';
-  }).join('');
-}
-on('paperSearch','input', renderPapers);
-
-on('savePaperBtn','click', function(){
-  var code = ($('pCode').value||'').trim().toUpperCase(), title = ($('pTitle').value||'').trim();
-  if(!code || !title){ setStatus('paperStatus','Code and title are required.'); return; }
-  var payload = {
-    code: code, title: title, level: $('pLevel').value,
-    timeLimit: Number($('pTime').value||90), totalMarks: Number($('pMarks').value||100),
-    attemptLimit: Math.max(1, Number($('pAttempts').value||1)),
-    sections: lines($('pSections').value),
-    locked: !!$('pLocked').checked, isFree: !!$('pFree').checked,
-    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-  };
-  var p;
-  if(S.editingPaperId){
-    p = db.collection('mockPapers').doc(S.editingPaperId).set(payload, {merge:true});
-  } else {
-    payload.createdAt = firebase.firestore.FieldValue.serverTimestamp();
-    p = db.collection('mockPapers').add(payload);
-  }
-  p.then(function(){
-    setStatus('paperStatus', S.editingPaperId ? 'Paper updated ✓' : 'Paper saved ✓', true);
-    S.editingPaperId = null; $('savePaperBtn').textContent = 'Save Paper';
-    clearPaperForm(); refreshAll();
-  }).catch(function(e){ setStatus('paperStatus', e.message); });
-});
-function clearPaperForm(){
-  ['pCode','pTitle','pSections'].forEach(function(i){ $(i).value=''; });
-  $('pTime').value = 90; $('pMarks').value = 100; $('pAttempts').value = 1;
-  $('pLevel').selectedIndex = 1; $('pLocked').checked = false; $('pFree').checked = false;
-}
-on('clearPaperBtn','click', function(){ clearPaperForm(); S.editingPaperId=null; $('savePaperBtn').textContent='Save Paper'; setStatus('paperStatus',''); });
-
-window.VP = window.VP || {};
-VP.editPaper = function(id){
-  var p = S.papers.find(function(x){ return x.id === id; }); if(!p) return;
-  S.editingPaperId = id;
-  $('pCode').value = p.code||''; $('pTitle').value = p.title||''; $('pLevel').value = p.level||'Applied Skills';
-  $('pTime').value = p.timeLimit||90; $('pMarks').value = p.totalMarks||100; $('pAttempts').value = p.attemptLimit||1;
-  $('pSections').value = (p.sections||[]).join('\n');
-  $('pLocked').checked = !!p.locked; $('pFree').checked = !!p.isFree;
-  $('savePaperBtn').textContent = 'Update Paper';
-  window.scrollTo({top:0, behavior:'smooth'});
-};
-VP.delPaper = function(id){
-  if(!confirm('Delete this paper and ALL its questions?')) return;
-  db.collection('mockQuestions').where('paperId','==',id).get().then(function(snap){
-    var b = db.batch();
-    snap.forEach(function(d){ b.delete(d.ref); });
-    b.delete(db.collection('mockPapers').doc(id));
-    return b.commit();
-  }).then(refreshAll).catch(function(e){ alert(e.message); });
-};
-
-/* ---------- dynamic question form ---------- */
-function dynFields(){
-  var t = $('qType').value, area = $('dynArea');
-  $('optionsBlock').style.display = '';
-  $('addOptBtn').style.display = '';
-  $('qTextWrap').style.display = '';
-  if(t === 'fill'){
-    $('optionsBlock').style.display = 'none';
-    area.innerHTML =
-      '<div class="frow"><label>Sentence with blanks</label><textarea id="dSentence" placeholder="Use {{1}}, {{2}} or [blank]"></textarea></div>'+
-      '<div class="frow"><label>Answers (one per line)</label><textarea id="dAnswers"></textarea></div>'+
-      '<div class="frow"><label>Alternatives (one line per blank, comma separated)</label><textarea id="dAlts"></textarea></div>';
-  } else if(t === 'dropdown'){
-    $('optionsBlock').style.display = 'none';
-    area.innerHTML =
-      '<div class="frow"><label>Sentence with [blank]</label><textarea id="dSentence"></textarea></div>'+
-      '<div class="frow"><label>Options (one per line)</label><textarea id="dOptions"></textarea></div>'+
-      '<div class="frow"><label>Correct option index (0-based)</label><input id="dCorrectIdx" type="number" min="0" value="0"></div>';
-  } else if(t === 'screenshot'){
-    area.innerHTML =
-      '<div class="frow"><label>Image URL(s) — one per line</label><textarea id="dImageUrls" placeholder="https://..."></textarea></div>'+
-      '<div class="qtype-note">Screenshot MCQ behaves like an MCQ with image(s).</div>';
-  } else if(t === 'sectionb'){
-    $('optionsBlock').style.display = 'none';
-    area.innerHTML =
-      '<div class="frow"><label>Exhibit Image URL(s) — one per line</label><textarea id="dImageUrls"></textarea></div>'+
-      '<div class="frow"><label>Answer Fields (pipe syntax)</label><textarea id="dSbRows" style="min-height:140px;" placeholder="calcTable|Calculation of goodwill&#10;row|Fair value of consideration|input|660000|1&#10;row|NCI at acquisition|input|165000|1&#10;fixed|Total goodwill|900000"></textarea></div>'+
-      '<div class="qtype-note">Row format: <b>row|label|input|correct|marks|alts</b> or <b>row|label|dropdown|opt1,opt2|correct|marks</b> · <b>fixed|label|value</b> · <b>text|heading</b>. First line can be <b>calcTable|Title</b>.</div>';
-  } else if(t === 'word' || t === 'excel'){
-    $('optionsBlock').style.display = 'none';
-    area.innerHTML = '<div class="qtype-note">Constructed response — answered in a '+(t==='excel'?'spreadsheet grid':'word editor')+'. NOT auto-marked: the attempt is saved as <b>pending manual marking</b> and you award marks from the Attempts list. Put the marking guide in the Explanation box.</div>';
-  } else {
-    area.innerHTML = '';
-  }
-}
-on('qType','change', function(){ dynFields(); });
-
-function addOptRow(v){
-  var wrap = $('optionsWrap');
-  var row = document.createElement('div');
-  row.className = 'opt-row';
-  row.innerHTML = '<div class="opt-num">'+(wrap.children.length+1)+'</div>'+
-    '<input type="text" class="opt-in" value="'+esc(v||'')+'" placeholder="Option text">'+
-    '<button type="button" class="btn btn-danger btn-sm">✕</button>';
-  row.querySelector('button').addEventListener('click', function(){
-    row.remove();
-    Array.prototype.forEach.call(wrap.children, function(r,i){
-      r.querySelector('.opt-num').textContent = i+1;
-      r.querySelector('.opt-in').placeholder = 'Option '+(i+1);
-    });
-  });
-  wrap.appendChild(row);
-}
-on('addOptBtn','click', function(){ addOptRow(''); });
-
-function parseSbRows(raw){
-  var ls = lines(raw), layout = '', title = '', rows = [];
-  var start = 0;
-  if(ls.length){
-    var h = ls[0].split('|').map(function(s){return s.trim();});
-    if(['calcTable','calctable','statementTable','statementtable'].indexOf(norm(h[0])) !== -1){
-      layout = norm(h[0]).indexOf('calc') !== -1 ? 'calcTable' : 'statementTable';
-      title = h.slice(1).join(' | ');
-      start = 1;
-    }
-  }
-  ls.slice(start).forEach(function(l){
-    var p = l.split('|').map(function(s){return s.trim();});
-    var kind = norm(p[0]);
-    if(['text','heading','label'].indexOf(kind) !== -1){ rows.push({label:p.slice(1).join(' | '), fieldType:'text', correct:'', marks:0, options:[], altAnswers:[]}); return; }
-    if(kind === 'fixed'){ rows.push({label:p[1]||'', fieldType:'fixed', correct:p[2]||'', marks:0, options:[], altAnswers:[]}); return; }
-    var label = p[0] && ['row','total','grandtotal'].indexOf(kind) === -1 ? p[0] : (p[1]||'');
-    var off = (['row','total','grandtotal'].indexOf(kind) !== -1) ? 1 : 0;
-    var fieldType = norm(p[1+off] || 'input');
-    if(kind === 'total' || kind === 'grandtotal') fieldType = 'input';
-    var options = [], correct = '', marks = 1, altAnswers = [];
-    var rest = p.slice(2+off);
-    if(['dropdown','mcq','yesno','radio'].indexOf(fieldType) !== -1){
-      options = (rest[0]||'').split(/[,;]/).map(function(s){return s.trim();}).filter(Boolean);
-      correct = rest[1]||''; marks = Number(rest[2]||1)||1;
-      altAnswers = (rest[3]||'').split(/[,|]/).map(norm).filter(Boolean);
-    } else if(['text','heading','label','fixed','display'].indexOf(fieldType) !== -1){
-      correct = rest[0]||''; marks = 0;
-    } else {
-      correct = rest[0]||''; marks = Number(rest[1]||1)||1;
-      altAnswers = (rest[2]||'').split(/[,|]/).map(norm).filter(Boolean);
-    }
-    rows.push({label:label, fieldType:fieldType, options:options, correct:correct, marks:marks, altAnswers:altAnswers});
-  });
-  return {layout:layout, title:title, rows:rows};
-}
-
-on('saveQBtn','click', function(){
-  var paperId = $('qPaper').value, t = $('qType').value;
-  if(!paperId){ setStatus('qStatus','Select a paper.'); return; }
-  var paper = S.papers.find(function(p){ return p.id === paperId; });
-  var section = ($('qSection').value||'').trim();
-  var mainQ = ($('qMain').value||'').trim();
-  var qtext = ($('qText').value||'').trim();
-  var expl = ($('qExpl').value||'').trim();
-  var marks = Number($('qMarks').value||0);
-  var correctRaw = ($('qCorrect').value||'').trim();
-  var payload = {
-    paperId: paperId, paperCode: paper.code||'', paperTitle: paper.title||'',
-    section: section, type: t, mainQuestion: mainQ, question: qtext,
-    explanation: expl, marks: marks,
-    requiresManualMark: (t === 'word' || t === 'excel'),
-    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-  };
-  try {
-    if(t === 'mcq' || t === 'screenshot'){
-      payload.options = Array.prototype.map.call(document.querySelectorAll('.opt-in'), function(i){ return i.value.trim(); }).filter(Boolean);
-      if(payload.options.length < 2){ setStatus('qStatus','Add at least 2 options.'); return; }
-      payload.correct = Number(correctRaw);
-      if(isNaN(payload.correct) || payload.correct < 0 || payload.correct >= payload.options.length){ setStatus('qStatus','Correct answer must be a valid option index (0-based).'); return; }
-      if(t === 'screenshot'){
-        payload.imageUrls = lines(($('dImageUrls')||{}).value);
-        if(!payload.imageUrls.length){ setStatus('qStatus','Add at least one image URL.'); return; }
-        payload.imageUrl = payload.imageUrls[0];
-      }
-    } else if(t === 'multi'){
-      payload.options = Array.prototype.map.call(document.querySelectorAll('.opt-in'), function(i){ return i.value.trim(); }).filter(Boolean);
-      payload.correct = correctRaw.split(',').map(function(x){ return Number(x.trim()); }).filter(function(x){ return !isNaN(x); });
-      if(!payload.correct.length){ setStatus('qStatus','Enter correct option indexes like 0,2'); return; }
-    } else if(t === 'fill'){
-      payload.sentence = ($('dSentence').value||'').trim();
-      payload.answers = lines($('dAnswers').value).map(norm);
-      payload.altAnswers = parseAlt($('dAlts').value);
-      var blanks = (payload.sentence.match(/\{\{\d+\}\}/g)||[]).length || (/(\[blank\]|_{3,})/.test(payload.sentence) ? 1 : 0);
-      if(!blanks){ setStatus('qStatus','Sentence needs {{1}} or [blank] placeholders.'); return; }
-      if(payload.answers.length !== blanks){ setStatus('qStatus','Sentence has '+blanks+' blank(s) but '+payload.answers.length+' answer line(s).'); return; }
-      payload.correct = payload.answers;
-      payload.question = payload.sentence;
-    } else if(t === 'dropdown'){
-      payload.sentence = ($('dSentence').value||'').trim();
-      payload.options = lines($('dOptions').value);
-      payload.correctIndex = Number($('dCorrectIdx').value||0);
-      if(payload.options.length < 2){ setStatus('qStatus','Dropdown needs at least 2 options.'); return; }
-      if(payload.correctIndex < 0 || payload.correctIndex >= payload.options.length){ setStatus('qStatus','Correct index out of range.'); return; }
-      payload.correct = payload.correctIndex;
-      payload.question = payload.sentence;
-    } else if(t === 'sectionb'){
-      payload.imageUrls = lines(($('dImageUrls')||{}).value);
-      if(!payload.imageUrls.length){ setStatus('qStatus','Section B needs at least one exhibit image URL.'); return; }
-      payload.imageUrl = payload.imageUrls[0];
-      var spec = parseSbRows($('dSbRows').value);
-      if(!spec.rows.length){ setStatus('qStatus','Add at least one answer field row.'); return; }
-      payload.sectionBRows = spec.rows;
-      payload.sectionBLayout = spec.layout;
-      payload.sectionBTitle = spec.title;
-      payload.correct = spec.rows.map(function(r){ return r.correct; });
-      if(!marks) payload.marks = spec.rows.reduce(function(s,r){ return s + (Number(r.marks)||0); }, 0);
-    }
-  } catch(err){ setStatus('qStatus', err.message); return; }
-
-  var pr;
-  if(S.editingQId){
-    pr = db.collection('mockQuestions').doc(S.editingQId).set(payload, {merge:true});
-  } else {
-    payload.createdAt = firebase.firestore.FieldValue.serverTimestamp();
-    pr = db.collection('mockQuestions').add(payload);
-  }
-  pr.then(function(){
-    setStatus('qStatus', S.editingQId ? 'Question updated ✓' : 'Question saved ✓', true);
-    cancelEdit(); dynFields(); refreshAll();
-  }).catch(function(e){ setStatus('qStatus', e.message); });
-});
-
-function cancelEdit(){
-  S.editingQId = null;
-  $('cancelEditBtn').classList.add('hidden');
-  $('saveQBtn').textContent = 'Save Question';
-  ['qMain','qText','qCorrect','qExpl'].forEach(function(i){ $(i).value=''; });
-  $('qMarks').value = 2; $('optionsWrap').innerHTML = '';
-  for(var i=0;i<4;i++) addOptRow('');
-}
-on('cancelEditBtn','click', cancelEdit);
-
-/* ---------- questions list ---------- */
-function qMarksOf(q){
-  if(q.type === 'sectionb' && Array.isArray(q.sectionBRows) && q.sectionBRows.length){
-    var m = q.sectionBRows.reduce(function(s,r){ return s + (Number(r.marks)||0); }, 0);
-    if(m) return m;
-  }
-  return Number(q.marks||0);
-}
-function renderQuestions(){
-  var groups = {};
-  S.questions.slice().sort(function(a,b){
-    return String(a.paperCode).localeCompare(String(b.paperCode)) || String(a.section).localeCompare(String(b.section));
-  }).forEach(function(q){
-    var k = q.paperId || 'x';
-    if(!groups[k]) groups[k] = {code:q.paperCode||'—', title:q.paperTitle||'Paper', items:[]};
-    groups[k].items.push(q);
-  });
-  var keys = Object.keys(groups);
-  if(!keys.length){ $('questionList').innerHTML = '<div class="empty">No questions yet.</div>'; return; }
-  $('questionList').innerHTML = keys.map(function(k, gi){
-    var g = groups[k];
-    var tot = g.items.reduce(function(s,q){ return s + qMarksOf(q); }, 0);
-    return '<details class="grp" '+(gi===0?'open':'')+'>'+
-      '<summary><span>'+esc(g.code)+' — '+esc(g.title)+'</span><span class="small">'+g.items.length+' question(s) · '+tot+' marks</span></summary>'+
-      '<div class="grp-body">'+
-      g.items.map(function(q, i){
-        var img = (Array.isArray(q.imageUrls) && q.imageUrls.length ? q.imageUrls : (q.imageUrl ? [q.imageUrl] : []));
-        return '<div class="item">'+
-          '<span class="badge">Q'+(i+1)+'</span><span class="badge">'+qMarksOf(q)+' marks</span><span class="badge">'+esc(q.section||'-')+'</span><span class="badge">'+esc(q.type)+'</span>'+
-          (q.requiresManualMark ? '<span class="badge warn">manual marking</span>' : '')+
-          (q.mainQuestion ? '<div style="margin:8px 0 4px;font-weight:700;color:var(--navy);white-space:pre-wrap;">'+esc(q.mainQuestion)+'</div>' : '')+
-          (q.question ? '<div class="small" style="white-space:pre-wrap;">'+esc(q.question)+'</div>' : '')+
-          (img.length ? '<div style="margin-top:8px;">'+img.slice(0,2).map(function(u){ return '<a href="'+esc(u)+'" target="_blank" class="small" style="color:var(--gold);font-weight:700;">🖼 image</a>'; }).join(' ')+'</div>' : '')+
-          '<div style="display:flex;gap:8px;margin-top:10px;">'+
-            '<button class="btn btn-ghost btn-sm" onclick="VP.editQ(\''+q.id+'\')">Edit</button>'+
-            '<button class="btn btn-danger btn-sm" onclick="VP.delQ(\''+q.id+'\')">Delete</button>'+
-          '</div></div>';
-      }).join('')+
-      '</div></details>';
-  }).join('');
-}
-VP.editQ = function(id){
-  var q = S.questions.find(function(x){ return x.id === id; }); if(!q) return;
-  S.editingQId = id;
-  $('qPaper').value = q.paperId || '';
-  $('qSection').value = q.section || '';
-  $('qType').value = q.type || 'mcq';
-  dynFields();
-  $('qMain').value = q.mainQuestion || '';
-  $('qText').value = q.question || '';
-  $('qExpl').value = q.explanation || '';
-  $('qMarks').value = q.marks || 2;
-  $('qCorrect').value = Array.isArray(q.correct) ? q.correct.join(',') : (q.correct != null ? q.correct : '');
-  if(q.type === 'mcq' || q.type === 'multi' || q.type === 'screenshot'){
-    $('optionsWrap').innerHTML = '';
-    (q.options || []).forEach(function(o){ addOptRow(o); });
-  }
-  var img = (Array.isArray(q.imageUrls) && q.imageUrls.length ? q.imageUrls : (q.imageUrl ? [q.imageUrl] : []));
-  if($('dImageUrls') && img.length) $('dImageUrls').value = img.join('\n');
-  if(q.type === 'fill'){
-    if($('dSentence')) $('dSentence').value = q.sentence || q.question || '';
-    if($('dAnswers')) $('dAnswers').value = (q.answers || []).join('\n');
-    if($('dAlts')) $('dAlts').value = (q.altAnswers || []).map(function(a){ return (a||[]).join(', '); }).join('\n');
-  }
-  if(q.type === 'dropdown'){
-    if($('dSentence')) $('dSentence').value = q.sentence || q.question || '';
-    if($('dOptions')) $('dOptions').value = (q.options || []).join('\n');
-    if($('dCorrectIdx')) $('dCorrectIdx').value = Number(q.correctIndex != null ? q.correctIndex : q.correct || 0);
-  }
-  if(q.type === 'sectionb' && $('dSbRows')){
-    var ls = [];
-    if(q.sectionBLayout || q.sectionBTitle) ls.push((q.sectionBLayout||'calcTable') + (q.sectionBTitle ? '|'+q.sectionBTitle : ''));
-    (q.sectionBRows || []).forEach(function(r){
-      var ft = r.fieldType || 'input';
-      if(['text','heading','label'].indexOf(ft) !== -1){ ls.push('text|'+(r.label||'')); return; }
-      if(ft === 'fixed'){ ls.push('fixed|'+(r.label||'')+'|'+ (r.correct||'')); return; }
-      var parts = ['row', r.label || '', ft];
-      if(['dropdown','mcq','yesno','radio'].indexOf(ft) !== -1) parts.push((r.options||[]).join(','));
-      parts.push(r.correct != null ? String(r.correct) : '');
-      parts.push(String(Number(r.marks||1)));
-      if(r.altAnswers && r.altAnswers.length) parts.push((r.altAnswers||[]).join(','));
-      ls.push(parts.join('|'));
-    });
-    $('dSbRows').value = ls.join('\n');
-  }
-  $('saveQBtn').textContent = 'Update Question';
-  $('cancelEditBtn').classList.remove('hidden');
-  window.scrollTo({top:0, behavior:'smooth'});
-};
-VP.delQ = function(id){
-  if(!confirm('Delete this question?')) return;
-  db.collection('mockQuestions').doc(id).delete().then(refreshAll).catch(function(e){ alert(e.message); });
-};
-
-/* ---------- attempts ---------- */
-function fmtDate(v){
-  if(!v) return '';
-  var d = v.toDate ? v.toDate() : (v.seconds ? new Date(v.seconds*1000) : new Date(v));
-  return d.toLocaleString('en-IN');
-}
-function renderAttempts(){
-  var list = IS_ADMIN ? S.attempts : S.attempts.filter(function(a){
-    return auth.currentUser && String(a.userId) === String(auth.currentUser.uid);
-  });
-  if(!list.length){ $('attemptList').innerHTML = '<div class="empty">No attempts yet.</div>'; return; }
-  $('attemptList').innerHTML = list.map(function(a){
-    var st = a.status === 'pending_marking' ? '<span class="badge warn">Awaiting manual marking</span>'
-      : (a.status === 'marked' ? '<span class="badge okb">Manually marked</span>' : '');
-    return '<div class="item">'+
-      '<span class="badge">'+esc(a.paperCode||'')+'</span>'+st+
-      '<h3 style="font-size:1rem;color:var(--navy);margin:5px 0;">'+esc(a.studentName || a.userEmail || 'Student')+'</h3>'+
-      '<div class="small">'+esc(a.paperTitle||'')+'</div>'+
-      '<div style="margin-top:8px;">'+
-        '<span class="pill">'+Number(a.score||0)+'/'+Number(a.total||0)+'</span>'+
-        '<span class="pill">'+Number(a.percentage||0)+'%</span>'+
-        '<span class="pill">'+fmtTime(Number(a.timeTakenSec||0))+'</span>'+
-        '<span class="pill">'+esc(fmtDate(a.createdAt))+'</span>'+
-      '</div>'+
-      (a.status === 'pending_marking' ? '<div style="margin-top:10px;"><button class="btn btn-gold btn-sm" onclick="VP.openMark(\''+a.id+'\')">✍️ Mark Constructed Responses</button></div>' : '')+
-    '</div>';
-  }).join('');
-}
-
-/* ---------- manual marking ---------- */
-var markAttemptId = null;
-VP.openMark = function(id){
-  var a = S.attempts.find(function(x){ return x.id === id; }); if(!a) return;
-  markAttemptId = id;
-  var qs = S.questions.filter(function(q){ return String(q.paperId) === String(a.paperId) && (q.type === 'word' || q.type === 'excel'); });
-  $('markTitle').textContent = (a.paperCode||'') + ' — ' + (a.studentName || a.userEmail || 'Student');
-  $('markSub').textContent = 'Auto-marked OT score: ' + Number(a.autoScore != null ? a.autoScore : a.score || 0) + ' — award marks for constructed responses below.';
-  $('markBody').innerHTML = qs.length ? qs.map(function(q, i){
-    var given = a.answers ? a.answers[q.id] : null;
-    var pre = (a.manualScores && a.manualScores[q.id] != null) ? Number(a.manualScores[q.id]) : '';
-    var ansHtml;
-    if(q.type === 'excel'){
-      var grid = Array.isArray(given) ? given : [];
-      var head = '<tr><th></th>'+['A','B','C','D','E'].map(function(c){ return '<th>'+c+'</th>'; }).join('')+'</tr>';
-      var body = '';
-      for(var r=0; r<Math.max(10, grid.length); r++){
-        body += '<tr><th>'+(r+1)+'</th>';
-        for(var c=0;c<5;c++){ body += '<td>'+esc(grid[r] && grid[r][c] != null ? grid[r][c] : '')+'</td>'; }
-        body += '</tr>';
-      }
-      ansHtml = '<div style="overflow:auto;"><table class="cr-grid">'+head+body+'</table></div>';
-    } else {
-      var txt = String(given || '').replace(/<[^>]*>/g,'').trim();
-      ansHtml = txt ? '<div style="white-space:pre-wrap;">'+esc(txt)+'</div>' : '<div class="empty">No answer submitted.</div>';
-    }
-    return '<div class="mark-q">'+
-      '<span class="badge">Q'+(i+1)+'</span><span class="badge">'+qMarksOf(q)+' marks</span><span class="badge">'+q.type+'</span>'+
-      (q.mainQuestion ? '<div style="margin:8px 0 4px;font-weight:700;color:var(--navy);">'+esc(q.mainQuestion)+'</div>' : '')+
-      (q.explanation ? '<div class="small" style="margin-bottom:6px;"><b>Marking guide:</b> '+esc(q.explanation)+'</div>' : '')+
-      '<div class="mark-ans">'+ansHtml+'</div>'+
-      '<label>Awarded marks (max '+qMarksOf(q)+')</label>'+
-      '<input type="number" min="0" max="'+qMarksOf(q)+'" step="0.5" class="mark-in" data-qid="'+q.id+'" data-max="'+qMarksOf(q)+'" value="'+pre+'" style="max-width:140px;">'+
-    '</div>';
-  }).join('') : '<div class="empty">No constructed-response questions in this paper.</div>';
-  $('markStatus').textContent = '';
-  $('markModal').classList.add('open');
-};
-on('markCancel','click', function(){ $('markModal').classList.remove('open'); markAttemptId = null; });
-on('markSave','click', function(){
-  if(!markAttemptId) return;
-  var a = S.attempts.find(function(x){ return x.id === markAttemptId; }); if(!a) return;
-  var manualScores = {}, manualSum = 0;
-  document.querySelectorAll('.mark-in').forEach(function(inp){
-    var v = Number(inp.value); if(isNaN(v) || v < 0) v = 0;
-    if(v > Number(inp.dataset.max)) v = Number(inp.dataset.max);
-    manualScores[inp.dataset.qid] = v; manualSum += v;
-  });
-  var autoScore = Number(a.autoScore != null ? a.autoScore : a.score || 0);
-  var total = Number(a.total || 0);
-  var finalScore = Math.round((autoScore + manualSum) * 100) / 100;
-  var pct = total ? Math.round((finalScore / total) * 100) : 0;
-  db.collection('mockAttempts').doc(markAttemptId).update({
-    manualScores: manualScores, manualScore: manualSum,
-    score: finalScore, percentage: pct, status: 'marked',
-    markedAt: firebase.firestore.FieldValue.serverTimestamp()
-  }).then(function(){
-    $('markModal').classList.remove('open'); markAttemptId = null;
-    refreshAll().then(function(){ alert('Saved: ' + finalScore + '/' + total + ' (' + pct + '%)'); });
-  }).catch(function(e){ setStatus('markStatus', e.message); });
-});
-
-/* ============================================================
-   EXAM ENGINE
-   ============================================================ */
-function examQs(paperId){ return S.questions.filter(function(q){ return String(q.paperId) === String(paperId); }); }
-
-VP.startExam = function(paperId){
-  var p = S.papers.find(function(x){ return x.id === paperId; });
-  var qs = examQs(paperId);
-  if(!p) return;
-  if(p.locked){ alert('This paper is locked by the admin.'); return; }
-  if(!qs.length){ alert('No questions uploaded for this paper yet.'); return; }
-  var name = prompt('Enter student name to start ' + (p.code || '') + ' ' + (p.title || '') + ':', S.exam.name || '');
-  if(name === null) return;
-  name = name.trim();
-  if(!name){ alert('Student name is required to start.'); return; }
-  var maxAttempts = Math.max(1, Number(p.attemptLimit || 1));
-  var used = S.attempts.filter(function(a){
-    if(String(a.paperId) !== String(paperId)) return false;
-    return IS_ADMIN ? String(a.studentName) === String(name)
-      : (auth.currentUser && String(a.userId) === String(auth.currentUser.uid));
-  }).length;
-  if(used >= maxAttempts){ alert('Attempt limit reached: ' + maxAttempts + ' attempt(s) allowed for this paper.'); return; }
-  var E = S.exam;
-  E.active = true; E.paper = p; E.qs = qs; E.idx = 0;
-  E.sel = {}; E.rev = {}; E.name = name; E.submitting = false;
-  E.locked = false; E.armed = false;
-  E.endAt = Date.now() + Number(p.timeLimit || 90) * 60000;
-  try{ var rt = document.documentElement; if(rt.requestFullscreen) rt.requestFullscreen().catch(function(){}); }catch(e){}
-  setTimeout(function(){ if(S.exam.active) S.exam.armed = true; }, 3000);
-  $('examTitle').textContent = (p.code || '') + ' — ' + (p.title || '');
-  $('examOverlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
-  renderExam();
-  clearInterval(E.timer);
-  E.timer = setInterval(function(){
-    var left = Math.max(0, Math.ceil((E.endAt - Date.now())/1000));
-    $('examTimer').textContent = fmtTime(left);
-    var wb = $('timeWarn');
-    if(left <= 300){ wb.textContent = '⚠ ' + fmtTime(left) + ' left'; wb.style.display = ''; wb.style.background = '#fecaca'; wb.style.color = '#7f1d1d'; }
-    else if(left <= 900){ wb.textContent = '15-minute warning'; wb.style.display = ''; }
-    else { wb.style.display = 'none'; }
-    if(left <= 0){ clearInterval(E.timer); submitExam(); }
-  }, 1000);
-  $('examTimer').textContent = fmtTime(Number(p.timeLimit||90)*60);
-};
-
-function lockExam(reason){
-  var E = S.exam;
-  if(!E.active || E.locked || !E.armed || E.submitting) return;
-  E.locked = true;
-  clearInterval(E.timer);
-  $('examQcard').innerHTML = '<div class="lockscreen"><h3 style="color:#7f1d1d;">Exam Locked</h3><p>'+esc(reason || 'Focus changed')+'</p>'+
-    '<p class="small">The attempt is frozen because the browser tab or window changed. Submit to finish.</p>'+
-    '<div style="margin-top:14px;"><button class="btn btn-gold" onclick="VP.lockSubmit()">Submit Now</button></div></div>';
-}
-VP.lockSubmit = function(){ S.exam.armed = false; submitExam(); };
-window.addEventListener('blur', function(){ lockExam('Browser focus changed.'); });
-document.addEventListener('visibilitychange', function(){ if(document.hidden) lockExam('Tab switch detected.'); });
-window.addEventListener('beforeunload', function(e){ if(S.exam.active){ e.preventDefault(); e.returnValue = ''; } });
-
-function renderNav(){
-  var E = S.exam;
-  var answered = E.qs.filter(hasAnswer).length;
-  $('navCount').textContent = 'Answered ' + answered + '/' + E.qs.length;
-  $('navGrid').innerHTML = E.qs.map(function(q, i){
-    var c = 'nav-btn';
-    if(i === E.idx) c += ' current';
-    if(hasAnswer(q)) c += ' answered';
-    if(E.rev[q.id]) c += ' review';
-    return '<button type="button" class="'+c+'" onclick="VP.goQ('+i+')">'+(i+1)+(E.rev[q.id]?' ★':'')+'</button>';
-  }).join('');
-}
-function hasAnswer(q){
-  var a = S.exam.sel[q.id], t = q.type;
-  if(t === 'multi') return Array.isArray(a) && a.length > 0;
-  if(t === 'fill' || t === 'sectionb') return Array.isArray(a) && a.some(function(v){ return String(v||'').trim() !== ''; });
-  if(t === 'word') return String(a||'').replace(/<[^>]*>/g,'').trim() !== '';
-  if(t === 'excel') return Array.isArray(a) && a.some(function(r){ return Array.isArray(r) && r.some(function(v){ return String(v||'').trim() !== ''; }); });
-  return a !== undefined && a !== null && String(a) !== '';
-}
-function qTotal(q){ return qMarksOf(q); }
-
-function sbFieldsHTML(q, readonly, mode){
-  var rows = q.sectionBRows || [];
-  var body = rows.map(function(r, i){
-    var ft = r.fieldType || 'input';
-    var label = r.label || ('Field ' + (i+1));
-    var ans = mode === 'correct' ? (r.correct != null ? String(r.correct) : '') : '';
-    if(['text','heading','label'].indexOf(ft) !== -1) return '<tr><td colspan="2" style="background:#f8fafc;font-weight:800;">'+esc(label)+'</td></tr>';
-    if(ft === 'fixed') return '<tr><td>'+esc(label)+'</td><td style="font-weight:700;text-align:right;">'+esc(r.correct != null ? String(r.correct) : '')+'</td></tr>';
-    var attrs = 'data-answer="'+esc(ans)+'" data-marks="'+Number(r.marks||1)+'" data-alt="'+esc((r.altAnswers||[]).join(','))+'"';
-    if(readonly) attrs += ' disabled';
-    if(['dropdown','mcq','yesno','radio'].indexOf(ft) !== -1){
-      var opts = (r.options && r.options.length) ? r.options : (ft === 'yesno' ? ['Yes','No'] : [String(r.correct||'Option 1')]);
-      return '<tr><td>'+esc(label)+'</td><td><select '+attrs+'><option value="">Select</option>'+opts.map(function(o){ return '<option value="'+esc(o)+'">'+esc(o)+'</option>'; }).join('')+'</select></td></tr>';
-    }
-    if(ft === 'number' || ['input','amount','currency'].indexOf(ft) !== -1){
-      return '<tr><td>'+esc(label)+'</td><td><input type="number" step="any" placeholder="Enter answer" '+attrs+'></td></tr>';
-    }
-    return '<tr><td>'+esc(label)+'</td><td><input type="text" placeholder="Enter answer" '+attrs+'></td></tr>';
-  }).join('');
-  var head = (q.sectionBLayout === 'calcTable') ? '' : '<tr><th style="width:45%;">Item</th><th>Answer</th></tr>';
-  return '<table class="sb-table"><thead>'+head+'</thead><tbody>'+body+'</tbody></table>';
-}
-function getFields(rootSel){
-  return Array.prototype.slice.call(document.querySelectorAll(rootSel + ' [data-answer]'));
-}
-function readSbAnswers(){
-  return getFields('#examQcard').map(function(f){
-    return String(f.value != null ? f.value : '').trim();
-  });
-}
-function scoreSb(q, answers){
-  var tmp = document.createElement('div');
-  tmp.innerHTML = sbFieldsHTML(q, false, 'correct');
-  var fields = Array.prototype.slice.call(tmp.querySelectorAll('[data-answer]'));
-  (answers || []).forEach(function(v, i){ if(fields[i]) fields[i].value = v; });
-  var gained = 0, total = 0;
-  fields.forEach(function(f){
-    var m = Number(f.dataset.marks || 1);
-    total += m;
-    if(answerMatches(f.value, f.dataset.answer, String(f.dataset.alt||'').split(/[,|]/).map(norm).filter(Boolean))) gained += m;
-  });
-  return {gained:gained, total:total};
-}
-
-function renderQuestion(){
-  var E = S.exam, q = E.qs[E.idx];
-  var sel = E.sel[q.id], t = q.type;
-  $('examQnum').textContent = 'Q ' + (E.idx+1) + '/' + E.qs.length;
-  $('examMarks').textContent = qTotal(q) + ' marks';
-  $('examFlag').textContent = E.rev[q.id] ? 'Unflag Review ★' : 'Flag for Review';
-
-  var imgs = (Array.isArray(q.imageUrls) && q.imageUrls.length) ? q.imageUrls : (q.imageUrl ? [q.imageUrl] : []);
-  var imgHtml = imgs.map(function(u){ return '<img src="'+esc(u)+'" class="qimg" alt="question image">'; }).join('');
-  var body = '';
-
-  if(t === 'mcq' || t === 'screenshot'){
-    body = imgHtml + (q.options||[]).map(function(o, i){
-      return '<label class="option"><input type="radio" name="ans" value="'+i+'" '+(String(sel)===String(i)?'checked':'')+'><span>'+esc(o)+'</span></label>';
-    }).join('');
-  } else if(t === 'multi'){
-    var picked = Array.isArray(sel) ? sel : [];
-    body = imgHtml + (q.options||[]).map(function(o, i){
-      return '<label class="option"><input type="checkbox" class="mBox" value="'+i+'" '+(picked.indexOf(i)!==-1?'checked':'')+'><span>'+esc(o)+'</span></label>';
-    }).join('');
-  } else if(t === 'fill'){
-    var vals = Array.isArray(sel) ? sel : [];
-    var s = String(q.sentence || q.question || '');
-    var safe = esc(s);
-    if(/\{\{\d+\}\}/.test(s)){
-      body = imgHtml + '<div class="qtext">' + safe.replace(/\{\{(\d+)\}\}/g, function(_, n){
-        var i = Number(n)-1;
-        return '<input type="text" class="fib-input" data-fi="'+i+'" value="'+esc(vals[i]||'')+'">';
-      }) + '</div>';
-    } else {
-      var n = (q.answers || []).length || 1;
-      var inHtml = '';
-      for(var i=0;i<n;i++) inHtml += '<div style="margin:8px 0;"><label style="text-transform:none;letter-spacing:0;">Blank '+(i+1)+'</label><input type="text" class="fib-input" data-fi="'+i+'" style="display:block;width:220px;max-width:100%;" value="'+esc(vals[i]||'')+'"></div>';
-      body = imgHtml + '<div class="qtext">'+safe+'</div>' + inHtml;
-    }
-  } else if(t === 'dropdown'){
-    var opts = q.options || [];
-    var dd = '<select id="ddAns" style="max-width:280px;margin-top:8px;"><option value="">Select</option>'+opts.map(function(o,i){
-      return '<option value="'+i+'" '+(String(sel)===String(i)?'selected':'')+'>'+esc(o)+'</option>';
-    }).join('')+'</select>';
-    var sent = esc(String(q.sentence || q.question || ''));
-    body = imgHtml + (sent.indexOf('[blank]') !== -1
-      ? '<div class="qtext">'+sent.replace('[blank]', dd)+'</div>'
-      : '<div class="qtext">'+sent+'</div>'+dd);
-  } else if(t === 'sectionb'){
-    var ex = imgs.map(function(u){ return '<img src="'+esc(u)+'" class="qimg" alt="exhibit">'; }).join('');
-    var tbl = sbFieldsHTML(q, false, 'student');
-    body = '<div class="grid-2" style="align-items:start;"><div><h3 style="font-size:.95rem;color:var(--navy);margin-bottom:6px;">Exhibit</h3>'+(ex||'<div class="empty">No exhibit</div>')+'</div>'+
-           '<div><h3 style="font-size:.95rem;color:var(--navy);margin-bottom:6px;">Answer Area</h3>'+(q.sectionBTitle?'<div style="font-weight:800;margin-bottom:8px;">'+esc(q.sectionBTitle)+'</div>':'')+tbl+'</div></div>';
-  } else if(t === 'word'){
-    body = (q.question ? '<div class="qtext">'+esc(q.question)+'</div>' : '') + imgHtml +
-      '<div id="wAns" class="cr-word" contenteditable="true">'+String(sel||'')+'</div>'+
-      '<div class="small" style="margin-top:8px;">Constructed response — manually marked by your tutor.</div>';
-  } else if(t === 'excel'){
-    var grid = Array.isArray(sel) && sel.length ? sel : [];
-    var head = '<tr><th></th>'+['A','B','C','D','E'].map(function(c){ return '<th>'+c+'</th>'; }).join('')+'</tr>';
-    var body2 = '';
-    for(var r=0;r<10;r++){
-      body2 += '<tr><th>'+(r+1)+'</th>';
-      for(var c=0;c<5;c++){ body2 += '<td class="cr-cell" contenteditable="true" data-r="'+r+'" data-c="'+c+'">'+esc(grid[r] && grid[r][c] != null ? grid[r][c] : '')+'</td>'; }
-      body2 += '</tr>';
-    }
-    body = (q.question ? '<div class="qtext">'+esc(q.question)+'</div>' : '') + imgHtml +
-      '<div style="overflow:auto;"><table class="cr-grid">'+head+body2+'</table></div>';
-  } else {
-    body = imgHtml + '<textarea id="freeAns" placeholder="Type your answer">'+esc(sel||'')+'</textarea>';
-  }
-
-  $('examQcard').innerHTML =
-    '<div class="qhead"><span>Section '+esc(q.section||'-')+' · '+esc(t)+'</span><span>Question '+(E.idx+1)+' of '+E.qs.length+'</span></div>'+
-    (q.mainQuestion ? '<div class="qmain">'+esc(q.mainQuestion)+'</div>' : '')+
-    body;
-
-  renderNav();
-}
-function renderExam(){ renderQuestion(); }
-
-function capture(){
-  var E = S.exam, q = E.qs[E.idx], t = q.type;
-  if(t === 'mcq' || t === 'screenshot'){ var r = document.querySelector('input[name="ans"]:checked'); E.sel[q.id] = r ? Number(r.value) : null; }
-  else if(t === 'multi'){ E.sel[q.id] = Array.prototype.map.call(document.querySelectorAll('.mBox:checked'), function(c){ return Number(c.value); }); }
-  else if(t === 'fill'){ E.sel[q.id] = Array.prototype.map.call(document.querySelectorAll('.fib-input'), function(i){ return i.value.trim(); }); }
-  else if(t === 'dropdown'){ var d = $('ddAns'); E.sel[q.id] = d && d.value !== '' ? Number(d.value) : null; }
-  else if(t === 'sectionb'){ E.sel[q.id] = readSbAnswers(); }
-  else if(t === 'word'){ var w = $('wAns'); E.sel[q.id] = w ? w.innerHTML.trim() : ''; }
-  else if(t === 'excel'){
-    var g = [];
-    document.querySelectorAll('.cr-cell').forEach(function(c){
-      var r = Number(c.dataset.r), cc = Number(c.dataset.c);
-      if(!g[r]) g[r] = [];
-      g[r][cc] = c.textContent.trim();
-    });
-    E.sel[q.id] = g.map(function(row){ return row || []; });
-  } else { var f = $('freeAns'); E.sel[q.id] = f ? f.value.trim() : ''; }
-}
-
-VP.goQ = function(i){ if(S.exam.locked) return; if(i < 0 || i >= S.exam.qs.length) return; capture(); S.exam.idx = i; renderQuestion(); };
-on('examNext','click', function(){ if(S.exam.locked) return; capture(); if(S.exam.idx < S.exam.qs.length-1){ S.exam.idx++; renderQuestion(); } });
-on('examPrev','click', function(){ if(S.exam.locked) return; capture(); if(S.exam.idx > 0){ S.exam.idx--; renderQuestion(); } });
-on('examFlag','click', function(){ var q = S.exam.qs[S.exam.idx]; S.exam.rev[q.id] = !S.exam.rev[q.id]; renderQuestion(); });
-on('examSubmit','click', function(){ if(confirm('Submit the paper? This ends the attempt.')) submitExam(); });
-on('examSubmitTop','click', function(){ if(confirm('Submit the paper? This ends the attempt.')) submitExam(); });
-
-on('btnScratch','click', function(){ $('scratchPad').classList.toggle('hidden'); });
-on('btnCalc','click', function(){
-  var p = $('calcPop'); p.classList.toggle('hidden');
-  if(!p.dataset.built){
-    p.dataset.built = '1';
-    var keys = ['C','(',')','/','7','8','9','*','4','5','6','-','1','2','3','+','0','.','=','⌫'];
-    $('calcKeys').innerHTML = keys.map(function(k){ return '<button type="button" data-k="'+k+'" class="'+('/*-+='.indexOf(k)!==-1?'op':'')+'">'+k+'</button>'; }).join('');
-    Array.prototype.forEach.call($('calcKeys').children, function(b){
-      b.addEventListener('click', function(){
-        var d = $('calcDisp'), k = b.dataset.k;
-        if(k === 'C'){ d.value = '0'; return; }
-        if(k === '⌫'){ d.value = d.value.length > 1 ? d.value.slice(0,-1) : '0'; return; }
-        if(k === '='){ try{ d.value = String(Function('"use strict";return ('+d.value+')')()); }catch(e){ d.value = 'Error'; } return; }
-        d.value = (d.value === '0' || d.value === 'Error') ? k : d.value + k;
-      });
-    });
-  }
-});
-function applyFmt(cmd){
-  var sel = window.getSelection();
-  if(!sel || !sel.rangeCount || sel.isCollapsed){ alert('Select some text first (scenario or your answer), then apply.'); return; }
-  try{ document.execCommand(cmd, false, cmd === 'hiliteColor' ? 'yellow' : null); }catch(e){}
-}
-on('btnHi','click', function(){ applyFmt('hiliteColor'); });
-on('btnStrike','click', function(){ applyFmt('strikeThrough'); });
-on('btnSym','click', function(){
-  var sym = prompt('Symbol to insert:', '$'); if(!sym) return;
-  var ae = document.activeElement;
-  if(ae && ae.isContentEditable){ document.execCommand('insertText', false, sym); return; }
-  if(ae && (ae.tagName === 'TEXTAREA' || ae.tagName === 'INPUT')){
-    var s = ae.selectionStart || 0, e2 = ae.selectionEnd || s;
-    ae.value = ae.value.slice(0, s) + sym + ae.value.slice(e2);
-    ae.dispatchEvent(new Event('input', {bubbles:true}));
-    return;
-  }
-  var w = $('wAns');
-  if(w){ w.focus(); document.execCommand('insertText', false, sym); return; }
-  var c = document.querySelector('.cr-cell');
-  if(c){ c.focus(); document.execCommand('insertText', false, sym); }
-});
-
-function closeExam(){
-  clearInterval(S.exam.timer);
-  var E = S.exam;
-  E.active = false; E.locked = false; E.armed = false; E.submitting = false;
-  $('examOverlay').classList.remove('open');
-  document.body.style.overflow = '';
-  try{ if(document.exitFullscreen) document.exitFullscreen().catch(function(){}); }catch(e){}
-  ['scratchPad','calcPop'].forEach(function(i){ var n = $(i); if(n) n.classList.add('hidden'); });
-  var wb = $('timeWarn'); if(wb) wb.style.display = 'none';
-}
-
-function optText(q, idx){
-  var o = q.options || [];
-  return (o[idx] != null) ? String(o[idx]) : '';
-}
-function submitExam(){
-  var E = S.exam;
-  if(E.submitting) return;
-  E.submitting = true;
-  E.armed = false;
-  capture();
-  clearInterval(E.timer);
-  var score = 0, total = 0, pending = false;
-  var review = [];
-  E.qs.forEach(function(q, qi){
-    var m = qTotal(q); total += m;
-    var a = E.sel[q.id], t = q.type;
-    var gained = 0, givenTxt = '', correctTxt = '', isPending = false;
-    if(t === 'mcq' || t === 'screenshot'){
-      givenTxt = (a !== null && a !== undefined && a !== '') ? optText(q, Number(a)) : '';
-      correctTxt = optText(q, Number(q.correct));
-      if(String(a) !== '' && String(a) === String(q.correct)) gained = m;
-    }
-    else if(t === 'dropdown'){
-      var ci = Number(q.correctIndex != null ? q.correctIndex : q.correct);
-      givenTxt = (a !== null && a !== undefined && a !== '') ? optText(q, Number(a)) : '';
-      correctTxt = optText(q, ci);
-      if(String(a) !== '' && String(a) === String(ci)) gained = m;
-    }
-    else if(t === 'multi'){
-      givenTxt = (Array.isArray(a) ? a : []).map(function(i){ return optText(q, Number(i)); }).filter(Boolean).join(', ');
-      correctTxt = (Array.isArray(q.correct) ? q.correct : []).map(function(i){ return optText(q, Number(i)); }).filter(Boolean).join(', ');
-      var s1 = JSON.stringify((Array.isArray(a)?a:[]).map(String).sort());
-      var s2 = JSON.stringify((Array.isArray(q.correct)?q.correct:[]).map(String).sort());
-      if(s1 === s2) gained = m;
-    }
-    else if(t === 'fill'){
-      givenTxt = (Array.isArray(a) ? a : [a]).join(' | ');
-      var corr = (q.answers && q.answers.length) ? q.answers : (q.correct || []);
-      correctTxt = corr.join(' | ');
-      var alts = q.altAnswers || [];
-      var matched = 0;
-      corr.forEach(function(c, i){
-        if(answerMatches((Array.isArray(a) ? a : [])[i] || '', c, alts[i] || [])) matched++;
-      });
-      if(corr.length) gained = Math.round((m * matched / corr.length) * 100) / 100;
-    }
-    else if(t === 'sectionb'){
-      var sc = scoreSb(q, a);
-      gained = sc.gained;
-      givenTxt = (Array.isArray(a) ? a : []).join(' | ');
-      correctTxt = (q.sectionBRows || []).map(function(r){ return r.correct != null ? String(r.correct) : ''; }).join(' | ');
-    }
-    else if(t === 'word' || t === 'excel'){
-      pending = true; isPending = true;
-      givenTxt = t === 'word' ? String(a || '').replace(/<[^>]*>/g,'').trim() : '(spreadsheet answer)';
-    }
-    score += gained;
-    review.push({num: qi+1, section: q.section || '-', type: t, main: q.mainQuestion || '', qtext: q.question || '',
-      given: givenTxt, correct: correctTxt, gained: gained, max: m, pending: isPending});
-  });
-  var paperTotal = Number(E.paper.totalMarks || 0);
-  var totFor = paperTotal > 0 ? paperTotal : total;
-  var pct = totFor ? Math.round((score / totFor) * 100) : 0;
-  var timeTaken = Math.round((Date.now() - (E.endAt - Number(E.paper.timeLimit||90)*60000)) / 1000);
-  var answered = E.qs.filter(hasAnswer).length;
-
-  db.collection('mockAttempts').add({
-    userId: auth.currentUser ? auth.currentUser.uid : '',
-    userEmail: auth.currentUser ? (auth.currentUser.email || '') : '',
-    studentName: E.name,
-    paperId: E.paper.id, paperCode: E.paper.code || '', paperTitle: E.paper.title || '',
-    score: score, total: totFor, percentage: pct, answered: answered,
-    reviewedCount: Object.keys(E.rev).filter(function(k){ return E.rev[k]; }).length,
-    timeTakenSec: timeTaken,
-    status: pending ? 'pending_marking' : 'auto_marked',
-    autoScore: score, autoTotal: totFor, pendingManualMarking: pending,
-    answers: E.sel, reviewed: E.rev,
-    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-  }).then(function(){
-    renderResult(score, totFor, pct, answered, timeTaken, pending, review);
-    refreshAll();
-  }).catch(function(e){
-    E.submitting = false;
-    alert('Save failed: ' + e.message);
-  });
-}
-
-function renderResult(score, total, pct, answered, timeTaken, pending, review){
-  var E = S.exam, p = E.paper;
-  $('examTitle').textContent = 'Results — ' + (p.code || '');
-  $('examQcard').innerHTML =
-    '<h2 style="margin-bottom:4px;">'+esc(p.title||'Exam Results')+'</h2>'+
-    '<div class="small" style="margin-bottom:16px;">'+esc(E.name)+' · completed</div>'+
-    '<div class="summary5">'+
-      '<div class="sumcard"><div class="v">'+score+'/'+total+'</div><div class="k">Score</div></div>'+
-      '<div class="sumcard"><div class="v">'+pct+'%</div><div class="k">Percentage</div></div>'+
-      '<div class="sumcard"><div class="v">'+answered+'</div><div class="k">Answered</div></div>'+
-      '<div class="sumcard"><div class="v">'+fmtTime(timeTaken)+'</div><div class="k">Time Taken</div></div>'+
-      '<div class="sumcard"><div class="v">'+E.qs.length+'</div><div class="k">Questions</div></div>'+
-    '</div>'+
-    (pending ? '<div class="empty" style="background:#fef3c7;border-color:#f3d18b;text-align:left;">⏳ <b>Manual marking pending.</b> Constructed-response answers will be marked by your tutor; the score above is the auto-marked objective-test score.</div>' : '')+
-    '<h3 style="margin:20px 0 10px;">Question Review</h3>'+
-    (review || []).map(function(r){
-      var verdict, cls;
-      if(r.pending){ verdict = '⏳ pending manual marking'; cls = ''; }
-      else { verdict = r.gained + '/' + r.max + (r.max > 0 && r.gained >= r.max ? ' ✓' : ' ✗'); cls = (r.max > 0 && r.gained >= r.max) ? 'rev-ok' : 'rev-bad'; }
-      return '<div class="rev-item">'+
-        '<div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;"><strong>Q'+r.num+' · Section '+esc(r.section)+' · '+esc(r.type)+'</strong><span class="'+cls+'">'+verdict+'</span></div>'+
-        (r.main ? '<div style="font-weight:700;color:var(--navy);margin:6px 0;white-space:pre-wrap;">'+esc(r.main)+'</div>' : '')+
-        '<div class="small" style="margin-top:6px;"><b>Your answer:</b> '+esc(r.given || '—')+'</div>'+
-        (r.pending ? '' : '<div class="small"><b>Correct:</b> '+esc(r.correct || '—')+'</div>')+
-        (r.qtext ? '<div class="small" style="margin-top:4px;color:#9ca3af;">'+esc(String(r.qtext).slice(0,180))+'</div>' : '')+
-      '</div>';
-    }).join('')+
-    '<div style="text-align:center;margin-top:18px;"><button class="btn btn-primary" onclick="VP.closeExam()">Back to Manager</button></div>';
-  $('navGrid').innerHTML = '';
-  $('navCount').textContent = '';
-  document.querySelector('.exam-actions').style.display = 'none';
-}
-VP.closeExam = function(){
-  closeExam();
-  document.querySelector('.exam-actions').style.display = '';
-};
-
-/* ---------- init ---------- */
-dynFields();
-for(var i=0;i<4;i++) addOptRow('');
-})();
 </script>
-<script>window.__vpToDash = function(){try{ if(window.self !== window.top){ parent.postMessage({type:'vp-close'}, '*'); return; } }catch(e){}location.href = 'index.html'; };</script><script>
-document.addEventListener('click', function(e){
-  var t = e.target && e.target.closest ? e.target.closest('#logoutBtn, #adminLogoutBtn') : null;
-  if(!t) return;
-  setTimeout(function(){
-    try{ if(window.self !== window.top){ window.top.location.href = 'index.html'; } }catch(err){}
-  }, 900);
-}, true);
+
+<!-- ================= CBE PLATFORM MODULES ================= -->
+<script src="cbe-core.js"></script>
+<script src="cbe-admin.js"></script>
+
+<!-- ================= SITE UTILITIES (unchanged) ================= -->
+<script>
+if (top !== self) { top.location = self.location; }
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('../sw.js').catch(function(e){ console.warn('SW:', e); });
+  });
+}
+(function(){
+  var deferredPrompt = null;
+  window.addEventListener('beforeinstallprompt', function(e){
+    e.preventDefault(); deferredPrompt = e; showBtn();
+  });
+  function showBtn(){
+    if (document.getElementById('vpInstallBtn')) return;
+    var b = document.createElement('button');
+    b.id = 'vpInstallBtn';
+    b.textContent = '📲 Install App';
+    b.style.cssText = "position:fixed;left:18px;bottom:18px;z-index:15000;border:none;border-radius:999px;padding:12px 20px;background:linear-gradient(135deg,#C9922A,#E8AA48);color:#0D1B40;font:800 14px 'DM Sans',sans-serif;box-shadow:0 10px 28px rgba(13,27,64,.35);cursor:pointer;";
+    b.onclick = function(){
+      if (deferredPrompt) { deferredPrompt.prompt(); deferredPrompt = null; }
+      b.remove();
+    };
+    document.body.appendChild(b);
+  }
+})();
+(function(){
+  try{
+    var ok = localStorage.getItem('adminUnlocked') === '1' || sessionStorage.getItem('adminUnlocked') === '1';
+    if(!ok) return;
+    var loginEl = document.getElementById('loginWrap');
+    var appEl = document.getElementById('appShell');
+    if(loginEl){ loginEl.style.display = 'none'; loginEl.classList.add('hidden'); }
+    if(appEl){ appEl.classList.remove('hidden'); appEl.style.display = ''; }
+  }catch(e){}
+})();
 </script>
 </body>
 </html>
