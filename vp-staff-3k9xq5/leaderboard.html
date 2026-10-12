@@ -51,8 +51,11 @@ th{background:#f8fafc;color:var(--navy);font-size:.76rem;text-transform:uppercas
 .doubt-item{border:1px solid #e5e7eb;border-radius:14px;padding:14px;margin-bottom:12px;background:#fff;}
 @media(max-width:800px){.sidebar{width:100%;height:auto;}.app-shell{flex-direction:column;}}
 </style>
-</head>
+<style>.app-shell{display:block !important;}.main{padding:56px 24px 40px !important;max-width:1100px;margin:0 auto;}</style></head>
 <body>
+<button onclick="(function(){try{if(window.self!==window.top){parent.postMessage({type:'vp-close'},'*');return;}}catch(e){}location.href='index.html';})()" style="position:fixed;top:12px;left:12px;z-index:15000;padding:8px 15px;border-radius:999px;background:#fff;border:1px solid #e5e7eb;color:#0D1B40;font:700 13px 'DM Sans',sans-serif;cursor:pointer;box-shadow:0 3px 12px rgba(13,27,64,.12);">← Dashboard</button>
+<button id="cornerLogout" onclick="(function(){try{localStorage.removeItem('vp_staff_sess');localStorage.removeItem('vp_staff_profile');}catch(e){}try{auth.signOut();}catch(e){}setTimeout(function(){location.href='index.html';},400);})()" style="position:fixed;top:12px;right:12px;z-index:15000;padding:8px 15px;border-radius:999px;background:#fef2f2;border:1px solid #fecaca;color:#b42318;font:700 13px 'DM Sans',sans-serif;cursor:pointer;box-shadow:0 3px 12px rgba(13,27,64,.12);">Logout ⏻</button>
+
 <div class="login-wrap" id="loginWrap">
   <div class="login-box">
     <h2>Faculty Portal</h2>
@@ -65,22 +68,7 @@ th{background:#f8fafc;color:var(--navy);font-size:.76rem;text-transform:uppercas
   </div>
 </div>
 <div class="app-shell hidden" id="appShell">
-  <aside class="sidebar">
-    <div class="brand">
-      <img src="https://pasteimg.com/images/2026/03/31/WhatsApp-Image-2026-03-19-at-6.49.19-PM.jpg" alt="Vinayak ProEdu">
-      <div><h3>Vinayak ProEdu</h3><p>Faculty Portal</p></div>
-    </div>
-    <div class="menu">
-      <a href="./index.html">📊 Dashboard</a>
-      <a href="./lectures.html">🎬 Lectures</a>
-      <a href="./live.html">🔴 Live Classes</a>
-      <a href="./leaderboard.html" class="active">🏆 Leaderboard</a>
-      <a href="./doubts.html">💬 Doubts</a>
-      <a href="./mocks.html">📝 Mocks</a>
-      <a href="./calendar.html">📅 Calendar</a>
-      <a href="#" onclick="auth.signOut();return false;">🚪 Logout</a>
-    </div>
-  </aside>
+  
   <main class="main">
     <div class="top"><div><h1>Leaderboard</h1><div class="sub" id="pageSub"></div></div></div>
     <div class="card"><strong style="color:var(--navy)">🏆 Rankings — your subjects</strong> <span style="font-size:.8rem;color:var(--muted)">(auto-loaded)</span><div id="lbBox" style="margin-top:10px;"><div class="empty">Loading…</div></div></div>
@@ -106,12 +94,20 @@ window.resetPw = function(){
   auth.sendPasswordResetEmail(e.trim()).then(()=>{ const s=document.getElementById('lStatus'); s.textContent='Reset email sent.'; s.style.color='#a7f3d0'; }).catch(err=>{ document.getElementById('lStatus').textContent = err.message; });
 };
 /* Optimistic session: if this device recently had a teacher session, hide the login instantly and verify in background */
-if(localStorage.getItem('vp_staff_sess')){
-  document.getElementById('loginWrap').style.display = 'none';
-}
+try{
+  if(localStorage.getItem('vp_staff_sess')){
+    document.getElementById('loginWrap').style.display = 'none';
+    var __app = document.getElementById('appShell'); if(__app) __app.classList.remove('hidden');
+    var __prof = JSON.parse(localStorage.getItem('vp_staff_profile') || 'null');
+    if(__prof){ window.__subs = __prof.subs || []; window.__batches = __prof.batches || []; }
+    window.addEventListener('DOMContentLoaded', function(){
+      if(__prof && typeof loadAll === 'function'){ try{ loadAll(); }catch(err){} }
+    });
+  }
+}catch(e){}
 auth.onAuthStateChanged(async user => {
   if(!user){
-    localStorage.removeItem('vp_staff_sess');
+    localStorage.removeItem('vp_staff_sess'); localStorage.removeItem('vp_staff_profile');
     const lw = document.getElementById('loginWrap');
     lw.style.display = ''; lw.classList.remove('hidden');
     document.getElementById('appShell').classList.add('hidden');
@@ -124,6 +120,7 @@ auth.onAuthStateChanged(async user => {
       window.__subs = tdoc.data().assignedSubjects || [];
       window.__batches = tdoc.data().assignedBatches || [];
       localStorage.setItem('vp_staff_sess', user.email);
+      try{ localStorage.setItem('vp_staff_profile', JSON.stringify({subs: window.__subs||[], batches: window.__batches||[]})); }catch(e){}
       document.getElementById('loginWrap').classList.add('hidden');
       document.getElementById('appShell').classList.remove('hidden');
       loadAll();
@@ -154,8 +151,17 @@ async function loadAll(){
 }
 </script>
 <script>
-if (top !== self) { top.location = self.location; }
-if ('serviceWorker' in navigator) { window.addEventListener('load', function(){ navigator.serviceWorker.register('../sw.js').catch(function(){}); }); }
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function(){
+    var dir = location.href.replace(/[^/]*$/, '');
+    navigator.serviceWorker.getRegistrations().then(function(regs){
+      regs.forEach(function(r){ if(r.scope !== dir){ r.unregister(); } });
+    });
+    caches.keys().then(function(keys){ keys.forEach(function(k){ caches.delete(k); }); }).catch(function(){});
+    navigator.serviceWorker.register('./staff-sw.js', {scope:'./'}).catch(function(){});
+  });
+}
 (function(){
   var deferredPrompt = null;
   window.addEventListener('beforeinstallprompt', function(e){ e.preventDefault(); deferredPrompt = e; showBtn(); });

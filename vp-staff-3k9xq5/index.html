@@ -4,72 +4,149 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="theme-color" content="#0D1B40">
+<meta name="mobile-web-app-capable" content="yes">
 <title>Faculty Portal | Vinayak ProEdu</title>
 <link rel="icon" type="image/png" href="https://pasteimg.com/images/2026/03/31/WhatsApp-Image-2026-03-19-at-6.49.19-PM.jpg">
 <link rel="manifest" href="./manifest.json">
-<meta name="theme-color" content="#0D1B40">
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--navy:#0D1B40;--blue:#1e3c72;--gold:#C9922A;--gold-lt:#E8AA48;--ink:#1A1A2E;--muted:#6B7280;}
+:root{
+  --navy:#0D1B40; --navy2:#16295c; --blue:#1e3c72; --gold:#C9922A; --gold-lt:#E8AA48;
+  --ink:#1A1A2E; --muted:#667085; --line:#e6e9f0;
+  --shadow-sm:0 1px 3px rgba(16,24,40,.06),0 1px 2px rgba(16,24,40,.04);
+  --shadow-md:0 10px 30px rgba(13,27,64,.12);
+  --r:14px;
+}
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'DM Sans',sans-serif;color:var(--ink);background:#f5f7fb;line-height:1.65;}
+html,body{height:100%;}
+body{font-family:'DM Sans',sans-serif;color:var(--ink);background:#f4f6fa;line-height:1.55;-webkit-font-smoothing:antialiased;}
+h1,h2,h3{font-family:'Playfair Display',serif;}
+button{font-family:inherit;cursor:pointer;border:none;background:none;}
+input{font-family:inherit;}
 .hidden{display:none !important;}
-.login-wrap{position:fixed;inset:0;z-index:9999;background:linear-gradient(135deg,var(--navy),var(--blue));display:flex;align-items:center;justify-content:center;padding:20px;}
-.login-box{width:min(420px,92vw);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:24px;padding:clamp(32px,6vw,48px);backdrop-filter:blur(20px);box-shadow:0 40px 100px rgba(0,0,0,.4);}
-.login-box h2{color:#fff;font-family:'Playfair Display',serif;font-size:1.6rem;margin-bottom:6px;text-align:center;}
-.login-box>p{color:rgba(255,255,255,.55);font-size:.9rem;text-align:center;margin-bottom:28px;}
-.lf{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;}
-.lf label{font-size:.74rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.65);}
-.lf input{padding:13px 16px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.14);border-radius:10px;color:#fff;font-size:.95em;font-family:inherit;}
-.lf input:focus{outline:none;border-color:rgba(201,146,42,.6);}
-.login-btn{width:100%;padding:15px;border-radius:50px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--gold),var(--gold-lt));color:var(--navy);font-size:1em;font-weight:700;font-family:inherit;}
-.login-status{margin-top:12px;font-size:.9rem;font-weight:700;text-align:center;min-height:22px;color:#fca5a5;}
-.forgot{text-align:center;margin-top:10px;}
-.forgot a{color:var(--gold-lt);font-size:.85rem;cursor:pointer;font-weight:700;}
-.app{max-width:900px;margin:0 auto;padding:32px 20px;}
-.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:24px;}
-h1{font-family:'Playfair Display',serif;color:var(--navy);font-size:1.7rem;}
-.sub{color:var(--muted);font-size:.9rem;}
-.chips{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 28px;}
-.chip{background:#eef4ff;color:#1e3c72;border-radius:999px;padding:7px 14px;font-size:.8rem;font-weight:800;}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px;}
-.card{background:#fff;border:1px solid rgba(201,146,42,.15);border-radius:20px;padding:28px 22px;cursor:pointer;text-decoration:none;color:var(--ink);box-shadow:0 4px 18px rgba(13,27,64,.06);transition:all .25s;display:block;}
-.card:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(13,27,64,.12);border-color:rgba(201,146,42,.4);}
-.card .ic{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,var(--navy),var(--blue));display:grid;place-items:center;font-size:1.4rem;margin-bottom:14px;}
-.card h3{font-family:'Playfair Display',serif;color:var(--navy);margin-bottom:4px;}
-.card p{color:var(--muted);font-size:.86rem;}
-.logout{border:1px solid #fecaca;background:#fef2f2;color:#b42318;border-radius:12px;padding:10px 16px;font-weight:700;cursor:pointer;font-family:inherit;}
+
+/* Login */
+.login-wrap{position:fixed;inset:0;z-index:9999;background:radial-gradient(1200px 700px at 70% -10%,#24407e 0%,var(--navy) 55%);display:flex;align-items:center;justify-content:center;padding:20px;}
+.login-box{width:min(400px,92vw);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.13);border-radius:22px;padding:44px 38px;backdrop-filter:blur(18px);box-shadow:0 40px 100px rgba(0,0,0,.45);}
+.login-logo{width:64px;height:64px;border-radius:50%;border:2px solid var(--gold);margin:0 auto 18px;display:block;object-fit:cover;box-shadow:0 0 0 8px rgba(201,146,42,.12);}
+.login-box h2{color:#fff;font-size:1.55rem;text-align:center;margin-bottom:4px;}
+.login-box>p{color:rgba(255,255,255,.55);font-size:.88rem;text-align:center;margin-bottom:30px;}
+.lf{margin-bottom:15px;}
+.lf label{display:block;font-size:.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:6px;}
+.lf input{width:100%;padding:13px 16px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:11px;color:#fff;font-size:.95rem;transition:border-color .2s;}
+.lf input::placeholder{color:rgba(255,255,255,.3);}
+.lf input:focus{outline:none;border-color:rgba(232,170,72,.7);}
+.login-btn{width:100%;padding:14px;border-radius:50px;background:linear-gradient(135deg,var(--gold),var(--gold-lt));color:var(--navy);font-size:1rem;font-weight:700;transition:transform .15s, box-shadow .15s;box-shadow:0 6px 20px rgba(201,146,42,.3);}
+.login-btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 10px 26px rgba(201,146,42,.4);}
+.login-btn:disabled{opacity:.7;cursor:wait;}
+.login-status{margin-top:12px;font-size:.88rem;font-weight:600;text-align:center;min-height:20px;color:#fca5a5;}
+.spin{display:inline-block;width:15px;height:15px;border:2px solid rgba(13,27,64,.35);border-top-color:var(--navy);border-radius:50%;vertical-align:-3px;margin-right:8px;animation:rot .7s linear infinite;}
+@keyframes rot{to{transform:rotate(360deg);}}
+
+/* Shell */
+.shell{height:100vh;display:flex;flex-direction:column;}
+.hub{flex:1;overflow:auto;}
+.hub-inner{max-width:820px;margin:0 auto;padding:0 24px 60px;}
+.hub-head{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:26px 0 4px;}
+.brand{display:flex;align-items:center;gap:13px;}
+.brand img{width:46px;height:46px;border-radius:50%;border:2px solid var(--gold);object-fit:cover;}
+.brand h1{font-size:1.35rem;color:var(--navy);line-height:1.15;}
+.brand span{display:block;font-family:'DM Sans',sans-serif;font-size:.66rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold);font-weight:700;margin-top:2px;}
+.greeting{color:var(--muted);font-size:.92rem;margin:14px 0 18px;}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:26px;min-height:22px;}
+.chip{background:#fff;border:1px solid var(--line);color:var(--navy);border-radius:999px;padding:6px 14px;font-size:.78rem;font-weight:800;box-shadow:var(--shadow-sm);}
+.chip.gold{background:linear-gradient(135deg,var(--gold),var(--gold-lt));color:var(--navy);border:none;}
+
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+@media(max-width:760px){.tiles{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:460px){.tiles{grid-template-columns:1fr;}}
+.tile{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:24px 20px 20px;text-align:left;position:relative;overflow:hidden;cursor:pointer;transition:transform .18s, box-shadow .18s, border-color .18s;box-shadow:var(--shadow-sm);display:block;width:100%;}
+.tile::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--gold),var(--gold-lt));opacity:0;transition:opacity .18s;}
+.tile:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);border-color:#d8c29a;}
+.tile:hover::before{opacity:1;}
+.tile-ico{width:46px;height:46px;border-radius:12px;background:linear-gradient(135deg,var(--navy),var(--blue));display:grid;place-items:center;font-size:1.25rem;margin-bottom:14px;}
+.tile-name{font-family:'Playfair Display',serif;font-size:1.06rem;font-weight:700;color:var(--navy);}
+.tile-desc{font-size:.8rem;color:var(--muted);margin-top:3px;}
+.tile-arrow{position:absolute;right:16px;top:22px;color:#c4ccdb;font-size:1.05rem;transition:transform .18s, color .18s;}
+.tile:hover .tile-arrow{transform:translateX(3px);color:var(--gold);}
+
+/* Viewer */
+.viewer{flex:1;display:none;flex-direction:column;background:#fff;}
+.viewer.open{display:flex;}
+.viewer-bar{height:52px;flex-shrink:0;display:flex;align-items:center;gap:14px;padding:0 10px 0 8px;background:#fff;border-bottom:1px solid var(--line);box-shadow:0 1px 4px rgba(16,24,40,.05);z-index:5;}
+.back-btn{display:flex;align-items:center;gap:7px;padding:8px 14px;border-radius:10px;font-weight:600;font-size:.88rem;color:var(--navy);transition:background .15s;}
+.back-btn:hover{background:#f1f4fb;}
+.viewer-title{font-family:'Playfair Display',serif;font-size:1.02rem;color:var(--navy);font-weight:700;}
+.viewer-frame{flex:1;border:none;width:100%;background:#f4f6fa;}
+
+/* Logout — extreme corner */
+.logout-corner{padding:10px 4px 10px 18px;font-size:.84rem;font-weight:700;color:#b42318;border-radius:10px;transition:background .15s;}
+.logout-corner:hover{background:#fef2f2;}
+@media(max-width:600px){.viewer-title{display:none;}}
 </style>
 </head>
 <body>
 
 <div class="login-wrap" id="loginWrap">
   <div class="login-box">
+    <img class="login-logo" src="https://pasteimg.com/images/2026/03/31/WhatsApp-Image-2026-03-19-at-6.49.19-PM.jpg" alt="Vinayak ProEdu">
     <h2>Faculty Portal</h2>
-    <p>Vinayak ProEdu · Teachers only</p>
-    <div class="lf"><label>Email</label><input type="email" id="tEmail" placeholder="you@gmail.com"></div>
-    <div class="lf"><label>Password</label><input type="password" id="tPass" placeholder="••••••••"></div>
+    <p>Teachers only · Vinayak ProEdu</p>
+    <div class="lf"><label>Email</label><input type="email" id="tEmail" placeholder="you@gmail.com" autocomplete="username"></div>
+    <div class="lf"><label>Password</label><input type="password" id="tPass" placeholder="••••••••" autocomplete="current-password"></div>
     <button class="login-btn" id="tLogin" type="button">Login</button>
     <div class="login-status" id="tStatus"></div>
-    <div class="forgot"><a onclick="resetPw()">Forgot password?</a></div>
+    <div style="text-align:center;margin-top:10px;"><a style="color:var(--gold-lt);font-size:.85rem;cursor:pointer;font-weight:700;" onclick="resetPw()">Forgot password?</a></div>
   </div>
 </div>
 
-<div class="app hidden" id="appShell">
-  <div class="top">
-    <div><h1>Faculty Dashboard</h1><div class="sub" id="helloSub">Welcome</div></div>
-    <button class="logout" id="tLogout" type="button">Logout</button>
+<div class="shell hidden" id="appShell">
+  <div class="hub" id="hubView">
+    <div class="hub-inner">
+      <div class="hub-head">
+        <div class="brand">
+          <img src="https://pasteimg.com/images/2026/03/31/WhatsApp-Image-2026-03-19-at-6.49.19-PM.jpg" alt="">
+          <div><h1>Vinayak ProEdu<span>Faculty Portal</span></h1></div>
+        </div>
+        <button class="logout-corner" id="tLogout" type="button">Logout ⏻</button>
+      </div>
+      <div class="greeting" id="helloSub">Welcome.</div>
+      <div class="chips" id="subjChips"></div>
+
+      <div class="tiles">
+        <button class="tile" data-page="lectures.html" data-title="Lectures">
+          <span class="tile-ico">🎬</span><div class="tile-name">Lectures</div><div class="tile-desc">Upload & manage video lessons</div><span class="tile-arrow">→</span>
+        </button>
+        <button class="tile" data-page="live.html" data-title="Live Classes">
+          <span class="tile-ico">🔴</span><div class="tile-name">Live Classes</div><div class="tile-desc">Schedule Zoom / Meet sessions</div><span class="tile-arrow">→</span>
+        </button>
+        <button class="tile" data-page="leaderboard.html" data-title="Leaderboard">
+          <span class="tile-ico">🏆</span><div class="tile-name">Leaderboard</div><div class="tile-desc">Rankings for your subjects</div><span class="tile-arrow">→</span>
+        </button>
+        <button class="tile" data-page="doubts.html" data-title="Doubts">
+          <span class="tile-ico">💬</span><div class="tile-name">Doubts</div><div class="tile-desc">Reply to student doubts</div><span class="tile-arrow">→</span>
+        </button>
+        <button class="tile" data-page="mocks.html" data-title="Mocks & Attempts">
+          <span class="tile-ico">📝</span><div class="tile-name">Mocks & Attempts</div><div class="tile-desc">Papers, questions & results</div><span class="tile-arrow">→</span>
+        </button>
+        <button class="tile" data-page="calendar.html" data-title="Calendar">
+          <span class="tile-ico">📅</span><div class="tile-name">Calendar</div><div class="tile-desc">Upcoming classes & lectures</div><span class="tile-arrow">→</span>
+        </button>
+      </div>
+    </div>
   </div>
-  <div class="sub" style="margin-bottom:8px;font-weight:700;color:var(--navy);">YOUR ASSIGNED SUBJECTS</div>
-  <div class="chips" id="subjChips"></div>
-  <div class="grid">
-    <a class="card" href="./lectures.html"><div class="ic">🎬</div><h3>Lectures</h3><p>Upload & manage video lessons for your subjects</p></a>
-    <a class="card" href="./live.html"><div class="ic">🔴</div><h3>Live Classes</h3><p>Schedule Zoom / Meet sessions</p></a>
-    <a class="card" href="./leaderboard.html"><div class="ic">🏆</div><h3>Leaderboard</h3><p>See rankings for your subjects</p></a>
-    <a class="card" href="./doubts.html"><div class="ic">💬</div><h3>Doubts</h3><p>Reply to student doubts in your subjects</p></a>
-    <a class="card" href="./mocks.html"><div class="ic">📝</div><h3>Mocks & Attempts</h3><p>See papers and student attempts</p></a>
-    <a class="card" href="./calendar.html"><div class="ic">📅</div><h3>Calendar</h3><p>Upcoming live classes & recent lectures</p></a>
+
+  <div class="viewer" id="viewer">
+    <div class="viewer-bar">
+      <button class="back-btn" id="backBtn" type="button">← All modules</button>
+      <span class="viewer-title" id="viewerTitle"></span>
+      <div style="flex:1;"></div>
+      <button class="logout-corner" id="tLogout2" type="button">Logout ⏻</button>
+    </div>
+    <iframe class="viewer-frame" id="viewerFrame" title="module"></iframe>
   </div>
 </div>
 
@@ -78,58 +155,117 @@ h1{font-family:'Playfair Display',serif;color:var(--navy);font-size:1.7rem;}
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 <script src="../firebase-config.js"></script>
 <script>
-const $ = id => document.getElementById(id);
-window.resetPw = function(){
-  const e = ($('tEmail').value || '').trim() || prompt('Enter your email:');
-  if(!e) return;
-  auth.sendPasswordResetEmail(e.trim()).then(()=>{ $('tStatus').textContent='Reset email sent — check inbox.'; $('tStatus').style.color='#a7f3d0'; })
-    .catch(err=>{ $('tStatus').textContent = err.message; $('tStatus').style.color='#fca5a5'; });
-};
-$('tLogin').onclick = () => {
-  auth.signInWithEmailAndPassword($('tEmail').value.trim(), $('tPass').value).catch(e=>{ $('tStatus').textContent = e.message; });
-};
-$('tLogout').onclick = () => auth.signOut();
-if(localStorage.getItem('vp_staff_sess')){ $('loginWrap').style.display='none'; }
-auth.onAuthStateChanged(async user => {
-  if(!user){ $('loginWrap').classList.remove('hidden'); $('appShell').classList.add('hidden'); return; }
-  try{
-    const tq = await db.collection('users').where('email','==',user.email).limit(1).get();
-    const tdoc = tq.empty ? null : tq.docs[0];
-    if(tdoc && tdoc.data().role === 'teacher'){
-      const subs = tdoc.data().assignedSubjects || [];
-      const bats = tdoc.data().assignedBatches || [];
-      localStorage.setItem('vp_staff_sess', user.email);
-      $('helloSub').textContent = 'Welcome, ' + (tdoc.data().name || user.email);
-      $('subjChips').innerHTML = subs.map(s => '<span class="chip">'+s+'</span>').join('') + (bats.length ? ' <span class="chip" style="background:#d1fae5;color:#166534;">Batches: '+bats.join(', ')+'</span>' : '') || '<span class="chip" style="background:#fef3c7;color:#92400e;">No subjects assigned yet — contact admin</span>';
-      $('loginWrap').classList.add('hidden'); $('appShell').classList.remove('hidden');
-      return;
-    }
-  }catch(e){}
-  await auth.signOut();
-  $('tStatus').textContent = 'Teacher accounts only.';
-});
-</script>
-<script>
-if (top !== self) { top.location = self.location; }
-if ('serviceWorker' in navigator) { window.addEventListener('load', function(){ navigator.serviceWorker.register('../sw.js').catch(function(){}); }); }
-</script>
-<script>
-try { auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL); } catch(e) {}
-/* One-tap install button */
 (function(){
-  var deferredPrompt = null;
-  window.addEventListener('beforeinstallprompt', function(e){
-    e.preventDefault(); deferredPrompt = e; showBtn();
-  });
-  function showBtn(){
-    if (document.getElementById('vpInstallBtn')) return;
-    var b = document.createElement('button');
-    b.id = 'vpInstallBtn'; b.textContent = '📲 Install App';
-    b.style.cssText = "position:fixed;left:18px;bottom:18px;z-index:15000;border:none;border-radius:999px;padding:12px 20px;background:linear-gradient(135deg,#C9922A,#E8AA48);color:#0D1B40;font:800 14px 'DM Sans',sans-serif;box-shadow:0 10px 28px rgba(13,27,64,.35);cursor:pointer;";
-    b.onclick = function(){ if(deferredPrompt){ deferredPrompt.prompt(); deferredPrompt = null; } b.remove(); };
-    document.body.appendChild(b);
+'use strict';
+var $ = function(id){ return document.getElementById(id); };
+function on(id, ev, fn){ var n = $(id); if(n) n.addEventListener(ev, fn); return n; }
+
+/* Instant session restore */
+try{
+  if(localStorage.getItem('vp_staff_sess')){
+    $('loginWrap').style.display = 'none';
+    $('appShell').classList.remove('hidden');
+    var p = JSON.parse(localStorage.getItem('vp_staff_profile') || 'null');
+    if(p) renderProfile(p, localStorage.getItem('vp_staff_sess'));
   }
+}catch(e){}
+
+if(typeof firebase === 'undefined' || !firebase.apps.length) return;
+var auth = firebase.auth();
+var db = firebase.firestore();
+
+function renderProfile(p, email){
+  var name = p.name || (email || '').split('@')[0];
+  $('helloSub').textContent = 'Welcome, ' + name + '.';
+  var chips = (p.subs||[]).map(function(s){ return '<span class="chip">'+s+'</span>'; }).join('');
+  if(p.batches && p.batches.length) chips += '<span class="chip gold">Batches: '+p.batches.join(', ')+'</span>';
+  $('subjChips').innerHTML = chips || '<span class="chip" style="background:#fef3c7;color:#92400e;">No subjects assigned yet — contact admin</span>';
+}
+
+auth.onAuthStateChanged(function(user){
+  if(!user){
+    try{ localStorage.removeItem('vp_staff_sess'); localStorage.removeItem('vp_staff_profile'); }catch(e){}
+    $('appShell').classList.add('hidden');
+    $('loginWrap').style.display = '';
+    return;
+  }
+  db.collection('users').where('email','==',user.email).limit(1).get().then(function(q){
+    var doc = q.empty ? null : q.docs[0];
+    if(doc && doc.data().role === 'teacher'){
+      var p = { name: doc.data().name || '', subs: doc.data().assignedSubjects || [], batches: doc.data().assignedBatches || [] };
+      try{
+        localStorage.setItem('vp_staff_sess', user.email);
+        localStorage.setItem('vp_staff_profile', JSON.stringify(p));
+      }catch(e){}
+      renderProfile(p, user.email);
+      $('loginWrap').style.display = 'none';
+      $('appShell').classList.remove('hidden');
+    } else {
+      auth.signOut();
+      var s = $('tStatus'); s.textContent = 'Teacher accounts only.';
+    }
+  }).catch(function(){ auth.signOut(); });
+});
+
+on('tLogin','click', doLogin);
+on('tPass','keydown', function(e){ if(e.key === 'Enter') doLogin(); });
+function doLogin(){
+  var btn = $('tLogin'), st = $('tStatus');
+  var email = ($('tEmail').value||'').trim(), pw = $('tPass').value;
+  if(!email || !pw){ st.textContent = 'Email and password required.'; return; }
+  btn.disabled = true; btn.innerHTML = '<span class="spin"></span>Signing in…';
+  st.textContent = '';
+  auth.signInWithEmailAndPassword(email, pw).catch(function(err){
+    btn.disabled = false; btn.textContent = 'Login';
+    st.textContent = err.message;
+  });
+}
+function doLogout(){
+  try{ localStorage.removeItem('vp_staff_sess'); localStorage.removeItem('vp_staff_profile'); }catch(e){}
+  auth.signOut().then(function(){ location.reload(); }).catch(function(){ location.reload(); });
+}
+on('tLogout','click', doLogout);
+on('tLogout2','click', doLogout);
+window.resetPw = function(){
+  var e = ($('tEmail').value || '').trim() || prompt('Enter your email:');
+  if(!e) return;
+  auth.sendPasswordResetEmail(e.trim()).then(function(){
+    var s = $('tStatus'); s.textContent = 'Reset email sent — check inbox.'; s.style.color = '#a7f3d0';
+  }).catch(function(err){ var s = $('tStatus'); s.textContent = err.message; s.style.color = '#fca5a5'; });
+};
+
+/* Embedded module viewer */
+var viewer = $('viewer'), frame = $('viewerFrame');
+function openModule(page, title){
+  $('viewerTitle').textContent = title;
+  $('hubView').classList.add('hidden');
+  viewer.classList.add('open');
+  frame.src = page;
+}
+function closeModule(){
+  frame.src = 'about:blank';
+  viewer.classList.remove('open');
+  $('hubView').classList.remove('hidden');
+}
+Array.prototype.forEach.call(document.querySelectorAll('.tile'), function(t){
+  t.addEventListener('click', function(){ openModule(t.dataset.page, t.dataset.title); });
+});
+on('backBtn','click', closeModule);
+window.addEventListener('message', function(e){ if(e.data && e.data.type === 'vp-close') closeModule(); });
+window.addEventListener('keydown', function(e){ if(e.key === 'Escape' && viewer.classList.contains('open')) closeModule(); });
 })();
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function(){
+    var dir = location.href.replace(/[^/]*$/, '');
+    navigator.serviceWorker.getRegistrations().then(function(regs){
+      regs.forEach(function(r){ if(r.scope !== dir){ r.unregister(); } });
+    });
+    caches.keys().then(function(keys){ keys.forEach(function(k){ caches.delete(k); }); }).catch(function(){});
+    navigator.serviceWorker.register('./staff-sw.js', {scope:'./'}).catch(function(){});
+  });
+}
 </script>
 </body>
 </html>

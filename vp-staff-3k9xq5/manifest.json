@@ -1,21 +1,16 @@
 {
-  "name": "Vinayak ProEdu \u2014 Faculty",
-  "short_name": "ProEdu Faculty",
+  "id": "vp-faculty-portal",
+  "name": "Vinayak ProEdu — Faculty Portal",
+  "short_name": "Faculty",
+  "description": "Faculty portal for Vinayak ProEdu teachers",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#0D1B40",
   "theme_color": "#0D1B40",
   "icons": [
-    {
-      "src": "../icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "../icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
+    { "src": "https://pasteimg.com/images/2026/03/31/WhatsApp-Image-2026-03-19-at-6.49.19-PM.jpg", "sizes": "512x512", "type": "image/jpeg", "purpose": "any" },
+    { "src": "https://pasteimg.com/images/2026/03/31/WhatsApp-Image-2026-03-19-at-6.49.19-PM.jpg", "sizes": "192x192", "type": "image/jpeg", "purpose": "any" }
   ]
 }

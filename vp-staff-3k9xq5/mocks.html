@@ -4,222 +4,712 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="theme-color" content="#0D1B40">
+<meta name="mobile-web-app-capable" content="yes">
 <title>Mocks & Attempts | Faculty Portal</title>
 <link rel="icon" type="image/png" href="https://pasteimg.com/images/2026/03/31/WhatsApp-Image-2026-03-19-at-6.49.19-PM.jpg">
 <link rel="manifest" href="./manifest.json">
-<meta name="theme-color" content="#0D1B40">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--navy:#0D1B40;--blue:#1e3c72;--gold:#C9922A;--gold-lt:#E8AA48;--ink:#1A1A2E;--muted:#6B7280;}
+:root{
+  --navy:#0D1B40; --blue:#1e3c72; --gold:#C9922A; --gold-lt:#E8AA48;
+  --ink:#1A1A2E; --muted:#667085; --line:#e6e9f0;
+  --shadow-sm:0 1px 3px rgba(16,24,40,.06),0 1px 2px rgba(16,24,40,.04);
+  --shadow-md:0 10px 30px rgba(13,27,64,.12);
+  --r:14px;
+}
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'DM Sans',sans-serif;color:var(--ink);background:#f5f7fb;line-height:1.65;}
+body{font-family:'DM Sans',sans-serif;color:var(--ink);background:#f4f6fa;line-height:1.55;-webkit-font-smoothing:antialiased;}
+h1,h2,h3{font-family:'Playfair Display',serif;}
+button{font-family:inherit;cursor:pointer;border:none;background:none;}
+input,select,textarea{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);font:inherit;font-size:.92rem;transition:border-color .15s, box-shadow .15s;}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,146,42,.13);}
+textarea{min-height:90px;resize:vertical;}
+label{display:block;font-size:.7rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin:0 0 5px;}
 .hidden{display:none !important;}
-.login-wrap{position:fixed;inset:0;z-index:9999;background:linear-gradient(135deg,var(--navy),var(--blue));display:flex;align-items:center;justify-content:center;padding:20px;}
-.login-box{width:min(420px,92vw);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:24px;padding:clamp(32px,6vw,48px);backdrop-filter:blur(20px);box-shadow:0 40px 100px rgba(0,0,0,.4);}
-.login-box h2{color:#fff;font-family:'Playfair Display',serif;font-size:1.6rem;margin-bottom:6px;text-align:center;}
-.login-box>p{color:rgba(255,255,255,.55);font-size:.9rem;text-align:center;margin-bottom:28px;}
-.lf{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;}
-.lf label{font-size:.74rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.65);}
-.lf input{padding:13px 16px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.14);border-radius:10px;color:#fff;font-size:.95em;font-family:inherit;}
-.lf input:focus{outline:none;border-color:rgba(201,146,42,.6);}
-.login-btn{width:100%;padding:15px;border-radius:50px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--gold),var(--gold-lt));color:var(--navy);font-size:1em;font-weight:700;font-family:inherit;}
-.login-status{margin-top:12px;font-size:.9rem;font-weight:700;text-align:center;min-height:22px;color:#fca5a5;}
-.forgot{text-align:center;margin-top:10px;}
-.forgot a{color:var(--gold-lt);font-size:.85rem;cursor:pointer;font-weight:700;}
-.app-shell{display:flex;min-height:100vh;}
-.sidebar{width:240px;background:var(--navy);color:#fff;padding:18px;flex-shrink:0;}
-.brand{display:flex;align-items:center;gap:10px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,.08);}
-.brand img{width:38px;height:38px;border-radius:50%;border:2px solid var(--gold);object-fit:cover;}
-.brand h3{font-family:'Playfair Display',serif;font-size:1rem;}
-.brand p{font-size:.68rem;letter-spacing:1.2px;text-transform:uppercase;color:rgba(232,170,72,.8);}
-.menu a{display:block;padding:11px 14px;border-radius:10px;font-weight:600;font-size:.9rem;color:#fff;text-decoration:none;margin-bottom:4px;}
-.menu a:hover,.menu a.active{background:var(--gold);color:var(--navy);}
-.main{flex:1;padding:24px 28px;overflow:auto;}
-.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid rgba(201,146,42,.25);}
-h1{font-family:'Playfair Display',serif;color:var(--navy);font-size:1.5rem;}
-.sub{color:var(--muted);font-size:.88rem;}
-.card{background:#fff;border:1px solid rgba(201,146,42,.12);border-radius:18px;padding:18px;box-shadow:0 4px 18px rgba(13,27,64,.06);margin-bottom:16px;}
-table{width:100%;border-collapse:collapse;font-size:.88rem;}
-th,td{padding:9px 12px;border-bottom:1px solid #eef2f7;text-align:left;}
-th{background:#f8fafc;color:var(--navy);font-size:.76rem;text-transform:uppercase;letter-spacing:.5px;}
-.empty{padding:20px;border:1px dashed #d9e2ef;border-radius:14px;background:#fbfdff;color:#5d6e83;text-align:center;}
-.chip{display:inline-block;background:#eef4ff;color:#1e3c72;border-radius:999px;padding:4px 10px;font-size:.72rem;font-weight:800;margin:2px 4px 2px 0;}
-@media(max-width:800px){.sidebar{width:100%;height:auto;}.app-shell{flex-direction:column;}}
+.small{font-size:.83rem;color:var(--muted);}
+
+/* Login */
+.login-wrap{position:fixed;inset:0;z-index:9999;background:radial-gradient(1200px 700px at 70% -10%,#24407e 0%,var(--navy) 55%);display:flex;align-items:center;justify-content:center;padding:20px;}
+.login-box{width:min(400px,92vw);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.13);border-radius:22px;padding:44px 38px;backdrop-filter:blur(18px);}
+.login-logo{width:60px;height:60px;border-radius:50%;border:2px solid var(--gold);margin:0 auto 16px;display:block;object-fit:cover;}
+.login-box h2{color:#fff;font-size:1.5rem;text-align:center;margin-bottom:4px;}
+.login-box>p{color:rgba(255,255,255,.55);font-size:.88rem;text-align:center;margin-bottom:28px;}
+.lf{margin-bottom:15px;}
+.lf label{color:rgba(255,255,255,.6);}
+.lf input{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#fff;}
+.lf input::placeholder{color:rgba(255,255,255,.3);}
+.login-btn{width:100%;padding:14px;border-radius:50px;background:linear-gradient(135deg,var(--gold),var(--gold-lt));color:var(--navy);font-size:1rem;font-weight:700;}
+.login-status{margin-top:12px;font-size:.88rem;font-weight:600;text-align:center;min-height:20px;color:#fca5a5;}
+
+/* App */
+.app{max-width:1180px;margin:0 auto;padding:20px 22px 80px;}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--line);}
+.topbar h1{font-size:1.5rem;color:var(--navy);}
+.topbar .sub{color:var(--muted);font-size:.87rem;}
+.btn{display:inline-flex;align-items:center;gap:6px;border-radius:10px;padding:10px 16px;font-weight:700;font-size:.87rem;text-decoration:none;transition:transform .15s, opacity .15s;}
+.btn:hover{transform:translateY(-1px);opacity:.93;}
+.btn-primary{background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff;}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold-lt));color:var(--navy);}
+.btn-ghost{background:#eef4ff;color:var(--blue);}
+.btn-danger{background:#fef2f2;color:#b91c1c;border:1px solid #fecaca;}
+.btn-sm{padding:6px 12px;font-size:.78rem;}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+@media(max-width:920px){.grid-2{grid-template-columns:1fr;}}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+@media(max-width:700px){.grid-3{grid-template-columns:1fr;}}
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:20px;box-shadow:var(--shadow-sm);margin-bottom:18px;}
+.card h2{font-size:1.15rem;color:var(--navy);margin-bottom:4px;}
+.card .sub{margin-bottom:14px;}
+.section-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px;}
+.stat{background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff;border-radius:var(--r);padding:17px;text-align:center;box-shadow:var(--shadow-sm);}
+.stat .n{font-size:2rem;font-weight:900;line-height:1;}
+.stat .l{font-size:.7rem;letter-spacing:1px;text-transform:uppercase;color:#d7e6ff;margin-top:5px;}
+.frow{margin-bottom:13px;}
+.frow-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(max-width:640px){.frow-row{grid-template-columns:1fr;}}
+.status{min-height:20px;font-size:.87rem;font-weight:700;margin-top:8px;}
+.status.error{color:#b42318;}
+.status.ok{color:#166534;}
+.empty{padding:18px;border:1px dashed var(--line);border-radius:12px;background:#fbfdff;color:var(--muted);text-align:center;font-size:.88rem;}
+.list{display:grid;gap:10px;}
+.item{background:#fff;border:1px solid var(--line);border-radius:12px;padding:15px;box-shadow:var(--shadow-sm);}
+.badge{display:inline-block;padding:5px 10px;border-radius:999px;background:#eef4ff;color:var(--navy);font-size:.72rem;font-weight:800;margin:0 6px 6px 0;}
+.badge.gold{background:linear-gradient(135deg,var(--gold),var(--gold-lt));color:var(--navy);}
+.badge.warn{background:#fef3c7;color:#92400e;}
+.badge.okb{background:#d1fae5;color:#166534;}
+.pill{display:inline-flex;align-items:center;gap:6px;background:#f1f5ff;border:1px solid #dce4fb;color:var(--navy);padding:6px 11px;border-radius:999px;font-size:.77rem;font-weight:700;margin:3px 6px 3px 0;}
+.opt-row{display:grid;grid-template-columns:36px 1fr auto;gap:8px;align-items:center;margin-bottom:8px;}
+.opt-num{width:36px;height:36px;border-radius:9px;background:#eef4ff;color:var(--navy);display:flex;align-items:center;justify-content:center;font-weight:900;}
+.qtype-note{font-size:.8rem;color:var(--muted);background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:12px;}
+details.grp{border:1px solid var(--line);border-radius:12px;background:#fff;box-shadow:var(--shadow-sm);overflow:hidden;}
+details.grp>summary{list-style:none;cursor:pointer;padding:13px 16px;font-weight:800;color:var(--navy);display:flex;justify-content:space-between;gap:10px;background:linear-gradient(180deg,#fff,#f8fbff);border-bottom:1px solid var(--line);}
+details.grp>summary::-webkit-details-marker{display:none;}
+.grp-body{display:grid;gap:10px;padding:14px;}
+.batch-pick{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;padding:10px;border:1px solid var(--line);border-radius:10px;background:#fbfdff;}
+.batch-pick label{display:flex;align-items:center;gap:8px;padding:8px 10px;background:#fff;border:1px solid var(--line);border-radius:9px;font-size:.84rem;font-weight:600;color:var(--navy);text-transform:none;letter-spacing:0;cursor:pointer;margin:0;}
+.batch-pick input{width:auto;}
+
+/* Marking modal */
+.modal-wrap{position:fixed;inset:0;background:rgba(15,23,42,.55);backdrop-filter:blur(4px);z-index:9500;display:none;align-items:center;justify-content:center;padding:18px;}
+.modal-wrap.open{display:flex;}
+.modal{background:#fff;border-radius:16px;box-shadow:0 24px 70px rgba(15,23,42,.3);padding:22px;width:min(580px,100%);max-height:88vh;overflow:auto;}
+.modal h3{color:var(--navy);margin-bottom:8px;}
+.mark-q{border:1px solid var(--line);border-radius:12px;padding:13px;margin-bottom:12px;background:#fbfdff;}
+.mark-ans{background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:10px;margin:9px 0;max-height:200px;overflow:auto;font-size:.9rem;white-space:pre-wrap;}
 </style>
 </head>
 <body>
+
 <div class="login-wrap" id="loginWrap">
   <div class="login-box">
-    <h2>Faculty Portal</h2>
-    <p>Mocks & Attempts · Teachers only</p>
-    <div class="lf"><label>Email</label><input type="email" id="lEmail" placeholder="you@gmail.com"></div>
-    <div class="lf"><label>Password</label><input type="password" id="lPass" placeholder="••••••••"></div>
+    <img class="login-logo" src="https://pasteimg.com/images/2026/03/31/WhatsApp-Image-2026-03-19-at-6.49.19-PM.jpg" alt="">
+    <h2>Mocks & Attempts</h2>
+    <p>Faculty Portal · Teachers only</p>
+    <div class="lf"><label>Email</label><input type="email" id="lEmail" placeholder="you@gmail.com" autocomplete="username"></div>
+    <div class="lf"><label>Password</label><input type="password" id="lPass" placeholder="••••••••" autocomplete="current-password"></div>
     <button class="login-btn" id="loginBtn" type="button">Login</button>
     <div class="login-status" id="lStatus"></div>
-    <div class="forgot"><a onclick="resetPw()">Forgot password?</a></div>
   </div>
 </div>
-<div class="app-shell hidden" id="appShell">
-  <aside class="sidebar">
-    <div class="brand">
-      <img src="https://pasteimg.com/images/2026/03/31/WhatsApp-Image-2026-03-19-at-6.49.19-PM.jpg" alt="Vinayak ProEdu">
-      <div><h3>Vinayak ProEdu</h3><p>Faculty Portal</p></div>
+
+<div class="app hidden" id="appShell">
+  <button onclick="(function(){try{if(window.self!==window.top){parent.postMessage({type:'vp-close'},'*');return;}}catch(e){}location.href='index.html';})()" style="position:fixed;top:12px;left:12px;z-index:15000;padding:8px 15px;border-radius:999px;background:#fff;border:1px solid var(--line);color:var(--navy);font:700 13px 'DM Sans',sans-serif;cursor:pointer;box-shadow:var(--shadow-sm);">← Dashboard</button>
+  <button id="cornerLogout" style="position:fixed;top:12px;right:12px;z-index:15000;padding:8px 15px;border-radius:999px;background:#fef2f2;border:1px solid #fecaca;color:#b42318;font:700 13px 'DM Sans',sans-serif;cursor:pointer;box-shadow:var(--shadow-sm);">Logout ⏻</button>
+
+  <div class="topbar" style="margin-top:34px;">
+    <div>
+      <h1>Mocks & Attempts</h1>
+      <div class="sub" id="pageSub">Your assigned batches only</div>
     </div>
-    <div class="menu">
-      <a href="./index.html">📊 Dashboard</a>
-      <a href="./lectures.html">🎬 Lectures</a>
-      <a href="./live.html">🔴 Live Classes</a>
-      <a href="./leaderboard.html">🏆 Leaderboard</a>
-      <a href="./doubts.html">💬 Doubts</a>
-      <a href="./mocks.html" class="active">📝 Mocks</a>
-      <a href="./calendar.html">📅 Calendar</a>
-      <a href="#" onclick="auth.signOut();return false;">🚪 Logout</a>
+  </div>
+
+  <div class="grid-3" style="margin-bottom:18px;">
+    <div class="stat"><div class="n" id="statPapers">0</div><div class="l">My Papers</div></div>
+    <div class="stat"><div class="n" id="statQuestions">0</div><div class="l">Questions</div></div>
+    <div class="stat"><div class="n" id="statAttempts">0</div><div class="l">Attempts</div></div>
+  </div>
+
+  <div class="card">
+    <div class="section-head">
+      <div><h2>My Papers</h2><div class="sub">Papers created for your batches.</div></div>
+      <input type="search" id="paperSearch" placeholder="Search papers..." style="max-width:280px;margin:0;">
     </div>
-  </aside>
-  <main class="main">
-    <div class="top"><div><h1>Mocks & Attempts</h1><div class="sub" id="pageSub">Your assigned subjects only</div></div></div>
+    <div id="paperList" class="list"></div>
+  </div>
+
+  <div class="grid-2">
     <div class="card">
-  <strong style="color:var(--navy)">➕ Create mock paper</strong>
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:10px;">
-    <input id="mpCode" placeholder="Code (e.g. BT-M1)">
-    <input id="mpTitle" placeholder="Paper title">
-    <select id="mpSubject"></select>
-    <input id="mpTime" type="number" placeholder="Minutes (90)" value="90">
-    <input id="mpMarks" type="number" placeholder="Total marks (100)" value="100">
-    <label style="display:flex;align-items:center;gap:6px;font-size:.85rem;"><input id="mpFree" type="checkbox" style="width:auto;"> Free (trial students)</label>
+      <h2 id="paperFormTitle">Create Paper</h2>
+      <div class="frow"><label>Paper Code *</label><input id="pCode" placeholder="e.g. FA-M1"></div>
+      <div class="frow"><label>Paper Title *</label><input id="pTitle" placeholder="e.g. FA Mock 1"></div>
+      <div class="frow"><label>Subject *</label><select id="pSubject"></select></div>
+      <div class="frow">
+        <label>Assign to Batches * <span class="small" style="text-transform:none;letter-spacing:0;font-weight:500;">(only batches assigned to you by admin)</span></label>
+        <div class="batch-pick" id="pBatches"></div>
+      </div>
+      <div class="frow-row">
+        <div class="frow"><label>Time (min)</label><input id="pTime" type="number" value="90"></div>
+        <div class="frow"><label>Total Marks</label><input id="pMarks" type="number" value="100"></div>
+      </div>
+      <div class="frow-row">
+        <div class="frow"><label>Allowed Attempts</label><input id="pAttempts" type="number" min="1" value="1"></div>
+        <div class="frow"><label>Level</label>
+          <select id="pLevel"><option>Applied Knowledge</option><option selected>Applied Skills</option><option>Strategic Professional</option></select>
+        </div>
+      </div>
+      <label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-size:.9rem;font-weight:700;color:var(--navy);margin-bottom:14px;">
+        <input type="checkbox" id="pFree" style="width:auto;"> 🎁 Free paper (trial students can take it)
+      </label>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="btn btn-primary" id="savePaperBtn" type="button">Save Paper</button>
+        <button class="btn btn-ghost" id="clearPaperBtn" type="button">Clear</button>
+      </div>
+      <div class="status" id="paperStatus"></div>
+    </div>
+
+    <div class="card">
+      <h2>Add Question</h2>
+      <div class="frow"><label>Select Paper *</label><select id="qPaper"><option value="">— choose paper —</option></select></div>
+      <div class="frow-row">
+        <div class="frow"><label>Section</label><input id="qSection" placeholder="A, B, C"></div>
+        <div class="frow"><label>Type</label>
+          <select id="qType">
+            <option value="mcq">MCQ</option>
+            <option value="screenshot">Screenshot MCQ</option>
+            <option value="multi">Multiple Response</option>
+            <option value="fill">Fill in the Blank</option>
+            <option value="dropdown">Dropdown</option>
+            <option value="word">Constructed Response (manual marking)</option>
+          </select>
+        </div>
+      </div>
+      <div class="frow"><label>Question / Scenario</label><textarea id="qText"></textarea></div>
+      <div id="dynArea"></div>
+      <div class="frow" id="optionsBlock">
+        <div class="section-head" style="margin-bottom:8px;">
+          <label style="margin:0;">Answer Options</label>
+          <button class="btn btn-ghost btn-sm" id="addOptBtn" type="button">+ Add option</button>
+        </div>
+        <div id="optionsWrap"></div>
+      </div>
+      <div class="frow-row">
+        <div class="frow"><label>Correct Answer</label><input id="qCorrect" placeholder="MCQ: 0 · Multi: 0,2 · Fill/Word: text"></div>
+        <div class="frow"><label>Marks</label><input id="qMarks" type="number" value="2"></div>
+      </div>
+      <div class="frow"><label>Explanation / Marking Guide</label><textarea id="qExpl"></textarea></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="btn btn-gold" id="saveQBtn" type="button">Save Question</button>
+        <button class="btn btn-ghost hidden" id="cancelEditBtn" type="button">Cancel Edit</button>
+      </div>
+      <div class="status" id="qStatus"></div>
+    </div>
   </div>
-  <button class="login-btn" style="width:auto;padding:10px 22px;border-radius:10px;margin-top:10px;" onclick="createPaper()">💾 Create Paper</button>
-  <div id="mpStatus" style="font-size:.88rem;margin-top:8px;font-weight:700;"></div>
-</div>
-<div class="card">
-  <strong style="color:var(--navy)">➕ Add question</strong>
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:10px;">
-    <select id="mqPaper"></select>
-    <select id="mqType">
-      <option value="mcq">MCQ</option>
-      <option value="multi">Multiple response</option>
-      <option value="fill">Fill in the blank</option>
-      <option value="dropdown">Dropdown</option>
-      <option value="word">Constructed response (manual marking)</option>
-    </select>
-    <input id="mqSection" placeholder="Section (A)" value="A">
-    <input id="mqMarks" type="number" placeholder="Marks (2)" value="2">
+
+  <div class="card">
+    <h2>Existing Questions</h2>
+    <div class="sub">Grouped by paper.</div>
+    <div id="questionList" class="list"></div>
   </div>
-  <textarea id="mqText" placeholder="Question text" style="width:100%;min-height:70px;margin-top:10px;padding:10px;border:1px solid #dbe2ee;border-radius:10px;font:inherit;"></textarea>
-  <textarea id="mqOptions" placeholder="Options, one per line (MCQ/Multi/Dropdown only)" style="width:100%;min-height:60px;margin-top:8px;padding:10px;border:1px solid #dbe2ee;border-radius:10px;font:inherit;"></textarea>
-  <input id="mqCorrect" placeholder="Correct: option NUMBER for MCQ/Dropdown (0=first), numbers comma-separated for Multi, answer text for Fill/Word" style="width:100%;margin-top:8px;padding:10px;border:1px solid #dbe2ee;border-radius:10px;font:inherit;">
-  <button class="login-btn" style="width:auto;padding:10px 22px;border-radius:10px;margin-top:10px;" onclick="addQuestion()">💾 Add Question</button>
-  <div id="mqStatus" style="font-size:.88rem;margin-top:8px;font-weight:700;"></div>
+
+  <div class="card">
+    <h2>Attempts on My Papers</h2>
+    <div id="attemptList" class="list"></div>
+  </div>
 </div>
-<div class="card"><strong style="color:var(--navy)">📝 Your papers</strong><div id="papersBox" style="margin-top:10px;"><div class="empty">Loading…</div></div></div>
-<div class="card"><strong style="color:var(--navy)">📊 Recent attempts</strong><div id="attemptsBox" style="margin-top:10px;"><div class="empty">Loading…</div></div></div>
-  </main>
+
+<div class="modal-wrap" id="markModal">
+  <div class="modal">
+    <h3 id="markTitle">Manual Marking</h3>
+    <div class="small" id="markSub" style="margin-bottom:12px;"></div>
+    <div id="markBody"></div>
+    <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:14px;">
+      <button class="btn btn-ghost" id="markCancel" type="button">Cancel</button>
+      <button class="btn btn-gold" id="markSave" type="button">Save &amp; Finalise</button>
+    </div>
+    <div class="status" id="markStatus"></div>
+  </div>
 </div>
+
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 <script src="../firebase-config.js"></script>
 <script>
-const esc = v => String(v ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-const fmtDate = v => { if(!v) return ''; const d = v.toDate ? v.toDate() : new Date(v.seconds ? v.seconds*1000 : v); return d.toLocaleString('en-IN'); };
+(function(){
+'use strict';
+var $ = function(id){ return document.getElementById(id); };
+function on(id, ev, fn){ var n = $(id); if(n) n.addEventListener(ev, fn); return n; }
+function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]; }); }
+function norm(s){ return String(s == null ? '' : s).trim().toLowerCase(); }
+function lines(s){ return String(s || '').split('\n').map(function(x){ return x.trim(); }).filter(Boolean); }
+function setStatus(id, msg, ok){ var n = $(id); if(!n) return; n.textContent = msg; n.className = 'status ' + (ok ? 'ok' : 'error'); }
+function fmtDate(v){ if(!v) return ''; var d = v.toDate ? v.toDate() : (v.seconds ? new Date(v.seconds*1000) : new Date(v)); return d.toLocaleString('en-IN'); }
 
-document.getElementById('loginBtn').onclick = () => {
-  auth.signInWithEmailAndPassword(document.getElementById('lEmail').value.trim(), document.getElementById('lPass').value).catch(e => { document.getElementById('lStatus').textContent = e.message; });
-};
-let myPapers = [];
-async function loadAll(){
-  const subs = window.__teacherSubjects || [];
-  document.getElementById('pageSub').textContent = 'Subjects: ' + (subs.join(', ') || 'none assigned');
-  document.getElementById('mpSubject').innerHTML = subs.map(s => '<option>'+s+'</option>').join('');
-  await loadPapers();
-  await loadAttempts();
+/* ---- cached session: show app instantly ---- */
+var ME = { subs: [], batches: [], email: '', name: '' };
+try{
+  if(localStorage.getItem('vp_staff_sess')){
+    var p = JSON.parse(localStorage.getItem('vp_staff_profile') || 'null');
+    if(p){ ME.subs = p.subs||[]; ME.batches = p.batches||[]; ME.name = p.name||''; }
+    ME.email = localStorage.getItem('vp_staff_sess') || '';
+    $('loginWrap').style.display = 'none';
+    $('appShell').classList.remove('hidden');
+    bootUI();
+  }
+}catch(e){}
+
+if(typeof firebase === 'undefined' || !firebase.apps.length){
+  var st = $('lStatus'); if(st) st.textContent = 'Firebase failed to load — check firebase-config.js';
+  return;
 }
-async function loadPapers(){
-  const subs = window.__teacherSubjects || [];
-  const snap = await db.collection('mockPapers').orderBy('createdAt','desc').limit(100).get();
-  myPapers = snap.docs.map(d => ({id:d.id, ...d.data()})).filter(p => p.subject && subs.includes(p.subject));
-  document.getElementById('mqPaper').innerHTML = myPapers.map(p => '<option value="'+p.id+'">'+esc(p.code)+' — '+esc(p.title)+'</option>').join('') || '<option value="">No papers yet — create one above</option>';
-  document.getElementById('papersBox').innerHTML = myPapers.length ? '<table><tr><th>Code</th><th>Title</th><th>Subject</th><th>Marks</th><th>Free?</th></tr>' + myPapers.map(p => '<tr><td><strong>'+esc(p.code)+'</strong></td><td>'+esc(p.title)+'</td><td><span class="chip">'+esc(p.subject)+'</span></td><td>'+Number(p.totalMarks||0)+'</td><td>'+(p.isFree?'🎁':'—')+'</td></tr>').join('') + '</table>' : '<div class="empty">No papers yet for your subjects.</div>';
-}
-async function loadAttempts(){
-  const subs = window.__teacherSubjects || [];
-  const pMap = {}; myPapers.forEach(p => pMap[p.id] = p);
-  const aSnap = await db.collection('mockAttempts').orderBy('createdAt','desc').limit(150).get();
-  let att = aSnap.docs.map(d => d.data()).filter(a => { const p = pMap[a.paperId]; return p; });
-  document.getElementById('attemptsBox').innerHTML = att.length ? '<table><tr><th>Student</th><th>Paper</th><th>Score</th><th>%</th><th>When</th></tr>' + att.slice(0,60).map(a => '<tr><td>'+esc(a.studentName||a.userEmail||'Student')+'</td><td>'+esc(a.paperCode||'')+'</td><td><strong>'+Number(a.score||0)+'/'+Number(a.total||0)+'</strong></td><td>'+Number(a.percentage||0)+'%</td><td>'+fmtDate(a.createdAt)+'</td></tr>').join('') + '</table>' : '<div class="empty">No attempts yet on your papers.</div>';
-}
-async function createPaper(){
-  const st = document.getElementById('mpStatus');
-  const code = document.getElementById('mpCode').value.trim().toUpperCase();
-  const title = document.getElementById('mpTitle').value.trim();
-  const subject = document.getElementById('mpSubject').value;
-  if(!code || !title || !subject){ st.textContent = 'Code, title and subject required.'; st.style.color='#b42318'; return; }
-  st.textContent = 'Creating…'; st.style.color='#0D1B40';
-  await db.collection('mockPapers').add({
-    code, title, subject, level: 'Applied Skills',
-    timeLimit: Number(document.getElementById('mpTime').value||90),
-    totalMarks: Number(document.getElementById('mpMarks').value||100),
-    isFree: document.getElementById('mpFree').checked,
-    locked: false, attemptLimit: 1,
-    sections: ['Section A - Objective Test'],
-    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-  });
-  st.textContent = '✅ Paper created — you can now add questions below.'; st.style.color='#166534';
-  document.getElementById('mpCode').value=''; document.getElementById('mpTitle').value='';
-  loadPapers();
-}
-async function addQuestion(){
-  const st = document.getElementById('mqStatus');
-  const paperId = document.getElementById('mqPaper').value;
-  const paper = myPapers.find(p => p.id === paperId);
-  const type = document.getElementById('mqType').value;
-  const question = document.getElementById('mqText').value.trim();
-  const options = document.getElementById('mqOptions').value.split('\n').map(s => s.trim()).filter(Boolean);
-  let correct = document.getElementById('mqCorrect').value.trim();
-  const marks = Number(document.getElementById('mqMarks').value||2);
-  if(!paper){ st.textContent = 'Create a paper first.'; st.style.color='#b42318'; return; }
-  if(!question){ st.textContent = 'Question text required.'; st.style.color='#b42318'; return; }
-  if((type==='mcq'||type==='multi'||type==='dropdown') && options.length < 2){ st.textContent = 'Add at least 2 options (one per line).'; st.style.color='#b42318'; return; }
-  if(type==='mcq'||type==='dropdown') correct = Number(correct);
-  if(type==='multi') correct = correct.split(',').map(s => Number(s.trim())).filter(n => !isNaN(n));
-  st.textContent = 'Saving…'; st.style.color='#0D1B40';
-  await db.collection('mockQuestions').add({
-    paperId, paperCode: paper.code||'', paperTitle: paper.title||'', subject: paper.subject||'',
-    section: document.getElementById('mqSection').value.trim()||'A',
-    type, question, options, correct, marks, requiresManualMark: type==='word',
-    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-  });
-  st.textContent = '✅ Question added to ' + paper.code; st.style.color='#166534';
-  document.getElementById('mqText').value=''; document.getElementById('mqOptions').value=''; document.getElementById('mqCorrect').value='';
-}
-window.resetPw = function(){
-  const e = (document.getElementById('lEmail').value || '').trim() || prompt('Enter your email:');
-  if(!e) return;
-  auth.sendPasswordResetEmail(e.trim()).then(()=>{ document.getElementById('lStatus').textContent='Reset email sent.'; document.getElementById('lStatus').style.color='#a7f3d0'; }).catch(err=>{ document.getElementById('lStatus').textContent = err.message; });
-};
-auth.onAuthStateChanged(async user => {
-  if(!user){ document.getElementById('loginWrap').classList.remove('hidden'); document.getElementById('appShell').classList.add('hidden'); return; }
-  try{
-    const tq = await db.collection('users').where('email','==',user.email).limit(1).get();
-    const tdoc = tq.empty ? null : tq.docs[0];
-    if(tdoc && tdoc.data().role === 'teacher'){
-      window.__teacherSubjects = tdoc.data().assignedSubjects || [];
-      document.getElementById('loginWrap').classList.add('hidden');
-      document.getElementById('appShell').classList.remove('hidden');
-      loadAll();
-      return;
+var auth = firebase.auth();
+var db = firebase.firestore();
+
+on('loginBtn','click', function(){
+  var st = $('lStatus');
+  var email = ($('lEmail').value||'').trim(), pw = $('lPass').value;
+  if(!email || !pw){ st.textContent = 'Email and password required.'; return; }
+  st.textContent = '';
+  auth.signInWithEmailAndPassword(email, pw).catch(function(e){ st.textContent = e.message; });
+});
+on('lPass','keydown', function(e){ if(e.key === 'Enter') $('loginBtn').click(); });
+
+auth.onAuthStateChanged(function(user){
+  if(!user){
+    try{ localStorage.removeItem('vp_staff_sess'); localStorage.removeItem('vp_staff_profile'); }catch(e){}
+    $('appShell').classList.add('hidden');
+    var lw = $('loginWrap'); lw.style.display = '';
+    return;
+  }
+  db.collection('users').where('email','==',user.email).limit(1).get().then(function(q){
+    var doc = q.empty ? null : q.docs[0];
+    if(doc && doc.data().role === 'teacher'){
+      ME.subs = doc.data().assignedSubjects || [];
+      ME.batches = doc.data().assignedBatches || [];
+      ME.email = user.email;
+      ME.name = doc.data().name || '';
+      try{
+        localStorage.setItem('vp_staff_sess', user.email);
+        localStorage.setItem('vp_staff_profile', JSON.stringify({name: ME.name, subs: ME.subs, batches: ME.batches}));
+      }catch(e){}
+      $('loginWrap').style.display = 'none';
+      $('appShell').classList.remove('hidden');
+      bootUI();
+    } else {
+      auth.signOut();
+      $('lStatus').textContent = 'Teacher accounts only.';
     }
-  }catch(e){}
-  await auth.signOut();
-  document.getElementById('lStatus').textContent = 'Teacher accounts only.';
+  }).catch(function(){ auth.signOut(); });
+});
+on('cornerLogout','click', function(){
+  try{ localStorage.removeItem('vp_staff_sess'); localStorage.removeItem('vp_staff_profile'); }catch(e){}
+  auth.signOut().then(function(){
+    try{ if(window.self !== window.top){ window.top.location.href = 'index.html'; return; } }catch(e){}
+    location.href = 'index.html';
+  });
 });
 
+/* ================= DATA ================= */
+var S = { papers: [], questions: [], attempts: [], booted: false, editingPaperId: null, editingQId: null };
+
+function myPaper(p){
+  var pb = p.batchCodes || [];
+  if(p.createdBy && p.createdBy === ME.email) return true;
+  if(!pb.length || !ME.batches.length) return false;
+  return pb.some(function(b){ return ME.batches.indexOf(b) !== -1; });
+}
+function loadAll(){
+  return Promise.all([
+    db.collection('mockPapers').orderBy('createdAt','desc').limit(200).get().catch(function(){return {docs:[]};}),
+    db.collection('mockQuestions').get().catch(function(){return {docs:[]};}),
+    db.collection('mockAttempts').orderBy('createdAt','desc').limit(300).get().catch(function(){return {docs:[]};})
+  ]).then(function(res){
+    S.papers = res[0].docs.map(function(d){ return Object.assign({id:d.id}, d.data()); }).filter(myPaper);
+    var ids = {}; S.papers.forEach(function(p){ ids[p.id] = true; });
+    S.questions = res[1].docs.map(function(d){ return Object.assign({id:d.id}, d.data()); }).filter(function(q){ return ids[q.paperId]; });
+    S.attempts = res[2].docs.map(function(d){ return Object.assign({id:d.id}, d.data()); }).filter(function(a){ return ids[a.paperId]; });
+  });
+}
+function refreshAll(){
+  return loadAll().then(function(){
+    $('statPapers').textContent = S.papers.length;
+    $('statQuestions').textContent = S.questions.length;
+    $('statAttempts').textContent = S.attempts.length;
+    renderPapers(); renderQSelect(); renderQuestions(); renderAttempts();
+  });
+}
+
+/* ================= UI BOOT ================= */
+function bootUI(){
+  if(S.booted) { refreshAll(); return; }
+  S.booted = true;
+  $('pageSub').textContent = 'Subjects: ' + (ME.subs.join(', ') || 'none') + ' · Batches: ' + (ME.batches.join(', ') || 'none');
+  $('pSubject').innerHTML = ME.subs.map(function(s){ return '<option>'+esc(s)+'</option>'; }).join('') || '<option value="">No subjects assigned</option>';
+  $('pBatches').innerHTML = ME.batches.length ? ME.batches.map(function(b){
+    return '<label><input type="checkbox" class="pb-c" value="'+esc(b)+'"> '+esc(b)+'</label>';
+  }).join('') : '<div class="small" style="grid-column:1/-1;padding:6px;">No batches assigned by admin — contact admin.</div>';
+  dynFields();
+  for(var i=0;i<4;i++) addOptRow('');
+  refreshAll();
+}
+
+/* ================= PAPERS ================= */
+function renderPapers(){
+  var q = norm($('paperSearch').value);
+  var list = S.papers.filter(function(p){ return !q || norm(p.code+' '+p.title+' '+(p.subject||'')).indexOf(q) !== -1; });
+  $('paperList').innerHTML = list.length ? list.map(function(p){
+    var nq = S.questions.filter(function(x){ return String(x.paperId) === String(p.id); }).length;
+    return '<div class="item">'+
+      '<span class="badge">'+esc(p.code)+'</span>'+
+      ((p.batchCodes||[]).map(function(b){ return '<span class="badge gold">'+esc(b)+'</span>'; }).join(''))+
+      (p.isFree ? '<span class="badge okb">Free</span>' : '')+
+      (p.locked ? '<span class="badge warn">Locked</span>' : '')+
+      '<h3 style="font-size:1.02rem;color:var(--navy);margin:4px 0;">'+esc(p.title)+'</h3>'+
+      '<div class="small">'+esc(p.subject||'')+' · '+esc(p.level||'')+' · '+Number(p.timeLimit||0)+' min · '+Number(p.totalMarks||0)+' marks · '+nq+' questions · '+Number(p.attemptLimit||1)+' attempt(s)</div>'+
+      '<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">'+
+        '<button class="btn btn-ghost btn-sm" onclick="VP.editPaper(\''+p.id+'\')">Edit</button>'+
+        '<button class="btn btn-danger btn-sm" onclick="VP.delPaper(\''+p.id+'\')">Delete</button>'+
+      '</div></div>';
+  }).join('') : '<div class="empty">No papers for your batches yet — create one below.</div>';
+}
+on('paperSearch','input', renderPapers);
+function renderQSelect(){
+  $('qPaper').innerHTML = '<option value="">— choose paper —</option>' + S.papers.map(function(p){
+    return '<option value="'+p.id+'">'+esc(p.code)+' - '+esc(p.title)+'</option>';
+  }).join('');
+}
+on('savePaperBtn','click', function(){
+  var code = ($('pCode').value||'').trim().toUpperCase(), title = ($('pTitle').value||'').trim();
+  var subject = $('pSubject').value;
+  var batchCodes = Array.prototype.map.call(document.querySelectorAll('.pb-c:checked'), function(i){ return i.value; });
+  if(!code || !title){ setStatus('paperStatus','Code and title are required.'); return; }
+  if(!subject){ setStatus('paperStatus','No subject selected.'); return; }
+  if(!ME.batches.length){ setStatus('paperStatus','Ask admin to assign you at least one batch first.'); return; }
+  if(!batchCodes.length){ setStatus('paperStatus','Tick at least one batch — you can only publish to batches assigned by admin.'); return; }
+  var payload = {
+    code: code, title: title, subject: subject, level: $('pLevel').value,
+    timeLimit: Number($('pTime').value||90), totalMarks: Number($('pMarks').value||100),
+    attemptLimit: Math.max(1, Number($('pAttempts').value||1)),
+    batchCodes: batchCodes, isFree: !!$('pFree').checked, locked: false,
+    createdBy: ME.email,
+    sections: ['Section A - Objective Test'],
+    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+  };
+  var pr;
+  if(S.editingPaperId){
+    pr = db.collection('mockPapers').doc(S.editingPaperId).set(payload, {merge:true});
+  } else {
+    payload.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+    pr = db.collection('mockPapers').add(payload);
+  }
+  pr.then(function(){
+    setStatus('paperStatus', S.editingPaperId ? 'Paper updated ✓' : 'Paper saved ✓', true);
+    S.editingPaperId = null; $('savePaperBtn').textContent = 'Save Paper';
+    $('paperFormTitle').textContent = 'Create Paper';
+    ['pCode','pTitle'].forEach(function(i){ $(i).value=''; });
+    $('pTime').value = 90; $('pMarks').value = 100; $('pAttempts').value = 1; $('pFree').checked = false;
+    document.querySelectorAll('.pb-c:checked').forEach(function(i){ i.checked = false; });
+    refreshAll();
+  }).catch(function(e){ setStatus('paperStatus', e.message); });
+});
+on('clearPaperBtn','click', function(){
+  S.editingPaperId = null;
+  $('savePaperBtn').textContent = 'Save Paper';
+  $('paperFormTitle').textContent = 'Create Paper';
+  ['pCode','pTitle'].forEach(function(i){ $(i).value=''; });
+  $('pTime').value = 90; $('pMarks').value = 100; $('pAttempts').value = 1; $('pFree').checked = false;
+  setStatus('paperStatus','');
+});
+window.VP = window.VP || {};
+VP.editPaper = function(id){
+  var p = S.papers.find(function(x){ return x.id === id; }); if(!p) return;
+  S.editingPaperId = id;
+  $('pCode').value = p.code||''; $('pTitle').value = p.title||''; $('pSubject').value = p.subject||ME.subs[0]||'';
+  $('pTime').value = p.timeLimit||90; $('pMarks').value = p.totalMarks||100; $('pAttempts').value = p.attemptLimit||1;
+  $('pLevel').value = p.level||'Applied Skills'; $('pFree').checked = !!p.isFree;
+  document.querySelectorAll('.pb-c').forEach(function(i){ i.checked = (p.batchCodes||[]).indexOf(i.value) !== -1; });
+  $('savePaperBtn').textContent = 'Update Paper';
+  $('paperFormTitle').textContent = 'Update Paper';
+  window.scrollTo({top: $('pCode').getBoundingClientRect().top + window.scrollY - 90, behavior:'smooth'});
+};
+VP.delPaper = function(id){
+  if(!confirm('Delete this paper and ALL its questions?')) return;
+  db.collection('mockQuestions').where('paperId','==',id).get().then(function(snap){
+    var b = db.batch();
+    snap.forEach(function(d){ b.delete(d.ref); });
+    b.delete(db.collection('mockPapers').doc(id));
+    return b.commit();
+  }).then(refreshAll).catch(function(e){ alert(e.message); });
+};
+
+/* ================= QUESTIONS ================= */
+function dynFields(){
+  var t = $('qType').value, area = $('dynArea');
+  $('optionsBlock').style.display = '';
+  $('addOptBtn').style.display = '';
+  if(t === 'fill'){
+    $('optionsBlock').style.display = 'none';
+    area.innerHTML =
+      '<div class="frow"><label>Sentence with blanks</label><textarea id="dSentence" placeholder="Use {{1}}, {{2}} or [blank]"></textarea></div>'+
+      '<div class="frow"><label>Answers (one per line)</label><textarea id="dAnswers"></textarea></div>'+
+      '<div class="frow"><label>Alternatives (one line per blank, comma separated)</label><textarea id="dAlts"></textarea></div>';
+  } else if(t === 'dropdown'){
+    $('optionsBlock').style.display = 'none';
+    area.innerHTML =
+      '<div class="frow"><label>Sentence with [blank]</label><textarea id="dSentence"></textarea></div>'+
+      '<div class="frow"><label>Options (one per line)</label><textarea id="dOptions"></textarea></div>'+
+      '<div class="frow"><label>Correct option index (0-based)</label><input id="dCorrectIdx" type="number" min="0" value="0"></div>';
+  } else if(t === 'screenshot'){
+    area.innerHTML =
+      '<div class="frow"><label>Image URL(s) — one per line</label><textarea id="dImageUrls" placeholder="https://..."></textarea></div>'+
+      '<div class="qtype-note">Screenshot MCQ behaves like an MCQ with image(s).</div>';
+  } else if(t === 'word'){
+    $('optionsBlock').style.display = 'none';
+    area.innerHTML = '<div class="qtype-note">Constructed response — not auto-marked. Award marks from the Attempts list. Put the marking guide in the Explanation box.</div>';
+  } else {
+    area.innerHTML = '';
+  }
+}
+on('qType','change', dynFields);
+function addOptRow(v){
+  var wrap = $('optionsWrap');
+  var row = document.createElement('div');
+  row.className = 'opt-row';
+  row.innerHTML = '<div class="opt-num">'+(wrap.children.length+1)+'</div>'+
+    '<input type="text" class="opt-in" value="'+esc(v||'')+'" placeholder="Option text">'+
+    '<button type="button" class="btn btn-danger btn-sm">✕</button>';
+  row.querySelector('button').addEventListener('click', function(){
+    row.remove();
+    Array.prototype.forEach.call(wrap.children, function(r,i){
+      r.querySelector('.opt-num').textContent = i+1;
+      r.querySelector('.opt-in').placeholder = 'Option '+(i+1);
+    });
+  });
+  wrap.appendChild(row);
+}
+on('addOptBtn','click', function(){ addOptRow(''); });
+
+on('saveQBtn','click', function(){
+  var paperId = $('qPaper').value, t = $('qType').value;
+  if(!paperId){ setStatus('qStatus','Select a paper.'); return; }
+  var paper = S.papers.find(function(p){ return p.id === paperId; });
+  var payload = {
+    paperId: paperId, paperCode: paper.code||'', paperTitle: paper.title||'', subject: paper.subject||'',
+    section: ($('qSection').value||'').trim() || 'A',
+    type: t,
+    mainQuestion: '',
+    question: ($('qText').value||'').trim(),
+    explanation: ($('qExpl').value||'').trim(),
+    marks: Number($('qMarks').value||2),
+    requiresManualMark: t === 'word',
+    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+  };
+  var correctRaw = ($('qCorrect').value||'').trim();
+  if(t === 'mcq' || t === 'screenshot'){
+    payload.options = Array.prototype.map.call(document.querySelectorAll('.opt-in'), function(i){ return i.value.trim(); }).filter(Boolean);
+    if(payload.options.length < 2){ setStatus('qStatus','Add at least 2 options.'); return; }
+    payload.correct = Number(correctRaw);
+    if(isNaN(payload.correct) || payload.correct < 0 || payload.correct >= payload.options.length){ setStatus('qStatus','Correct answer must be an option index (0-based).'); return; }
+    if(t === 'screenshot'){
+      payload.imageUrls = lines(($('dImageUrls')||{}).value);
+      if(!payload.imageUrls.length){ setStatus('qStatus','Add at least one image URL.'); return; }
+      payload.imageUrl = payload.imageUrls[0];
+    }
+  } else if(t === 'multi'){
+    payload.options = Array.prototype.map.call(document.querySelectorAll('.opt-in'), function(i){ return i.value.trim(); }).filter(Boolean);
+    payload.correct = correctRaw.split(',').map(function(x){ return Number(x.trim()); }).filter(function(x){ return !isNaN(x); });
+    if(!payload.correct.length){ setStatus('qStatus','Enter correct option indexes like 0,2'); return; }
+  } else if(t === 'fill'){
+    payload.sentence = ($('dSentence').value||'').trim();
+    payload.answers = lines($('dAnswers').value).map(norm);
+    payload.altAnswers = lines(($('dAlts')||{}).value).map(function(l){ return l.split(/[,|]/).map(norm).filter(Boolean); });
+    var blanks = (payload.sentence.match(/\{\{\d+\}\}/g)||[]).length || (/(\[blank\]|_{3,})/.test(payload.sentence) ? 1 : 0);
+    if(!blanks){ setStatus('qStatus','Sentence needs {{1}} or [blank] placeholders.'); return; }
+    if(payload.answers.length !== blanks){ setStatus('qStatus','Sentence has '+blanks+' blank(s) but '+payload.answers.length+' answer line(s).'); return; }
+    payload.correct = payload.answers;
+    payload.question = payload.sentence;
+  } else if(t === 'dropdown'){
+    payload.sentence = ($('dSentence').value||'').trim();
+    payload.options = lines($('dOptions').value);
+    payload.correctIndex = Number($('dCorrectIdx').value||0);
+    if(payload.options.length < 2){ setStatus('qStatus','Dropdown needs at least 2 options.'); return; }
+    payload.correct = payload.correctIndex;
+    payload.question = payload.sentence;
+  } else if(t === 'word'){
+    payload.correct = '';
+  }
+  var pr;
+  if(S.editingQId){
+    pr = db.collection('mockQuestions').doc(S.editingQId).set(payload, {merge:true});
+  } else {
+    payload.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+    pr = db.collection('mockQuestions').add(payload);
+  }
+  pr.then(function(){
+    setStatus('qStatus', S.editingQId ? 'Question updated ✓' : 'Question saved ✓', true);
+    cancelEdit(); dynFields(); refreshAll();
+  }).catch(function(e){ setStatus('qStatus', e.message); });
+});
+function cancelEdit(){
+  S.editingQId = null;
+  $('cancelEditBtn').classList.add('hidden');
+  $('saveQBtn').textContent = 'Save Question';
+  ['qText','qCorrect','qExpl'].forEach(function(i){ $(i).value=''; });
+  $('qMarks').value = 2; $('optionsWrap').innerHTML = '';
+  for(var i=0;i<4;i++) addOptRow('');
+}
+on('cancelEditBtn','click', cancelEdit);
+
+function qMarksOf(q){ return Number(q.marks||0); }
+function renderQuestions(){
+  var groups = {};
+  S.questions.slice().sort(function(a,b){
+    return String(a.paperCode).localeCompare(String(b.paperCode)) || String(a.section).localeCompare(String(b.section));
+  }).forEach(function(q){
+    var k = q.paperId || 'x';
+    if(!groups[k]) groups[k] = {code:q.paperCode||'—', title:q.paperTitle||'Paper', items:[]};
+    groups[k].items.push(q);
+  });
+  var keys = Object.keys(groups);
+  if(!keys.length){ $('questionList').innerHTML = '<div class="empty">No questions yet — add your first question above.</div>'; return; }
+  $('questionList').innerHTML = keys.map(function(k, gi){
+    var g = groups[k];
+    var tot = g.items.reduce(function(s,q){ return s + qMarksOf(q); }, 0);
+    return '<details class="grp" '+(gi===0?'open':'')+'>'+
+      '<summary><span>'+esc(g.code)+' — '+esc(g.title)+'</span><span class="small">'+g.items.length+' question(s) · '+tot+' marks</span></summary>'+
+      '<div class="grp-body">'+
+      g.items.map(function(q, i){
+        var img = (Array.isArray(q.imageUrls) && q.imageUrls.length) ? q.imageUrls : (q.imageUrl ? [q.imageUrl] : []);
+        return '<div class="item">'+
+          '<span class="badge">Q'+(i+1)+'</span><span class="badge">'+qMarksOf(q)+' marks</span><span class="badge">'+esc(q.section||'-')+'</span><span class="badge">'+esc(q.type)+'</span>'+
+          (q.requiresManualMark ? '<span class="badge warn">manual marking</span>' : '')+
+          (q.question ? '<div class="small" style="white-space:pre-wrap;margin-top:6px;">'+esc(q.question)+'</div>' : '')+
+          (img.length ? '<div style="margin-top:8px;">'+img.slice(0,2).map(function(u){ return '<a href="'+esc(u)+'" target="_blank" style="color:var(--gold);font-weight:700;font-size:.82rem;">🖼 image</a>'; }).join(' ')+'</div>' : '')+
+          '<div style="display:flex;gap:8px;margin-top:10px;">'+
+            '<button class="btn btn-ghost btn-sm" onclick="VP.editQ(\''+q.id+'\')">Edit</button>'+
+            '<button class="btn btn-danger btn-sm" onclick="VP.delQ(\''+q.id+'\')">Delete</button>'+
+          '</div></div>';
+      }).join('')+
+      '</div></details>';
+  }).join('');
+}
+VP.editQ = function(id){
+  var q = S.questions.find(function(x){ return x.id === id; }); if(!q) return;
+  S.editingQId = id;
+  $('qPaper').value = q.paperId || '';
+  $('qSection').value = q.section || '';
+  $('qType').value = q.type || 'mcq';
+  dynFields();
+  $('qText').value = q.question || '';
+  $('qExpl').value = q.explanation || '';
+  $('qMarks').value = q.marks || 2;
+  $('qCorrect').value = Array.isArray(q.correct) ? q.correct.join(',') : (q.correct != null ? q.correct : '');
+  if(q.type === 'mcq' || q.type === 'multi' || q.type === 'screenshot'){
+    $('optionsWrap').innerHTML = '';
+    (q.options || []).forEach(function(o){ addOptRow(o); });
+  }
+  var img = (Array.isArray(q.imageUrls) && q.imageUrls.length) ? q.imageUrls : (q.imageUrl ? [q.imageUrl] : []);
+  if($('dImageUrls') && img.length) $('dImageUrls').value = img.join('\n');
+  if(q.type === 'fill'){
+    if($('dSentence')) $('dSentence').value = q.sentence || q.question || '';
+    if($('dAnswers')) $('dAnswers').value = (q.answers || []).join('\n');
+    if($('dAlts')) $('dAlts').value = (q.altAnswers || []).map(function(a){ return (a||[]).join(', '); }).join('\n');
+  }
+  if(q.type === 'dropdown'){
+    if($('dSentence')) $('dSentence').value = q.sentence || q.question || '';
+    if($('dOptions')) $('dOptions').value = (q.options || []).join('\n');
+    if($('dCorrectIdx')) $('dCorrectIdx').value = Number(q.correctIndex != null ? q.correctIndex : q.correct || 0);
+  }
+  $('saveQBtn').textContent = 'Update Question';
+  $('cancelEditBtn').classList.remove('hidden');
+  window.scrollTo({top: $('qPaper').getBoundingClientRect().top + window.scrollY - 90, behavior:'smooth'});
+};
+VP.delQ = function(id){
+  if(!confirm('Delete this question?')) return;
+  db.collection('mockQuestions').doc(id).delete().then(refreshAll).catch(function(e){ alert(e.message); });
+};
+
+/* ================= ATTEMPTS + MARKING ================= */
+function renderAttempts(){
+  if(!S.attempts.length){ $('attemptList').innerHTML = '<div class="empty">No attempts on your papers yet.</div>'; return; }
+  $('attemptList').innerHTML = S.attempts.map(function(a){
+    var st = a.status === 'pending_marking' ? '<span class="badge warn">Awaiting manual marking</span>'
+      : (a.status === 'marked' ? '<span class="badge okb">Manually marked</span>' : '');
+    return '<div class="item">'+
+      '<span class="badge">'+esc(a.paperCode||'')+'</span>'+st+
+      '<h3 style="font-size:1rem;color:var(--navy);margin:5px 0;">'+esc(a.studentName || a.userEmail || 'Student')+'</h3>'+
+      '<div class="small">'+esc(a.paperTitle||'')+'</div>'+
+      '<div style="margin-top:8px;">'+
+        '<span class="pill">'+Number(a.score||0)+'/'+Number(a.total||0)+'</span>'+
+        '<span class="pill">'+Number(a.percentage||0)+'%</span>'+
+        '<span class="pill">'+fmtDate(a.createdAt)+'</span>'+
+      '</div>'+
+      (a.status === 'pending_marking' ? '<div style="margin-top:10px;"><button class="btn btn-gold btn-sm" onclick="VP.openMark(\''+a.id+'\')">✍️ Mark Constructed Responses</button></div>' : '')+
+    '</div>';
+  }).join('');
+}
+var markAttemptId = null;
+VP.openMark = function(id){
+  var a = S.attempts.find(function(x){ return x.id === id; }); if(!a) return;
+  markAttemptId = id;
+  var qs = S.questions.filter(function(q){ return String(q.paperId) === String(a.paperId) && (q.type === 'word' || q.type === 'excel'); });
+  $('markTitle').textContent = (a.paperCode||'') + ' — ' + (a.studentName || a.userEmail || 'Student');
+  $('markSub').textContent = 'Auto-marked objective score: ' + Number(a.autoScore != null ? a.autoScore : a.score || 0) + ' — award marks for constructed responses below.';
+  $('markBody').innerHTML = qs.length ? qs.map(function(q, i){
+    var given = a.answers ? a.answers[q.id] : null;
+    var pre = (a.manualScores && a.manualScores[q.id] != null) ? Number(a.manualScores[q.id]) : '';
+    var txt = String(given || '').replace(/<[^>]*>/g,'').trim();
+    return '<div class="mark-q">'+
+      '<span class="badge">Q'+(i+1)+'</span><span class="badge">'+qMarksOf(q)+' marks</span>'+
+      (q.question ? '<div class="small" style="white-space:pre-wrap;margin:6px 0;">'+esc(q.question)+'</div>' : '')+
+      (q.explanation ? '<div class="small" style="margin-bottom:6px;"><b>Marking guide:</b> '+esc(q.explanation)+'</div>' : '')+
+      '<div class="mark-ans">'+(txt ? esc(txt) : '<i style="color:var(--muted)">No answer submitted.</i>')+'</div>'+
+      '<label style="text-transform:none;letter-spacing:0;">Awarded marks (max '+qMarksOf(q)+')</label>'+
+      '<input type="number" min="0" max="'+qMarksOf(q)+'" step="0.5" class="mark-in" data-qid="'+q.id+'" data-max="'+qMarksOf(q)+'" value="'+pre+'" style="max-width:140px;margin-top:4px;">'+
+    '</div>';
+  }).join('') : '<div class="empty">No constructed-response questions in this paper.</div>';
+  $('markStatus').textContent = '';
+  $('markModal').classList.add('open');
+};
+on('markCancel','click', function(){ $('markModal').classList.remove('open'); markAttemptId = null; });
+on('markSave','click', function(){
+  if(!markAttemptId) return;
+  var a = S.attempts.find(function(x){ return x.id === markAttemptId; }); if(!a) return;
+  var manualScores = {}, manualSum = 0;
+  document.querySelectorAll('.mark-in').forEach(function(inp){
+    var v = Number(inp.value); if(isNaN(v) || v < 0) v = 0;
+    if(v > Number(inp.dataset.max)) v = Number(inp.dataset.max);
+    manualScores[inp.dataset.qid] = v; manualSum += v;
+  });
+  var autoScore = Number(a.autoScore != null ? a.autoScore : a.score || 0);
+  var total = Number(a.total || 0);
+  var finalScore = Math.round((autoScore + manualSum) * 100) / 100;
+  var pct = total ? Math.round((finalScore / total) * 100) : 0;
+  db.collection('mockAttempts').doc(markAttemptId).update({
+    manualScores: manualScores, manualScore: manualSum,
+    score: finalScore, percentage: pct, status: 'marked',
+    markedAt: firebase.firestore.FieldValue.serverTimestamp()
+  }).then(function(){
+    $('markModal').classList.remove('open'); markAttemptId = null;
+    refreshAll().then(function(){ alert('Saved: ' + finalScore + '/' + total + ' (' + pct + '%)'); });
+  }).catch(function(e){ setStatus('markStatus', e.message); });
+});
+})();
 </script>
 <script>
-if (top !== self) { top.location = self.location; }
-if ('serviceWorker' in navigator) { window.addEventListener('load', function(){ navigator.serviceWorker.register('../sw.js').catch(function(){}); }); }
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function(){
+    var dir = location.href.replace(/[^/]*$/, '');
+    navigator.serviceWorker.getRegistrations().then(function(regs){
+      regs.forEach(function(r){ if(r.scope !== dir){ r.unregister(); } });
+    });
+    caches.keys().then(function(keys){ keys.forEach(function(k){ caches.delete(k); }); }).catch(function(){});
+    navigator.serviceWorker.register('./staff-sw.js', {scope:'./'}).catch(function(){});
+  });
+}
 </script>
 </body>
 </html>

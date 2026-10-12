@@ -46,8 +46,11 @@ th{background:#f8fafc;color:var(--navy);font-size:.76rem;text-transform:uppercas
 .chip{display:inline-block;background:#eef4ff;color:#1e3c72;border-radius:999px;padding:4px 10px;font-size:.72rem;font-weight:800;margin:2px 4px 2px 0;}
 @media(max-width:800px){.sidebar{width:100%;height:auto;}.app-shell{flex-direction:column;}}
 </style>
-</head>
+<style>.app-shell{display:block !important;}.main{padding:56px 24px 40px !important;max-width:1100px;margin:0 auto;}</style></head>
 <body>
+<button onclick="(function(){try{if(window.self!==window.top){parent.postMessage({type:'vp-close'},'*');return;}}catch(e){}location.href='index.html';})()" style="position:fixed;top:12px;left:12px;z-index:15000;padding:8px 15px;border-radius:999px;background:#fff;border:1px solid #e5e7eb;color:#0D1B40;font:700 13px 'DM Sans',sans-serif;cursor:pointer;box-shadow:0 3px 12px rgba(13,27,64,.12);">← Dashboard</button>
+<button id="cornerLogout" onclick="(function(){try{localStorage.removeItem('vp_staff_sess');localStorage.removeItem('vp_staff_profile');}catch(e){}try{auth.signOut();}catch(e){}setTimeout(function(){location.href='index.html';},400);})()" style="position:fixed;top:12px;right:12px;z-index:15000;padding:8px 15px;border-radius:999px;background:#fef2f2;border:1px solid #fecaca;color:#b42318;font:700 13px 'DM Sans',sans-serif;cursor:pointer;box-shadow:0 3px 12px rgba(13,27,64,.12);">Logout ⏻</button>
+
 <div class="login-wrap" id="loginWrap">
   <div class="login-box">
     <h2>Faculty Portal</h2>
@@ -60,22 +63,7 @@ th{background:#f8fafc;color:var(--navy);font-size:.76rem;text-transform:uppercas
   </div>
 </div>
 <div class="app-shell hidden" id="appShell">
-  <aside class="sidebar">
-    <div class="brand">
-      <img src="https://pasteimg.com/images/2026/03/31/WhatsApp-Image-2026-03-19-at-6.49.19-PM.jpg" alt="Vinayak ProEdu">
-      <div><h3>Vinayak ProEdu</h3><p>Faculty Portal</p></div>
-    </div>
-    <div class="menu">
-      <a href="./index.html">📊 Dashboard</a>
-      <a href="./lectures.html">🎬 Lectures</a>
-      <a href="./live.html">🔴 Live Classes</a>
-      <a href="./leaderboard.html">🏆 Leaderboard</a>
-      <a href="./doubts.html">💬 Doubts</a>
-      <a href="./mocks.html">📝 Mocks</a>
-      <a href="./calendar.html" class="active">📅 Calendar</a>
-      <a href="#" onclick="auth.signOut();return false;">🚪 Logout</a>
-    </div>
-  </aside>
+  
   <main class="main">
     <div class="top"><div><h1>Calendar</h1><div class="sub" id="pageSub">Your assigned subjects only</div></div></div>
     <div class="card"><strong style="color:var(--navy)">📅 Upcoming live classes</strong><div id="liveBox" style="margin-top:10px;"><div class="empty">Loading…</div></div></div>
@@ -131,8 +119,17 @@ async function loadAll(){
 }
 </script>
 <script>
-if (top !== self) { top.location = self.location; }
-if ('serviceWorker' in navigator) { window.addEventListener('load', function(){ navigator.serviceWorker.register('../sw.js').catch(function(){}); }); }
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function(){
+    var dir = location.href.replace(/[^/]*$/, '');
+    navigator.serviceWorker.getRegistrations().then(function(regs){
+      regs.forEach(function(r){ if(r.scope !== dir){ r.unregister(); } });
+    });
+    caches.keys().then(function(keys){ keys.forEach(function(k){ caches.delete(k); }); }).catch(function(){});
+    navigator.serviceWorker.register('./staff-sw.js', {scope:'./'}).catch(function(){});
+  });
+}
 </script>
 <script>
 try { auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL); } catch(e) {}
