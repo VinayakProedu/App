@@ -65,18 +65,20 @@ window.CBE = (function () {
         const idx = p0 === 'row' ? 1 : 0;
         const label = parts[idx] || '';
         const kind = (parts[idx + 1] || 'number').toLowerCase();
-        const options = String(parts[idx + 2] || '').split(/[,;]/).map(s => s.trim()).filter(Boolean);
-        const correct = parts[idx + 3] ?? '';
-        const marks = Number(parts[idx + 4]) || 1;
-        const alts = String(parts[idx + 5] || '').split(/[,|]/).map(s => s.trim()).filter(Boolean);
-        if(['dropdown','mcq','yesno'].includes(kind)){
-          subs.push({ type:'dropdown', question:label, options: kind === 'yesno' ? ['Yes','No'] : options, correct:Number(correct)||0, marks });
+        const altsOf = v => String(v || '').split(/[,|]/).map(s => s.trim()).filter(Boolean);
+        if(['dropdown','select','choice','mcq','radio','yesno','yes/no'].includes(kind)){
+          const options = String(parts[idx + 2] || '').split(/[,;]/).map(s => s.trim()).filter(Boolean);
+          subs.push({ type:'dropdown', question:label, options:['yesno','yes/no'].includes(kind) ? ['Yes','No'] : options, correct:Number(parts[idx + 3])||0, marks:Number(parts[idx + 4])||1, alts:altsOf(parts[idx + 5]) });
         } else {
-          subs.push({ type:'number', question:label, correct:String(correct), alts, marks });
+          subs.push({ type:'number', question:label, correct:String(parts[idx + 2] ?? ''), marks:Number(parts[idx + 3])||1, alts:altsOf(parts[idx + 4]) });
         }
       });
     }
     return {
+      id: raw.id,
+      paperId: raw.paperId,
+      paperCode: raw.paperCode,
+      paperTitle: raw.paperTitle,
       type:'case',
       section: raw.section || 'B',
       heading: raw.mainQuestion || raw.sectionBTitle || '',
@@ -103,6 +105,9 @@ window.CBE = (function () {
     const type = TYPES[raw.type] ? raw.type : 'mcq';
     const q = {
       id: raw.id || uid(),
+      paperId: String(raw.paperId || ''),
+      paperCode: String(raw.paperCode || ''),
+      paperTitle: String(raw.paperTitle || ''),
       type,
       section: raw.section || TYPES[type].sec,
       order: Number(raw.order) || 0,
