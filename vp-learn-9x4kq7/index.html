@@ -277,9 +277,7 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
           <h2 class="app-title" id="pageTitleX">Dashboard</h2>
           <div class="app-sub" id="pageSubX">Select a course assigned by your admin</div>
         </div>
-        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
-          <button id="studentCloseBtnX" class="ghost-btn" type="button">Close</button>
-        </div>
+        
       </div>
 
       <!-- DASHBOARD -->
@@ -420,6 +418,7 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
 <script>
 /* Local handles (shared config initializes the app) */
 const auth = firebase.auth();
+auth.setPersistence(firebase.auth.Auth.Persistence.NONE).catch(()=>{});
 const db = firebase.firestore();
 const ADMIN_EMAIL = "vinayakproedu@gmail.com";
 
@@ -481,7 +480,7 @@ document.getElementById('studentLoginBtnX').addEventListener('click', async ()=>
 });
 
 document.getElementById('studentLogoutBtnX').addEventListener('click', async ()=>{ await auth.signOut(); location.reload(); });
-document.getElementById('studentCloseBtnX').addEventListener('click', closeStudentApp);
+
 
 document.querySelectorAll('.app-menu button[data-stu-view]').forEach(btn=>{
   btn.addEventListener('click', ()=>{
