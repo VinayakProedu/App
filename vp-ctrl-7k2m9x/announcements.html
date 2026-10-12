@@ -79,7 +79,6 @@ a{text-decoration:none;color:inherit;}
 .app-main{margin-left:0 !important;}
 @media(max-width:900px){.app-main{margin-left:0 !important;}}
 </style>
-<base target="_blank">
 </head>
 <body>
 
@@ -226,7 +225,7 @@ a{text-decoration:none;color:inherit;}
 })();
 </script>
 <script>
-if (top !== self) { top.location = self.location; }
+
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() {
     navigator.serviceWorker.register('../sw.js').catch(function(e){ console.warn('SW:', e); });
@@ -270,9 +269,18 @@ if ('serviceWorker' in navigator) {
 <script>
 /* Back to dashboard = end session, ask password again */
 window.__vpToDash = function(){
-  try{ localStorage.removeItem('adminUnlocked'); sessionStorage.removeItem('adminUnlocked'); }catch(e){}
+  try{ if(window.self !== window.top){ parent.postMessage({type:'vp-close'}, '*'); return; } }catch(e){}
   location.href = 'index.html';
 };
+</script>
+<script>
+document.addEventListener('click', function(e){
+  var t = e.target && e.target.closest ? e.target.closest('#logoutBtn, #adminLogoutBtn') : null;
+  if(!t) return;
+  setTimeout(function(){
+    try{ if(window.self !== window.top){ window.top.location.href = 'index.html'; } }catch(err){}
+  }, 900);
+}, true);
 </script>
 </body>
 </html>

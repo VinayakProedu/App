@@ -133,7 +133,6 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2}
 .app-main{margin-left:0 !important;}
 @media(max-width:900px){.app-main{margin-left:0 !important;}}
 </style>
-<base target="_blank">
 </head>
 <body>
 
@@ -306,7 +305,7 @@ async function loadLectures(){ const snap=await db.collection('lectures').get().
 
 /* ================= BATCHES ================= */
 async function loadBatches(){
-    if(!auth.currentUser){ setTimeout(function(){ if(window.loadBatches) window.loadBatches(); else loadBatches(); }, 1500); return; }
+    if(!auth.currentUser){ setTimeout(function(){ if(window.loadBatches) window.loadBatches(); else loadBatches(); }, 400); return; }
   try{
     const snap = await db.collection('batches').orderBy('createdAt','desc').get();
     allBatches = snap.docs.map(d => ({id: d.id, ...d.data()}));
@@ -543,7 +542,7 @@ window.deleteStudent = async function(userId){
 };
 </script>
 <script>
-if (top !== self) { top.location = self.location; }
+
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() {
     navigator.serviceWorker.register('../sw.js').catch(function(e){ console.warn('SW:', e); });
@@ -587,7 +586,7 @@ if ('serviceWorker' in navigator) {
 <script>
 /* Back to dashboard = end session, ask password again */
 window.__vpToDash = function(){
-  try{ localStorage.removeItem('adminUnlocked'); sessionStorage.removeItem('adminUnlocked'); }catch(e){}
+  try{ if(window.self !== window.top){ parent.postMessage({type:'vp-close'}, '*'); return; } }catch(e){}
   location.href = 'index.html';
 };
 </script>
@@ -595,6 +594,15 @@ window.__vpToDash = function(){
 window.addEventListener('load', function(){
   try{ if(new URLSearchParams(location.search).get('view')==='batches' && window.showView){ showView('batchView'); } }catch(e){}
 });
+</script>
+<script>
+document.addEventListener('click', function(e){
+  var t = e.target && e.target.closest ? e.target.closest('#logoutBtn, #adminLogoutBtn') : null;
+  if(!t) return;
+  setTimeout(function(){
+    try{ if(window.self !== window.top){ window.top.location.href = 'index.html'; } }catch(err){}
+  }, 900);
+}, true);
 </script>
 </body>
 </html>

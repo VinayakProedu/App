@@ -143,7 +143,6 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
 .app-main{margin-left:0 !important;}
 @media(max-width:900px){.app-main{margin-left:0 !important;}}
 </style>
-<base target="_blank">
 </head>
 <body>
 <button id="logoutBtn" type="button" style="position:fixed;top:14px;right:16px;z-index:12000;border:none;border-radius:999px;padding:9px 18px;background:#fef2f2;color:#b42318;border:1px solid #fecaca;font:700 13px 'DM Sans',sans-serif;cursor:pointer;box-shadow:0 4px 14px rgba(13,27,64,.12);">🚪 Logout</button>
@@ -288,8 +287,7 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
     document.getElementById('appShell').classList.remove('hidden');
     loadClasses();
     loadBatches();
-    setTimeout(loadBatches, 1200);
-  }
+      }
 
   /* Batch selector renderer */
   function renderBatchCheckboxList(batches, containerId, selected=[]){
@@ -371,7 +369,7 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
   }
 
   async function loadBatches(){
-    if(!auth.currentUser){ setTimeout(function(){ if(window.loadBatches) window.loadBatches(); else loadBatches(); }, 1500); return; }
+    if(!auth.currentUser){ setTimeout(function(){ if(window.loadBatches) window.loadBatches(); else loadBatches(); }, 400); return; }
     const statusEl = document.getElementById('batchLoadStatus');
     const filterStatus = document.getElementById('batchFilterStatus');
     try {
@@ -467,7 +465,7 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
 })();
 </script>
 <script>
-if (top !== self) { top.location = self.location; }
+
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() {
     navigator.serviceWorker.register('../sw.js').catch(function(e){ console.warn('SW:', e); });
@@ -511,9 +509,18 @@ if ('serviceWorker' in navigator) {
 <script>
 /* Back to dashboard = end session, ask password again */
 window.__vpToDash = function(){
-  try{ localStorage.removeItem('adminUnlocked'); sessionStorage.removeItem('adminUnlocked'); }catch(e){}
+  try{ if(window.self !== window.top){ parent.postMessage({type:'vp-close'}, '*'); return; } }catch(e){}
   location.href = 'index.html';
 };
+</script>
+<script>
+document.addEventListener('click', function(e){
+  var t = e.target && e.target.closest ? e.target.closest('#logoutBtn, #adminLogoutBtn') : null;
+  if(!t) return;
+  setTimeout(function(){
+    try{ if(window.self !== window.top){ window.top.location.href = 'index.html'; } }catch(err){}
+  }, 900);
+}, true);
 </script>
 </body>
 </html>

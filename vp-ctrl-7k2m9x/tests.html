@@ -152,7 +152,6 @@ body.student .admin-only{display:none !important;}
 .mark-q{border:1px solid var(--border);border-radius:12px;padding:13px;margin-bottom:12px;background:#fbfdff;}
 .mark-ans{background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:10px;margin:9px 0;max-height:220px;overflow:auto;font-size:.9rem;}
 </style>
-<base target="_blank">
 </head>
 <body>
 
@@ -1327,6 +1326,15 @@ VP.closeExam = function(){
 dynFields();
 for(var i=0;i<4;i++) addOptRow('');
 })();
+</script>
+<script>window.__vpToDash = function(){try{ if(window.self !== window.top){ parent.postMessage({type:'vp-close'}, '*'); return; } }catch(e){}location.href = 'index.html'; };</script><script>
+document.addEventListener('click', function(e){
+  var t = e.target && e.target.closest ? e.target.closest('#logoutBtn, #adminLogoutBtn') : null;
+  if(!t) return;
+  setTimeout(function(){
+    try{ if(window.self !== window.top){ window.top.location.href = 'index.html'; } }catch(err){}
+  }, 900);
+}, true);
 </script>
 </body>
 </html>
