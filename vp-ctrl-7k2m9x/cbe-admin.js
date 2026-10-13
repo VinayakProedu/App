@@ -579,7 +579,7 @@
     <div style="padding:16px 20px;display:grid;gap:14px;">
       <div style="padding:12px;border-radius:12px;background:#fffbe6;border:1px solid #e5d9a0;font-size:.9rem;">Auto-marked objective-test score so far: <strong>${Number(a.autoScore ?? a.score ?? 0)}</strong>. Award marks for each constructed response below, then Save & Finalise.</div>
       ${qs.map((q, i) => {
-        const given = a.answers ? C.decAnswers(a.answers)[q.id] : null;
+        const given = a.answers ? (C.decAnswers ? C.decAnswers(a.answers)[q.id] : a.answers[q.id]) : null;
         const pre = a.manualScores && a.manualScores[q.id] != null ? a.manualScores[q.id] : '';
         return `
         <div style="padding:14px;border:1px solid #e5e7eb;border-radius:14px;background:#fff;">
