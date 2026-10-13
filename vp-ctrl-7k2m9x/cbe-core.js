@@ -55,6 +55,30 @@ window.CBE = (function () {
     const spec = String(raw.sectionBHtml || '').trim();
     const introLines = [], subs = [];
     if(spec){
+      if(/<table|<tr|<td|<th|<tbody|<thead/i.test(spec)){
+        const tmp = document.createElement('div');
+        tmp.innerHTML = spec;
+        tmp.querySelectorAll('tr').forEach(tr => {
+          const field = tr.querySelector('[data-answer],[data-sb-answer]');
+          const cells = [...tr.children].map(c => c.textContent.trim());
+          if(field){
+            const label = cells[0] || '';
+            const marks = Number(field.dataset.marks || field.dataset.sbMarks) || 1;
+            const answer = String(field.dataset.answer || field.dataset.sbAnswer || '').trim();
+            const altRaw = String(field.dataset.alt || field.dataset.sbAlt || '').trim();
+            const alts = altRaw ? altRaw.split(/[,|]/).map(s => s.trim()).filter(Boolean) : [];
+            if(field.tagName === 'SELECT'){
+              const opts = [...field.options].map(o => (o.value || o.textContent).trim()).filter(v => v && v.toLowerCase() !== 'select');
+              subs.push({ type:'dropdown', question:label, options: opts.length ? opts : [answer], correct: Math.max(0, opts.indexOf(answer)), marks, alts });
+            } else {
+              subs.push({ type:'number', question:label, correct:answer, marks, alts });
+            }
+          } else {
+            const txt = tr.textContent.replace(/\s+/g,' ').trim();
+            if(txt && !/^Item\s+Answer$/i.test(txt)) introLines.push(txt);
+          }
+        });
+      } else {
       const ls = lines(spec);
       const start = /^(calcTable|statementTable|cashflowtable|type\s*=)/i.test(ls[0] || '') ? 1 : 0;
       ls.slice(start).forEach(ln => {
@@ -73,6 +97,7 @@ window.CBE = (function () {
           subs.push({ type:'number', question:label, correct:String(parts[idx + 2] ?? ''), marks:Number(parts[idx + 3])||1, alts:altsOf(parts[idx + 4]) });
         }
       });
+    }
     }
     return {
       id: raw.id,
@@ -109,7 +134,7 @@ window.CBE = (function () {
       paperCode: String(raw.paperCode || ''),
       paperTitle: String(raw.paperTitle || ''),
       type,
-      section: raw.section || TYPES[type].sec,
+      section: String(raw.section || TYPES[type].sec).toUpperCase(),
       order: Number(raw.order) || 0,
       heading: String(raw.heading || raw.mainQuestion || '').trim(),
       scenario: String(raw.scenario || ((type === 'fill' || type === 'dropdown') ? '' : raw.question) || '').trim(),
@@ -640,6 +665,7 @@ window.CBE = (function () {
       const td = e.target.closest('[data-cbe-cell]');
       if(!td) return;
       e.preventDefault();
+      wrap.focus();
       commit();
       select(Number(td.dataset.r), Number(td.dataset.c), {keepFx: true});
       if(fxEl) fxEl.value = td.dataset.v || '';
@@ -659,9 +685,11 @@ window.CBE = (function () {
       else if(k === 'ArrowRight' || k === 'Tab'){ e.preventDefault(); select(sel.r, sel.c + 1); }
       else if(k === 'Delete' || k === 'Backspace'){ e.preventDefault(); clearCell(sel.r, sel.c); }
       else if(k === 'F2'){ e.preventDefault(); beginEdit(); }
+      else if(k === 'Enter'){ e.preventDefault(); commit(); select(sel.r + 1, sel.c); }
       else if(k.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey){ e.preventDefault(); beginEdit(k); }
     });
     select(0, 0, {scroll: false});
+    wrap.focus();
   }
 
   function answerHtml(q, selected, opts = {}){
