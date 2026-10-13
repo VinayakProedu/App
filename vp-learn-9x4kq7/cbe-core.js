@@ -22,6 +22,16 @@ window.CBE = (function () {
   const SUB_TYPES = ['mcq', 'multi', 'number', 'fill', 'dropdown'];
   const CR_TYPES = ['word', 'sheet'];
 
+  /* ---------------- image error fallback ---------------- */
+  if(typeof window !== 'undefined' && !window.__cbeImgErr){
+    window.__cbeImgErr = function(el){
+      const div = document.createElement('div');
+      div.style.cssText = 'padding:16px;border:1.5px dashed #d8dee9;border-radius:12px;color:#64748b;background:#f8fafc;font-size:.9rem;line-height:1.5;';
+      div.textContent = '🖼️ This exhibit could not be loaded — the image link may have expired. Please ask your tutor to re-upload it from the admin panel.';
+      if(el.parentNode) el.parentNode.replaceWith(div);
+    };
+  }
+
   /* ---------------- utils ---------------- */
   const esc = s => String(s ?? '').replace(/[&<>'"]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[m]));
   const normalizeText = v => String(v ?? '').trim().toLowerCase().replace(/\s+/g, ' ');
@@ -334,7 +344,7 @@ window.CBE = (function () {
 
   /* ---------------- rendering ---------------- */
   function scenarioHtml(q, opts = {}){
-    const imgs = q.exhibits.map((u, i) => `<figure class="cbe-exhibit"><img src="${esc(u)}" alt="${esc(q.imageAlt || 'Exhibit ' + (i + 1))}"></figure>`).join('');
+    const imgs = q.exhibits.map((u, i) => `<figure class="cbe-exhibit"><img src="${esc(u)}" alt="${esc(q.imageAlt || 'Exhibit ' + (i + 1))}" onerror="window.__cbeImgErr(this)"></figure>`).join('');
     let rubric = '';
     if(opts.showRubric && q.rubric) rubric = `<div class="cbe-note" style="background:#fffbe6;border:1px solid #e5d9a0;border-radius:10px;padding:10px;"><strong>Marking guide:</strong> ${esc(q.rubric)}</div>`;
     return `${q.scenario ? `<div class="cbe-scenario-text">${esc(q.scenario)}</div>` : ''}${imgs}${rubric}`;
@@ -361,7 +371,7 @@ window.CBE = (function () {
   }
 
   const SHEET_COLS = ['A','B','C','D','E','F','G','H','I','J'];
-  const SHEET_ROWS = 40;
+  let SHEET_ROWS = 60;
 
   function toFrac(n){
     if(!Number.isFinite(n)) return String(n);
@@ -471,8 +481,24 @@ window.CBE = (function () {
     const cell = (r, c) => table.querySelector(`[data-cbe-cell][data-r="${r}"][data-c="${c}"]`);
     const display = td => { td.textContent = numDisplay(td.dataset.v || '', td.dataset.fmt || 'general'); };
     const pushU = (r, c, pv, nv, pf, nf) => { undoStack.push({r, c, pv, nv, pf: pf || '', nf: nf || ''}); redoStack = []; };
+    function addRows(n){
+      const tbody = table.querySelector('tbody');
+      if(!tbody) return;
+      const frag = document.createDocumentFragment();
+      for(let i = 0; i < n; i++){
+        const r = SHEET_ROWS + i;
+        const tr = document.createElement('tr');
+        let html = `<th class="cbe-gc-rowh" data-row="${r}">${r + 1}</th>`;
+        for(let c = 0; c < SHEET_COLS.length; c++) html += `<td data-cbe-cell data-r="${r}" data-c="${c}" data-v=""></td>`;
+        tr.innerHTML = html;
+        frag.appendChild(tr);
+      }
+      tbody.appendChild(frag);
+      SHEET_ROWS += n;
+    }
 
     function select(r, c, opts = {}){
+      if(r > SHEET_ROWS - 6) addRows(20);
       r = Math.max(0, Math.min(SHEET_ROWS - 1, r));
       c = Math.max(0, Math.min(SHEET_COLS.length - 1, c));
       table.querySelectorAll('.cbe-gc-cur,.cbe-gc-hl').forEach(el => el.classList.remove('cbe-gc-cur', 'cbe-gc-hl'));
