@@ -303,12 +303,12 @@
         answers: S.answers, review: S.review, seen: S.seen,
         idx: S.idx, remaining: S.remaining, studentName: S.studentName,
         savedAt: firebase.firestore.FieldValue.serverTimestamp()
-      }).catch(() => {});
+      }).catch(err => console.warn('[autosave] failed:', err.code || err.message));
     }, 1200);
   }
   async function checkResume(paperId){
     let snap = null;
-    try{ snap = await progressRef(paperId).get(); }catch(e){}
+    try{ snap = await progressRef(paperId).get(); }catch(e){ console.warn('[resume] read failed:', e.code || e.message); }
     if(snap && snap.exists && Number(snap.data().remaining) > 0){
       const d = snap.data();
       ask({
