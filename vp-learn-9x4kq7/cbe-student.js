@@ -49,6 +49,10 @@
     .cbe-fbtn{border:1px solid #9aa7b8;background:#fff;padding:8px 16px;cursor:pointer;font:inherit;font-weight:700;color:#1f2937;border-radius:3px;}
     .cbe-fbtn:hover{background:#f1f3f6;}
     .cbe-fbtn-primary{background:#0D1B40;color:#fff;border-color:#0D1B40;}
+    .cbe-tb-submit{background:linear-gradient(135deg,#C9922A,#E8AA48);color:#0D1B40;font-weight:900;border-radius:4px;margin-right:4px;}
+    .cbe-tb-submit:hover{background:linear-gradient(135deg,#b57f1f,#d99a35);}
+    .cbe-fsubmit{background:linear-gradient(135deg,#C9922A,#E8AA48);color:#0D1B40;border:none;font-weight:900;box-shadow:0 4px 14px rgba(201,146,42,.35);}
+    .cbe-fsubmit:hover{filter:brightness(1.06);}
     .cbe-fbtn-primary:hover{background:#1a2e5e;}
     .cbe-pop{position:absolute;top:52px;left:14px;background:#fff;border:1px solid #9aa7b8;box-shadow:0 14px 40px rgba(15,23,42,.25);z-index:60;display:none;flex-direction:column;border-radius:4px;overflow:hidden;}
     .cbe-pop.open{display:flex;}
@@ -137,12 +141,15 @@
           <button class="cbe-tb-btn" data-pop="help">❓ Help</button>
         </div>
         <div class="cbe-tb-right">
+          <button class="cbe-tb-btn cbe-tb-submit" data-pop="submit">✔ Submit</button>
           <button class="cbe-tb-btn" data-pop="close">🗙 Close All</button>
           <button class="cbe-tb-btn" data-pop="flag">🚩 Flag for Review</button>
         </div>
       </div>
       <div class="cbe-main" id="cbeMain"></div>
       <div class="cbe-footer" id="cbeFooter">
+        <button class="cbe-fbtn cbe-fsubmit" onclick="window.cbeSubmit()">✔ Submit Exam</button>
+        <span style="flex:1;"></span>
         <button class="cbe-fbtn" onclick="window.cbePrev()">← Previous</button>
         <button class="cbe-fbtn" onclick="window.cbeToggleNav()">▦ Navigator</button>
         <button class="cbe-fbtn cbe-fbtn-primary" onclick="window.cbeNext()">Next →</button>
@@ -493,6 +500,7 @@
       return;
     }
     if(a === 'close') return endExamConfirm(false);
+    if(a === 'submit') return window.cbeSubmit();
   }
   $('cbeHlBtn').addEventListener('click', e => { e.stopPropagation(); $('cbeHlMenu').classList.toggle('open'); });
   document.addEventListener('click', e => { if(!e.target.closest('.cbe-hl-wrap')) $('cbeHlMenu')?.classList.remove('open'); });
@@ -637,6 +645,23 @@
 
   /* navigator list */
   window.cbeToggleNav = () => window.cbePop('nav');
+  window.cbeSubmit = function(){
+    if(!S.active || S.submitting) return;
+    saveAns();
+    const total = S.qs.length;
+    const answered = S.qs.filter(hasAns).length;
+    const unseen = S.qs.filter(q => !S.seen[q.id]).length;
+    const flagged = S.qs.filter(q => S.review[q.id]).length;
+    ask({
+      title: 'Submit Exam',
+      body: `<p>Are you sure you want to submit your exam?</p>
+             <p style="color:#6B7280;margin-top:8px;"><strong>${answered}</strong> of ${total} answered · <strong>${unseen}</strong> unseen · <strong>${flagged}</strong> flagged for review</p>
+             <p style="color:#6B7280;margin-top:8px;">Objective-test questions will be marked instantly; Word/Spreadsheet answers go to your tutor for manual marking. <strong>Once submitted you cannot change your answers.</strong></p>`,
+      okText: 'Yes, Submit',
+      cancel: 'No, Continue',
+      onOk: doSubmit
+    });
+  };
   function renderNavList(){
     const box = $('cbeNavList');
     let html = '', lastSec = null;
