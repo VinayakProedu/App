@@ -267,6 +267,7 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
       <div class="app-menu">
         <button class="active" data-stu-view="studentHomeX" type="button">🏠 Dashboard</button>
         <button data-stu-view="studentAnnouncementsX" type="button">📢 Announcements</button>
+        <button data-stu-view="studentProfileX" type="button">👤 Profile</button>
         <button id="studentLogoutBtnX" type="button">Logout</button>
       </div>
     </aside>
@@ -277,6 +278,7 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
           <h2 class="app-title" id="pageTitleX">Dashboard</h2>
           <div class="app-sub" id="pageSubX">Select a course assigned by your admin</div>
         </div>
+        <button onclick="openStudentView('studentProfileX');loadProfile();" title="My Profile" style="width:42px;height:42px;border-radius:50%;border:2px solid #C9922A;background:linear-gradient(135deg,#0D1B40,#1e3c72);color:#E8AA48;font-size:1.15rem;cursor:pointer;flex-shrink:0;">👤</button>
         
       </div>
 
@@ -329,7 +331,8 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
             <div class="syllabus-header">
               <h3>Syllabus</h3>
               <input type="search" id="lectureSearchX" class="course-search" placeholder="Search lessons..." oninput="filterLectures()" style="max-width:100%;margin-bottom:10px;padding:10px 14px;">
-              <div class="progress-bar-wrap"><div class="progress-bar-fill" id="courseProgressBarX" style="width:0%"></div></div>
+              <div style="font-size:1.7rem;font-weight:800;color:#0D1B40;line-height:1;"><span id="courseProgressBigX">0%</span> <span style="font-size:1rem;font-weight:600;color:#6b7280;">complete</span></div>
+              <div class="progress-bar-wrap" style="margin-top:8px;"><div class="progress-bar-fill" id="courseProgressBarX" style="width:0%"></div></div>
               <div style="display:flex;justify-content:space-between;font-size:.82rem;color:#6b7280;">
                 <span id="courseProgressTextX">0 of 0 Lessons</span><span id="courseProgressPctX">0%</span>
               </div>
@@ -402,6 +405,34 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
         <div class="app-card"><div id="courseCalendarListX" class="calendar-list"><div class="skeleton" style="height:100px;border-radius:12px;"></div></div></div>
       </section>
 
+      <!-- PROFILE -->
+      <section class="app-view hidden" id="studentProfileX">
+        <h2 class="app-title" style="margin-bottom:6px;">👤 My Profile</h2>
+        <p class="app-sub" style="margin-bottom:18px;">Keep your details up to date so the institute can reach you.</p>
+        <div class="app-grid-2">
+          <div class="app-card">
+            <h3 class="subject-title">Personal Details</h3>
+            <div class="portal-field" style="margin-bottom:12px"><label>Full Name</label><input id="pfNameX" placeholder="Your full name"></div>
+            <div class="portal-field" style="margin-bottom:12px"><label>Email (login)</label><input id="pfEmailX" disabled style="background:#f3f4f6;"></div>
+            <div class="portal-field" style="margin-bottom:12px"><label>Phone / WhatsApp</label><input id="pfPhoneX" placeholder="+91 …"></div>
+            <div class="app-grid-2" style="gap:10px;">
+              <div class="portal-field" style="margin-bottom:12px"><label>State</label><input id="pfStateX" placeholder="e.g. Maharashtra"></div>
+              <div class="portal-field" style="margin-bottom:12px"><label>City</label><input id="pfCityX" placeholder="e.g. Mumbai"></div>
+            </div>
+            <div class="portal-field" style="margin-bottom:12px"><label>Address</label><textarea id="pfAddressX" placeholder="House no, street, area…" style="min-height:80px;resize:vertical"></textarea></div>
+            <div class="portal-field" style="margin-bottom:12px"><label>PIN Code</label><input id="pfPinX" placeholder="e.g. 400001"></div>
+            <button class="primary-btn" type="button" onclick="saveProfile()">💾 Save Profile</button>
+            <div id="pfStatusX" class="portal-status" style="color:#0D1B40;"></div>
+          </div>
+          <div class="app-card">
+            <h3 class="subject-title">Account</h3>
+            <div class="mini-item" style="margin-bottom:10px;"><strong>Email:</strong> <span id="pfAccEmailX">—</span></div>
+            <div class="mini-item" style="margin-bottom:10px;"><strong>Member since:</strong> <span id="pfSinceX">—</span></div>
+            <div class="mini-item"><strong>Account type:</strong> <span id="pfRoleX">—</span></div>
+          </div>
+        </div>
+      </section>
+
       <!-- ANNOUNCEMENTS -->
       <section class="app-view hidden" id="studentAnnouncementsX">
         <h2 class="app-title" style="margin-bottom:6px;">📢 Announcements</h2>
@@ -455,7 +486,8 @@ function openStudentView(viewId){
     studentDoubtsX: ['Doubts','Ask faculty'],
     studentCourseLeaderboardX: ['Leaderboard','Rankings'],
     studentCourseCalendarX: ['Calendar','Upcoming events'],
-    studentAnnouncementsX: ['Announcements','Important updates']
+    studentAnnouncementsX: ['Announcements','Important updates'],
+    studentProfileX: ['My Profile','Update your personal details']
   };
   const t = titles[viewId] || ['Portal',''];
   document.getElementById('pageTitleX').textContent = t[0];
@@ -486,6 +518,7 @@ document.querySelectorAll('.app-menu button[data-stu-view]').forEach(btn=>{
   btn.addEventListener('click', ()=>{
     openStudentView(btn.dataset.stuView);
     if(btn.dataset.stuView === 'studentAnnouncementsX') loadAnnouncements();
+    if(btn.dataset.stuView === 'studentProfileX') loadProfile();
     if(window.innerWidth<=640) document.getElementById('appSidebarX').classList.remove('open');
   });
 });
@@ -607,6 +640,7 @@ async function renderSyllabus(subject){
   document.getElementById('courseProgressBarX').style.width = '0%';
   document.getElementById('courseProgressTextX').textContent = `0 of ${total} Lessons`;
   document.getElementById('courseProgressPctX').textContent = '0%';
+  if(document.getElementById('courseProgressBigX')) document.getElementById('courseProgressBigX').textContent = '0%';
   const bySection = {};
   courseLectures.forEach(l => { const sec = l.section || 'General'; if(!bySection[sec]) bySection[sec]=[]; bySection[sec].push(l); });
   container.innerHTML = Object.keys(bySection).sort().map((sec, idx) => {
@@ -822,6 +856,40 @@ window.submitCourseDoubt = async function(){
     if(statusEl) statusEl.textContent = 'Sent successfully.';
     loadCourseDoubts();
   }catch(err){ if(statusEl) statusEl.textContent = err.message || 'Could not send.'; }
+};
+
+/* ===== PROFILE ===== */
+window.loadProfile = async function(){
+  const user = auth.currentUser; if(!user) return;
+  $('pfEmailX').value = user.email || '';
+  $('pfAccEmailX').textContent = user.email || '—';
+  let data = {};
+  try{ const snap = await db.collection('users').doc(user.uid).get(); if(snap.exists) data = snap.data() || {}; }catch(e){}
+  $('pfNameX').value = data.name || user.displayName || '';
+  $('pfPhoneX').value = data.phone || '';
+  $('pfStateX').value = data.state || '';
+  $('pfCityX').value = data.city || '';
+  $('pfAddressX').value = data.address || '';
+  $('pfPinX').value = data.pincode || '';
+  $('pfSinceX').textContent = data.createdAt?.toDate ? data.createdAt.toDate().toLocaleDateString() : '—';
+  $('pfRoleX').textContent = (data.role === 'student') ? 'Full student' : 'Free trial';
+  $('pfStatusX').textContent = '';
+};
+window.saveProfile = async function(){
+  const user = auth.currentUser; if(!user) return;
+  const btn = $('pfStatusX');
+  const payload = {
+    name: $('pfNameX').value.trim(), phone: $('pfPhoneX').value.trim(),
+    state: $('pfStateX').value.trim(), city: $('pfCityX').value.trim(),
+    address: $('pfAddressX').value.trim(), pincode: $('pfPinX').value.trim(),
+    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+  };
+  try{
+    btn.textContent = 'Saving…';
+    await db.collection('users').doc(user.uid).set(payload, {merge: true});
+    btn.textContent = '✓ Profile saved.';
+    if(state.userData) Object.assign(state.userData, payload);
+  }catch(err){ btn.textContent = err.message || 'Could not save.'; }
 };
 
 /* ===== AUTH STATE ===== */
