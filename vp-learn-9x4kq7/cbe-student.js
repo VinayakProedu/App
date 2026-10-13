@@ -253,7 +253,7 @@
 
   /* ---------------- modal ---------------- */
   let modalOk = null;
-  function ask({title, body, okText = 'OK', cancel = null, onOk}){
+  function ask({title, body, okText = 'OK', cancel = null, altText = null, onAlt = null, onOk}){
     $('cbeModalTitle').textContent = title;
     $('cbeModalBody').innerHTML = body;
     const foot = $('cbeModalFoot');
@@ -263,6 +263,12 @@
       c.className = 'cbe-fbtn'; c.textContent = cancel;
       c.onclick = () => window.cbeMask(0);
       foot.appendChild(c);
+    }
+    if(altText){
+      const a = document.createElement('button');
+      a.className = 'cbe-fbtn'; a.textContent = altText;
+      a.onclick = () => { window.cbeMask(0); if(onAlt) onAlt(); };
+      foot.appendChild(a);
     }
     const o = document.createElement('button');
     o.className = 'cbe-fbtn cbe-fbtn-primary'; o.textContent = okText;
@@ -282,6 +288,43 @@
     const max = Math.max(1, Number(p.attemptLimit || 1));
     if(used >= max) return alert(`You have already used all ${max} attempt(s) for this paper.`);
     S.pendingPaper = paperId;
+    checkResume(paperId);
+  };
+
+  /* ---------------- resume / autosave ---------------- */
+  const progressRef = paperId => db().collection('mockProgress').doc(`${S.user.uid}_${paperId}`);
+  let persistTimer = null;
+  function persist(){
+    if(!S.active || S.submitting || !S.paper || !S.user) return;
+    clearTimeout(persistTimer);
+    persistTimer = setTimeout(() => {
+      progressRef(S.paper.id).set({
+        userId: S.user.uid, paperId: S.paper.id,
+        answers: S.answers, review: S.review, seen: S.seen,
+        idx: S.idx, remaining: S.remaining, studentName: S.studentName,
+        savedAt: firebase.firestore.FieldValue.serverTimestamp()
+      }).catch(() => {});
+    }, 1200);
+  }
+  async function checkResume(paperId){
+    let snap = null;
+    try{ snap = await progressRef(paperId).get(); }catch(e){}
+    if(snap && snap.exists && Number(snap.data().remaining) > 0){
+      const d = snap.data();
+      ask({
+        title: 'Resume Test?',
+        body: `<p>You have an <strong>unfinished attempt</strong> on this paper.</p>
+               <p style="color:#6B7280;">Time remaining: <strong style="color:#0D1B40;">${C.fmtTime(Number(d.remaining) || 0)}</strong> · Question ${(Number(d.idx) || 0) + 1} of ${getQs(paperId).length}</p>
+               <p>Resume where you left off, or start a new attempt (your saved progress will be cleared)?</p>`,
+        okText: 'Resume', altText: 'Start New',
+        onOk: () => begin(paperId, d),
+        onAlt: async () => { await progressRef(paperId).delete().catch(() => {}); askStartName(paperId); }
+      });
+      return;
+    }
+    askStartName(paperId);
+  }
+  function askStartName(paperId){
     ask({
       title: 'Start Test',
       body: `<label style="display:block;font-size:.76rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#6B7280;margin-bottom:6px;">Student Name</label>
@@ -291,27 +334,33 @@
         const name = ($('cbeNameInput')?.value || '').trim();
         if(!name){ alert('Please enter your name.'); return; }
         S.studentName = name;
-        begin(paperId);
+        begin(paperId, null);
       }
     });
     setTimeout(() => $('cbeNameInput')?.focus(), 50);
-  };
+  }
 
-  function begin(paperId){
+  function begin(paperId, saved){
     const p = S.papers.find(x => x.id === paperId);
     S.paper = p;
     S.qs = getQs(paperId);
-    S.idx = 0; S.answers = {}; S.review = {}; S.seen = {};
-    S.active = true; S.locked = false; S.armed = false; S.reviewMode = false;
-    S.remaining = Number(p.timeLimit || 90) * 60;
+    if(saved){
+      S.answers = saved.answers || {}; S.review = saved.review || {}; S.seen = saved.seen || {};
+      S.idx = Math.max(0, Math.min(Number(saved.idx) || 0, S.qs.length - 1));
+      S.remaining = Math.max(1, Number(saved.remaining) || 0);
+      S.studentName = saved.studentName || S.studentName || '';
+    }else{
+      S.idx = 0; S.answers = {}; S.review = {}; S.seen = {};
+      S.remaining = Number(p.timeLimit || 90) * 60;
+    }
+    S.active = true; S.reviewMode = false;
     S.startTime = Date.now(); S.submitting = false;
     $('cbeTitle').textContent = `${p.code || ''} - ${p.title || ''}`;
     $('cbeOverlay').classList.add('open');
     document.body.style.overflow = 'hidden';
-    enterFs();
-    setTimeout(() => { if(S.active && !S.locked) S.armed = true; }, 3000);
     renderQ();
     startTimer();
+    persist();
   }
 
   window.closeMock = function(){
@@ -320,10 +369,9 @@
     $('cbeOverlay').classList.remove('open');
     document.body.style.overflow = '';
     clearInterval(S.timer);
-    Object.assign(S, {active: false, locked: false, armed: false, submitting: false, qs: [], idx: 0, reviewMode: false});
+    Object.assign(S, {active: false, submitting: false, qs: [], idx: 0, reviewMode: false});
     $('cbeTimerWarn').style.display = 'none';
     $('cbeTimer').classList.remove('warn', 'crit');
-    exitFs();
   };
 
   /* ---------------- timer ---------------- */
@@ -344,6 +392,7 @@
     if(left <= 900 && left > 300){ warn.style.display = 'inline-flex'; warn.textContent = '15 minutes left'; }
     else if(left <= 300 && left > 0){ warn.style.display = 'inline-flex'; warn.textContent = '5 minutes left'; }
     else warn.style.display = 'none';
+    if(left % 10 === 0) persist();
     if(left <= 0){ clearInterval(S.timer); endExamConfirm(true); }
   }
 
@@ -390,13 +439,14 @@
     C.wire($('cbeMain'), q, () => {
       S.answers[q.id] = C.capture(q, $('cbeMain'));
       S.seen[q.id] = true;
+      persist();
       if(S.popOpen === 'nav') renderNavList();
     });
     bindTb();
     clearTimeout(seenTimer);
     if(!S.seen[q.id]) seenTimer = setTimeout(() => { S.seen[q.id] = true; if(S.popOpen === 'nav') renderNavList(); }, 1500);
   }
-  function saveAns(){ const q = curQ(); if(q) S.answers[q.id] = C.capture(q, $('cbeMain')); }
+  function saveAns(){ const q = curQ(); if(q) S.answers[q.id] = C.capture(q, $('cbeMain')); persist(); }
 
   function guardNav(fn){
     const q = curQ();
@@ -692,9 +742,9 @@
       S.submitting = false;
       return;
     }
+    progressRef(S.paper.id).delete().catch(() => {});
     S.active = false;
     S.submitting = false;
-    exitFs();
     renderResult({ name, score, total, pct, answered, timeTakenSec, hasManual, detail });
     await loadData();
   }
@@ -737,13 +787,7 @@
     </div>`;
   }
 
-  /* ---------------- proctoring ---------------- */
-  function lock(reason){ if(!S.active || S.locked || !S.armed || S.uiPrompt) return; S.locked = true; S.lockReason = reason; renderQ(); }
-  const enterFs = () => { const r = document.documentElement, f = r.requestFullscreen || r.webkitRequestFullscreen; if(!f) return; try{ const p = f.call(r); if(p && p.catch) p.catch(() => {}); }catch(e){} };
-  const exitFs = () => { const f = document.exitFullscreen || document.webkitExitFullscreen; if(!document.fullscreenElement || !f) return; try{ const p = f.call(document); if(p && p.catch) p.catch(() => {}); }catch(e){} };
-  window.addEventListener('blur', () => S.active && lock('Browser focus changed.'));
-  document.addEventListener('visibilitychange', () => document.hidden && S.active && lock('Tab switch detected.'));
-  window.addEventListener('beforeunload', e => { if(S.active){ e.preventDefault(); e.returnValue = ''; } });
+  /* ---------------- autosave note: no lock — students can leave and resume ---------------- */
 
   firebase.auth().onAuthStateChanged(async user => { S.user = user || null; if(user) await loadData(); });
 })();
