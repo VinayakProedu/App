@@ -118,6 +118,7 @@ window.CBE = (function () {
               : (raw.imageUrl ? [raw.imageUrl] : [])),
       imageAlt: raw.imageAlt || '',
       marks: Number(raw.marks) || 0,
+      modelAnswer: String(raw.modelAnswer || ''),
       explanation: String(raw.explanation || '')
     };
     switch(type){
@@ -261,6 +262,48 @@ window.CBE = (function () {
   .cbe-grid td{border:1px solid #e2e8f0;min-width:96px;height:28px;padding:3px 6px;font-size:.88rem;outline:none;white-space:pre-wrap;}
   .cbe-grid td:focus{background:#f8fbff;box-shadow:inset 0 0 0 2px rgba(30,60,114,.25);}
   .cbe-note{margin-top:10px;font-size:.85rem;color:#6B7280;line-height:1.55;}
+  .cbe-wtoolbar select{padding:5px 8px;border:1px solid #dbe2ee;border-radius:6px;font:inherit;font-size:.82rem;background:#fff;}
+  .cbe-word table{border-collapse:collapse;width:100%;}
+  .cbe-word td,.cbe-word th{border:1px solid #cbd5e1;padding:5px 8px;min-width:60px;}
+  /* ---- spreadsheet widget ---- */
+  .cbe-gc-wrap{border:1px solid #d8dee9;border-radius:8px;background:#fff;outline:none;font-size:.88rem;}
+  .cbe-gc-menubar{display:flex;gap:2px;border-bottom:1px solid #e5e7eb;padding:2px 6px;position:relative;background:#fbfcfe;}
+  .cbe-xmenu-btn{border:none;background:transparent;padding:5px 10px;cursor:pointer;font:inherit;font-weight:700;border-radius:4px;}
+  .cbe-xmenu-btn:hover{background:#eef2f8;}
+  .cbe-xmenu{display:none;position:absolute;top:100%;left:0;background:#fff;border:1px solid #9aa7b8;box-shadow:0 12px 32px rgba(15,23,42,.22);z-index:40;min-width:210px;padding:4px;border-radius:4px;}
+  .cbe-xmenu.open{display:block;}
+  .cbe-xmenu button{display:block;width:100%;text-align:left;border:none;background:#fff;padding:6px 10px;cursor:pointer;font:inherit;border-radius:3px;}
+  .cbe-xmenu button:hover{background:#eef2f8;}
+  .cbe-xmenu hr{border:none;border-top:1px solid #e5e7eb;margin:3px 0;}
+  .cbe-gc-fmtrow{display:flex;align-items:center;gap:3px;border-bottom:1px solid #e5e7eb;padding:4px 6px;background:#fff;flex-wrap:wrap;}
+  .cbe-gc-fmtrow select{padding:3px 6px;border:1px solid #dbe2ee;border-radius:4px;font:inherit;}
+  .cbe-gc-fmtrow button{border:1px solid transparent;background:#fff;padding:4px 8px;cursor:pointer;font:inherit;font-weight:700;border-radius:4px;min-width:30px;}
+  .cbe-gc-fmtrow button:hover{background:#eef2f8;border-color:#dbe2ee;}
+  .cbe-gc-sep{width:1px;height:18px;background:#c9d2e0;margin:0 4px;}
+  .cbe-gc-bar{display:flex;align-items:stretch;border-bottom:1px solid #e5e7eb;background:#fff;}
+  .cbe-gc-name{width:64px;border:none;border-right:1px solid #e5e7eb;text-align:center;font:inherit;font-weight:700;padding:6px 4px;}
+  .cbe-gc-fxlab{width:34px;display:flex;align-items:center;justify-content:center;font-style:italic;font-family:Georgia,serif;border-right:1px solid #e5e7eb;color:#6B7280;}
+  .cbe-gc-fx{flex:1;border:none;padding:6px 10px;font:inherit;outline:none;}
+  .cbe-gc-scroll{max-height:380px;overflow:auto;position:relative;}
+  .cbe-gc{border-collapse:collapse;min-width:100%;table-layout:fixed;}
+  .cbe-gc th,.cbe-gc td{border:1px solid #e2e8f0;}
+  .cbe-gc-corner{background:#f1f5f9;position:sticky;top:0;left:0;z-index:5;min-width:38px;}
+  .cbe-gc-colh{background:#f1f5f9;font-weight:700;color:#334155;min-width:80px;padding:4px 6px;position:sticky;top:0;z-index:4;text-align:center;}
+  .cbe-gc-rowh{background:#f1f5f9;font-weight:700;color:#334155;min-width:38px;padding:3px 6px;position:sticky;left:0;z-index:3;text-align:center;}
+  .cbe-gc td{min-width:80px;height:26px;padding:3px 6px;cursor:cell;overflow:hidden;white-space:nowrap;background:#fff;}
+  .cbe-gc td.cbe-gc-cur{outline:2px solid #0D1B40;outline-offset:-2px;position:relative;}
+  .cbe-gc-hl{background:#F5C04A !important;color:#0D1B40 !important;}
+  .cbe-gc-all td{background:#dbeafe !important;}
+  .cbe-gc-wrap .cbe-note{padding:8px 10px;border-top:1px solid #e5e7eb;overflow:hidden;}
+  /* ---- word toolbar rows ---- */
+  .cbe-wtoolbar{display:block;background:#fff;border:1px solid #d8dee9;border-radius:6px 6px 0 0;padding:4px;}
+  .cbe-wrow1,.cbe-wrow2{display:flex;align-items:center;gap:2px;flex-wrap:wrap;border-bottom:1px solid #eef2f8;padding:2px 0;}
+  .cbe-wrow2{border-bottom:none;}
+  .cbe-wtoolbar button{border:1px solid transparent;background:#fff;padding:4px 8px;cursor:pointer;font:inherit;font-weight:700;border-radius:4px;min-width:30px;}
+  .cbe-wtoolbar button:hover{background:#eef2f8;border-color:#dbe2ee;}
+  .cbe-wtoolbar select{padding:4px 6px;border:1px solid #dbe2ee;border-radius:4px;font:inherit;min-width:120px;}
+  .cbe-word{border-top:none;border-radius:0 0 6px 6px;min-height:260px;}
+  .cbe-word.readonly{background:#f8fafc;}
   `;
   function injectCss(){ if(byId('cbe-css')) return; const st = document.createElement('style'); st.id = 'cbe-css'; st.textContent = CSS; document.head.appendChild(st); }
 
@@ -292,13 +335,333 @@ window.CBE = (function () {
     return `<div class="cbe-scenario-text">${safe}</div><div style="display:grid;gap:8px;">${q.blanks.map((_, i) => `<label class="small" style="font-weight:700;color:#374151;">Blank ${i + 1}<input type="text" class="cbe-input" data-cbe-input data-idx="${i}" value="${esc(values[i] ?? '')}" style="margin-top:4px;"></label>`).join('')}</div>`;
   }
 
-  const SHEET_COLS = ['A','B','C','D','E'];
-  const SHEET_ROWS = 10;
+  const SHEET_COLS = ['A','B','C','D','E','F','G','H','I','J'];
+  const SHEET_ROWS = 40;
+
+  function toFrac(n){
+    if(!Number.isFinite(n)) return String(n);
+    const sign = n < 0 ? '-' : ''; n = Math.abs(n);
+    const whole = Math.floor(n), frac = n - whole;
+    let best = [0, 1], err = Infinity;
+    for(const d of [2, 4, 8, 16, 32, 64]){ const r = Math.round(frac * d), e = Math.abs(frac - r / d); if(e < err){ err = e; best = [r, d]; } }
+    let [r, d] = best;
+    if(r === d) return sign + (whole + 1);
+    return sign + (whole ? whole + ' ' : '') + (r ? r + '/' + d : '');
+  }
+  function numDisplay(v, fmt){
+    const s = String(v ?? '');
+    if(!fmt || fmt === 'general' || fmt === 'text' || s === '') return s;
+    const n = Number(s.replace(/[,$\s]/g, ''));
+    if(!Number.isFinite(n)) return s;
+    switch(fmt){
+      case '#,##0': return n.toLocaleString('en-US', {maximumFractionDigits: 0});
+      case '#,##0.00': return n.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+      case '0.00': return n.toFixed(2);
+      case '$#,##0': return '$' + n.toLocaleString('en-US', {maximumFractionDigits: 0});
+      case '%': return (n * 100).toFixed(2) + '%';
+      case 'fraction': return toFrac(n);
+      case 'd-mmm-yy': { const d = new Date(n); return isNaN(d) ? s : d.toLocaleDateString('en-GB', {day: 'numeric', month: 'short', year: '2-digit'}); }
+      default: return s;
+    }
+  }
+
+  const GC_FORMATS = ['general', '#,##0', '#,##0.00', '0.00', '$#,##0', '%', 'fraction', 'd-mmm-yy', 'text'];
+
   function sheetHtml(q, selected){
     const grid = Array.isArray(selected) && selected.length ? selected : [];
-    const head = `<tr><th></th>${SHEET_COLS.map(c => `<th>${c}</th>`).join('')}</tr>`;
-    const body = Array.from({length: SHEET_ROWS}, (_, r) => `<tr><th>${r + 1}</th>${SHEET_COLS.map((_, c) => { const v = grid[r] && grid[r][c] != null ? grid[r][c] : ''; return `<td data-cbe-cell data-r="${r}" data-c="${c}" ${q.readonly ? '' : 'contenteditable="true"'}>${esc(v)}</td>`; }).join('')}</tr>`).join('');
-    return `<div class="cbe-grid-wrap"><table class="cbe-grid">${head}${body}</table></div>`;
+    const ro = !!q.readonly;
+    const head = `<tr><th class="cbe-gc-corner"></th>${SHEET_COLS.map((c, ci) => `<th class="cbe-gc-colh" data-col="${ci}">${c}</th>`).join('')}</tr>`;
+    const body = Array.from({length: SHEET_ROWS}, (_, r) => `<tr><th class="cbe-gc-rowh" data-row="${r}">${r + 1}</th>${SHEET_COLS.map((_, c) => {
+      const v = grid[r] && grid[r][c] != null ? String(grid[r][c]) : '';
+      return `<td data-cbe-cell data-r="${r}" data-c="${c}" data-v="${esc(v)}">${esc(numDisplay(v, 'general'))}</td>`;
+    }).join('')}</tr>`).join('');
+    const gridEl = `<div class="cbe-gc-scroll"><table class="cbe-grid cbe-gc">${head}${body}</table></div>`;
+    const bar = `<div class="cbe-gc-bar"><input class="cbe-gc-name" value="A1" readonly tabindex="-1"><span class="cbe-gc-fxlab">fx</span><input class="cbe-gc-fx" placeholder="Enter value or formula, e.g. =B2*1.1" ${ro ? 'disabled' : ''}></div>`;
+    if(ro) return `<div class="cbe-gc-wrap readonly">${bar}${gridEl}</div>`;
+    return `
+    <div class="cbe-gc-wrap" tabindex="0">
+      <div class="cbe-gc-menubar">
+        <button type="button" class="cbe-xmenu-btn" data-xmenu="edit">Edit ▾</button>
+        <button type="button" class="cbe-xmenu-btn" data-xmenu="format">Format ▾</button>
+        <div class="cbe-xmenu" data-xmenu-panel="edit">
+          <button data-gc="undo">↶ Undo</button>
+          <button data-gc="redo">↷ Redo</button>
+          <hr>
+          <button data-gc="cut">✂ Cut</button>
+          <button data-gc="copy">📄 Copy</button>
+          <button data-gc="paste">📋 Paste</button>
+          <button data-gc="pastesp">📋 Paste Special…</button>
+          <hr>
+          <button data-gc="colwidth">↔ Column Width…</button>
+          <hr>
+          <button data-gc="find">🔍 Find…</button>
+          <button data-gc="replace">🔁 Replace…</button>
+          <hr>
+          <button data-gc="selectall">☑ Select All</button>
+        </div>
+        <div class="cbe-xmenu" data-xmenu-panel="format">
+          <button data-gc="cells">🎛 Cells…</button>
+          <hr>
+          <button data-gc="fbold"><b>B</b> Bold</button>
+          <button data-gc="fitalic"><i>I</i> Italic</button>
+          <button data-gc="funderline"><u>U</u> Underline</button>
+          <hr>
+          <button data-gc="rowheight">↕ Row Height…</button>
+          <button data-gc="colwidth">↔ Column Width…</button>
+          <hr>
+          ${GC_FORMATS.map(f => `<button data-gfmt="${f}">${f === 'general' ? 'General' : f}</button>`).join('')}
+        </div>
+      </div>
+      <div class="cbe-gc-fmtrow">
+        <select data-gc="fontsize" title="Font size">${[8,9,10,11,12,14,16,18,20,24].map(s => `<option ${s===11?'selected':''}>${s}</option>`).join('')}</select>
+        <button type="button" data-gc="fbold" title="Bold"><b>B</b></button>
+        <button type="button" data-gc="fitalic" title="Italic"><i>I</i></button>
+        <button type="button" data-gc="funderline" title="Underline"><u>U</u></button>
+        <button type="button" data-gc="fcolor" title="Font color" style="color:#c0392b;">A</button>
+        <button type="button" data-gc="ffill" title="Fill color" style="background:#fef08a;">▨</button>
+        <span class="cbe-gc-sep"></span>
+        <button type="button" data-gc="aleft" title="Align left">⇤</button>
+        <button type="button" data-gc="acenter" title="Align centre">≡</button>
+        <button type="button" data-gc="aright" title="Align right">⇥</button>
+        <span class="cbe-gc-sep"></span>
+        <button type="button" data-gfmt="#,##0.00" title="2 decimal places">.00</button>
+        <button type="button" data-gfmt="%" title="Percentage">%</button>
+        <button type="button" data-gfmt="fraction" title="Fraction">½</button>
+      </div>
+      ${bar}
+      ${gridEl}
+      <div class="cbe-note">Constructed response — <strong>not auto-marked</strong>. Formulae and workings are manually marked. <button type="button" data-gc="reset" style="float:right;border:1px solid #c9d2e0;background:#fff;padding:4px 12px;cursor:pointer;font:inherit;font-weight:700;border-radius:3px;">Reset</button></div>
+    </div>`;
+  }
+
+  function initSheet(box, fire){
+    const wrap = box.querySelector('.cbe-gc-wrap');
+    if(!wrap || wrap.dataset.gcbound) return;
+    wrap.dataset.gcbound = '1';
+    const table = wrap.querySelector('table.cbe-gc');
+    const nameEl = wrap.querySelector('.cbe-gc-name');
+    const fxEl = wrap.querySelector('.cbe-gc-fx');
+    let sel = {r: 0, c: 0}, editing = false;
+    let undoStack = [], redoStack = [];
+    const cell = (r, c) => table.querySelector(`[data-cbe-cell][data-r="${r}"][data-c="${c}"]`);
+    const display = td => { td.textContent = numDisplay(td.dataset.v || '', td.dataset.fmt || 'general'); };
+    const pushU = (r, c, pv, nv, pf, nf) => { undoStack.push({r, c, pv, nv, pf: pf || '', nf: nf || ''}); redoStack = []; };
+
+    function select(r, c, opts = {}){
+      r = Math.max(0, Math.min(SHEET_ROWS - 1, r));
+      c = Math.max(0, Math.min(SHEET_COLS.length - 1, c));
+      table.querySelectorAll('.cbe-gc-cur,.cbe-gc-hl').forEach(el => el.classList.remove('cbe-gc-cur', 'cbe-gc-hl'));
+      sel = {r, c};
+      const td = cell(r, c);
+      if(td) td.classList.add('cbe-gc-cur');
+      const colh = table.querySelector(`[data-col="${c}"]`), rowh = table.querySelector(`[data-row="${r}"]`);
+      if(colh) colh.classList.add('cbe-gc-hl');
+      if(rowh) rowh.classList.add('cbe-gc-hl');
+      if(nameEl) nameEl.value = SHEET_COLS[c] + (r + 1);
+      if(fxEl && !opts.keepFx) fxEl.value = td ? (td.dataset.v || '') : '';
+      if(td && opts.scroll !== false) td.scrollIntoView({block: 'nearest'});
+    }
+    function commit(){
+      if(!editing) return;
+      editing = false;
+      const td = cell(sel.r, sel.c);
+      if(!td) return;
+      td.contentEditable = 'false';
+      const raw = (td.textContent || '').replace(/\s+\n/g, ' ').trim();
+      const prev = td.dataset.v || '';
+      td.dataset.v = raw;
+      display(td);
+      if(fxEl) fxEl.value = raw;
+      if(prev !== raw){ pushU(sel.r, sel.c, prev, raw); fire(); }
+    }
+    function beginEdit(ch){
+      const td = cell(sel.r, sel.c);
+      if(!td) return;
+      commit();
+      editing = true;
+      td.contentEditable = 'true';
+      td.textContent = td.dataset.v || '';
+      td.focus();
+      if(ch) document.execCommand('insertText', false, ch);
+      const done = () => { td.removeEventListener('blur', done); commit(); };
+      td.addEventListener('blur', done);
+    }
+    function clearCell(r, c){
+      const td = cell(r, c); if(!td) return;
+      const prev = td.dataset.v || '';
+      if(!prev && !td.dataset.fmt) return;
+      pushU(r, c, prev, '', td.dataset.fmt, '');
+      td.dataset.v = ''; delete td.dataset.fmt;
+      ['fontWeight','fontStyle','textDecoration','color','background','fontSize','textAlign'].forEach(p => td.style[p] = '');
+      display(td);
+      if(r === sel.r && c === sel.c && fxEl) fxEl.value = '';
+      fire();
+    }
+    async function copyCell(){
+      const td = cell(sel.r, sel.c); const v = td ? (td.dataset.v || '') : '';
+      try{ await navigator.clipboard.writeText(v); }catch(e){ const ta = document.createElement('textarea'); ta.value = v; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); }
+    }
+    async function pasteCell(){
+      let t = '';
+      try{ t = await navigator.clipboard.readText(); }catch(e){ t = prompt('Paste value:'); }
+      if(t == null) return;
+      const td = cell(sel.r, sel.c); if(!td) return;
+      const prev = td.dataset.v || '';
+      pushU(sel.r, sel.c, prev, t);
+      td.dataset.v = t; display(td);
+      if(fxEl) fxEl.value = t;
+      fire();
+    }
+    function setFmt(fmt){
+      const td = cell(sel.r, sel.c); if(!td) return;
+      const prev = td.dataset.fmt || 'general';
+      if(prev === fmt) return;
+      pushU(sel.r, sel.c, td.dataset.v || '', td.dataset.v || '', prev, fmt);
+      td.dataset.fmt = fmt; display(td); fire();
+    }
+    function toggleStyle(prop, val){
+      const td = cell(sel.r, sel.c); if(!td) return;
+      td.style[prop] = td.style[prop] ? '' : val; fire();
+    }
+    function undo(){ const u = undoStack.pop(); if(!u) return; redoStack.push(u); applyU(u, true); }
+    function redo(){ const u = redoStack.pop(); if(!u) return; undoStack.push(u); applyU(u, false); }
+    function applyU(u, isUndo){
+      const td = cell(u.r, u.c); if(!td) return;
+      td.dataset.v = isUndo ? u.pv : u.nv;
+      td.dataset.fmt = isUndo ? (u.pf || 'general') : (u.nf || 'general');
+      display(td);
+      select(u.r, u.c, {keepFx: true});
+      if(fxEl) fxEl.value = td.dataset.v || '';
+      fire();
+    }
+    function doReset(){
+      if(!confirm('Are you sure you want to reset?\n\nResetting will remove any response you have made on this item and reset back to an unanswered state.')) return;
+      table.querySelectorAll('[data-cbe-cell]').forEach(td => {
+        if(td.dataset.v || td.dataset.fmt){
+          pushU(Number(td.dataset.r), Number(td.dataset.c), td.dataset.v || '', '', td.dataset.fmt, '');
+          td.dataset.v = ''; delete td.dataset.fmt;
+          ['fontWeight','fontStyle','textDecoration','color','background','fontSize','textAlign'].forEach(p => td.style[p] = '');
+          display(td);
+        }
+      });
+      select(0, 0); fire();
+    }
+    function cellsDialog(){
+      const cur = (cell(sel.r, sel.c)?.dataset.fmt) || 'general';
+      const pick = prompt('Number format:\n' + GC_FORMATS.map((f, i) => (i + 1) + '. ' + (f === 'general' ? 'General' : f)).join('\n') + '\n\nEnter number (current: ' + cur + '):', String(GC_FORMATS.indexOf(cur) + 1));
+      if(pick == null) return;
+      const f = GC_FORMATS[parseInt(pick, 10) - 1];
+      if(f) setFmt(f);
+    }
+    function findReplace(){
+      const f = prompt('Find:'); if(!f) return;
+      const rep = prompt('Replace with:', '') ?? '';
+      let count = 0;
+      table.querySelectorAll('[data-cbe-cell]').forEach(td => {
+        const v = td.dataset.v || '';
+        if(v.includes(f)){ td.dataset.v = v.split(f).join(rep); display(td); count++; }
+      });
+      if(count){ fire(); } alert(count + ' cell(s) replaced.');
+    }
+    function findOnly(){
+      const f = prompt('Find:'); if(!f) return;
+      const hit = [...table.querySelectorAll('[data-cbe-cell]')].find(td => (td.dataset.v || '').includes(f));
+      if(hit){ select(Number(hit.dataset.r), Number(hit.dataset.c)); } else alert('Not found.');
+    }
+    function sizePrompt(axis){
+      const cur = axis === 'col' ? (cell(sel.r, sel.c)?.offsetWidth || 90) : (cell(sel.r, sel.c)?.offsetHeight || 26);
+      const v = parseInt(prompt((axis === 'col' ? 'Column' : 'Row') + ' width (px):', String(cur)), 10);
+      if(!v) return;
+      if(axis === 'col'){
+        table.querySelectorAll(`[data-cbe-cell][data-c="${sel.c}"],[data-col="${sel.c}"]`).forEach(el => el.style.width = v + 'px');
+      } else {
+        table.querySelectorAll(`[data-cbe-cell][data-r="${sel.r}"],[data-row="${sel.r}"]`).forEach(el => el.style.height = v + 'px');
+      }
+    }
+
+    // menu bar
+    wrap.querySelectorAll('.cbe-xmenu-btn').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        const p = wrap.querySelector(`[data-xmenu-panel="${btn.dataset.xmenu}"]`);
+        const open = p.classList.contains('open');
+        wrap.querySelectorAll('.cbe-xmenu').forEach(m => m.classList.remove('open'));
+        if(!open) p.classList.add('open');
+      });
+    });
+    document.addEventListener('click', () => wrap.querySelectorAll('.cbe-xmenu').forEach(m => m.classList.remove('open')));
+    wrap.querySelectorAll('[data-gc],[data-gfmt]').forEach(el => {
+      el.addEventListener('click', e => {
+        const act = el.dataset.gc, fmt = el.dataset.gfmt;
+        wrap.querySelectorAll('.cbe-xmenu').forEach(m => m.classList.remove('open'));
+        e.stopPropagation();
+        if(fmt) return setFmt(fmt);
+        if(!act) return;
+        if(act === 'undo') undo();
+        else if(act === 'redo') redo();
+        else if(act === 'cut'){ copyCell().then(() => clearCell(sel.r, sel.c)); }
+        else if(act === 'copy') copyCell();
+        else if(act === 'paste' || act === 'pastesp') pasteCell();
+        else if(act === 'colwidth') sizePrompt('col');
+        else if(act === 'rowheight') sizePrompt('row');
+        else if(act === 'find') findOnly();
+        else if(act === 'replace') findReplace();
+        else if(act === 'selectall'){ table.classList.add('cbe-gc-all'); setTimeout(() => table.classList.remove('cbe-gc-all'), 1200); }
+        else if(act === 'cells') cellsDialog();
+        else if(act === 'fbold') toggleStyle('fontWeight', '700');
+        else if(act === 'fitalic') toggleStyle('fontStyle', 'italic');
+        else if(act === 'funderline') toggleStyle('textDecoration', 'underline');
+        else if(act === 'fcolor'){ const td = cell(sel.r, sel.c); const c = prompt('Font color (name or #hex):', td.style.color || 'red'); if(c){ td.style.color = c; fire(); } }
+        else if(act === 'ffill'){ const td = cell(sel.r, sel.c); const c = prompt('Fill color (name or #hex):', '#fef08a'); if(c){ td.style.background = c; fire(); } }
+        else if(act === 'aleft'){ const td = cell(sel.r, sel.c); td.style.textAlign = 'left'; fire(); }
+        else if(act === 'acenter'){ const td = cell(sel.r, sel.c); td.style.textAlign = 'center'; fire(); }
+        else if(act === 'aright'){ const td = cell(sel.r, sel.c); td.style.textAlign = 'right'; fire(); }
+        else if(act === 'fontsize'){ /* handled by select change */ }
+        else if(act === 'reset') doReset();
+      });
+    });
+    const fsSel = wrap.querySelector('[data-gc="fontsize"]');
+    if(fsSel) fsSel.addEventListener('change', () => { const td = cell(sel.r, sel.c); if(td){ td.style.fontSize = fsSel.value + 'px'; fire(); } });
+
+    // fx bar
+    if(fxEl) fxEl.addEventListener('keydown', e => {
+      if(e.key === 'Enter'){
+        e.preventDefault();
+        const td = cell(sel.r, sel.c); if(!td) return;
+        const prev = td.dataset.v || '';
+        pushU(sel.r, sel.c, prev, fxEl.value);
+        td.dataset.v = fxEl.value; display(td); fire();
+        select(sel.r + 1, sel.c);
+      }
+    });
+
+    // grid interaction
+    table.addEventListener('mousedown', e => {
+      const td = e.target.closest('[data-cbe-cell]');
+      if(!td) return;
+      e.preventDefault();
+      commit();
+      select(Number(td.dataset.r), Number(td.dataset.c), {keepFx: true});
+      if(fxEl) fxEl.value = td.dataset.v || '';
+    });
+    table.addEventListener('dblclick', e => { if(e.target.closest('[data-cbe-cell]')) beginEdit(); });
+    wrap.addEventListener('keydown', e => {
+      const k = e.key;
+      if(editing){
+        if(k === 'Enter'){ e.preventDefault(); commit(); select(sel.r + 1, sel.c); }
+        else if(k === 'Tab'){ e.preventDefault(); commit(); select(sel.r, sel.c + 1); }
+        else if(k === 'Escape'){ e.preventDefault(); editing = false; const td = cell(sel.r, sel.c); td.contentEditable = 'false'; display(td); td.blur(); }
+        return;
+      }
+      if(k === 'ArrowUp'){ e.preventDefault(); select(sel.r - 1, sel.c); }
+      else if(k === 'ArrowDown'){ e.preventDefault(); select(sel.r + 1, sel.c); }
+      else if(k === 'ArrowLeft'){ e.preventDefault(); select(sel.r, sel.c - 1); }
+      else if(k === 'ArrowRight' || k === 'Tab'){ e.preventDefault(); select(sel.r, sel.c + 1); }
+      else if(k === 'Delete' || k === 'Backspace'){ e.preventDefault(); clearCell(sel.r, sel.c); }
+      else if(k === 'F2'){ e.preventDefault(); beginEdit(); }
+      else if(k.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey){ e.preventDefault(); beginEdit(k); }
+    });
+    select(0, 0, {scroll: false});
   }
 
   function answerHtml(q, selected, opts = {}){
@@ -323,7 +686,38 @@ window.CBE = (function () {
       case 'case':
         return q.subqs.map((s, i) => `<div class="cbe-sub" data-sub="${i}"><div class="cbe-sub-q">${i + 1}. ${esc(s.question)}<span class="cbe-tag">${s.marks} mark${s.marks > 1 ? 's' : ''}</span></div>${widgetHtml(s, Array.isArray(selected) ? selected[i] : undefined, 'cbe-' + q.id + '-' + i)}</div>`).join('');
       case 'word':
-        return `<div class="cbe-toolbar"><button type="button" data-cmd="bold"><b>B</b></button><button type="button" data-cmd="italic"><i>I</i></button><button type="button" data-cmd="underline"><u>U</u></button><button type="button" data-cmd="insertUnorderedList">• List</button></div><div class="cbe-word" data-cbe-word ${opts.readonly ? '' : 'contenteditable="true"'}>${String(selected || '')}</div><div class="cbe-note">Constructed response — <strong>not auto-marked</strong>. Your answer goes to the tutor for manual marking.</div>`;
+        if(opts.readonly) return `<div class="cbe-word readonly" data-cbe-word>${String(selected || '')}</div>`;
+        return `<div class="cbe-toolbar cbe-wtoolbar">
+          <div class="cbe-wrow1">
+            <button type="button" data-wact="paste" title="Paste">📋</button>
+            <button type="button" data-wact="cut" title="Cut">✂</button>
+            <button type="button" data-wact="copy" title="Copy">📄</button>
+            <button type="button" data-cmd="undo" title="Undo">↶</button>
+            <button type="button" data-cmd="redo" title="Redo">↷</button>
+            <button type="button" data-cmd="insertTable" title="Insert table">⊞</button>
+            <button type="button" data-cmd="bold" title="Bold"><b>B</b></button>
+            <button type="button" data-cmd="italic" title="Italic"><i>I</i></button>
+            <button type="button" data-cmd="underline" title="Underline"><u>U</u></button>
+            <button type="button" data-cmd="strikeThrough" title="Strikethrough"><s>S</s></button>
+            <button type="button" data-cmd="subscript" title="Subscript">x₂</button>
+            <button type="button" data-cmd="superscript" title="Superscript">x²</button>
+            <button type="button" data-cmd="removeFormat" title="Clear formatting">✕</button>
+          </div>
+          <div class="cbe-wrow2">
+            <select data-stylebox><option value="p">Paragraph</option><option value="h1">Heading 1</option><option value="h2">Heading 2</option><option value="h3">Heading 3</option><option value="h4">Heading 4</option><option value="h5">Heading 5</option><option value="h6">Heading 6</option><option value="pre">Preformatted</option></select>
+            <button type="button" data-cmd="insertTable" title="Table">▦</button>
+            <button type="button" data-cmd="justifyLeft" title="Align left">⇤</button>
+            <button type="button" data-cmd="justifyCenter" title="Align centre">≡</button>
+            <button type="button" data-cmd="justifyRight" title="Align right">⇥</button>
+            <button type="button" data-cmd="justifyFull" title="Justify">☰</button>
+            <button type="button" data-cmd="insertUnorderedList" title="Bullet list">• List</button>
+            <button type="button" data-cmd="insertOrderedList" title="Numbered list">1. List</button>
+            <button type="button" data-cmd="outdent" title="Outdent">⇤⇤</button>
+            <button type="button" data-cmd="indent" title="Indent">⇥⇥</button>
+          </div>
+        </div>
+        <div class="cbe-word" data-cbe-word contenteditable="true">${String(selected || '')}</div>
+        <div class="cbe-note">Constructed response — <strong>not auto-marked</strong>. Answer all requirement parts clearly. <button type="button" data-wact="reset" style="float:right;border:1px solid #c9d2e0;background:#fff;padding:4px 12px;cursor:pointer;font:inherit;font-weight:700;border-radius:3px;">Reset</button></div>`;
       case 'sheet':
         return sheetHtml({ ...q, readonly: opts.readonly }, selected) + `<div class="cbe-note">Constructed response — <strong>not auto-marked</strong>. Use the on-screen calculator / scratch pad for workings.</div>`;
     }
@@ -388,13 +782,38 @@ window.CBE = (function () {
     if(q.type === 'word'){
       const ed = box.querySelector('[data-cbe-word]');
       if(ed) ed.addEventListener('input', fire);
+      const styleBox = box.querySelector('[data-stylebox]');
+      if(styleBox && ed) styleBox.addEventListener('change', () => { ed.focus(); document.execCommand('formatBlock', false, styleBox.value); fire(); });
+      box.querySelectorAll('[data-wact]').forEach(btn => btn.addEventListener('click', e => {
+        e.preventDefault();
+        const act = btn.dataset.wact;
+        if(act === 'reset'){
+          if(confirm('Are you sure you want to reset?\n\nResetting will remove any response you have made on this item and reset back to an unanswered state.')){ ed.innerHTML = ''; fire(); }
+          return;
+        }
+        ed.focus();
+        try{ document.execCommand(act); }catch(err){}
+        fire();
+      }));
       box.querySelectorAll('.cbe-toolbar [data-cmd]').forEach(btn => btn.addEventListener('mousedown', e => {
         e.preventDefault();
-        if(ed){ ed.focus(); document.execCommand(btn.dataset.cmd, false, null); fire(); }
+        if(!ed) return;
+        ed.focus();
+        if(btn.dataset.cmd === 'insertTable'){
+          const rows = Math.min(20, parseInt(prompt('Number of rows?', '3'), 10) || 3);
+          const cols = Math.min(10, parseInt(prompt('Number of columns?', '3'), 10) || 3);
+          let html = '<table style="border-collapse:collapse;width:100%" border="1" cellpadding="6"><tbody>';
+          for(let r = 0; r < rows; r++){ html += '<tr>'; for(let c2 = 0; c2 < cols; c2++) html += '<td>&nbsp;</td>'; html += '</tr>'; }
+          html += '</tbody></table><p><br></p>';
+          document.execCommand('insertHTML', false, html);
+        } else {
+          document.execCommand(btn.dataset.cmd, false, null);
+        }
+        fire();
       }));
     }
     if(q.type === 'sheet'){
-      box.querySelectorAll('[data-cbe-cell]').forEach(cell => cell.addEventListener('input', fire));
+      initSheet(box, fire);
     }
   }
 
@@ -417,7 +836,7 @@ window.CBE = (function () {
       case 'dragmatch': { const m = {}; box.querySelectorAll('.cbe-drop.filled').forEach(s => { m[s.dataset.drop] = s.dataset.value; }); return m; }
       case 'case': return q.subqs.map((s, i) => { const subBox = box.querySelector(`[data-sub="${i}"]`); return captureSub(s, subBox); });
       case 'word': return box.querySelector('[data-cbe-word]')?.innerHTML.trim() || '';
-      case 'sheet': { const g = []; box.querySelectorAll('[data-cbe-cell]').forEach(c => { const rI = Number(c.dataset.r), cI = Number(c.dataset.c); if(!g[rI]) g[rI] = []; g[rI][cI] = c.textContent.trim(); }); return g.map(row => row || []); }
+      case 'sheet': { const g = []; box.querySelectorAll('[data-cbe-cell]').forEach(c => { const rI = Number(c.dataset.r), cI = Number(c.dataset.c); if(!g[rI]) g[rI] = []; g[rI][cI] = c.dataset.v != null ? c.dataset.v : c.textContent.trim(); }); return g.map(row => row || []); }
     }
     return null;
   }
