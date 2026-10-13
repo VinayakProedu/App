@@ -959,5 +959,21 @@ window.CBE = (function () {
     return String(ans);
   }
 
-  return { TYPES, SUB_TYPES, CR_TYPES, esc, lines, fmtTime, normalize, normalizeSub, marksOf, isCR, validate, injectCss, scenarioHtml, answerHtml, render, wire, setReadonly, capture, score, correctText, answerText, answerMatches };
+  /* ---------------- Firestore-safe answer encoding ----------------
+     Firestore rejects nested arrays; sheet grids & case answers can contain
+     arrays inside arrays, so we JSON-wrap those before saving. */
+  function encAnswer(a){
+    if(Array.isArray(a) && a.some(v => Array.isArray(v))) return { __enc: JSON.stringify(a) };
+    return a;
+  }
+  function encAnswers(ans){ const o = {}; Object.keys(ans || {}).forEach(k => o[k] = encAnswer(ans[k])); return o; }
+  function decAnswer(a){
+    if(a && typeof a === 'object' && !Array.isArray(a) && typeof a.__enc === 'string'){
+      try{ return JSON.parse(a.__enc); }catch(e){ return a; }
+    }
+    return a;
+  }
+  function decAnswers(ans){ const o = {}; Object.keys(ans || {}).forEach(k => o[k] = decAnswer(ans[k])); return o; }
+
+  return { TYPES, SUB_TYPES, CR_TYPES, esc, lines, fmtTime, normalize, normalizeSub, marksOf, isCR, validate, injectCss, scenarioHtml, answerHtml, render, wire, setReadonly, capture, score, correctText, answerText, answerMatches, encAnswers, decAnswers };
 })();
