@@ -307,7 +307,7 @@
     persistTimer = setTimeout(() => {
       progressRef(S.paper.id).set({
         userId: S.user.uid, paperId: S.paper.id,
-        answers: S.answers, review: S.review, seen: S.seen,
+        answers: C.encAnswers(S.answers), review: S.review, seen: S.seen,
         idx: S.idx, remaining: S.remaining, studentName: S.studentName,
         savedAt: firebase.firestore.FieldValue.serverTimestamp()
       }).catch(err => console.warn('[autosave] failed:', err.code || err.message));
@@ -352,7 +352,7 @@
     S.paper = p;
     S.qs = getQs(paperId);
     if(saved){
-      S.answers = saved.answers || {}; S.review = saved.review || {}; S.seen = saved.seen || {};
+      S.answers = C.decAnswers(saved.answers); S.review = saved.review || {}; S.seen = saved.seen || {};
       S.idx = Math.max(0, Math.min(Number(saved.idx) || 0, S.qs.length - 1));
       S.remaining = Math.max(1, Number(saved.remaining) || 0);
       S.studentName = saved.studentName || S.studentName || '';
@@ -758,7 +758,7 @@
         score, total, percentage: pct, answered, reviewedCount: Object.values(S.review).filter(Boolean).length,
         timeTakenSec, status: hasManual ? 'pending_marking' : 'auto_marked',
         autoScore: score, autoTotal: total, pendingManualMarking: hasManual,
-        answers: S.answers, review: S.review,
+        answers: C.encAnswers(S.answers), review: S.review,
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       });
     }catch(err){
