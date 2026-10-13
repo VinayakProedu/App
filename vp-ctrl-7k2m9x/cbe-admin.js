@@ -71,6 +71,8 @@
           <select id="apLevel" style="width:100%;padding:12px 14px;border:1px solid #e5e7eb;border-radius:12px;font:inherit;">${LEVELS.map(l => `<option>${l}</option>`).join('')}</select></div>
         <div><label style="display:block;font-size:.76rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#6B7280;margin-bottom:6px;">Section Layout (auto from level)</label>
           <textarea id="apSections" rows="3" style="width:100%;padding:12px 14px;border:1px solid #e5e7eb;border-radius:12px;font:inherit;" placeholder="Leave blank for ACCA defaults"></textarea></div>
+        <div style="grid-column:1 / -1;"><label style="display:block;font-size:.76rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#6B7280;margin-bottom:6px;">Exam Instructions (shown to the student in Help → Exam Instructions)</label>
+          <textarea id="apInstructions" rows="3" style="width:100%;padding:12px 14px;border:1px solid #e5e7eb;border-radius:12px;font:inherit;" placeholder="Leave blank for default ACCA-style instructions"></textarea></div>
         <div><label style="display:block;font-size:.76rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#6B7280;margin-bottom:6px;">Time Limit (minutes)</label>
           <input id="apTime" type="number" value="90" style="width:100%;padding:12px 14px;border:1px solid #e5e7eb;border-radius:12px;font:inherit;"></div>
         <div><label style="display:block;font-size:.76rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#6B7280;margin-bottom:6px;">Total Marks</label>
@@ -127,6 +129,7 @@
       totalMarks: Number(val('apMarks')) || 100,
       attemptLimit: Math.max(1, Number(val('apAttempts')) || 1),
       locked: !!$('apLocked').checked,
+      instructions: val('apInstructions'),
       updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     };
     if(S.editPId){
@@ -141,7 +144,7 @@
     await refresh();
   }
   function clearPaper(){
-    ['apCode','apTitle','apSections'].forEach(id => $(id).value = '');
+    ['apCode','apTitle','apSections','apInstructions'].forEach(id => $(id).value = '');
     $('apTime').value = 90; $('apMarks').value = 100; $('apAttempts').value = 1; $('apLocked').checked = false;
     $('apLevel').value = 'Applied Skills';
     S.editPId = null;
@@ -156,6 +159,7 @@
     $('apTime').value = p.timeLimit || 90; $('apMarks').value = p.totalMarks || 100;
     $('apAttempts').value = p.attemptLimit || 1; $('apLocked').checked = !!p.locked;
     $('apSections').value = Array.isArray(p.sections) ? p.sections.join('\n') : '';
+    $('apInstructions').value = p.instructions || '';
     $('apSave').textContent = 'Update Paper';
     window.scrollTo({top: 0, behavior: 'smooth'});
   }
@@ -270,6 +274,7 @@
     }
     if(C.CR_TYPES.includes(t)){
       html += area('qbRubric', 'Marking Guide / Rubric (visible to the tutor while marking — REQUIRED for constructed response)', '1 mark for each valid point, max 4…', 3);
+      html += area('qbModel', 'Model Answer / Solution (visible to the tutor while marking — optional)', 'The ideal answer or key points…', 3);
       html += `<div class="cbe-note" style="background:#fffbe6;border:1px solid #e5d9a0;border-radius:10px;padding:10px;">Constructed-response questions are <strong>never auto-marked</strong> — the student's whole attempt is sent to you for manual marking, exactly like the real ACCA CBE.</div>`;
     }
     d.innerHTML = html;
@@ -382,7 +387,7 @@
         return sub;
       });
     }
-    if(C.CR_TYPES.includes(t)) q.rubric = val('qbRubric');
+    if(C.CR_TYPES.includes(t)){ q.rubric = val('qbRubric'); q.modelAnswer = val('qbModel'); }
     return q;
   }
 
@@ -420,7 +425,7 @@
 
   function clearBuilder(){
     S.editQId = null;
-    ['qbHeading','qbScenario','qbExhibits','qbExplanation','qbOptions','qbCorrect','qbAlts','qbSentence','qbAnswers','qbPairs','qbCaseIntro','qbRubric','qbHotspotImg'].forEach(id => { if($(id)) $(id).value = ''; });
+    ['qbHeading','qbScenario','qbExhibits','qbExplanation','qbOptions','qbCorrect','qbAlts','qbSentence','qbAnswers','qbPairs','qbCaseIntro','qbRubric','qbModel','qbHotspotImg'].forEach(id => { if($(id)) $(id).value = ''; });
     $('qbOrder').value = 1; $('qbMarks').value = 2;
     $('qbSave').textContent = 'Save Question';
     $('qbCancel').style.display = 'none';
@@ -513,7 +518,7 @@
       q.subqs.forEach(s => addSub(s));
       if(!q.subqs.length) addSub();
     }
-    if(C.CR_TYPES.includes(q.type)) $('qbRubric').value = q.rubric;
+    if(C.CR_TYPES.includes(q.type)){ $('qbRubric').value = q.rubric; if($('qbModel')) $('qbModel').value = q.modelAnswer || ''; }
     $('qbSave').textContent = 'Update Question';
     $('qbCancel').style.display = '';
     $('qbStatus').textContent = '';
@@ -581,6 +586,7 @@
           <div style="font-weight:900;color:#0D1B40;margin-bottom:8px;">Q${i + 1} · ${q.type === 'sheet' ? 'Spreadsheet' : 'Word'} · max ${Number(q.marks || 0)} marks</div>
           ${q.heading ? `<div style="white-space:pre-wrap;font-size:.95rem;margin-bottom:8px;"><strong>Requirement:</strong> ${esc(q.heading)}</div>` : ''}
           ${q.rubric ? `<div style="padding:10px;border-radius:10px;background:#fffbe6;border:1px solid #e5d9a0;font-size:.9rem;margin-bottom:10px;"><strong>Marking guide:</strong> ${esc(q.rubric)}</div>` : ''}
+          ${q.modelAnswer ? `<div style="padding:10px;border-radius:10px;background:#ecfdf5;border:1px solid #a7f3d0;font-size:.9rem;margin-bottom:10px;white-space:pre-wrap;"><strong>Model answer:</strong> ${esc(q.modelAnswer)}</div>` : ''}
           <div style="border:1px solid #e5e7eb;border-radius:12px;padding:12px;background:#f8fafc;max-height:320px;overflow:auto;margin-bottom:10px;">${C.render(q, given, {readonly: true})}</div>
           <label style="display:block;font-size:.76rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#6B7280;margin-bottom:6px;">Awarded marks (max ${Number(q.marks || 0)})</label>
           <input data-marks-for="${q.id}" type="number" min="0" max="${Number(q.marks || 0)}" step="0.5" value="${pre}" style="width:140px;padding:10px;border:1px solid #e5e7eb;border-radius:10px;font:inherit;">
