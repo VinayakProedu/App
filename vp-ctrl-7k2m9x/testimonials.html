@@ -61,6 +61,7 @@ button{font-family:inherit;}
 .danger-btn{background:#fef2f2;color:#b42318;border:1px solid #fecaca;}
 .primary-btn:hover,.ghost-btn:hover,.danger-btn:hover{transform:translateY(-1px);opacity:0.95;}
 .btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;}
+.primary-btn:disabled{opacity:.65;cursor:wait;transform:none;}
 
 .portal-status{font-size:0.92rem;margin-top:10px;min-height:22px;font-weight:700;}
 .portal-status.error{color:#b42318;}
@@ -71,20 +72,27 @@ button{font-family:inherit;}
 .stars-input span.on{color:var(--gold);}
 .stars-input span:hover{transform:scale(1.15);}
 
+/* Photo picker */
+.photo-preview-row{display:none;align-items:center;gap:10px;margin-top:4px;}
+.photo-preview-row img{width:56px;height:56px;border-radius:50%;object-fit:cover;border:2px solid var(--gold);box-shadow:0 4px 12px rgba(13,27,64,.15);}
+.field-hint{font-size:0.76rem;color:var(--muted);text-transform:none;letter-spacing:0;font-weight:500;}
+
 .testi-item{background:#fff;border:1px solid #e5e7eb;border-left:4px solid var(--gold);border-radius:14px;padding:16px 18px;margin-bottom:12px;transition:all 0.2s;}
 .testi-item.inactive{border-left-color:#9ca3af;opacity:0.6;}
 .testi-quote{font-size:0.93rem;color:var(--ink);line-height:1.65;margin:8px 0 10px;font-style:italic;}
 .testi-meta{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;}
 .testi-who{display:flex;align-items:center;gap:10px;}
-.testi-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff;display:grid;place-items:center;font-weight:800;font-size:0.85rem;}
+.testi-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff;display:grid;place-items:center;font-weight:800;font-size:0.85rem;overflow:hidden;flex-shrink:0;}
+.testi-avatar img{width:100%;height:100%;object-fit:cover;}
 .testi-name{font-weight:700;color:var(--navy);font-size:0.92rem;}
 .testi-stars{color:var(--gold);letter-spacing:2px;font-size:0.95rem;}
 .testi-date{font-size:0.75rem;color:var(--muted);}
-.testi-actions{display:flex;gap:8px;}
+.testi-actions{display:flex;gap:8px;flex-wrap:wrap;}
 .mini-btn{border:none;border-radius:8px;padding:7px 12px;font-size:0.78rem;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.15s;}
 .mini-toggle{background:#eef4ff;color:var(--blue);}
 .mini-delete{background:#fef2f2;color:#b42318;}
 .mini-edit{background:#fef9ec;color:#92610e;}
+.mini-remove-photo{background:#f3f4f6;color:#6b7280;}
 
 .empty-box{padding:20px;border:1px dashed #d9e2ef;border-radius:14px;background:#fbfdff;color:#5d6e83;text-align:center;font-size:0.9rem;}
 .count-pill{display:inline-block;background:#eef4ff;color:var(--blue);font-size:0.78rem;font-weight:700;padding:4px 12px;border-radius:999px;margin-left:8px;}
@@ -113,7 +121,7 @@ button{font-family:inherit;}
   <div class="app-topbar">
     <div>
       <h1 class="app-title">Testimonials</h1>
-      <div class="app-sub">Add student reviews — they appear instantly on the website ⭐</div>
+      <div class="app-sub">Add student reviews &amp; photos — they appear instantly on the website ⭐</div>
     </div>
     <button class="ghost-btn" id="closeBtn" type="button">← Dashboard</button>
   </div>
@@ -127,6 +135,17 @@ button{font-family:inherit;}
         <div class="stars-input" id="starsInput">
           <span data-v="1" class="on">★</span><span data-v="2" class="on">★</span><span data-v="3" class="on">★</span><span data-v="4" class="on">★</span><span data-v="5" class="on">★</span>
         </div>
+      </div>
+      <div class="portal-field">
+        <label>Student Photo (optional)</label>
+        <input type="file" id="tPhoto" accept="image/*">
+        <div class="photo-preview-row" id="photoPreviewRow">
+          <img id="photoPreviewImg" alt="preview">
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <button class="mini-btn mini-remove-photo" id="photoRemoveBtn" type="button">Remove photo</button>
+          </div>
+        </div>
+        <div class="field-hint" id="photoHint">JPG / PNG, up to 2 MB. Square photos look best.</div>
       </div>
       <div class="portal-field"><label>Testimonial *</label><textarea id="tQuote" placeholder="The student's actual words (get their permission first)" maxlength="700"></textarea></div>
       <div class="btn-row">
@@ -147,12 +166,15 @@ button{font-family:inherit;}
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
 <script src="../firebase-config.js"></script>
 <script>
 (function(){
   const ADMIN_EMAIL = 'vinayakproedu@gmail.com';
   const auth = firebase.auth();
   const db = firebase.firestore();
+  const storage = firebase.storage();
+  const MAX_PHOTO_BYTES = 2 * 1024 * 1024;
 
   function esc(v){ return String(v ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
   function val(id){ const n = document.getElementById(id); return n ? n.value.trim() : ''; }
@@ -197,14 +219,73 @@ button{font-family:inherit;}
 
   function showApp(){ loadTestimonials(); }
 
+  /* ---------- Photo picker ---------- */
+  let photoFile = null;        // newly chosen file, not yet uploaded
+  let existingPhotoURL = '';   // photo already saved on the doc being edited
+
+  const photoInput = document.getElementById('tPhoto');
+  const photoPreviewRow = document.getElementById('photoPreviewRow');
+  const photoPreviewImg = document.getElementById('photoPreviewImg');
+  const photoHint = document.getElementById('photoHint');
+
+  function resetPhotoHint(){
+    photoHint.style.color = '';
+    photoHint.textContent = 'JPG / PNG, up to 2 MB. Square photos look best.';
+  }
+  function showPhotoPreview(url){
+    photoPreviewImg.src = url;
+    photoPreviewRow.style.display = 'flex';
+    photoInput.style.display = 'none';
+  }
+  function clearPhoto(){
+    photoFile = null;
+    photoInput.value = '';
+    photoInput.style.display = '';
+    photoPreviewRow.style.display = 'none';
+    photoPreviewImg.src = '';
+    resetPhotoHint();
+  }
+
+  photoInput.addEventListener('change', () => {
+    resetPhotoHint();
+    const f = photoInput.files && photoInput.files[0];
+    if(!f){ photoFile = null; return; }
+    if(!/^image\//.test(f.type)){
+      photoHint.style.color = '#b42318';
+      photoHint.textContent = 'Please choose an image file (JPG or PNG).';
+      photoInput.value = '';
+      photoFile = null;
+      return;
+    }
+    if(f.size > MAX_PHOTO_BYTES){
+      photoHint.style.color = '#b42318';
+      photoHint.textContent = 'Image is too large — maximum 2 MB. Try a smaller or compressed photo.';
+      photoInput.value = '';
+      photoFile = null;
+      return;
+    }
+    photoFile = f;
+    showPhotoPreview(URL.createObjectURL(f));
+  });
+
+  document.getElementById('photoRemoveBtn').addEventListener('click', () => {
+    clearPhoto();
+    existingPhotoURL = '';   // also removes the saved photo when updating
+  });
+
+  async function uploadPhoto(){
+    const ext = (photoFile.name.split('.').pop() || 'jpg').toLowerCase();
+    const safe = Date.now() + '_' + Math.random().toString(36).slice(2,8) + '.' + ext;
+    const ref = storage.ref('testimonials/' + safe);
+    await ref.put(photoFile, { contentType: photoFile.type });
+    return await ref.getDownloadURL();
+  }
+
   /* ---------- Star rating input ---------- */
   let currentStars = 5;
   const starsBox = document.getElementById('starsInput');
   starsBox.querySelectorAll('span').forEach(s => {
-    s.addEventListener('click', () => {
-      currentStars = parseInt(s.dataset.v, 10);
-      paintStars();
-    });
+    s.addEventListener('click', () => { currentStars = parseInt(s.dataset.v, 10); paintStars(); });
   });
   function paintStars(){
     starsBox.querySelectorAll('span').forEach(s => {
@@ -220,30 +301,44 @@ button{font-family:inherit;}
     if(!name || !quote){ setStatus(document.getElementById('saveStatus'),'Name and testimonial are required.',true); return; }
     const btn = document.getElementById('saveBtn');
     btn.disabled = true;
+    btn.textContent = photoFile ? '⏳ Uploading photo…' : '⏳ Saving…';
     try{
+      let photoURL = existingPhotoURL || null;   // keep existing unless removed / replaced
+      if(photoFile){
+        photoURL = await uploadPhoto();
+      }
+
       if(editingId){
-        await db.collection('testimonials').doc(editingId).update({
-          name, quote, stars: currentStars
-        });
+        const upd = { name, quote, stars: currentStars };
+        if(photoURL) upd.photoURL = photoURL;
+        else upd.photoURL = firebase.firestore.FieldValue.delete();
+        await db.collection('testimonials').doc(editingId).update(upd);
         setStatus(document.getElementById('saveStatus'),'Testimonial updated ✅');
       } else {
-        await db.collection('testimonials').add({
+        const payload = {
           name, quote, stars: currentStars,
           active: true,
           createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        });
+        };
+        if(photoURL) payload.photoURL = photoURL;
+        await db.collection('testimonials').add(payload);
         setStatus(document.getElementById('saveStatus'),'Testimonial published — live on the website ✅');
       }
       resetForm();
       await loadTestimonials();
-    }catch(err){ setStatus(document.getElementById('saveStatus'), err.message || 'Failed to save', true); }
+    }catch(err){
+      setStatus(document.getElementById('saveStatus'), err.message || 'Failed to save', true);
+    }
     btn.disabled = false;
+    btn.textContent = editingId ? '💾 Update Testimonial' : '💾 Publish Testimonial';
   });
 
   document.getElementById('cancelEditBtn').addEventListener('click', resetForm);
 
   function resetForm(){
     editingId = null;
+    clearPhoto();
+    existingPhotoURL = '';
     document.getElementById('tName').value = '';
     document.getElementById('tQuote').value = '';
     currentStars = 5; paintStars();
@@ -265,7 +360,11 @@ button{font-family:inherit;}
       <div class="testi-item ${t.active ? '' : 'inactive'}">
         <div class="testi-meta">
           <div class="testi-who">
-            <span class="testi-avatar">${esc(initials(t.name))}</span>
+            <span class="testi-avatar">${
+              t.photoURL
+                ? `<img src="${esc(t.photoURL)}" alt="">`
+                : esc(initials(t.name))
+            }</span>
             <div>
               <div class="testi-name">${esc(t.name)}</div>
               <div class="testi-stars">${'★'.repeat(t.stars||5)}${'☆'.repeat(5-(t.stars||5))}</div>
@@ -291,6 +390,9 @@ button{font-family:inherit;}
     document.getElementById('tName').value = t.name || '';
     document.getElementById('tQuote').value = t.quote || '';
     currentStars = t.stars || 5; paintStars();
+    existingPhotoURL = t.photoURL || '';
+    clearPhoto();
+    if(existingPhotoURL) showPhotoPreview(existingPhotoURL);
     document.getElementById('formTitle').textContent = 'Edit Testimonial';
     document.getElementById('saveBtn').textContent = '💾 Update Testimonial';
     document.getElementById('cancelEditBtn').classList.remove('hidden');
