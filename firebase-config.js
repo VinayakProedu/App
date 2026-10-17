@@ -16,4 +16,5 @@ window.storage = window.__storage;
 
 // Push delivery must use a trusted server/Cloud Function with FCM HTTP v1.
 // Never put an FCM server credential in browser code.
-window.VP_FCM_KEY = atob("UE9TVF9ZT1VSX0xFR0FDWV9TRVJWRVJfS0VZX0hFUkU="); } catch(e) { window.VP_FCM_KEY = "";
+// Keep the legacy key empty; browser-side legacy FCM authorization is unsupported.
+window.VP_FCM_KEY = "";
