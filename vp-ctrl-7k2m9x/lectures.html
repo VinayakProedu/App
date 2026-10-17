@@ -239,7 +239,6 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
 <script src="../firebase-config.js"></script>
 <script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js"></script>
 
@@ -251,15 +250,37 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
   const auth = firebase.auth();
   const db = firebase.firestore();
 
-  UPLOADCARE_PUBLIC_KEY = "9dcf4ee1bc520691123a";
+  window.UPLOADCARE_PUBLIC_KEY = "9dcf4ee1bc520691123a";
   let uploadedFileURL = null;
+  let uploadcareWidget = null;
 
   document.addEventListener("DOMContentLoaded", function() {
-    const widget = uploadcare.Widget(document.querySelector('[role="uploadcare-uploader"]'));
-    widget.onUploadComplete(function(info) {
-      uploadedFileURL = info.cdnUrl;
+    const input = document.querySelector('[role="uploadcare-uploader"]');
+    if (!input || !window.uploadcare) {
+      console.warn('Uploadcare widget did not load. Check the Uploadcare script/network connection.');
+      return;
+    }
+    uploadcareWidget = window.uploadcare.Widget(input);
+    uploadcareWidget.onUploadComplete(function(info) {
+      uploadedFileURL = info && info.cdnUrl ? info.cdnUrl : null;
       const st = document.getElementById('uploadStatus');
-      if(st) st.textContent = 'File ready ✅';
+      if(st && uploadedFileURL) setStatus(st, 'File ready ✅');
+    });
+    // Keep the selected file URL in sync, including uploads completed through
+    // the widget's normal change lifecycle (not only the completion callback).
+    uploadcareWidget.onChange(function(file) {
+      uploadedFileURL = null;
+      if (!file) return;
+      const st = document.getElementById('uploadStatus');
+      if(st) setStatus(st, 'Preparing selected file…');
+      file.done(function(info) {
+        uploadedFileURL = info && info.cdnUrl ? info.cdnUrl : null;
+        if(st && uploadedFileURL) setStatus(st, 'File ready ✅');
+      }).fail(function(error) {
+        uploadedFileURL = null;
+        if(st) setStatus(st, 'File upload failed. Please retry or use a YouTube link.', true);
+        console.error('Uploadcare file error:', error);
+      });
     });
   });
 
@@ -361,7 +382,18 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
     const youtubeInput = val('lecYoutube');
     const batchCodes = getSelectedBatchCodes('lecBatchSelect');
 
-    if(!title || !subject || !date){ setStatus(document.getElementById('uploadStatus'), 'Title, Subject, and Date are required.', true); return; }
+    const required = [
+      ['lecTitle', title, 'Enter a lecture title.'],
+      ['lecSubject', subject, 'Enter a subject or paper code.'],
+      ['lecDate', date, 'Choose the lecture date.']
+    ];
+    const missing = required.find(([, value]) => !value);
+    if(missing){
+      setStatus(document.getElementById('uploadStatus'), missing[2], true);
+      const field = document.getElementById(missing[0]);
+      if(field){ field.focus(); field.reportValidity?.(); }
+      return;
+    }
     if(window.__isTeacher && !(window.__teacherSubjects||[]).includes(subject)){ setStatus(document.getElementById('uploadStatus'), 'You can only upload for your assigned subjects: ' + (window.__teacherSubjects||[]).join(', '), true); return; }
 
     let videoURL = null;
@@ -371,9 +403,26 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
       videoURL = videoId ? `https://www.youtube.com/watch?v=${videoId}` : youtubeInput;
     }
 
-    const hasVideo = videoURL && videoURL.trim() !== '';
-    const hasFile = uploadedFileURL && uploadedFileURL.trim() !== '';
-    if(!hasVideo && !hasFile){ setStatus(document.getElementById('uploadStatus'), 'Provide at least a YouTube link or upload a file.', true); return; }
+    // If the user clicks immediately after selecting a file, wait for the
+    // Uploadcare value to resolve instead of incorrectly reporting no file.
+    if(!uploadedFileURL && uploadcareWidget){
+      try {
+        const selectedFile = uploadcareWidget.value();
+        if(selectedFile && typeof selectedFile.done === 'function'){
+          setStatus(document.getElementById('uploadStatus'), 'Waiting for file upload…');
+          const info = await new Promise((resolve, reject) => selectedFile.done(resolve).fail(reject));
+          uploadedFileURL = info && info.cdnUrl ? info.cdnUrl : null;
+        }
+      } catch(uploadError) {
+        console.error('Unable to resolve selected Uploadcare file:', uploadError);
+      }
+    }
+    const hasVideo = !!(videoURL && videoURL.trim());
+    const hasFile = !!(uploadedFileURL && uploadedFileURL.trim());
+    if(!hasVideo && !hasFile){
+      setStatus(document.getElementById('uploadStatus'), 'Add a valid YouTube link or wait until the selected file finishes uploading.', true);
+      return;
+    }
 
     try{
       const payload = {
@@ -399,6 +448,7 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
       document.getElementById('lecYoutube').value = '';
       document.getElementById('lecFree').checked = false;
       uploadedFileURL = null;
+      if(uploadcareWidget) uploadcareWidget.value(null);
       renderBatchCheckboxList(allBatches, 'lecBatchSelect');
 
       await loadLibrary();
@@ -415,6 +465,7 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
     document.getElementById('lecYoutube').value = '';
     document.getElementById('lecFree').checked = false;
     uploadedFileURL = null;
+    if(uploadcareWidget) uploadcareWidget.value(null);
     renderBatchCheckboxList(allBatches, 'lecBatchSelect');
     setStatus(document.getElementById('uploadStatus'), '');
   });

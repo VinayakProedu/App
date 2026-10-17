@@ -436,6 +436,8 @@ window.showStudentDetail = function(userId){
   $('studentDetailPanel').scrollIntoView({behavior:'smooth'});
   renderStudentDetail(userId);
 };
+// Backwards-compatible alias for older cached markup/inline handlers.
+window.showStudentDetail2 = window.showStudentDetail;
 
 window.closeStudentDetail = function(){ $('studentDetailPanel').style.display = 'none'; };
 
