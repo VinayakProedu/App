@@ -8,14 +8,12 @@ if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
 
 window.__db = firebase.firestore();
 window.__auth = firebase.auth();
-// Guarded: some pages don't load the storage SDK — never crash
 try { window.__storage = (typeof firebase.storage === 'function') ? firebase.storage() : null; } catch (e) { window.__storage = null; }
 window.__ADMIN_EMAIL = "vinayakproedu@gmail.com";
 window.db = window.__db;
 window.auth = window.__auth;
 window.storage = window.__storage;
 
-/* ===== PUSH NOTIFICATIONS (optional) =====
-   Firebase Console → Project settings → Cloud Messaging → copy the
-   Legacy "Server key", base64-encode it, paste below. */
-try { window.VP_FCM_KEY = atob("UE9TVF9ZT1VSX0xFR0FDWV9TRVJWRVJfS0VZX0hFUkU="); } catch(e) { window.VP_FCM_KEY = ""; }
+// Push delivery must use a trusted server/Cloud Function with FCM HTTP v1.
+// Never put an FCM server credential in browser code.
+window.VP_FCM_KEY = atob("UE9TVF9ZT1VSX0xFR0FDWV9TRVJWRVJfS0VZX0hFUkU="); } catch(e) { window.VP_FCM_KEY = "";
