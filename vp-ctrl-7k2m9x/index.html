@@ -4,568 +4,310 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow, noarchive">
-<meta name="referrer" content="strict-origin-when-cross-origin">
-<meta name="permissions-policy" content="camera=(), microphone=(), geolocation=()">
-<link rel="manifest" href="./manifest.json">
-<meta name="theme-color" content="#660708">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<link rel="apple-touch-icon" href="../apple-touch-icon.png">
-
-<title>Live Classes | Vinayak ProEdu Admin</title>
+<meta name="theme-color" content="#0D1B40">
+<meta name="mobile-web-app-capable" content="yes">
+<title>Dashboard | Vinayak ProEdu Admin</title>
 <link rel="icon" type="image/png" href="https://pasteimg.com/images/2026/03/31/WhatsApp-Image-2026-03-19-at-6.49.19-PM.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --navy:#0D1B40; --navy-mid:#1a2e5e; --blue:#1e3c72; --gold:#C9922A; --gold-lt:#E8AA48;
-  --amber:#F5C04A; --ink:#1A1A2E; --muted:#6B7280; --smoke:#EFF1F6; --white:#FFFFFF;
-  --shadow-sm:0 4px 20px rgba(13,27,64,0.08); --shadow-md:0 12px 45px rgba(13,27,64,0.14);
-  --r-sm:10px; --r-md:16px; --r-lg:24px;
+  --navy:#0D1B40; --navy2:#16295c; --blue:#1e3c72; --gold:#C9922A; --gold-lt:#E8AA48;
+  --ink:#1A1A2E; --muted:#667085; --line:#e6e9f0;
+  --shadow-sm:0 1px 3px rgba(16,24,40,.06),0 1px 2px rgba(16,24,40,.04);
+  --shadow-md:0 10px 30px rgba(13,27,64,.12);
+  --r:14px;
 }
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;font-size:16px;}
-body{font-family:'DM Sans',sans-serif;color:var(--ink);background:#f5f7fb;line-height:1.65;overflow-x:hidden;}
-img{max-width:100%;display:block;}
-a{text-decoration:none;color:inherit;}
-h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
-
-/* Login */
-.login-wrap{position:fixed;inset:0;z-index:9999;background:linear-gradient(135deg,var(--navy) 0%,var(--blue) 100%);display:flex;align-items:center;justify-content:center;padding:20px;}
-.login-box{width:min(420px,92vw);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:var(--r-lg);padding:clamp(32px,6vw,48px);backdrop-filter:blur(20px);box-shadow:0 40px 100px rgba(0,0,0,0.4);}
-.login-box h2{font-family:'Playfair Display',serif;color:#fff;font-size:1.6rem;margin-bottom:6px;text-align:center;}
-.login-box p{color:rgba(255,255,255,0.55);font-size:0.9rem;text-align:center;margin-bottom:28px;}
-.login-field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;}
-.login-field label{font-size:0.74rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.65);}
-.login-field input{width:100%;padding:13px 16px;background:rgba(255,255,255,0.09);border:1px solid rgba(255,255,255,0.14);border-radius:var(--r-sm);color:#fff;font-size:0.95em;font-family:'DM Sans',sans-serif;transition:all 0.25s;}
-.login-field input::placeholder{color:rgba(255,255,255,0.32);}
-.login-field input:focus{outline:none;border-color:rgba(201,146,42,0.6);background:rgba(255,255,255,0.13);box-shadow:0 0 0 3px rgba(201,146,42,0.15);}
-.login-btn{width:100%;padding:15px;border-radius:50px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--gold),var(--gold-lt));color:var(--navy);font-size:1em;font-weight:700;font-family:'DM Sans',sans-serif;box-shadow:0 8px 28px rgba(201,146,42,0.35);transition:all 0.3s;}
-.login-btn:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(201,146,42,0.5);}
-.login-status{margin-top:12px;font-size:0.9rem;font-weight:700;text-align:center;min-height:22px;}
-.login-status.error{color:#fca5a5;}
-
-/* App Shell */
-.app-shell{display:flex;width:100%;min-height:100vh;}
-.app-sidebar{width:260px;background:var(--navy);color:#fff;padding:18px;overflow:auto;flex-shrink:0;position:fixed;height:100vh;left:0;top:0;z-index:100;}
-.app-brand{display:flex;align-items:center;gap:10px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px solid rgba(255,255,255,0.08);}
-.app-brand img{width:40px;height:40px;border-radius:50%;border:2px solid var(--gold);object-fit:cover;}
-.app-brand h3{font-family:'Playfair Display',serif;font-size:1.05rem;margin:0;color:#fff;}
-.app-brand p{font-size:0.72rem;letter-spacing:1.4px;text-transform:uppercase;color:rgba(232,170,72,0.8);margin-top:2px;}
-.app-menu{display:grid;gap:6px;}
-.app-menu a,.app-menu button{width:100%;border:none;background:transparent;color:#fff;padding:11px 14px;border-radius:10px;cursor:pointer;text-align:left;font-weight:600;font-size:0.9rem;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:10px;transition:all 0.2s;text-decoration:none;}
-.app-menu a:hover,.app-menu button:hover,.app-menu a.active,.app-menu button.active{background:var(--gold);color:var(--navy);}
-.app-main{flex:1;margin-left:260px;padding:24px 28px;overflow:auto;min-height:100vh;}
-
-/* Topbar */
-.app-topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid #e5e7eb;}
-.app-title{font-family:'Playfair Display',serif;color:var(--navy);font-size:1.6rem;margin:0;}
-.app-sub{color:var(--muted);font-size:0.9rem;}
-
-/* Cards */
-.app-card{background:#fff;border:1px solid rgba(201,146,42,0.12);border-radius:20px;padding:22px;box-shadow:var(--shadow-sm);margin-bottom:16px;}
-.app-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-.subject-title{font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--navy);margin:0 0 14px;}
-
-/* Form Elements */
-.portal-field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;}
-.portal-field label{font-size:0.74rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);}
-.portal-field input,.portal-field select,.portal-field textarea{width:100%;padding:12px 14px;border-radius:12px;border:1px solid rgba(13,27,64,0.14);background:#fff;color:var(--ink);font-size:0.95rem;font-family:'DM Sans',sans-serif;transition:all 0.2s;}
-.portal-field input:focus,.portal-field select:focus,.portal-field textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,146,42,0.12);}
-
-/* Buttons */
-.primary-btn,.secondary-btn,.ghost-btn,.danger-btn{border:none;border-radius:12px;padding:11px 18px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:0.9rem;transition:all 0.2s;display:inline-flex;align-items:center;gap:6px;}
-.primary-btn{background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff;}
-.secondary-btn{background:linear-gradient(135deg,var(--gold),var(--gold-lt));color:var(--navy);}
-.ghost-btn{background:#eef4ff;color:var(--blue);}
-.danger-btn{background:#fef2f2;color:#b42318;border:1px solid #fecaca;}
-.primary-btn:hover,.secondary-btn:hover,.ghost-btn:hover,.danger-btn:hover{transform:translateY(-1px);opacity:0.95;}
-.btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;}
-
-/* Status */
-.portal-status{font-size:0.92rem;margin-top:10px;min-height:22px;font-weight:700;}
-.portal-status.error{color:#b42318;}
-.portal-status.success{color:#166534;}
-
-/* Live Class Cards */
-.live-card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:18px;margin-bottom:12px;transition:all 0.2s;position:relative;overflow:hidden;}
-.live-card:hover{box-shadow:var(--shadow-sm);border-color:rgba(201,146,42,0.3);}
-.live-card.upcoming{border-left:4px solid var(--gold);}
-.live-card.past{border-left:4px solid #9ca3af;opacity:0.85;}
-.live-badge{display:inline-flex;align-items:center;padding:4px 12px;border-radius:999px;background:#fde8dc;color:var(--navy);font-size:0.72rem;font-weight:800;letter-spacing:0.5px;margin-bottom:10px;}
-.live-badge.past{background:#f3f4f6;color:#6b7280;}
-.live-title{font-family:'Playfair Display',serif;color:var(--navy);font-size:1.05rem;margin:0 0 6px;}
-.live-meta{color:var(--muted);font-size:0.85rem;line-height:1.6;}
-.live-meta strong{color:var(--navy);}
-
-/* Countdown */
-.countdown-box{display:flex;gap:10px;align-items:center;margin-top:12px;}
-.countdown-box .cd-unit{background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff;padding:10px 14px;border-radius:10px;text-align:center;min-width:56px;}
-.countdown-box .cd-unit .n{font-size:1.3rem;font-weight:800;display:block;line-height:1;}
-.countdown-box .cd-unit .l{font-size:0.65rem;text-transform:uppercase;opacity:0.7;letter-spacing:1px;}
-
-/* Search & Filter */
-.filter-bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px;}
-.filter-bar select{padding:10px 14px;border-radius:10px;border:1px solid #d7ddea;background:#fff;font:inherit;color:var(--ink);min-width:180px;}
-.filter-bar select:focus{outline:3px solid rgba(201,146,42,0.22);border-color:var(--gold);}
-.practice-search{width:100%;padding:11px 14px;border:1px solid #d7ddea;border-radius:10px;font:inherit;color:var(--ink);background:#fff;margin-bottom:14px;}
-.practice-search:focus{outline:3px solid rgba(201,146,42,0.22);border-color:var(--gold);}
-
-/* Batch selector in forms */
-.batch-select-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;max-height:220px;overflow:auto;padding:10px;border:1px solid #e5e7eb;border-radius:12px;background:#fbfdff;}
-.batch-option{display:flex;gap:8px;align-items:center;padding:8px 10px;background:#fff;border:1px solid #e1e7f0;border-radius:10px;font-size:0.85rem;color:var(--navy);font-weight:600;cursor:pointer;}
-.batch-option input{cursor:pointer;}
-
-/* Empty */
-.empty-box{padding:20px;border:1px dashed #d9e2ef;border-radius:14px;background:#fbfdff;color:#5d6e83;text-align:center;font-size:0.9rem;}
-
-/* Scrollbar */
-::-webkit-scrollbar{width:6px;}
-::-webkit-scrollbar-track{background:transparent;}
-::-webkit-scrollbar-thumb{background:rgba(13,27,64,0.2);border-radius:10px;}
-
-/* Responsive */
-@media(max-width:900px){
-  .app-sidebar{width:100%;height:auto;position:relative;}
-  .app-main{margin-left:0;}
-  .app-shell{flex-direction:column;}
-  .app-grid-2{grid-template-columns:1fr;}
-}
-@media(max-width:640px){
-  .app-main{padding:16px;}
-  .countdown-box{flex-wrap:wrap;}
-}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;}
+body{font-family:'DM Sans',sans-serif;color:var(--ink);background:#f4f6fa;line-height:1.55;-webkit-font-smoothing:antialiased;}
+h1,h2,h3{font-family:'Playfair Display',serif;}
+button{font-family:inherit;cursor:pointer;border:none;background:none;}
+input{font-family:inherit;}
 .hidden{display:none !important;}
-</style>
-<style>
-/* Sidebar removed: full-width clean layout */
-.app-sidebar{display:none !important;}
-.app-main{margin-left:0 !important;}
-@media(max-width:900px){.app-main{margin-left:0 !important;}}
-</style>
 
-<style id="vinayak-brand-refresh">
-:root{--navy:#660708;--navy-mid:#A4161A;--blue:#A4161A;--gold:#A4161A;--gold-lt:#E5383B;--amber:#E5383B;--ink:#161A1D;--muted:#6B6B6B;--smoke:#F5F3F4;--white:#FFFFFF;--shadow-sm:0 8px 26px rgba(102,7,8,.07);--shadow-md:0 18px 48px rgba(102,7,8,.13);}
-body{background:var(--smoke);color:var(--ink)}
-.login-wrap{background:radial-gradient(ellipse at top right,#A4161A 0%,#660708 58%,#161A1D 100%)}
-.login-box{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.22);border-radius:24px}
-.login-field input:focus{border-color:#E5383B;box-shadow:0 0 0 3px rgba(229,56,59,.2)}
-.login-btn,.primary-btn{background:linear-gradient(135deg,#660708,#A4161A);color:#fff;box-shadow:0 7px 18px rgba(102,7,8,.17)}
-.login-btn:hover,.primary-btn:hover{background:linear-gradient(135deg,#A4161A,#E5383B)}
-.app-main{padding:clamp(16px,3vw,36px);max-width:1800px;margin-inline:auto}
-.app-topbar{border-bottom:1px solid #eadbdc;padding-bottom:20px;margin-bottom:24px}
-.app-title{color:#660708;font-size:clamp(1.6rem,2.5vw,2.2rem)}
-.app-sub{margin-top:7px;max-width:700px}
-.app-grid-2{grid-template-columns:minmax(320px,.92fr) minmax(0,1.08fr);gap:20px;align-items:start}
-.app-card{border:1px solid #eadbdc;border-radius:20px;padding:clamp(17px,2.2vw,26px);box-shadow:0 8px 26px rgba(102,7,8,.06)}
-.subject-title{color:#660708;font-size:1.25rem}
-.form-intro{font-size:.9rem;color:var(--muted);margin:-6px 0 18px}
-.portal-field label{color:#5f4b4c;letter-spacing:.7px}
-.portal-field input,.portal-field select,.portal-field textarea,.filter-bar select,.practice-search{border-color:#e3d4d5;border-radius:12px;background:#fff}
-.portal-field input:focus,.portal-field select:focus,.portal-field textarea:focus,.filter-bar select:focus,.practice-search:focus{outline:none;border-color:#A4161A;box-shadow:0 0 0 3px rgba(164,22,26,.11)}
-.secondary-btn{background:#FDF0F0;color:#660708;border:1px solid #f0cfd0}
-.ghost-btn{background:#FDF0F0;color:#660708;border:1px solid #f0cfd0}
-.danger-btn{background:#fff1f1;color:#A4161A;border-color:#f2c3c5}
-.batch-select-grid{background:#fff;border-color:#eadbdc;max-height:260px;padding:12px}
-.batch-option{border-color:#eadbdc;border-radius:12px;color:#161A1D;transition:background .15s,border-color .15s}
-.batch-option:has(input:checked){background:#FDF0F0;border-color:#A4161A}
-.batch-option input{accent-color:#A4161A}
-.live-card{border-color:#eadbdc;border-radius:16px;padding:20px;box-shadow:0 4px 16px rgba(22,26,29,.03)}
-.live-card.upcoming{border-left:4px solid #E5383B}
-.live-card.past{border-left:4px solid #c5babb;background:#faf9f9}
-.live-badge{background:#FDF0F0;color:#A4161A}
-.live-badge.past{background:#F5F3F4;color:#6B6B6B}
-.live-title{color:#660708;font-size:1.15rem}
-.countdown-box .cd-unit{background:linear-gradient(135deg,#660708,#A4161A)}
-.empty-box{background:#fcf9f9;border-color:#eadbdc;color:#6B6B6B}
-#logoutBtn{background:#fff1f1!important;color:#A4161A!important;border-color:#f2c3c5!important}
-.required-mark{color:#E5383B;font-style:normal}
-@media(max-width:1000px){.app-grid-2{grid-template-columns:1fr}}
-@media(max-width:640px){.app-main{padding:14px}.app-topbar{align-items:flex-start}.filter-bar>*{min-width:0;max-width:100%}.filter-bar select{width:100%}.live-card{padding:15px}}
+/* ============ LOGIN ============ */
+.login-wrap{position:fixed;inset:0;z-index:9999;background:radial-gradient(1200px 700px at 70% -10%,#24407e 0%,var(--navy) 55%);display:flex;align-items:center;justify-content:center;padding:20px;transition:opacity .3s;}
+.login-box{width:min(400px,92vw);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.13);border-radius:22px;padding:44px 38px;backdrop-filter:blur(18px);box-shadow:0 40px 100px rgba(0,0,0,.45);}
+.login-logo{width:64px;height:64px;border-radius:50%;border:2px solid var(--gold);margin:0 auto 18px;display:block;object-fit:cover;box-shadow:0 0 0 8px rgba(201,146,42,.12);}
+.login-box h2{color:#fff;font-size:1.55rem;text-align:center;margin-bottom:4px;}
+.login-box>p{color:rgba(255,255,255,.55);font-size:.88rem;text-align:center;margin-bottom:30px;}
+.lf{margin-bottom:15px;}
+.lf label{display:block;font-size:.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:6px;}
+.lf input{width:100%;padding:13px 16px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:11px;color:#fff;font-size:.95rem;transition:border-color .2s;}
+.lf input::placeholder{color:rgba(255,255,255,.3);}
+.lf input:focus{outline:none;border-color:rgba(232,170,72,.7);}
+.login-btn{width:100%;padding:14px;border-radius:50px;background:linear-gradient(135deg,var(--gold),var(--gold-lt));color:var(--navy);font-size:1rem;font-weight:700;transition:transform .15s, box-shadow .15s;box-shadow:0 6px 20px rgba(201,146,42,.3);}
+.login-btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 10px 26px rgba(201,146,42,.4);}
+.login-btn:disabled{opacity:.7;cursor:wait;}
+.login-status{margin-top:12px;font-size:.88rem;font-weight:600;text-align:center;min-height:20px;color:#fca5a5;}
+.login-status.ok{color:#a7f3d0;}
+.spin{display:inline-block;width:15px;height:15px;border:2px solid rgba(13,27,64,.35);border-top-color:var(--navy);border-radius:50%;vertical-align:-3px;margin-right:8px;animation:rot .7s linear infinite;}
+@keyframes rot{to{transform:rotate(360deg);}}
+
+/* ============ SHELL ============ */
+.shell{height:100vh;display:flex;flex-direction:column;}
+
+/* Hub */
+.hub{flex:1;overflow:auto;}
+.hub-inner{max-width:820px;margin:0 auto;padding:0 24px 60px;}
+.hub-head{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:26px 0 6px;}
+.brand{display:flex;align-items:center;gap:13px;}
+.brand img{width:46px;height:46px;border-radius:50%;border:2px solid var(--gold);object-fit:cover;}
+.brand h1{font-size:1.35rem;color:var(--navy);line-height:1.15;}
+.brand span{display:block;font-family:'DM Sans',sans-serif;font-size:.66rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold);font-weight:700;margin-top:2px;}
+.greeting{color:var(--muted);font-size:.92rem;margin:14px 0 22px;}
+
+.search-wrap{position:relative;margin-bottom:10px;}
+.search-wrap svg{position:absolute;left:17px;top:50%;transform:translateY(-50%);opacity:.5;}
+.search-wrap input{width:100%;padding:15px 18px 15px 48px;border-radius:14px;border:1px solid var(--line);background:#fff;font-size:.96rem;box-shadow:var(--shadow-sm);transition:all .2s;}
+.search-wrap input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 4px rgba(201,146,42,.13);}
+.meta-line{display:flex;justify-content:space-between;align-items:center;font-size:.82rem;color:var(--muted);margin:8px 2px 24px;}
+
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+@media(max-width:760px){.tiles{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:460px){.tiles{grid-template-columns:1fr;}}
+.tile{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:24px 20px 20px;text-align:left;cursor:pointer;position:relative;overflow:hidden;transition:transform .18s, box-shadow .18s, border-color .18s;box-shadow:var(--shadow-sm);display:block;width:100%;}
+.tile::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--gold),var(--gold-lt));opacity:0;transition:opacity .18s;}
+.tile:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);border-color:#d8c29a;}
+.tile:hover::before{opacity:1;}
+.tile-ico{width:46px;height:46px;border-radius:12px;background:linear-gradient(135deg,var(--navy),var(--blue));display:grid;place-items:center;font-size:1.25rem;margin-bottom:14px;}
+.tile-name{font-family:'Playfair Display',serif;font-size:1.06rem;font-weight:700;color:var(--navy);}
+.tile-desc{font-size:.8rem;color:var(--muted);margin-top:3px;}
+.tile-arrow{position:absolute;right:16px;top:22px;color:#c4ccdb;font-size:1.05rem;transition:transform .18s, color .18s;}
+.tile:hover .tile-arrow{transform:translateX(3px);color:var(--gold);}
+.no-results{margin-top:18px;padding:22px;border:1px dashed var(--line);border-radius:var(--r);background:#fff;color:var(--muted);text-align:center;font-size:.9rem;}
+
+/* Viewer */
+.viewer{flex:1;display:none;flex-direction:column;background:#fff;}
+.viewer.open{display:flex;}
+.viewer-bar{height:52px;flex-shrink:0;display:flex;align-items:center;gap:14px;padding:0 10px 0 8px;background:#fff;border-bottom:1px solid var(--line);box-shadow:0 1px 4px rgba(16,24,40,.05);z-index:5;}
+.back-btn{display:flex;align-items:center;gap:7px;padding:8px 14px;border-radius:10px;font-weight:600;font-size:.88rem;color:var(--navy);transition:background .15s;}
+.back-btn:hover{background:#f1f4fb;}
+.viewer-title{font-family:'Playfair Display',serif;font-size:1.02rem;color:var(--navy);font-weight:700;}
+.viewer-frame{flex:1;border:none;width:100%;background:#f4f6fa;}
+
+/* Logout — extreme top-right corner, both views */
+.logout-corner{position:fixed;top:0;right:0;z-index:10001;height:52px;display:flex;align-items:center;padding:0 6px 0 18px;font-size:.84rem;font-weight:700;color:#b42318;background:rgba(255,255,255,.85);backdrop-filter:blur(6px);border-bottom-left-radius:14px;border-left:1px solid var(--line);border-bottom:1px solid var(--line);transition:background .15s;}
+.logout-corner:hover{background:#fef2f2;}
+.hub .logout-corner{background:transparent;border:none;backdrop-filter:none;height:auto;padding:10px 0 0 18px;position:static;border-radius:10px;}
+.hub .logout-corner:hover{background:#fef2f2;}
+
+@media(max-width:600px){
+  .brand h1{font-size:1.15rem;}
+  .viewer-title{display:none;}
+}
 </style>
+<base target="_blank">
 </head>
 <body>
-<button id="logoutBtn" type="button" style="position:fixed;top:14px;right:16px;z-index:12000;border:none;border-radius:999px;padding:9px 18px;background:#fef2f2;color:#b42318;border:1px solid #fecaca;font:700 13px 'DM Sans',sans-serif;cursor:pointer;box-shadow:0 4px 14px rgba(13,27,64,.12);">🚪 Logout</button>
-
 
 <!-- LOGIN -->
-<div class="login-wrap" id="loginWrap" style="display:none">
+<div class="login-wrap" id="loginWrap">
   <div class="login-box">
+    <img class="login-logo" src="https://pasteimg.com/images/2026/03/31/WhatsApp-Image-2026-03-19-at-6.49.19-PM.jpg" alt="Vinayak ProEdu">
     <h2>Admin Portal</h2>
-    <p>Live Class Scheduler</p>
-    <div class="login-field"><label>Admin Email</label><input type="email" id="adminEmail" placeholder="admin@email.com"></div>
-    <div class="login-field"><label>Password</label><input type="password" id="adminPassword" placeholder="••••••••"></div>
+    <p>Vinayak ProEdu Dashboard</p>
+    <div class="lf"><label>Admin Email</label><input type="email" id="adminEmail" placeholder="admin@email.com" autocomplete="username"></div>
+    <div class="lf"><label>Password</label><input type="password" id="adminPassword" placeholder="••••••••" autocomplete="current-password"></div>
     <button class="login-btn" id="adminLoginBtn" type="button">Login as Admin</button>
     <div class="login-status" id="loginStatus"></div>
-    <div style="text-align:center;margin-top:10px;"><a style="color:#E8AA48;font-size:.85rem;cursor:pointer;font-weight:700;" onclick="window.__vpResetPw && window.__vpResetPw()">Forgot password?</a></div>
   </div>
 </div>
 
-<!-- APP -->
-<div class="app-shell hidden" id="appShell">
-  
+<!-- APP SHELL -->
+<div class="shell hidden" id="appShell">
 
-  <main class="app-main">
-    <div class="app-topbar">
-      <div>
-        <h1 class="app-title">Live Classes</h1>
-        <div class="app-sub">Schedule sessions and assign them directly to your existing batches.</div>
+  <!-- HUB -->
+  <div class="hub" id="hubView">
+    <div class="hub-inner">
+      <div class="hub-head">
+        <div class="brand">
+          <img src="https://pasteimg.com/images/2026/03/31/WhatsApp-Image-2026-03-19-at-6.49.19-PM.jpg" alt="">
+          <div><h1>Vinayak ProEdu<span>Admin Panel</span></h1></div>
+        </div>
+        <button class="logout-corner" id="logoutBtn" type="button">Logout ⏻</button>
       </div>
-      <button class="ghost-btn" id="closeBtn" type="button">← Dashboard</button>
+      <div class="greeting" id="greeting">Welcome back. Pick a module to get started.</div>
+
+      <div class="search-wrap">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#667085" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input type="search" id="hubSearch" placeholder="Search modules — students, mocks, lectures, doubts..." autocomplete="off">
+      </div>
+      <div class="meta-line"><span id="hubCount">Loading…</span><span>Session active</span></div>
+
+      <div class="tiles" id="tiles">
+        <button class="tile" data-page="students.html" data-title="Students" data-keys="students enrolments access manage learners">
+          <span class="tile-ico">👥</span><div class="tile-name">Students</div><div class="tile-desc">Manage enrolments &amp; access</div><span class="tile-arrow">→</span>
+        </button>
+        <button class="tile" data-page="students.html?view=batches" data-title="Batches" data-keys="batches groups create batch">
+          <span class="tile-ico">📦</span><div class="tile-name">Batches</div><div class="tile-desc">Create &amp; manage batches</div><span class="tile-arrow">→</span>
+        </button>
+        <button class="tile" data-page="teachers.html" data-title="Teachers" data-keys="teachers faculty assign subjects roles">
+          <span class="tile-ico">👨‍🏫</span><div class="tile-name">Teachers</div><div class="tile-desc">Assign subjects &amp; roles</div><span class="tile-arrow">→</span>
+        </button>
+        <button class="tile" data-page="tests.html" data-title="Mock Exams" data-keys="tests mocks papers questions exams">
+          <span class="tile-ico">📝</span><div class="tile-name">Mock Exams</div><div class="tile-desc">Papers, questions &amp; attempts</div><span class="tile-arrow">→</span>
+        </button>
+        <button class="tile" data-page="lectures.html" data-title="Lectures" data-keys="lectures videos files upload library">
+          <span class="tile-ico">🎬</span><div class="tile-name">Lectures</div><div class="tile-desc">Upload videos &amp; files</div><span class="tile-arrow">→</span>
+        </button>
+        <button class="tile" data-page="live.html" data-title="Live Classes" data-keys="live classes meetings schedule zoom">
+          <span class="tile-ico">🔴</span><div class="tile-name">Live Classes</div><div class="tile-desc">Schedule meetings</div><span class="tile-arrow">→</span>
+        </button>
+        <button class="tile" data-page="leaderboard.html" data-title="Leaderboard" data-keys="leaderboard rankings batch toppers">
+          <span class="tile-ico">🏆</span><div class="tile-name">Leaderboard</div><div class="tile-desc">Batch-wise rankings</div><span class="tile-arrow">→</span>
+        </button>
+        <button class="tile" data-page="doubts.html" data-title="Doubts" data-keys="doubts queries reply students">
+          <span class="tile-ico">💬</span><div class="tile-name">Doubts</div><div class="tile-desc">Reply to students</div><span class="tile-arrow">→</span>
+        </button>
+        <button class="tile" data-page="announcements.html" data-title="Announcements" data-keys="announcements publish notify notice">
+          <span class="tile-ico">📢</span><div class="tile-name">Announcements</div><div class="tile-desc">Publish to all students</div><span class="tile-arrow">→</span>
+        </button>
+        <button class="tile" data-page="testimonials.html" data-title="Testimonials" data-keys="testimonials reviews feedback students words">
+          <span class="tile-ico">⭐</span><div class="tile-name">Testimonials</div><div class="tile-desc">Publish reviews to website</div><span class="tile-arrow">→</span>
+        </button>
+      </div>
+      <div class="no-results hidden" id="noResults">No module matches your search.</div>
     </div>
+  </div>
 
-    <div class="app-grid-2">
-      <!-- LEFT: Schedule Form -->
-      <div class="app-card">
-        <h3 class="subject-title">Schedule a session</h3>
-        <p class="form-intro">Choose the batch or batches first. The class will be associated with those batches.</p>
-
-        <div class="portal-field"><label>Class Title *</label><input type="text" id="liveTitle" placeholder="e.g. FR Live Doubt Session - Conceptual Framework"></div>
-
-        <div class="app-grid-2" style="grid-template-columns:1fr 1fr;">
-          <div class="portal-field"><label>Date *</label><input type="date" id="liveDate"></div>
-          <div class="portal-field"><label>Time *</label><input type="time" id="liveTime"></div>
-        </div>
-
-        <div class="portal-field"><label>Meeting Link *</label><input type="url" id="liveLink" inputmode="url" placeholder="https://zoom.us/j/... or https://meet.google.com/..." autocomplete="url"></div>
-
-        <!-- BATCH SELECTOR -->
-        <div class="portal-field">
-          <label style="display:flex;justify-content:space-between;align-items:center;">
-            <span>Assign to batches <em class="required-mark">*</em></span>
-            <span id="batchLoadStatus" style="font-size:0.72rem;color:var(--muted);text-transform:none;letter-spacing:0;font-weight:500;"></span>
-          </label>
-          <div id="liveBatchSelect" class="batch-select-grid">
-            <div class="empty-box" style="padding:12px;font-size:0.85rem;">Loading batches...</div>
-          </div>
-        </div>
-
-        <div class="portal-field"><label>Description (optional)</label><input type="text" id="liveDesc" placeholder="What will be covered in this session?"></div>
-
-        <div class="btn-row">
-          <button class="primary-btn" id="scheduleBtn" type="button">📅 Schedule Class</button>
-          <button class="ghost-btn" id="clearBtn" type="button">Clear</button>
-        </div>
-        <div class="portal-status" id="scheduleStatus"></div>
-      </div>
-
-      <!-- RIGHT: Upcoming & Past -->
-      <div class="app-card">
-        <h3 class="subject-title">Scheduled sessions</h3>
-        <div class="filter-bar">
-          <select id="batchFilter" onchange="renderClasses()"><option value="">All Batches</option></select>
-          <button class="ghost-btn" type="button" onclick="window.loadBatches()" style="padding:8px 12px;font-size:0.85rem;">🔄 Refresh Batches</button>
-          <span id="batchFilterStatus" style="font-size:0.82rem;color:var(--muted);align-self:center;"></span>
-          <input type="search" class="practice-search" id="liveSearch" placeholder="Search classes..." oninput="renderClasses()" style="margin:0;flex:1;">
-        </div>
-        <div id="liveList"></div>
-      </div>
+  <!-- VIEWER -->
+  <div class="viewer" id="viewer">
+    <div class="viewer-bar">
+      <button class="back-btn" id="backBtn" type="button">← All modules</button>
+      <span class="viewer-title" id="viewerTitle"></span>
+      <div style="flex:1;"></div>
+      <button class="logout-corner" id="logoutBtn2" type="button">Logout ⏻</button>
     </div>
-  </main>
+    <iframe class="viewer-frame" id="viewerFrame" title="module"></iframe>
+  </div>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
 <script src="../firebase-config.js"></script>
-
 <script>
 (function(){
-  const ADMIN_EMAIL = "vinayakproedu@gmail.com";
+'use strict';
+var $ = function(id){ return document.getElementById(id); };
+function on(id, ev, fn){ var n = $(id); if(n) n.addEventListener(ev, fn); return n; }
 
-  
-  const auth = firebase.auth();
-  const db = firebase.firestore();
+/* ======= Instant session restore (no flashing, no waiting) ======= */
+var unlocked = false;
+try{ unlocked = localStorage.getItem('adminUnlocked')==='1' || sessionStorage.getItem('adminUnlocked')==='1'; }catch(e){}
+if(unlocked){
+  $('loginWrap').style.display = 'none';
+  $('appShell').classList.remove('hidden');
+}
 
-  function esc(v){ return String(v ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-  function val(id){ const n = document.getElementById(id); return n ? n.value.trim() : ''; }
-  function setStatus(el, msg, err=false){ if(!el) return; el.textContent = msg; el.className = 'portal-status ' + (err ? 'error' : 'success'); }
+if(typeof firebase === 'undefined' || !firebase.apps.length){
+  var st = $('loginStatus');
+  if(st && !unlocked){ st.textContent = 'Firebase failed to load — check firebase-config.js'; }
+  return;
+}
+var auth = firebase.auth();
+var db = firebase.firestore();
+var ADMIN_EMAIL = 'vinayakproedu@gmail.com';
+var norm = function(s){ return String(s||'').trim().toLowerCase(); };
 
-  /* Auth */
-  document.getElementById('adminLoginBtn').addEventListener('click', async () => {
-    const email = val('adminEmail');
-    const pw = document.getElementById('adminPassword').value;
-    if(!email || !pw){ setStatus(document.getElementById('loginStatus'), 'Email and password required.', true); return; }
+/* ======= Auth ======= */
+function showApp(){
+  $('loginWrap').style.display = 'none';
+  $('appShell').classList.remove('hidden');
+  loadCount();
+}
+function showLogin(){
+  $('appShell').classList.add('hidden');
+  $('loginWrap').style.display = '';
+}
+auth.onAuthStateChanged(function(user){
+  if(user && norm(user.email) === norm(ADMIN_EMAIL)){
+    try{ localStorage.setItem('adminUnlocked','1'); }catch(e){}
+    showApp();
+  } else {
+    if(user) auth.signOut().catch(function(){});
+    try{ localStorage.removeItem('adminUnlocked'); sessionStorage.removeItem('adminUnlocked'); }catch(e){}
+    showLogin();
+  }
+});
+on('adminLoginBtn','click', doLogin);
+on('adminPassword','keydown', function(e){ if(e.key === 'Enter') doLogin(); });
+function doLogin(){
+  var btn = $('adminLoginBtn'), st = $('loginStatus');
+  var email = ($('adminEmail').value||'').trim(), pw = $('adminPassword').value;
+  if(!email || !pw){ st.textContent = 'Email and password required.'; st.className = 'login-status'; return; }
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spin"></span>Signing in…';
+  st.textContent = ''; st.className = 'login-status';
+  auth.signInWithEmailAndPassword(email, pw).then(function(){
     try{
-      const cred = await auth.signInWithEmailAndPassword(email, pw);
-      if(cred.user.email !== ADMIN_EMAIL){ await auth.signOut(); setStatus(document.getElementById('loginStatus'), 'Not authorized.', true); return; }
-      localStorage.setItem('adminUnlocked', '1');
-      showApp();
-    }catch(err){ setStatus(document.getElementById('loginStatus'), err.message, true); }
-  });
-
-  document.getElementById('logoutBtn').addEventListener('click', async () => {
-    localStorage.removeItem('adminUnlocked');
-    await auth.signOut();
-    location.reload();
-  });
-
-  document.getElementById('closeBtn').addEventListener('click', () => {
-    __vpToDash();
-  });
-
-  auth.onAuthStateChanged(async user => {
-    var lw = document.getElementById('loginWrap');
-    var ap = document.getElementById('appShell');
-    if(user && user.email === ADMIN_EMAIL){
-      window.__isTeacher = false;
       localStorage.setItem('adminUnlocked','1');
-      lw.classList.add('hidden'); lw.style.display='none';
-      ap.classList.remove('hidden'); ap.style.display='';
-      showApp();
-      return;
-    }
-    if(user) await auth.signOut();
-    localStorage.removeItem('adminUnlocked');
-    ap.classList.add('hidden');
-    lw.classList.remove('hidden'); lw.style.display='';
-  });
-
-  function showApp(){
-    document.getElementById('loginWrap').classList.add('hidden');
-    document.getElementById('appShell').classList.remove('hidden');
-    loadClasses();
-    loadBatches();
-      }
-
-  /* Batch selector renderer */
-  function renderBatchCheckboxList(batches, containerId, selected=[]){
-    const box = document.getElementById(containerId);
-    if(!box) return;
-    if(!batches.length){
-      box.innerHTML = '<div class="empty-box" style="padding:12px;font-size:0.85rem;">No batches found. Create one in Students → Batches.</div>';
-      return;
-    }
-    box.innerHTML = batches.map(b => `
-      <label class="batch-option">
-        <input type="checkbox" value="${esc(b.code || b.id)}" ${selected.includes(String(b.code || b.id))?'checked':''}>
-        <span style="word-break:break-word;">${esc(b.code)}<br><span style="font-size:0.75rem;color:var(--muted);font-weight:500;">${esc(b.name||'')}</span></span>
-      </label>
-    `).join('');
-  }
-
-  function getSelectedBatchCodes(containerId){
-    return [...document.querySelectorAll(`#${containerId} input:checked`)].map(i => i.value);
-  }
-
-  /* Schedule */
-  document.getElementById('scheduleBtn').addEventListener('click', async () => {
-    const title = val('liveTitle');
-        const date = val('liveDate');
-    const time = val('liveTime');
-    const link = val('liveLink');
-    const desc = val('liveDesc');
-    const batchCodes = getSelectedBatchCodes('liveBatchSelect');
-
-    if(!title || !date || !time || !link){ setStatus(document.getElementById('scheduleStatus'), 'Enter a title, date, time and meeting link.', true); return; }
-    if(!/^https?:\/\//i.test(link)){ setStatus(document.getElementById('scheduleStatus'), 'Enter a valid meeting URL beginning with https:// or http://.', true); return; }
-    if(!batchCodes.length){ setStatus(document.getElementById('scheduleStatus'), 'Select at least one batch for this session.', true); return; }
-    const selectedBatches = allBatches.filter(b => batchCodes.includes(String(b.code || b.id || '')));
-    const legacySubjects = [...new Set(selectedBatches.flatMap(b => [b.subject, b.subjectCode, b.paperCode, ...(Array.isArray(b.subjects) ? b.subjects : [])]).filter(v => typeof v === 'string' && v.trim()).map(v => v.trim()))];
-    // Compatibility: only derive a subject if batch metadata explicitly provides one. Never guess from a batch name/code.
-    const legacySubject = legacySubjects.length === 1 ? legacySubjects[0] : '';
-    if(legacySubjects.length > 1){ setStatus(document.getElementById('scheduleStatus'), 'Selected batches have conflicting subject metadata. Schedule them separately so the legacy subject can be derived safely.', true); return; }
-
-    try{
-      const payload = {
-        title,
-        ...(legacySubject ? { subject: legacySubject } : {}),
-        lectureDate: date,
-        lectureTime: time,
-        meetingLink: link,
-        description: desc || '',
-        batchCodes,
-        uploadedAt: firebase.firestore.FieldValue.serverTimestamp()
-      };
-      await db.collection('lectures').add(payload);
-      setStatus(document.getElementById('scheduleStatus'), 'Live class scheduled ✅');
-
-      document.getElementById('liveTitle').value = '';
-      document.getElementById('liveDate').value = '';
-      document.getElementById('liveTime').value = '';
-      document.getElementById('liveLink').value = '';
-      document.getElementById('liveDesc').value = '';
-      renderBatchCheckboxList(allBatches, 'liveBatchSelect');
-
-      await loadClasses();
-    }catch(err){ setStatus(document.getElementById('scheduleStatus'), err.message || 'Failed to schedule', true); }
-  });
-
-  document.getElementById('clearBtn').addEventListener('click', () => {
-    document.getElementById('liveTitle').value = '';
-    document.getElementById('liveDate').value = '';
-    document.getElementById('liveTime').value = '';
-    document.getElementById('liveLink').value = '';
-    document.getElementById('liveDesc').value = '';
-    renderBatchCheckboxList(allBatches, 'liveBatchSelect');
-    setStatus(document.getElementById('scheduleStatus'), '');
-  });
-
-  /* Load & Render */
-  let allClasses = [];
-  let allBatches = [];
-
-  async function loadClasses(){
-    const snap = await db.collection('lectures').where('meetingLink','!=','').orderBy('uploadedAt','desc').limit(200).get();
-    allClasses = snap.docs.map(d => ({id: d.id, ...d.data()}));
-    renderClasses();
-  }
-
-  async function loadBatches(){
-    if(!auth.currentUser){ setTimeout(function(){ if(window.loadBatches) window.loadBatches(); else loadBatches(); }, 400); return; }
-    const statusEl = document.getElementById('batchLoadStatus');
-    const filterStatus = document.getElementById('batchFilterStatus');
-    try {
-      if(statusEl) statusEl.textContent = 'Loading...';
-      const snap = await db.collection('batches').orderBy('createdAt','desc').get();
-      const batches = snap.docs.map(d => ({...d.data(), id: d.id}));
-      allBatches = batches;
-      renderBatchCheckboxList(batches, 'liveBatchSelect');
-      const sel = document.getElementById('batchFilter');
-      if(sel){
-        const current = sel.value;
-        sel.innerHTML = '<option value="">All Batches</option>' + 
-          batches.map(b => { const code = String(b.code || b.id || ''); return `<option value="${esc(code)}">${esc(code)} - ${esc(b.name || 'Unnamed')}</option>`; }).join('');
-        if(current && batches.some(b => String(b.code || b.id || '') === current)) sel.value = current;
-      }
-      if(statusEl) statusEl.textContent = batches.length ? `${batches.length} ready` : 'None';
-      if(filterStatus) filterStatus.textContent = batches.length ? `${batches.length} batch(es) ready` : 'No batches found';
-    } catch(err) {
-      console.error('loadBatches error', err);
-      if(statusEl) statusEl.textContent = 'Error';
-      if(filterStatus) filterStatus.textContent = 'Error loading batches';
-    }
-  }
-  window.loadBatches = loadBatches;
-
-  window.renderClasses = function(){
-    let sourceClasses = allClasses;
-    if(window.__isTeacher){
-      const subs = window.__teacherSubjects || [];
-      sourceClasses = sourceClasses.filter(c => subs.includes(c.subject));
-    }
-    const box = document.getElementById('liveList');
-    const q = (document.getElementById('liveSearch')?.value || '').toLowerCase();
-    const batchFilter = document.getElementById('batchFilter')?.value || '';
-
-    let filtered = sourceClasses.filter(c => {
-      if(batchFilter && !(c.batchCodes || []).includes(batchFilter)) return false;
-      if(!q) return true;
-      return [c.title,c.subject,c.description,(c.batchCodes||[]).join(' ')].join(' ').toLowerCase().includes(q);
-    });
-
-    const now = new Date();
-    filtered.sort((a,b) => {
-      const da = new Date((a.lectureDate||'') + 'T' + (a.lectureTime||'00:00'));
-      const db_ = new Date((b.lectureDate||'') + 'T' + (b.lectureTime||'00:00'));
-      return da - db_;
-    });
-
-    if(!filtered.length){ box.innerHTML = '<div class="empty-box">No live classes scheduled yet.</div>'; return; }
-
-    box.innerHTML = filtered.map(c => {
-      const dt = new Date((c.lectureDate||'') + 'T' + (c.lectureTime||'00:00'));
-      const isUpcoming = dt > now;
-      const diff = dt - now;
-      const days = Math.floor(diff / (1000*60*60*24));
-      const hours = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
-      const mins = Math.floor((diff % (1000*60*60)) / (1000*60));
-
-      let countdown = '';
-      if(isUpcoming && diff > 0){
-        countdown = `<div class="countdown-box">
-          ${days > 0 ? `<div class="cd-unit"><span class="n">${days}</span><span class="l">days</span></div>` : ''}
-          <div class="cd-unit"><span class="n">${hours}</span><span class="l">hrs</span></div>
-          <div class="cd-unit"><span class="n">${mins}</span><span class="l">min</span></div>
-        </div>`;
-      }
-
-      return `<div class="live-card ${isUpcoming ? 'upcoming' : 'past'}">
-        <div class="live-badge ${isUpcoming ? '' : 'past'}">${isUpcoming ? '🔴 UPCOMING' : '✅ COMPLETED'}</div>
-        <div class="live-title">${esc(c.title || 'Untitled')}</div>
-        <div class="live-meta">
-          ${c.subject ? `<strong>${esc(c.subject)}</strong><br>` : '<strong>Batch-assigned session</strong><br>'}
-          📅 ${esc(c.lectureDate || '')} · 🕒 ${esc(c.lectureTime || '')}<br>
-          ${c.batchCodes?.length ? `👥 Batches: ${esc(c.batchCodes.join(', '))}<br>` : ''}
-          ${c.description ? `📝 ${esc(c.description)}<br>` : ''}
-          🔗 <a href="${esc(c.meetingLink)}" target="_blank" style="color:var(--gold);font-weight:600;word-break:break-all;">${esc(c.meetingLink)}</a>
-        </div>
-        ${countdown}
-        <div class="btn-row" style="margin-top:14px;">
-          <a href="${esc(c.meetingLink)}" target="_blank" class="secondary-btn" style="text-decoration:none;display:inline-flex;">Join Meeting</a>
-          <button class="danger-btn" type="button" onclick="deleteClass('${c.id}')">Delete</button>
-        </div>
-      </div>`;
-    }).join('');
-  };
-
-  window.deleteClass = async function(id){
-    if(!confirm('Delete this live class?')) return;
-    await db.collection('lectures').doc(id).delete();
-    await loadClasses();
-  };
-
-  setInterval(() => { if(document.getElementById('appShell') && !document.getElementById('appShell').classList.contains('hidden')) renderClasses(); }, 60000);
-})();
-</script>
-<script>
-
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', function() {
-    navigator.serviceWorker.register('../sw.js').catch(function(e){ console.warn('SW:', e); });
+      sessionStorage.setItem('adminUnlocked','1');
+    }catch(e){}
+    btn.innerHTML = 'Login as Admin'; btn.disabled = false;
+  }).catch(function(err){
+    btn.innerHTML = 'Login as Admin'; btn.disabled = false;
+    st.textContent = err.message; st.className = 'login-status';
   });
 }
-/* One-tap PWA install button */
-(function(){
-  var deferredPrompt = null;
-  window.addEventListener('beforeinstallprompt', function(e){
-    e.preventDefault(); deferredPrompt = e; showBtn();
+function doLogout(){
+  try{ localStorage.removeItem('adminUnlocked'); sessionStorage.removeItem('adminUnlocked'); }catch(e){}
+  auth.signOut().then(function(){ location.reload(); }).catch(function(){ location.reload(); });
+}
+on('logoutBtn','click', doLogout);
+on('logoutBtn2','click', doLogout);
+
+/* ======= Student count (non-blocking) ======= */
+var countLoaded = false;
+function loadCount(){
+  if(countLoaded) return; countLoaded = true;
+  db.collection('users').where('role','==','student').get().then(function(snap){
+    $('hubCount').textContent = snap.size + ' students enrolled';
+  }).catch(function(){ $('hubCount').textContent = ''; });
+}
+
+/* ======= Tile search ======= */
+var tiles = Array.prototype.slice.call(document.querySelectorAll('.tile'));
+on('hubSearch','input', function(){
+  var q = norm($('hubSearch').value);
+  var vis = 0;
+  tiles.forEach(function(t){
+    var hay = norm(t.textContent + ' ' + (t.dataset.keys||''));
+    var show = !q || hay.indexOf(q) !== -1;
+    t.style.display = show ? '' : 'none';
+    if(show) vis++;
   });
-  function showBtn(){
-    if (document.getElementById('vpInstallBtn')) return;
-    var b = document.createElement('button');
-    b.id = 'vpInstallBtn';
-    b.textContent = '📲 Install App';
-    b.style.cssText = "position:fixed;left:18px;bottom:18px;z-index:15000;border:none;border-radius:999px;padding:12px 20px;background:linear-gradient(135deg,#C9922A,#E8AA48);color:#0D1B40;font:800 14px 'DM Sans',sans-serif;box-shadow:0 10px 28px rgba(13,27,64,.35);cursor:pointer;";
-    b.onclick = function(){
-      if (deferredPrompt) { deferredPrompt.prompt(); deferredPrompt = null; }
-      b.remove();
-    };
-    document.body.appendChild(b);
-  }
-  window.__vpShowInstall = showBtn;
-  /* If already installed, the prompt never fires - hide nothing, just don't show */
+  $('noResults').classList.toggle('hidden', vis > 0);
+});
+
+/* ======= Viewer (embedded modules) ======= */
+var viewer = $('viewer'), frame = $('viewerFrame');
+function openModule(page, title){
+  $('viewerTitle').textContent = title;
+  $('hubView').classList.add('hidden');
+  viewer.classList.add('open');
+  frame.src = page;
+}
+function closeModule(){
+  frame.src = 'about:blank';
+  viewer.classList.remove('open');
+  $('hubView').classList.remove('hidden');
+  loadCount();
+}
+tiles.forEach(function(t){
+  t.addEventListener('click', function(){ openModule(t.dataset.page, t.dataset.title); });
+});
+on('backBtn','click', closeModule);
+window.addEventListener('message', function(e){
+  if(e.data && e.data.type === 'vp-close'){ closeModule(); }
+});
+window.addEventListener('keydown', function(e){
+  if(e.key === 'Escape' && viewer.classList.contains('open')) closeModule();
+});
 })();
-</script>
-<script>
-/* Instant session restore: pages never flash the login box (auth verifies in background) */
-(function(){
-  try{
-    var ok = localStorage.getItem('adminUnlocked')==='1' || sessionStorage.getItem('adminUnlocked')==='1';
-    if(!ok) return;
-    var loginEl = document.getElementById('loginWrap') || document.getElementById('loginScreen');
-    var appEl = document.getElementById('appShell') || document.getElementById('adminApp');
-    if(loginEl){ loginEl.classList.add('hidden'); loginEl.style.display='none'; }
-    if(appEl){ appEl.classList.remove('hidden'); appEl.style.display=''; }
-  }catch(e){}
-})();
-</script>
-<script>
-/* Back to dashboard = end session, ask password again */
-window.__vpToDash = function(){
-  try{ if(window.self !== window.top){ parent.postMessage({type:'vp-close'}, '*'); return; } }catch(e){}
-  location.href = 'index.html';
-};
-</script>
-<script>
-document.addEventListener('click', function(e){
-  var t = e.target && e.target.closest ? e.target.closest('#logoutBtn, #adminLogoutBtn') : null;
-  if(!t) return;
-  setTimeout(function(){
-    try{ if(window.self !== window.top){ window.top.location.href = 'index.html'; } }catch(err){}
-  }, 900);
-}, true);
 </script>
 </body>
 </html>
