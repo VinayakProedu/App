@@ -33,7 +33,7 @@
 <div class="columns"><section class="panel"><div class="panel-head"><div><div class="eyebrow">Content management</div><h2 id="formHeading">Upload a lecture</h2></div><span class="pill">Recorded</span></div>
 <form id="lectureForm">
 <div class="field"><label for="lecTitle">Lecture title *</label><input id="lecTitle" required maxlength="180" placeholder="e.g. FR — Consolidation basics"></div>
-<div class="field"><label for="lecSubject">Subject / paper code *</label><input id="lecSubject" required placeholder="e.g. FA, FR, FM, AA"></div>
+<div class="field"><label for="lecSubject">Subject *</label><input id="lecSubject" required placeholder="e.g. Financial Reporting, Audit and Assurance"></div>
 <div class="field"><label for="lecSection">Section / chapter</label><input id="lecSection" placeholder="e.g. Chapter 1 — Introduction"></div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div class="field"><label for="lecDate">Lecture date *</label><input id="lecDate" type="date" required></div><div class="field"><label for="lecTime">Time</label><input id="lecTime" type="time"></div></div>
 <div class="field"><label>Assign to batches</label><div class="batch-picker"><button type="button" id="batchPickerToggle" class="batch-picker-trigger" aria-expanded="false"><span id="batchPickerSummary">Choose batches (optional)</span><span class="chevron">⌄</span></button><div id="batchPickerPanel" class="batch-picker-panel hidden"><input id="batchPickerSearch" type="search" placeholder="Search batches…" aria-label="Search batches"><div id="lecBatchSelect" class="batch-grid"><div class="empty">Loading batches…</div></div></div></div><small class="muted" id="batchLoadStatus">Choose one or more batches. Codes are hidden.</small></div>
