@@ -241,6 +241,7 @@ a{text-decoration:none;color:inherit;}
     const email = $('tEmail').value.trim().toLowerCase();
     const name = $('tName').value.trim();
     const subs = [...document.querySelectorAll('.t-subj:checked')].map(i => i.value);
+    const bats = [...document.querySelectorAll('.t-bat:checked')].map(i => i.value);
     if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ st.textContent='Enter a valid email.'; st.classList.add('error'); return; }
     if(!subs.length){ st.textContent='Tick at least one subject.'; st.classList.add('error'); return; }
     const password = genPass();
