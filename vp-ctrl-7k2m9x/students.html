@@ -278,22 +278,25 @@ $('adminLoginBtn').onclick = async () => {
 
 function setLoginStatus(msg, err){ const el=$('adminLoginStatus'); el.textContent=msg; el.className='login-status '+(err?'error':''); }
 
-$('adminLogoutBtn').onclick = async () => { localStorage.removeItem('adminUnlocked'); await auth.signOut(); location.reload(); };
+const adminLogoutBtn = $('adminLogoutBtn');
+if (adminLogoutBtn) adminLogoutBtn.onclick = async () => { localStorage.removeItem('adminUnlocked'); await auth.signOut(); location.reload(); };
 $('closeAdminBtn').onclick = () => { if(confirm('Close admin panel?')) window.__vpToDash(); };
 $('refreshBtn').onclick = () => refreshStudents();
 
-$('sidebarToggle').onclick = () => $('appSidebar').classList.toggle('open');
-document.addEventListener('click', e => { if(window.innerWidth <= 980 && !e.target.closest('.app-sidebar')) $('appSidebar').classList.remove('open'); });
+const sidebarToggle = $('sidebarToggle');
+if (sidebarToggle) sidebarToggle.onclick = () => { const sidebar = $('appSidebar'); if (sidebar) sidebar.classList.toggle('open'); };
+document.addEventListener('click', e => { const sidebar = $('appSidebar'); if (sidebar && window.innerWidth <= 980 && !e.target.closest('.app-sidebar')) sidebar.classList.remove('open'); });
 
 function showView(viewId){
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   $(viewId).classList.add('active');
   document.querySelectorAll('.app-menu a').forEach(a => a.classList.remove('active'));
-  if(viewId === 'studentsView') $('menuStudents').classList.add('active');
-  if(viewId === 'batchView') $('menuBatches').classList.add('active');
+  if(viewId === 'studentsView' && $('menuStudents')) $('menuStudents').classList.add('active');
+  if(viewId === 'batchView' && $('menuBatches')) $('menuBatches').classList.add('active');
 }
 
-$('menuStudents').onclick = (e) => { e.preventDefault(); showView('studentsView'); };
+const menuStudents = $('menuStudents');
+if (menuStudents) menuStudents.onclick = (e) => { e.preventDefault(); showView('studentsView'); };
 
 async function init(){
   await Promise.all([loadTests(), loadLectures(), loadBatches()]);
