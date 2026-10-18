@@ -270,7 +270,7 @@ a{text-decoration:none;color:inherit;}
       if(fr.status >= 400) throw new Error('Profile save failed (' + fr.status + '). Check the Firestore rules were published.');
       st.textContent = 'Emailing teacher…';
       await fetch(WEBHOOK_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain'},
-        body: JSON.stringify({ key:'vp-teach-2026', email, name, password, subjects: subs.join(', '), batches: bats.join(', '), appUrl: location.origin + '/vp-staff-3k9xq5/' }) });
+        body: JSON.stringify({ key:'vp-teach-2026', email, name, password, subjects: subs.join(', '), batches: bats.join(', '), appUrl: 'https://www.vinayakproedu.com/vp-staff-3k9xq5/' }) });
       st.textContent = 'Account created. Invitation request submitted to the email service; delivery cannot be confirmed by this page because Apps Script is called in no-cors mode. Check the teacher inbox and Apps Script executions.'; st.classList.add('success');
       $('tEmail').value=''; $('tName').value='';
       document.querySelectorAll('.t-subj:checked').forEach(i => i.checked=false);
