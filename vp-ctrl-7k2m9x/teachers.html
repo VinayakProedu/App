@@ -204,20 +204,14 @@ a{text-decoration:none;color:inherit;}
     if(!subs.length){ st.textContent='Tick at least one subject.'; st.classList.add('error'); return; }
     try{
       st.textContent = 'Saving…';
-      // find auth uid by listing is not possible client-side; require the auth account to exist
-      const signIn = await auth.fetchSignInMethodsForEmail(email).catch(()=>[]);
-      if(!signIn || signIn.length === 0){
-        st.textContent = '⚠️ No Firebase login exists for this email. Create it first: Firebase Console → Authentication → Users → Add user. Then come back and save.';
-        st.classList.add('error'); return;
-      }
-      // resolve uid via a temp query is not possible; store teacher profile keyed by email and let a cloud-less approach:
-      // we look up users collection by email field
+      // Check the existing profile directly. Firebase may hide sign-in methods for privacy.
       const q = await db.collection('users').where('email','==',email).limit(1).get();
       const payload = { name: name || email.split('@')[0], email, role:'teacher', assignedSubjects: subs, assignedBatches: bats,
         batchCode:'', enrolledSubjects:[], assignedLectureIds:[],
         accessUpdatedAt: firebase.firestore.FieldValue.serverTimestamp() };
       if(q.empty){
-        await db.collection('users').add(Object.assign({ createdAt: firebase.firestore.FieldValue.serverTimestamp() }, payload));
+        st.textContent = 'No teacher profile was found for this email. Use Auto-create account & email for a new account, or check that the existing account profile was created successfully.';
+        st.classList.add('error'); return;
       } else {
         await db.collection('users').doc(q.docs[0].id).update(payload);
       }
