@@ -243,7 +243,6 @@ a{text-decoration:none;color:inherit;}
     const subs = [...document.querySelectorAll('.t-subj:checked')].map(i => i.value);
     if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ st.textContent='Enter a valid email.'; st.classList.add('error'); return; }
     if(!subs.length){ st.textContent='Tick at least one subject.'; st.classList.add('error'); return; }
-    if(WEBHOOK_URL.indexOf('PASTE') !== -1){ st.textContent='Setup needed: paste your Web App URL into teachers.html (search WEBHOOK_URL). Steps are in apps-script-addon.gs.'; st.classList.add('error'); return; }
     const password = genPass();
     try{
       st.textContent = 'Creating Firebase login…';
