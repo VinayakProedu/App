@@ -2,510 +2,118 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="robots" content="noindex, nofollow, noarchive">
-<meta name="referrer" content="strict-origin-when-cross-origin">
-<meta name="permissions-policy" content="camera=(), microphone=(), geolocation=()">
-<link rel="manifest" href="./manifest.json">
-<meta name="theme-color" content="#0D1B40">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<link rel="apple-touch-icon" href="../apple-touch-icon.png">
-
-<title>Doubts | Vinayak ProEdu Admin</title>
-<link rel="icon" type="image/png" href="https://pasteimg.com/images/2026/03/31/WhatsApp-Image-2026-03-19-at-6.49.19-PM.jpg">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="theme-color" content="#660708">
+<title>Student Doubts | Vinayak ProEdu Admin</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{
-  --navy:#0D1B40; --navy-mid:#1a2e5e; --blue:#1e3c72; --gold:#C9922A; --gold-lt:#E8AA48;
-  --amber:#F5C04A; --ink:#1A1A2E; --muted:#6B7280; --smoke:#EFF1F6; --white:#FFFFFF;
-  --shadow-sm:0 4px 20px rgba(13,27,64,0.08); --shadow-md:0 12px 45px rgba(13,27,64,0.14);
-  --r-sm:10px; --r-md:16px; --r-lg:24px;
-}
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;font-size:16px;}
-body{font-family:'DM Sans',sans-serif;color:var(--ink);background:#f5f7fb;line-height:1.65;overflow-x:hidden;}
-img{max-width:100%;display:block;}
-a{text-decoration:none;color:inherit;}
-h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
-
-/* Login */
-.login-wrap{position:fixed;inset:0;z-index:9999;background:linear-gradient(135deg,var(--navy) 0%,var(--blue) 100%);display:flex;align-items:center;justify-content:center;padding:20px;}
-.login-box{width:min(420px,92vw);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:var(--r-lg);padding:clamp(32px,6vw,48px);backdrop-filter:blur(20px);box-shadow:0 40px 100px rgba(0,0,0,0.4);}
-.login-box h2{font-family:'Playfair Display',serif;color:#fff;font-size:1.6rem;margin-bottom:6px;text-align:center;}
-.login-box p{color:rgba(255,255,255,0.55);font-size:0.9rem;text-align:center;margin-bottom:28px;}
-.login-field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;}
-.login-field label{font-size:0.74rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.65);}
-.login-field input{width:100%;padding:13px 16px;background:rgba(255,255,255,0.09);border:1px solid rgba(255,255,255,0.14);border-radius:var(--r-sm);color:#fff;font-size:0.95em;font-family:'DM Sans',sans-serif;transition:all 0.25s;}
-.login-field input::placeholder{color:rgba(255,255,255,0.32);}
-.login-field input:focus{outline:none;border-color:rgba(201,146,42,0.6);background:rgba(255,255,255,0.13);box-shadow:0 0 0 3px rgba(201,146,42,0.15);}
-.login-btn{width:100%;padding:15px;border-radius:50px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--gold),var(--gold-lt));color:var(--navy);font-size:1em;font-weight:700;font-family:'DM Sans',sans-serif;box-shadow:0 8px 28px rgba(201,146,42,0.35);transition:all 0.3s;}
-.login-btn:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(201,146,42,0.5);}
-.login-status{margin-top:12px;font-size:0.9rem;font-weight:700;text-align:center;min-height:22px;}
-.login-status.error{color:#fca5a5;}
-
-/* App Shell */
-.app-shell{display:flex;width:100%;min-height:100vh;}
-.app-sidebar{width:260px;background:var(--navy);color:#fff;padding:18px;overflow:auto;flex-shrink:0;position:fixed;height:100vh;left:0;top:0;z-index:100;}
-.app-brand{display:flex;align-items:center;gap:10px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px solid rgba(255,255,255,0.08);}
-.app-brand img{width:40px;height:40px;border-radius:50%;border:2px solid var(--gold);object-fit:cover;}
-.app-brand h3{font-family:'Playfair Display',serif;font-size:1.05rem;margin:0;color:#fff;}
-.app-brand p{font-size:0.72rem;letter-spacing:1.4px;text-transform:uppercase;color:rgba(232,170,72,0.8);margin-top:2px;}
-.app-menu{display:grid;gap:6px;}
-.app-menu a,.app-menu button{width:100%;border:none;background:transparent;color:#fff;padding:11px 14px;border-radius:10px;cursor:pointer;text-align:left;font-weight:600;font-size:0.9rem;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:10px;transition:all 0.2s;text-decoration:none;}
-.app-menu a:hover,.app-menu button:hover,.app-menu a.active,.app-menu button.active{background:var(--gold);color:var(--navy);}
-.app-main{flex:1;margin-left:260px;padding:24px 28px;overflow:auto;min-height:100vh;}
-
-/* Topbar */
-.app-topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid #e5e7eb;}
-.app-title{font-family:'Playfair Display',serif;color:var(--navy);font-size:1.6rem;margin:0;}
-.app-sub{color:var(--muted);font-size:0.9rem;}
-
-/* Cards */
-.app-card{background:#fff;border:1px solid rgba(201,146,42,0.12);border-radius:20px;padding:22px;box-shadow:var(--shadow-sm);margin-bottom:16px;}
-.subject-title{font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--navy);margin:0 0 14px;}
-
-/* Buttons */
-.primary-btn,.secondary-btn,.ghost-btn,.back-btn,.danger-btn{border:none;border-radius:12px;padding:11px 18px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:0.9rem;transition:all 0.2s;display:inline-flex;align-items:center;gap:6px;}
-.primary-btn{background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff;}
-.secondary-btn{background:linear-gradient(135deg,var(--gold),var(--gold-lt));color:var(--navy);}
-.ghost-btn{background:#eef4ff;color:var(--blue);}
-.back-btn{background:#f1f5f9;color:var(--navy);margin-bottom:16px;}
-.danger-btn{background:#fef2f2;color:#b42318;border:1px solid #fecaca;}
-.primary-btn:hover,.secondary-btn:hover,.ghost-btn:hover,.back-btn:hover,.danger-btn:hover{transform:translateY(-1px);opacity:0.95;}
-
-/* Batch filter bar */
-.filter-bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px;}
-.filter-bar select{padding:10px 14px;border-radius:10px;border:1px solid #d7ddea;background:#fff;font:inherit;color:var(--ink);min-width:200px;}
-.filter-bar select:focus{outline:3px solid rgba(201,146,42,0.22);border-color:var(--gold);}
-
-/* Doubt Cards */
-.doubt-card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:18px;margin-bottom:12px;transition:all 0.2s;}
-.doubt-card:hover{box-shadow:var(--shadow-sm);}
-.doubt-card.closed{opacity:0.65;background:#fafafa;}
-.doubt-header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:10px;}
-.doubt-subject{font-family:'Playfair Display',serif;color:var(--navy);font-size:1rem;font-weight:700;}
-.doubt-badge{display:inline-flex;align-items:center;padding:4px 12px;border-radius:999px;font-size:0.72rem;font-weight:800;letter-spacing:0.5px;text-transform:uppercase;}
-.doubt-badge.open{background:#dbeafe;color:#1e40af;}
-.doubt-badge.answered{background:#d1fae5;color:#166534;}
-.doubt-badge.closed{background:#f3f4f6;color:#6b7280;}
-.doubt-meta{color:var(--muted);font-size:0.82rem;margin-bottom:8px;}
-.doubt-text{color:var(--ink);font-size:0.92rem;line-height:1.7;margin-bottom:10px;}
-.doubt-img{max-width:280px;border-radius:10px;border:1px solid #e5e7eb;margin:8px 0;cursor:pointer;}
-
-/* Reply Thread */
-.reply-thread{margin-top:14px;padding-left:14px;border-left:3px solid var(--gold);}
-.reply-item{background:#f8fafc;border-radius:10px;padding:12px;margin-bottom:8px;}
-.reply-by{font-size:0.78rem;font-weight:700;color:var(--navy);margin-bottom:4px;}
-.reply-by.faculty{color:var(--gold);}
-.reply-text{font-size:0.88rem;color:var(--ink);line-height:1.6;}
-.reply-at{font-size:0.75rem;color:var(--muted);margin-top:4px;}
-
-/* Reply Form */
-.reply-form{margin-top:14px;padding-top:14px;border-top:1px solid #e5e7eb;}
-.reply-form input[type="text"]{width:100%;padding:11px 14px;border:1px solid #d7ddea;border-radius:10px;font:inherit;margin-bottom:8px;}
-.reply-form input[type="text"]:focus{outline:3px solid rgba(201,146,42,0.22);border-color:var(--gold);}
-
-/* Search */
-.practice-search{width:100%;padding:11px 14px;border:1px solid #d7ddea;border-radius:10px;font:inherit;color:var(--ink);background:#fff;margin-bottom:14px;}
-.practice-search:focus{outline:3px solid rgba(201,146,42,0.22);border-color:var(--gold);}
-
-/* Status */
-.portal-status{font-size:0.92rem;margin-top:10px;min-height:22px;font-weight:700;}
-.portal-status.error{color:#b42318;}
-.portal-status.success{color:#166534;}
-
-/* Empty */
-.empty-box{padding:20px;border:1px dashed #d9e2ef;border-radius:14px;background:#fbfdff;color:#5d6e83;text-align:center;font-size:0.9rem;}
-
-/* Scrollbar */
-::-webkit-scrollbar{width:6px;}
-::-webkit-scrollbar-track{background:transparent;}
-::-webkit-scrollbar-thumb{background:rgba(13,27,64,0.2);border-radius:10px;}
-
-/* Responsive */
-@media(max-width:900px){
-  .app-sidebar{width:100%;height:auto;position:relative;}
-  .app-main{margin-left:0;}
-  .app-shell{flex-direction:column;}
-}
-@media(max-width:640px){
-  .app-main{padding:16px;}
-}
-.hidden{display:none !important;}
-</style>
-<style>
-/* Sidebar removed: full-width clean layout */
-.app-sidebar{display:none !important;}
-.app-main{margin-left:0 !important;}
-@media(max-width:900px){.app-main{margin-left:0 !important;}}
+:root{--garnet:#660708;--mahogany:#A4161A;--red:#E5383B;--charcoal:#161A1D;--smoke:#F5F3F4;--rose:#FDF0F0;--muted:#697078;--line:#eadcdd;--white:#fff;--green:#18794e;--amber:#925b00;--shadow:0 8px 28px rgba(65,10,12,.08)}
+*{box-sizing:border-box}body{margin:0;background:var(--smoke);color:var(--charcoal);font:15px/1.55 'DM Sans',sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}button:disabled{opacity:.55;cursor:wait}a{color:var(--mahogany)}.hidden{display:none!important}
+.topbar{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:14px clamp(16px,4vw,42px);display:flex;justify-content:space-between;align-items:center;gap:12px}.brand{display:flex;align-items:center;gap:12px}.brand-mark{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,var(--garnet),var(--red));display:grid;place-items:center;color:white;font-weight:800}.brand h1{font:700 1.1rem 'Playfair Display',serif;margin:0;color:var(--garnet)}.brand small{display:block;color:var(--muted);font-size:.76rem}.wrap{max-width:1440px;margin:auto;padding:26px clamp(14px,3vw,36px) 60px}.hero{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:22px}.eyebrow{color:var(--mahogany);font-size:.72rem;letter-spacing:1.8px;font-weight:800;text-transform:uppercase}.hero h2{font:700 clamp(1.8rem,3vw,2.5rem) 'Playfair Display',serif;color:var(--garnet);margin:3px 0}.hero p{margin:0;color:var(--muted)}.btn{border:0;border-radius:11px;padding:10px 15px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:7px;transition:transform .15s,opacity .15s}.btn:hover{transform:translateY(-1px)}.primary{background:linear-gradient(120deg,var(--garnet),var(--mahogany));color:white}.secondary{background:var(--rose);color:var(--garnet);border:1px solid #f0c7c8}.outline{background:white;color:var(--charcoal);border:1px solid var(--line)}.danger{background:#fff0f0;color:#a5161a;border:1px solid #f2b9bb}.cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:18px}.metric{background:white;border:1px solid var(--line);border-radius:17px;padding:18px;box-shadow:var(--shadow)}.metric span{display:block;color:var(--muted);font-weight:600;font-size:.84rem}.metric strong{display:block;font:700 2rem 'Playfair Display',serif;color:var(--garnet);margin-top:4px}.panel{background:white;border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:var(--shadow);margin-bottom:18px}.panel-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}.panel h3{font:700 1.25rem 'Playfair Display',serif;color:var(--garnet);margin:0}.filters{display:grid;grid-template-columns:minmax(220px,1.5fr) repeat(3,minmax(140px,1fr));gap:10px}.field{width:100%;min-width:0;padding:11px 12px;border:1px solid #dfd1d2;border-radius:11px;background:#fff;color:var(--charcoal)}.field:focus{outline:3px solid #f9d9da;border-color:var(--red)}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}.tab{border:1px solid var(--line);background:#fff;color:#4c4546;padding:8px 13px;border-radius:999px;font-weight:700}.tab.active{background:var(--garnet);border-color:var(--garnet);color:white}.tab .n{opacity:.8;font-size:.82em;margin-left:4px}.notice{font-size:.9rem;margin-top:10px;min-height:22px;color:var(--muted)}.notice.error{color:#b42318}.notice.success{color:var(--green)}.list{display:grid;gap:14px}.doubt{border:1px solid var(--line);border-radius:16px;padding:17px;background:#fff}.doubt.closed{background:#fbf9f9}.doubt-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}.student{font-weight:800;color:var(--charcoal)}.meta{font-size:.82rem;color:var(--muted);margin-top:3px}.status{display:inline-flex;align-items:center;border-radius:999px;padding:5px 10px;font-size:.72rem;text-transform:uppercase;letter-spacing:.5px;font-weight:800}.status.open{background:#fff2d7;color:#815000}.status.answered{background:#e2f7ec;color:#17643e}.status.closed{background:#eee9ea;color:#62585a}.doubt-text{white-space:pre-wrap;overflow-wrap:anywhere;margin:14px 0 8px}.attachment{display:inline-flex;align-items:center;gap:7px;background:var(--rose);border:1px solid var(--line);border-radius:10px;padding:8px 11px;font-size:.86rem;font-weight:700;text-decoration:none;margin:4px 0 10px}.thread{border-left:3px solid #e6b1b3;padding-left:12px;margin:14px 0}.reply{background:#faf7f7;border:1px solid #f0e5e5;border-radius:11px;padding:11px;margin:8px 0}.reply-by{font-size:.77rem;font-weight:800;color:var(--mahogany);text-transform:capitalize}.reply-text{white-space:pre-wrap;overflow-wrap:anywhere;margin-top:4px}.reply-at{font-size:.74rem;color:var(--muted);margin-top:5px}.replybox{border-top:1px solid var(--line);margin-top:14px;padding-top:14px}.replybox textarea{width:100%;min-height:86px;resize:vertical}.reply-actions{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-top:9px}.reply-actions input[type=file]{max-width:100%;font-size:.83rem}.empty{border:1px dashed #d9c9ca;border-radius:14px;padding:28px;text-align:center;color:var(--muted);background:#fff}.empty strong{display:block;color:var(--garnet);font-size:1.03rem;margin-bottom:4px}.login{position:fixed;inset:0;z-index:50;background:linear-gradient(135deg,#3c0304,var(--garnet),var(--mahogany));display:grid;place-items:center;padding:18px}.login-card{background:#fff;border-radius:22px;padding:clamp(24px,5vw,42px);width:min(420px,100%);box-shadow:0 25px 80px #25000066}.login-card h2{font:700 1.7rem 'Playfair Display',serif;color:var(--garnet);margin:0}.login-card p{color:var(--muted);margin:6px 0 22px}.login-card label{display:block;font-size:.75rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;margin:12px 0 5px}.login-card .btn{width:100%;margin-top:14px}.login-status{color:#b42318;font-size:.87rem;min-height:20px;margin-top:8px}.footnote{font-size:.8rem;color:var(--muted);margin-top:12px}
+@media(max-width:850px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.filters{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:520px){.cards{gap:9px}.metric{padding:13px}.metric strong{font-size:1.6rem}.filters{grid-template-columns:1fr}.panel{padding:14px}.topbar{padding:12px 14px}.brand small{display:none}}
 </style>
 </head>
 <body>
-<button id="logoutBtn" type="button" style="position:fixed;top:14px;right:16px;z-index:12000;border:none;border-radius:999px;padding:9px 18px;background:#fef2f2;color:#b42318;border:1px solid #fecaca;font:700 13px 'DM Sans',sans-serif;cursor:pointer;box-shadow:0 4px 14px rgba(13,27,64,.12);">🚪 Logout</button>
-
-
-<!-- LOGIN -->
-<div class="login-wrap" id="loginWrap" style="display:none">
-  <div class="login-box">
-    <h2>Admin Portal</h2>
-    <p>Student Doubts by Batch</p>
-    <div class="login-field"><label>Admin Email</label><input type="email" id="adminEmail" placeholder="admin@email.com"></div>
-    <div class="login-field"><label>Password</label><input type="password" id="adminPassword" placeholder="••••••••"></div>
-    <button class="login-btn" id="adminLoginBtn" type="button">Login as Admin</button>
-    <div class="login-status" id="loginStatus"></div>
-  </div>
-</div>
-
-<!-- APP -->
-<div class="app-shell hidden" id="appShell">
-  
-
-  <main class="app-main">
-    <div class="app-topbar">
-      <div>
-        <h1 class="app-title">Student Doubts</h1>
-        <div class="app-sub">Select a batch to view and reply to doubts</div>
-      </div>
-      <button class="ghost-btn" id="closeBtn" type="button">← Dashboard</button>
-    </div>
-
-    <div class="app-card">
-      <h3 class="subject-title">Select a Batch</h3>
-      <div class="filter-bar">
-        <select id="batchSelect" onchange="onBatchChange()"><option value="">-- Choose Batch --</option></select>
-        <button class="ghost-btn" type="button" onclick="window.loadBatches()" style="padding:8px 12px;font-size:0.85rem;">🔄 Refresh Batches</button>
-        <span id="batchLoadStatus" style="font-size:0.82rem;color:var(--muted);align-self:center;"></span>
-      </div>
-      <div class="filter-bar" style="margin-top:8px;">
-        <button class="primary-btn" type="button" onclick="loadDoubts()">Load Doubts</button>
-        <button class="danger-btn" type="button" onclick="purgeOldDoubts()">🧹 Purge Old Closed</button>
-      </div>
-      <div class="portal-status" id="batchStatus"></div>
-    </div>
-
-    <div id="doubtsView" style="display:none;">
-      <div class="app-card">
-        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px;">
-          <h3 class="subject-title" id="doubtBatchName" style="margin:0;">Batch Name</h3>
-          <span id="doubtStat" style="font-size:0.85rem;color:var(--muted);">0 doubts</span>
-        </div>
-        <input type="search" class="practice-search" id="doubtSearch" placeholder="Search student, subject, or doubt text..." oninput="renderDoubts()">
-        <div id="doubtList"></div>
-      </div>
-    </div>
-  </main>
-</div>
-
+<header class="topbar"><div class="brand"><div class="brand-mark">VP</div><div><h1>Vinayak ProEdu</h1><small>Admin · Doubt management</small></div></div><button id="logoutBtn" class="btn secondary hidden" type="button">Log out ↗</button></header>
+<section class="login" id="loginWrap"><div class="login-card"><div class="eyebrow">Admin workspace</div><h2>Student Doubts</h2><p>Sign in to manage batch questions and replies.</p><form id="loginForm"><label for="adminEmail">Admin email</label><input class="field" id="adminEmail" type="email" autocomplete="username" required placeholder="admin@email.com"><label for="adminPassword">Password</label><input class="field" id="adminPassword" type="password" autocomplete="current-password" required><button class="btn primary" id="loginBtn" type="submit">Sign in</button></form><div id="loginStatus" class="login-status" role="status"></div></div></section>
+<main class="wrap hidden" id="app">
+  <div class="hero"><div><div class="eyebrow">Student support</div><h2>Doubts overview</h2><p>Choose a batch to review questions and respond to students.</p></div><button class="btn outline" id="dashboardBtn" type="button">← Dashboard</button></div>
+  <section class="cards" aria-label="Doubt counts"><div class="metric"><span>Total in view</span><strong id="countAll">—</strong></div><div class="metric"><span>Open</span><strong id="countOpen">—</strong></div><div class="metric"><span>Answered</span><strong id="countAnswered">—</strong></div><div class="metric"><span>Closed</span><strong id="countClosed">—</strong></div></section>
+  <section class="panel"><div class="panel-head"><h3>Find doubts</h3><button class="btn outline" id="refreshBatches" type="button">↻ Refresh batches</button></div>
+    <div class="filters"><select class="field" id="batchSelect" aria-label="Select batch"><option value="">Choose a batch…</option></select><input class="field" id="search" type="search" placeholder="Search student, subject or message…" aria-label="Search doubts"><select class="field" id="dateFilter" aria-label="Date range"><option value="all">Any date</option><option value="7">Last 7 days</option><option value="30">Last 30 days</option><option value="90">Last 90 days</option></select><button class="btn primary" id="loadBtn" type="button">Load doubts</button></div>
+    <div class="tabs" role="tablist" aria-label="Filter by status"><button class="tab active" data-status="all" type="button">All <span class="n" id="tabAll">0</span></button><button class="tab" data-status="open" type="button">Open <span class="n" id="tabOpen">0</span></button><button class="tab" data-status="answered" type="button">Answered <span class="n" id="tabAnswered">0</span></button><button class="tab" data-status="closed" type="button">Closed <span class="n" id="tabClosed">0</span></button></div>
+    <div id="pageStatus" class="notice" role="status"></div>
+  </section>
+  <section class="panel"><div class="panel-head"><h3 id="listTitle">Select a batch to begin</h3><span class="meta" id="listMeta"></span></div><div class="list" id="doubtList"><div class="empty"><strong>Ready when you are</strong>Select a batch, then load its doubts.</div></div></section>
+  <div class="footnote">Batch data and replies are read from the existing Firebase collections. Purging records is intentionally not included in this redesign to avoid accidental data loss.</div>
+</main>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
 <script src="../firebase-config.js"></script>
-
 <script>
 (function(){
-  const ADMIN_EMAIL = "vinayakproedu@gmail.com";
-
-  
-  const auth = firebase.auth();
-  const db = firebase.firestore();
-  const storage = firebase.storage();
-
-  function esc(v){ return String(v ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-  function val(id){ const n = document.getElementById(id); return n ? n.value.trim() : ''; }
-  function fmtDate(v){ if(!v) return ''; const d = v.toDate ? v.toDate() : new Date(v.seconds ? v.seconds*1000 : v); return d.toLocaleString(); }
-
-  /* Auth */
-  document.getElementById('adminLoginBtn').addEventListener('click', async () => {
-    const email = val('adminEmail');
-    const pw = document.getElementById('adminPassword').value;
-    if(!email || !pw){ document.getElementById('loginStatus').textContent = 'Email and password required.'; document.getElementById('loginStatus').className = 'login-status error'; return; }
-    try{
-      const cred = await auth.signInWithEmailAndPassword(email, pw);
-      if(cred.user.email !== ADMIN_EMAIL){ await auth.signOut(); document.getElementById('loginStatus').textContent = 'Not authorized.'; document.getElementById('loginStatus').className = 'login-status error'; return; }
-      localStorage.setItem('adminUnlocked', '1');
-      showApp();
-    }catch(err){ document.getElementById('loginStatus').textContent = err.message; document.getElementById('loginStatus').className = 'login-status error'; }
-  });
-
-  document.getElementById('logoutBtn').addEventListener('click', async () => {
-    localStorage.removeItem('adminUnlocked');
-    await auth.signOut();
-    location.reload();
-  });
-
-  document.getElementById('closeBtn').addEventListener('click', () => {
-    __vpToDash();
-  });
-
-  auth.onAuthStateChanged(user => {
-    if(user && user.email === ADMIN_EMAIL && localStorage.getItem('adminUnlocked') === '1'){
-      showApp();
-    } else {
-      var _lw=document.getElementById('loginWrap');if(_lw){_lw.classList.remove('hidden');_lw.style.display='';}
-      document.getElementById('appShell').classList.add('hidden');
-    }
-  });
-
-  function showApp(){
-    document.getElementById('loginWrap').classList.add('hidden');
-    document.getElementById('appShell').classList.remove('hidden');
-    loadBatches();
-      }
-
-  /* Batches */
-  async function loadBatches(){
-    if(!auth.currentUser){ setTimeout(function(){ if(window.loadBatches) window.loadBatches(); else loadBatches(); }, 400); return; }
-    const statusEl = document.getElementById('batchLoadStatus');
-    try {
-      if(statusEl) statusEl.textContent = 'Loading batches...';
-      const snap = await db.collection('batches').orderBy('createdAt','desc').get();
-      const batches = snap.docs.map(d => ({...d.data(), id: d.id}));
-      const sel = document.getElementById('batchSelect');
-      if(!sel){ if(statusEl) statusEl.textContent = 'Batch dropdown not found'; return; }
-      const current = sel.value;
-      sel.innerHTML = '<option value="">-- Choose Batch --</option>' + 
-        batches.map(b => `<option value="${esc(b.code)}">${esc(b.code)} - ${esc(b.name || 'Unnamed')}</option>`).join('');
-      if(current && batches.some(b => b.code === current)) sel.value = current;
-      if(statusEl) statusEl.textContent = batches.length ? `${batches.length} batch(es) ready` : 'No batches found. Create one in Students → Batches.';
-    } catch(err) {
-      console.error('loadBatches error', err);
-      if(statusEl) statusEl.textContent = 'Error loading batches: ' + err.message;
-    }
+'use strict';
+const ADMIN_EMAIL='vinayakproedu@gmail.com';
+const auth=firebase.auth(), db=firebase.firestore(), storage=firebase.storage();
+const $=id=>document.getElementById(id);
+const esc=v=>String(v==null?'':v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+const fmtDate=v=>{if(!v)return 'Date unavailable';try{const d=v.toDate?v.toDate():new Date(v.seconds?v.seconds*1000:v);return Number.isNaN(d.getTime())?'Date unavailable':d.toLocaleString()}catch(_){return 'Date unavailable'}};
+let batches=[], currentBatchCode='', currentBatchName='', currentDoubts=[], activeStatus='all', loading=false;
+function notice(msg,type=''){ $('pageStatus').textContent=msg; $('pageStatus').className='notice '+type; }
+function setBusy(btn,busy,label){if(!btn)return;btn.disabled=busy;if(busy){btn.dataset.oldText=btn.textContent;btn.textContent=label||'Working…'}else if(btn.dataset.oldText){btn.textContent=btn.dataset.oldText;delete btn.dataset.oldText}}
+function setSignedIn(user){$('loginWrap').classList.toggle('hidden',!!user);$('app').classList.toggle('hidden',!user);$('logoutBtn').classList.toggle('hidden',!user);if(user)loadBatches()}
+$('loginForm').addEventListener('submit',async e=>{e.preventDefault();const btn=$('loginBtn');setBusy(btn,true,'Signing in…');$('loginStatus').textContent='';try{const cred=await auth.signInWithEmailAndPassword($('adminEmail').value.trim(),$('adminPassword').value);if((cred.user.email||'').toLowerCase()!==ADMIN_EMAIL){await auth.signOut();throw new Error('This account is not authorised for the admin portal.')}localStorage.setItem('adminUnlocked','1')}catch(err){$('loginStatus').textContent=err.message||'Sign-in failed.'}finally{setBusy(btn,false)}});
+$('logoutBtn').addEventListener('click',async()=>{localStorage.removeItem('adminUnlocked');await auth.signOut()});
+auth.onAuthStateChanged(user=>{if(user&&(user.email||'').toLowerCase()===ADMIN_EMAIL&&localStorage.getItem('adminUnlocked')==='1')setSignedIn(user);else{if(user)auth.signOut();setSignedIn(null)}});
+$('dashboardBtn').addEventListener('click',()=>{try{if(window.self!==window.top){parent.postMessage({type:'vp-close'},'*');return}}catch(_){}location.href='index.html'});
+async function loadBatches(){const sel=$('batchSelect');try{const snap=await db.collection('batches').orderBy('createdAt','desc').get();batches=snap.docs.map(d=>({...d.data(),id:d.id}));const prev=sel.value;sel.innerHTML='<option value="">Choose a batch…</option>'+batches.map(b=>`<option value="${esc(b.code||'')}">${esc(b.name||'Unnamed batch')}</option>`).join('');if(prev&&batches.some(b=>b.code===prev))sel.value=prev;notice(batches.length?`${batches.length} batches available.`:'No batches found. Create a batch first.',batches.length?'':'error')}catch(err){notice('Could not load batches: '+err.message,'error')}}
+$('refreshBatches').addEventListener('click',loadBatches);
+$('loadBtn').addEventListener('click',loadDoubts);
+$('batchSelect').addEventListener('change',()=>{const b=batches.find(x=>x.code===$('batchSelect').value);currentBatchCode=b?b.code:'';currentBatchName=b?(b.name||b.code):'';currentDoubts=[];render();$('listTitle').textContent=b?'Doubts · '+currentBatchName:'Select a batch to begin';});
+$('search').addEventListener('input',render);$('dateFilter').addEventListener('change',render);
+document.querySelectorAll('[data-status]').forEach(b=>b.addEventListener('click',()=>{activeStatus=b.dataset.status;document.querySelectorAll('[data-status]').forEach(x=>x.classList.toggle('active',x===b));render()}));
+async function loadDoubts(){
+ if(loading)return;const batchCode=$('batchSelect').value;if(!batchCode){notice('Select a batch first.','error');return}
+ const b=batches.find(x=>x.code===batchCode);currentBatchCode=batchCode;currentBatchName=b?(b.name||b.code):batchCode;loading=true;setBusy($('loadBtn'),true,'Loading…');notice('Loading students and doubts…');$('listTitle').textContent='Doubts · '+currentBatchName;$('doubtList').innerHTML='<div class="empty">Loading…</div>';
+ try{
+  const studentsSnap=await db.collection('users').where('role','==','student').where('batchCode','==',batchCode).get();
+  const studentIds=new Set(studentsSnap.docs.map(d=>d.id));
+  if(!studentIds.size){currentDoubts=[];render();notice('No students were found in this batch.');return}
+  // Existing doubt documents do not reliably expose batchCode, so paginate the existing ordered collection fully and filter by userId. This avoids silently dropping older batch doubts after a global 300-document cap.
+  const all=[];let cursor=null,done=false;
+  while(!done){
+   let q=db.collection('studentDoubts').orderBy('createdAt','desc').limit(300);
+   if(cursor)q=q.startAfter(cursor);
+   const snap=await q.get();if(snap.empty){done=true;break}
+   snap.docs.forEach(d=>all.push({id:d.id,...d.data()}));cursor=snap.docs[snap.docs.length-1];if(snap.size<300)done=true;
   }
-  window.loadBatches = loadBatches;
-
-  window.onBatchChange = function(){
-    document.getElementById('doubtsView').style.display = 'none';
-  };
-
-  /* Doubts */
-  let currentBatchCode = '';
-  let currentDoubts = [];
-
-  window.loadDoubts = async function(){
-    const batchCode = document.getElementById('batchSelect').value;
-    if(!batchCode){ document.getElementById('batchStatus').textContent = 'Select a batch first.'; document.getElementById('batchStatus').className = 'portal-status error'; return; }
-    currentBatchCode = batchCode;
-    document.getElementById('batchStatus').textContent = 'Loading...';
-    document.getElementById('batchStatus').className = 'portal-status';
-    document.getElementById('doubtsView').style.display = 'block';
-    document.getElementById('doubtBatchName').textContent = esc(batchCode);
-    const list = document.getElementById('doubtList');
-    list.innerHTML = '<div class="empty-box">Loading doubts...</div>';
-
-    try{
-      const userSnap = await db.collection('users').where('role','==','student').where('batchCode','==',batchCode).limit(200).get();
-      const studentIds = userSnap.docs.map(d => d.id);
-
-      if(!studentIds.length){
-        list.innerHTML = '<div class="empty-box">No students in this batch.</div>';
-        document.getElementById('doubtStat').textContent = '0 doubts';
-        document.getElementById('batchStatus').textContent = '';
-        return;
-      }
-
-      const doubtSnap = await db.collection('studentDoubts').orderBy('createdAt','desc').limit(300).get();
-      const allDoubts = doubtSnap.docs.map(d => ({id: d.id, ...d.data()}));
-      currentDoubts = allDoubts.filter(d => studentIds.includes(d.userId));
-      renderDoubts();
-      document.getElementById('batchStatus').textContent = '';
-    }catch(err){
-      document.getElementById('doubtList').innerHTML = `<div class="empty-box">Error: ${esc(err.message)}</div>`;
-      document.getElementById('batchStatus').textContent = err.message;
-      document.getElementById('batchStatus').className = 'portal-status error';
-    }
-  };
-
-  window.renderDoubts = function(){
-    const list = document.getElementById('doubtList');
-    const q = (document.getElementById('doubtSearch')?.value || '').toLowerCase();
-
-    let filtered = currentDoubts.filter(d => {
-      if(!q) return true;
-      return [d.studentName, d.courseSubject, d.message].join(' ').toLowerCase().includes(q);
-    });
-
-    const now = new Date();
-    filtered = filtered.map(d => {
-      const isClosed = d.status === 'closed' || (d.autoCloseAt && d.autoCloseAt.toDate && d.autoCloseAt.toDate() < now);
-      return {...d, _isClosed: isClosed};
-    });
-
-    document.getElementById('doubtStat').textContent = `${filtered.length} doubt${filtered.length !== 1 ? 's' : ''}`;
-
-    if(!filtered.length){
-      list.innerHTML = '<div class="empty-box">No doubts from this batch yet.</div>';
-      return;
-    }
-
-    list.innerHTML = filtered.map(d => {
-      const replies = Array.isArray(d.replies) ? d.replies : [];
-      const isClosed = d._isClosed;
-      const status = isClosed ? 'closed' : (replies.length && replies[replies.length-1].by === 'faculty' ? 'answered' : 'open');
-
-      return `<div class="doubt-card ${isClosed ? 'closed' : ''}">
-        <div class="doubt-header">
-          <div>
-            <div class="doubt-subject">${esc(d.courseSubject || d.subject || 'General')}</div>
-            <div class="doubt-meta">${esc(d.studentName || 'Student')} · ${fmtDate(d.createdAt)} · Batch: ${esc(currentBatchCode)}</div>
-          </div>
-          <span class="doubt-badge ${status}">${status}</span>
-        </div>
-        <div class="doubt-text">${esc(d.message || '')}</div>
-        ${d.screenshotUrl ? `<a href="${esc(d.screenshotUrl)}" target="_blank"><img src="${esc(d.screenshotUrl)}" class="doubt-img" alt="Screenshot"></a>` : ''}
-
-        ${replies.length ? `<div class="reply-thread">
-          ${replies.map(r => `
-            <div class="reply-item">
-              <div class="reply-by ${r.by === 'faculty' ? 'faculty' : ''}">${esc(r.by || 'Student')}</div>
-              <div class="reply-text">${esc(r.text || '')}</div>
-              ${r.attachmentUrl ? `<a href="${esc(r.attachmentUrl)}" target="_blank" style="font-size:0.8rem;color:var(--gold);font-weight:600;">📎 ${esc(r.attachmentName || 'Attachment')}</a>` : ''}
-              <div class="reply-at">${fmtDate(r.at)}</div>
-            </div>
-          `).join('')}
-        </div>` : ''}
-
-        ${!isClosed ? `<div class="reply-form">
-          <input type="text" id="replyText-${d.id}" placeholder="Write your reply...">
-          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:8px;">
-            <input type="file" id="replyFile-${d.id}" style="font-size:0.8rem;max-width:180px;">
-            <button class="primary-btn" type="button" onclick="replyToDoubt('${d.id}')">Reply</button>
-            <button class="ghost-btn" type="button" onclick="closeDoubt('${d.id}')">Mark Closed</button>
-          </div>
-          <div id="replyStatus-${d.id}" class="portal-status"></div>
-        </div>` : '<div style="font-size:0.82rem;color:var(--muted);margin-top:10px;font-style:italic;">This doubt is closed. No further replies.</div>'}
-      </div>`;
-    }).join('');
-  };
-
-  window.replyToDoubt = async function(doubtId){
-    const text = document.getElementById(`replyText-${doubtId}`)?.value.trim();
-    const file = document.getElementById(`replyFile-${doubtId}`)?.files?.[0];
-    const statusEl = document.getElementById(`replyStatus-${doubtId}`);
-    if(!text && !file){ if(statusEl) statusEl.textContent = 'Type a reply or attach a file.'; return; }
-
-    try{
-      if(statusEl) statusEl.textContent = 'Sending...';
-      const reply = { text: text || '', by: 'faculty', at: firebase.firestore.FieldValue.serverTimestamp() };
-
-      if(file){
-        if(file.size > 8*1024*1024) throw new Error('File must be under 8 MB.');
-        const safe = Date.now() + '-' + file.name.replace(/[^a-zA-Z0-9._-]/g,'_');
-        const ref = storage.ref(`doubt-attachments/${doubtId}/${safe}`);
-        await ref.put(file);
-        reply.attachmentUrl = await ref.getDownloadURL();
-        reply.attachmentName = file.name;
-      }
-
-      const docRef = db.collection('studentDoubts').doc(doubtId);
-      const snap = await docRef.get();
-      const data = snap.data() || {};
-      const replies = Array.isArray(data.replies) ? data.replies : [];
-      replies.push(reply);
-
-      const sevenDays = new Date(Date.now() + 7*24*60*60*1000);
-      await docRef.update({
-        replies: replies,
-        status: 'answered',
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        autoCloseAt: firebase.firestore.Timestamp.fromDate(sevenDays)
-      });
-
-      if(statusEl) statusEl.textContent = 'Reply sent ✅';
-      await loadDoubts();
-    }catch(err){
-      if(statusEl) statusEl.textContent = err.message || 'Failed to send.';
-    }
-  };
-
-  window.closeDoubt = async function(doubtId){
-    if(!confirm('Mark this doubt as closed?')) return;
-    await db.collection('studentDoubts').doc(doubtId).update({
-      status: 'closed',
-      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
-    await loadDoubts();
-  };
-
-  window.purgeOldDoubts = async function(){
-    if(!confirm('Delete all closed doubts older than 7 days? This cannot be undone.')) return;
-    try{
-      const cutoff = new Date(Date.now() - 7*24*60*60*1000);
-      const snap = await db.collection('studentDoubts').where('status','==','closed').limit(200).get();
-      const batch = db.batch();
-      let count = 0;
-      snap.docs.forEach(doc => {
-        const data = doc.data();
-        const updated = data.updatedAt?.toDate ? data.updatedAt.toDate() : new Date();
-        if(updated < cutoff){ batch.delete(doc.ref); count++; }
-      });
-      if(count) await batch.commit();
-      alert(`Deleted ${count} old closed doubt(s).`);
-      await loadDoubts();
-    }catch(err){ alert('Purge failed: ' + err.message); }
-  };
-})();
-</script>
-<script>
-
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', function() {
-    navigator.serviceWorker.register('../sw.js').catch(function(e){ console.warn('SW:', e); });
-  });
+  currentDoubts=all.filter(d=>studentIds.has(d.userId));render();notice(`Loaded ${currentDoubts.length} doubts for ${currentBatchName}.`,'success');
+ }catch(err){currentDoubts=[];render();notice('Could not load doubts: '+err.message,'error')}
+ finally{loading=false;setBusy($('loadBtn'),false)}
 }
-/* One-tap PWA install button */
-(function(){
-  var deferredPrompt = null;
-  window.addEventListener('beforeinstallprompt', function(e){
-    e.preventDefault(); deferredPrompt = e; showBtn();
-  });
-  function showBtn(){
-    if (document.getElementById('vpInstallBtn')) return;
-    var b = document.createElement('button');
-    b.id = 'vpInstallBtn';
-    b.textContent = '📲 Install App';
-    b.style.cssText = "position:fixed;left:18px;bottom:18px;z-index:15000;border:none;border-radius:999px;padding:12px 20px;background:linear-gradient(135deg,#C9922A,#E8AA48);color:#0D1B40;font:800 14px 'DM Sans',sans-serif;box-shadow:0 10px 28px rgba(13,27,64,.35);cursor:pointer;";
-    b.onclick = function(){
-      if (deferredPrompt) { deferredPrompt.prompt(); deferredPrompt = null; }
-      b.remove();
-    };
-    document.body.appendChild(b);
-  }
-  window.__vpShowInstall = showBtn;
-  /* If already installed, the prompt never fires - hide nothing, just don't show */
+function getStatus(d){if(d.status==='closed'||(d.autoCloseAt&&d.autoCloseAt.toDate&&d.autoCloseAt.toDate()<new Date()))return 'closed';const rs=Array.isArray(d.replies)?d.replies:[];return rs.length?'answered':'open'}
+function filteredDoubts(){
+ const q=$('search').value.trim().toLowerCase(), days=$('dateFilter').value, cutoff=days==='all'?null:Date.now()-Number(days)*86400000;
+ return currentDoubts.filter(d=>{const st=getStatus(d);if(activeStatus!=='all'&&st!==activeStatus)return false;if(q&&![d.studentName,d.courseSubject,d.subject,d.message].join(' ').toLowerCase().includes(q))return false;if(cutoff){const t=d.createdAt&&d.createdAt.toDate?d.createdAt.toDate().getTime():Number(new Date(d.createdAt||0));if(!t||t<cutoff)return false}return true});
+}
+function render(){
+ const counts={all:currentDoubts.length,open:0,answered:0,closed:0};currentDoubts.forEach(d=>counts[getStatus(d)]++);
+ $('countAll').textContent=counts.all;$('countOpen').textContent=counts.open;$('countAnswered').textContent=counts.answered;$('countClosed').textContent=counts.closed;
+ $('tabAll').textContent=counts.all;$('tabOpen').textContent=counts.open;$('tabAnswered').textContent=counts.answered;$('tabClosed').textContent=counts.closed;
+ const ds=filteredDoubts();$('listMeta').textContent=`${ds.length} shown · ${currentDoubts.length} total`;
+ if(!currentBatchCode){$('doubtList').innerHTML='<div class="empty"><strong>Ready when you are</strong>Select a batch, then load its doubts.</div>';return}
+ if(!ds.length){$('doubtList').innerHTML='<div class="empty"><strong>No matching doubts</strong>Try another status, date range, or search term.</div>';return}
+ $('doubtList').innerHTML=ds.map(d=>{
+  const status=getStatus(d), replies=Array.isArray(d.replies)?d.replies:[];
+  const screenshot=d.screenshotUrl?`<a class="attachment" href="${esc(d.screenshotUrl)}" target="_blank" rel="noopener noreferrer">📎 View student attachment</a>`:'';
+  const thread=replies.length?`<div class="thread">${replies.map(r=>`<div class="reply"><div class="reply-by">${esc(r.by||'reply')}</div><div class="reply-text">${esc(r.text||'')}</div>${r.attachmentUrl?`<a class="attachment" href="${esc(r.attachmentUrl)}" target="_blank" rel="noopener noreferrer">📎 ${esc(r.attachmentName||'Attachment')}</a>`:''}<div class="reply-at">${esc(fmtDate(r.at))}</div></div>`).join('')}</div>`:'';
+  const form=status!=='closed'?`<div class="replybox"><label for="reply-${esc(d.id)}" class="meta">Your reply</label><textarea class="field" id="reply-${esc(d.id)}" placeholder="Write a clear, helpful answer…"></textarea><div class="reply-actions"><input type="file" id="file-${esc(d.id)}" aria-label="Optional reply attachment"><button class="btn primary" type="button" data-reply="${esc(d.id)}">Send reply</button><button class="btn secondary" type="button" data-close="${esc(d.id)}">Mark closed</button></div><div id="status-${esc(d.id)}" class="notice" role="status"></div></div>`:`<div class="notice">This doubt is closed. No further replies can be sent.</div>`;
+  return `<article class="doubt ${status==='closed'?'closed':''}"><div class="doubt-top"><div><div class="student">${esc(d.studentName||'Student')}</div><div class="meta">${esc(fmtDate(d.createdAt))} · ${esc(currentBatchName)}</div><div class="meta">Topic: ${esc(d.courseSubject||d.subject||'General')}</div></div><span class="status ${status}">${status}</span></div><div class="doubt-text">${esc(d.message||'No message provided.')}</div>${screenshot}${thread}${form}</article>`;
+ }).join('');
+}
+$('doubtList').addEventListener('click',e=>{const r=e.target.closest('[data-reply]'),c=e.target.closest('[data-close]');if(r)replyToDoubt(r.dataset.reply,r);if(c)closeDoubt(c.dataset.close,c)});
+async function replyToDoubt(id,button){
+ const text=$('reply-'+id)?.value.trim()||'',file=$('file-'+id)?.files?.[0],statusEl=$('status-'+id);if(!text&&!file){statusEl.textContent='Type a reply or attach a file.';statusEl.className='notice error';return}
+ if(file&&file.size>8*1024*1024){statusEl.textContent='File must be under 8 MB.';statusEl.className='notice error';return}
+ setBusy(button,true,'Sending…');statusEl.textContent='Sending reply…';statusEl.className='notice';
+ try{
+  let attachmentUrl='',attachmentName='';
+  if(file){const safe=Date.now()+'-'+file.name.replace(/[^a-zA-Z0-9._-]/g,'_');const ref=storage.ref(`doubt-attachments/${id}/${safe}`);await ref.put(file);attachmentUrl=await ref.getDownloadURL();attachmentName=file.name}
+  const ref=db.collection('studentDoubts').doc(id);
+  // Transaction re-reads latest replies at commit time, preventing two admin/faculty replies from blindly replacing each other's array.
+  await db.runTransaction(async tx=>{const snap=await tx.get(ref);if(!snap.exists)throw new Error('This doubt no longer exists.');const data=snap.data()||{};if(data.status==='closed')throw new Error('This doubt has already been closed.');const replies=Array.isArray(data.replies)?data.replies:[];const reply={text:text||'',by:'faculty',at:firebase.firestore.Timestamp.now()};if(attachmentUrl){reply.attachmentUrl=attachmentUrl;reply.attachmentName=attachmentName}replies.push(reply);const sevenDays=firebase.firestore.Timestamp.fromDate(new Date(Date.now()+7*86400000));tx.update(ref,{replies,status:'answered',updatedAt:firebase.firestore.FieldValue.serverTimestamp(),autoCloseAt:sevenDays})});
+  notice('Reply sent.','success');await loadDoubts();
+ }catch(err){statusEl.textContent=err.message||'Reply failed.';statusEl.className='notice error'}
+ finally{setBusy(button,false)}
+}
+async function closeDoubt(id,button){if(!confirm('Mark this doubt as closed?'))return;setBusy(button,true,'Closing…');try{await db.collection('studentDoubts').doc(id).update({status:'closed',updatedAt:firebase.firestore.FieldValue.serverTimestamp()});notice('Doubt closed.','success');await loadDoubts()}catch(err){notice('Could not close doubt: '+err.message,'error')}finally{setBusy(button,false)}}
+if('serviceWorker'in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('../sw.js').catch(()=>{}))}
 })();
-</script>
-<script>
-/* Instant session restore: pages never flash the login box (auth verifies in background) */
-(function(){
-  try{
-    var ok = localStorage.getItem('adminUnlocked')==='1' || sessionStorage.getItem('adminUnlocked')==='1';
-    if(!ok) return;
-    var loginEl = document.getElementById('loginWrap') || document.getElementById('loginScreen');
-    var appEl = document.getElementById('appShell') || document.getElementById('adminApp');
-    if(loginEl){ loginEl.classList.add('hidden'); loginEl.style.display='none'; }
-    if(appEl){ appEl.classList.remove('hidden'); appEl.style.display=''; }
-  }catch(e){}
-})();
-</script>
-<script>
-/* Back to dashboard = end session, ask password again */
-window.__vpToDash = function(){
-  try{ if(window.self !== window.top){ parent.postMessage({type:'vp-close'}, '*'); return; } }catch(e){}
-  location.href = 'index.html';
-};
-</script>
-<script>
-document.addEventListener('click', function(e){
-  var t = e.target && e.target.closest ? e.target.closest('#logoutBtn, #adminLogoutBtn') : null;
-  if(!t) return;
-  setTimeout(function(){
-    try{ if(window.self !== window.top){ window.top.location.href = 'index.html'; } }catch(err){}
-  }, 900);
-}, true);
 </script>
 </body>
 </html>
