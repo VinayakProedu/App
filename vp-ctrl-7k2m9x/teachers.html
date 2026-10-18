@@ -183,12 +183,12 @@ a{text-decoration:none;color:inherit;}
       : '<span style="font-size:.85rem;color:var(--muted)">No subjects found yet — upload a lecture first, or type subjects when adding lectures later. You can still add the teacher and tick subjects afterward.</span>';
     const teachers = uSnap.docs.map(d => ({id:d.id, ...d.data()})); allTeachers = teachers; $('statTotal').textContent=teachers.length; $('statActive').textContent=teachers.filter(t=>t.role==='teacher').length; $('statInactive').textContent=teachers.filter(t=>t.role!=='teacher').length; $('statSubjects').textContent=new Set(teachers.flatMap(t=>t.assignedSubjects||[])).size;
     $('tList').innerHTML = teachers.length ? teachers.map(t => `
-      <div class="mini-item teacher-row"><input class="teacher-select" type="checkbox" value="${esc(t.id)}" aria-label="Select teacher" onchange="updateSelectedCount()">
+      <div class="mini-item teacher-row" data-search="${esc((t.name||"")+" "+(t.email||"")).toLowerCase()}" data-status="${t.role==="teacher"?"active":"inactive"}"><input class="teacher-select" type="checkbox" value="${esc(t.id)}" aria-label="Select teacher" onchange="updateSelectedCount()">
         <strong style="color:var(--navy)">${esc(t.name || t.email)}</strong>
         <span style="font-size:.8rem;color:var(--muted)"> · ${esc(t.email)}</span><br>
-        <span style="font-size:.82rem">${(t.assignedSubjects||[]).map(s=>`<span style="background:#eef4ff;color:#1e3c72;border-radius:999px;padding:2px 8px;font-size:.72rem;font-weight:700;margin:2px 4px 2px 0;display:inline-block">${esc(s)}</span>`).join('') || '<i style="color:#9ca3af">no subjects</i>'}</span>
+        <div style="font-size:.78rem;color:var(--muted);margin:4px 0">Batches: ${(t.assignedBatches||[]).map(b=>`<span class="teacher-batch">${esc(b)}</span>`).join('') || 'None assigned'}</div><span style="font-size:.82rem">${(t.assignedSubjects||[]).map(s=>`<span style="background:#eef4ff;color:#1e3c72;border-radius:999px;padding:2px 8px;font-size:.72rem;font-weight:700;margin:2px 4px 2px 0;display:inline-block">${esc(s)}</span>`).join('') || '<i style="color:#9ca3af">no subjects</i>'}</span>
         <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
-          <button class="secondary-btn" style="padding:7px 12px;font-size:.8rem;" onclick="sendTeacherReset('${esc(t.email)}')">📧 Set-password email</button>
+          <button class="secondary-btn" style="padding:7px 12px;font-size:.8rem;" onclick="editTeacher('${t.id}')">✏️ Edit</button><button class="secondary-btn" style="padding:7px 12px;font-size:.8rem;" onclick="sendTeacherReset('${esc(t.email)}')">📧 Password reset</button>
           <button class="danger-btn" style="padding:7px 12px;font-size:.8rem;" onclick="removeTeacher('${t.id}','${esc(t.email)}')">Remove</button>
         </div>
       </div>`).join('') : '<div class="empty-box">No teachers yet.</div>';
@@ -284,6 +284,7 @@ a{text-decoration:none;color:inherit;}
     }catch(e){ st.textContent = e.message; st.classList.add('error'); }
   };
 
+  window.editTeacher=function(id){const t=allTeachers.find(x=>x.id===id);if(!t)return;$('tEmail').value=t.email||'';$('tName').value=t.name||'';document.querySelectorAll('.t-subj').forEach(i=>i.checked=(t.assignedSubjects||[]).includes(i.value));document.querySelectorAll('.t-bat').forEach(i=>i.checked=(t.assignedBatches||[]).includes(i.value));$('tStatus').textContent='Editing '+(t.name||t.email)+'. Update assignments and click Save Teacher.';$('tStatus').className='portal-status';window.scrollTo({top:0,behavior:'smooth'});};
   window.selectTeachers=function(on){document.querySelectorAll('.teacher-select').forEach(i=>{if(!i.closest('.mini-item').hidden)i.checked=on;});updateSelectedCount();};
   window.updateSelectedCount=function(){const el=$('selectedCount');if(el)el.textContent=document.querySelectorAll('.teacher-select:checked').length+' selected';};
   window.bulkReset=async function(){const chosen=[...document.querySelectorAll('.teacher-select:checked')].map(i=>allTeachers.find(t=>t.id===i.value)).filter(Boolean);if(!chosen.length)return alert('Select at least one teacher.');if(!confirm('Send password reset emails to '+chosen.length+' teacher(s)?'))return;let n=0;for(const t of chosen){try{await auth.sendPasswordResetEmail(t.email);n++;}catch(e){}}alert('Reset emails sent: '+n+' of '+chosen.length);};
