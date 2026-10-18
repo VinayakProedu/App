@@ -229,7 +229,7 @@ a{text-decoration:none;color:inherit;}
   };
 
   /* ===== AUTO-CREATE: account + profile + email in one click ===== */
-  const WEBHOOK_URL = 'PASTE_YOUR_WEB_APP_URL_HERE';   // ← from Apps Script deployment (ends in /exec)
+  const WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbx_K52CG0YxNKzcFM4R7SXfTB7pvl1CLNSbLbu5QcOm-aeg6bhFWJsAMASNprcjWpy5/exec';
   const API_KEY = 'AIzaSyCwZGVK9I_GQmJkRatZOyMs0gdcZ8nSouc';
   function genPass(){
     const c='abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ23456789';
@@ -255,7 +255,7 @@ a{text-decoration:none;color:inherit;}
         if(d.error.message.indexOf('EMAIL_EXISTS') !== -1){
           st.textContent = 'Account already exists — emailing a password reset instead…';
           await fetch(WEBHOOK_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain'},
-            body: JSON.stringify({ key:'vp-teach-2026', email, name, password:'(use the reset link — a set-password email is on its way)', subjects: subs.join(', ') }) });
+            body: JSON.stringify({ key:'vp-teach-2026', email, name, password:'', action:'password-reset', subjects: subs.join(', '), batches: bats.join(', ') }) });
           auth.sendPasswordResetEmail(email).catch(()=>{});
           st.textContent = '✅ Account existed — reset email sent to ' + email; st.classList.add('success'); return;
         }
