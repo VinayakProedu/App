@@ -1,313 +1,63 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="robots" content="noindex, nofollow, noarchive">
-<meta name="theme-color" content="#0D1B40">
-<meta name="mobile-web-app-capable" content="yes">
-<title>Dashboard | Vinayak ProEdu Admin</title>
-<link rel="icon" type="image/png" href="https://pasteimg.com/images/2026/03/31/WhatsApp-Image-2026-03-19-at-6.49.19-PM.jpg">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow,noarchive"><meta name="theme-color" content="#660708">
+<title>Admin Dashboard | Vinayak ProEdu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{
-  --navy:#0D1B40; --navy2:#16295c; --blue:#1e3c72; --gold:#C9922A; --gold-lt:#E8AA48;
-  --ink:#1A1A2E; --muted:#667085; --line:#e6e9f0;
-  --shadow-sm:0 1px 3px rgba(16,24,40,.06),0 1px 2px rgba(16,24,40,.04);
-  --shadow-md:0 10px 30px rgba(13,27,64,.12);
-  --r:14px;
-}
-*{margin:0;padding:0;box-sizing:border-box;}
-html,body{height:100%;}
-body{font-family:'DM Sans',sans-serif;color:var(--ink);background:#f4f6fa;line-height:1.55;-webkit-font-smoothing:antialiased;}
-h1,h2,h3{font-family:'Playfair Display',serif;}
-button{font-family:inherit;cursor:pointer;border:none;background:none;}
-input{font-family:inherit;}
-.hidden{display:none !important;}
-
-/* ============ LOGIN ============ */
-.login-wrap{position:fixed;inset:0;z-index:9999;background:radial-gradient(1200px 700px at 70% -10%,#24407e 0%,var(--navy) 55%);display:flex;align-items:center;justify-content:center;padding:20px;transition:opacity .3s;}
-.login-box{width:min(400px,92vw);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.13);border-radius:22px;padding:44px 38px;backdrop-filter:blur(18px);box-shadow:0 40px 100px rgba(0,0,0,.45);}
-.login-logo{width:64px;height:64px;border-radius:50%;border:2px solid var(--gold);margin:0 auto 18px;display:block;object-fit:cover;box-shadow:0 0 0 8px rgba(201,146,42,.12);}
-.login-box h2{color:#fff;font-size:1.55rem;text-align:center;margin-bottom:4px;}
-.login-box>p{color:rgba(255,255,255,.55);font-size:.88rem;text-align:center;margin-bottom:30px;}
-.lf{margin-bottom:15px;}
-.lf label{display:block;font-size:.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:6px;}
-.lf input{width:100%;padding:13px 16px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:11px;color:#fff;font-size:.95rem;transition:border-color .2s;}
-.lf input::placeholder{color:rgba(255,255,255,.3);}
-.lf input:focus{outline:none;border-color:rgba(232,170,72,.7);}
-.login-btn{width:100%;padding:14px;border-radius:50px;background:linear-gradient(135deg,var(--gold),var(--gold-lt));color:var(--navy);font-size:1rem;font-weight:700;transition:transform .15s, box-shadow .15s;box-shadow:0 6px 20px rgba(201,146,42,.3);}
-.login-btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 10px 26px rgba(201,146,42,.4);}
-.login-btn:disabled{opacity:.7;cursor:wait;}
-.login-status{margin-top:12px;font-size:.88rem;font-weight:600;text-align:center;min-height:20px;color:#fca5a5;}
-.login-status.ok{color:#a7f3d0;}
-.spin{display:inline-block;width:15px;height:15px;border:2px solid rgba(13,27,64,.35);border-top-color:var(--navy);border-radius:50%;vertical-align:-3px;margin-right:8px;animation:rot .7s linear infinite;}
-@keyframes rot{to{transform:rotate(360deg);}}
-
-/* ============ SHELL ============ */
-.shell{height:100vh;display:flex;flex-direction:column;}
-
-/* Hub */
-.hub{flex:1;overflow:auto;}
-.hub-inner{max-width:820px;margin:0 auto;padding:0 24px 60px;}
-.hub-head{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:26px 0 6px;}
-.brand{display:flex;align-items:center;gap:13px;}
-.brand img{width:46px;height:46px;border-radius:50%;border:2px solid var(--gold);object-fit:cover;}
-.brand h1{font-size:1.35rem;color:var(--navy);line-height:1.15;}
-.brand span{display:block;font-family:'DM Sans',sans-serif;font-size:.66rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold);font-weight:700;margin-top:2px;}
-.greeting{color:var(--muted);font-size:.92rem;margin:14px 0 22px;}
-
-.search-wrap{position:relative;margin-bottom:10px;}
-.search-wrap svg{position:absolute;left:17px;top:50%;transform:translateY(-50%);opacity:.5;}
-.search-wrap input{width:100%;padding:15px 18px 15px 48px;border-radius:14px;border:1px solid var(--line);background:#fff;font-size:.96rem;box-shadow:var(--shadow-sm);transition:all .2s;}
-.search-wrap input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 4px rgba(201,146,42,.13);}
-.meta-line{display:flex;justify-content:space-between;align-items:center;font-size:.82rem;color:var(--muted);margin:8px 2px 24px;}
-
-.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
-@media(max-width:760px){.tiles{grid-template-columns:repeat(2,1fr);}}
-@media(max-width:460px){.tiles{grid-template-columns:1fr;}}
-.tile{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:24px 20px 20px;text-align:left;cursor:pointer;position:relative;overflow:hidden;transition:transform .18s, box-shadow .18s, border-color .18s;box-shadow:var(--shadow-sm);display:block;width:100%;}
-.tile::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--gold),var(--gold-lt));opacity:0;transition:opacity .18s;}
-.tile:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);border-color:#d8c29a;}
-.tile:hover::before{opacity:1;}
-.tile-ico{width:46px;height:46px;border-radius:12px;background:linear-gradient(135deg,var(--navy),var(--blue));display:grid;place-items:center;font-size:1.25rem;margin-bottom:14px;}
-.tile-name{font-family:'Playfair Display',serif;font-size:1.06rem;font-weight:700;color:var(--navy);}
-.tile-desc{font-size:.8rem;color:var(--muted);margin-top:3px;}
-.tile-arrow{position:absolute;right:16px;top:22px;color:#c4ccdb;font-size:1.05rem;transition:transform .18s, color .18s;}
-.tile:hover .tile-arrow{transform:translateX(3px);color:var(--gold);}
-.no-results{margin-top:18px;padding:22px;border:1px dashed var(--line);border-radius:var(--r);background:#fff;color:var(--muted);text-align:center;font-size:.9rem;}
-
-/* Viewer */
-.viewer{flex:1;display:none;flex-direction:column;background:#fff;}
-.viewer.open{display:flex;}
-.viewer-bar{height:52px;flex-shrink:0;display:flex;align-items:center;gap:14px;padding:0 10px 0 8px;background:#fff;border-bottom:1px solid var(--line);box-shadow:0 1px 4px rgba(16,24,40,.05);z-index:5;}
-.back-btn{display:flex;align-items:center;gap:7px;padding:8px 14px;border-radius:10px;font-weight:600;font-size:.88rem;color:var(--navy);transition:background .15s;}
-.back-btn:hover{background:#f1f4fb;}
-.viewer-title{font-family:'Playfair Display',serif;font-size:1.02rem;color:var(--navy);font-weight:700;}
-.viewer-frame{flex:1;border:none;width:100%;background:#f4f6fa;}
-
-/* Logout — extreme top-right corner, both views */
-.logout-corner{position:fixed;top:0;right:0;z-index:10001;height:52px;display:flex;align-items:center;padding:0 6px 0 18px;font-size:.84rem;font-weight:700;color:#b42318;background:rgba(255,255,255,.85);backdrop-filter:blur(6px);border-bottom-left-radius:14px;border-left:1px solid var(--line);border-bottom:1px solid var(--line);transition:background .15s;}
-.logout-corner:hover{background:#fef2f2;}
-.hub .logout-corner{background:transparent;border:none;backdrop-filter:none;height:auto;padding:10px 0 0 18px;position:static;border-radius:10px;}
-.hub .logout-corner:hover{background:#fef2f2;}
-
-@media(max-width:600px){
-  .brand h1{font-size:1.15rem;}
-  .viewer-title{display:none;}
-}
+:root{--g:#660708;--m:#A4161A;--r:#E5383B;--ink:#161A1D;--muted:#6b7077;--bg:#F5F3F4;--rose:#FDF0F0;--line:#eadcdd;--shadow:0 8px 28px #4b080d0d}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 'DM Sans',sans-serif}button,input{font:inherit}button{cursor:pointer}.hidden{display:none!important}.top{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:15px clamp(16px,4vw,44px);background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}.brand{display:flex;align-items:center;gap:12px}.mark{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,var(--g),var(--r));color:white;font-weight:800}.brand h1{margin:0;font:700 1.12rem 'Playfair Display',serif;color:var(--g)}.brand small{display:block;color:var(--muted);font-size:.76rem}.btn{border:1px solid transparent;border-radius:11px;padding:10px 15px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:7px}.primary{background:linear-gradient(120deg,var(--g),var(--m));color:#fff}.secondary{background:var(--rose);color:var(--g);border-color:#f1c8ca}.outline{background:#fff;color:var(--g);border-color:var(--line)}.btn:disabled{opacity:.6;cursor:wait}.wrap{max-width:1160px;margin:auto;padding:28px clamp(15px,3vw,36px) 55px}.eyebrow{font-size:.72rem;font-weight:800;letter-spacing:1.8px;text-transform:uppercase;color:var(--m)}h2{font:700 clamp(1.8rem,3vw,2.5rem) 'Playfair Display',serif;color:var(--g);margin:3px 0}.intro{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap}.intro p{color:var(--muted);margin:0}.search{margin:22px 0 10px;position:relative}.search input{width:100%;padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:#fff;box-shadow:var(--shadow)}.search input:focus,.lf input:focus{outline:3px solid #f9d9da;border-color:var(--r)}.meta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;color:var(--muted);font-size:.82rem;margin:9px 2px 20px}.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}.tile{width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-radius:16px;padding:21px;position:relative;box-shadow:var(--shadow);transition:transform .18s,border-color .18s;min-height:145px}.tile:hover{transform:translateY(-3px);border-color:#dba5a7}.tile:focus-visible{outline:3px solid #f1b7b9}.ico{width:43px;height:43px;border-radius:12px;display:grid;place-items:center;background:var(--rose);font-size:1.2rem;margin-bottom:13px}.name{font:700 1.08rem 'Playfair Display',serif;color:var(--g)}.desc{font-size:.82rem;color:var(--muted);margin-top:3px}.arrow{position:absolute;right:18px;top:19px;color:var(--r)}.noresults{background:white;padding:25px;text-align:center;border:1px dashed var(--line);border-radius:14px;color:var(--muted)}.viewer{display:none;position:fixed;inset:0;background:#fff;z-index:4;flex-direction:column}.viewer.open{display:flex}.viewerbar{height:58px;flex-shrink:0;display:flex;align-items:center;gap:12px;padding:0 16px;border-bottom:1px solid var(--line);background:white}.viewerbar strong{font:700 1rem 'Playfair Display',serif;color:var(--g)}.frame{border:0;width:100%;flex:1;background:var(--bg)}.login{position:fixed;inset:0;z-index:20;display:grid;place-items:center;padding:18px;background:linear-gradient(135deg,#350304,var(--g),var(--m))}.loginbox{width:min(420px,100%);padding:clamp(25px,5vw,42px);background:#fff;border-radius:22px;box-shadow:0 25px 80px #21000066}.loginbox h2{font-size:1.7rem}.loginbox p{color:var(--muted);margin:5px 0 22px}.lf{margin:14px 0}.lf label{display:block;font-size:.73rem;letter-spacing:1px;font-weight:800;text-transform:uppercase;margin-bottom:6px}.lf input{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:11px}.loginbox .btn{width:100%;margin-top:8px}.status{min-height:22px;font-size:.85rem;color:#b42318;margin-top:10px}.status.ok{color:#18794e}.foot{color:var(--muted);font-size:.78rem;margin-top:24px}
+@media(max-width:800px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:480px){.tiles{grid-template-columns:1fr}.tile{min-height:unset}.brand small{display:none}.top{padding:12px 14px}}
 </style>
-<base target="_blank">
 </head>
 <body>
-
-<!-- LOGIN -->
-<div class="login-wrap" id="loginWrap">
-  <div class="login-box">
-    <img class="login-logo" src="https://pasteimg.com/images/2026/03/31/WhatsApp-Image-2026-03-19-at-6.49.19-PM.jpg" alt="Vinayak ProEdu">
-    <h2>Admin Portal</h2>
-    <p>Vinayak ProEdu Dashboard</p>
-    <div class="lf"><label>Admin Email</label><input type="email" id="adminEmail" placeholder="admin@email.com" autocomplete="username"></div>
-    <div class="lf"><label>Password</label><input type="password" id="adminPassword" placeholder="••••••••" autocomplete="current-password"></div>
-    <button class="login-btn" id="adminLoginBtn" type="button">Login as Admin</button>
-    <div class="login-status" id="loginStatus"></div>
-  </div>
-</div>
-
-<!-- APP SHELL -->
-<div class="shell hidden" id="appShell">
-
-  <!-- HUB -->
-  <div class="hub" id="hubView">
-    <div class="hub-inner">
-      <div class="hub-head">
-        <div class="brand">
-          <img src="https://pasteimg.com/images/2026/03/31/WhatsApp-Image-2026-03-19-at-6.49.19-PM.jpg" alt="">
-          <div><h1>Vinayak ProEdu<span>Admin Panel</span></h1></div>
-        </div>
-        <button class="logout-corner" id="logoutBtn" type="button">Logout ⏻</button>
-      </div>
-      <div class="greeting" id="greeting">Welcome back. Pick a module to get started.</div>
-
-      <div class="search-wrap">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#667085" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-        <input type="search" id="hubSearch" placeholder="Search modules — students, mocks, lectures, doubts..." autocomplete="off">
-      </div>
-      <div class="meta-line"><span id="hubCount">Loading…</span><span>Session active</span></div>
-
-      <div class="tiles" id="tiles">
-        <button class="tile" data-page="students.html" data-title="Students" data-keys="students enrolments access manage learners">
-          <span class="tile-ico">👥</span><div class="tile-name">Students</div><div class="tile-desc">Manage enrolments &amp; access</div><span class="tile-arrow">→</span>
-        </button>
-        <button class="tile" data-page="students.html?view=batches" data-title="Batches" data-keys="batches groups create batch">
-          <span class="tile-ico">📦</span><div class="tile-name">Batches</div><div class="tile-desc">Create &amp; manage batches</div><span class="tile-arrow">→</span>
-        </button>
-        <button class="tile" data-page="teachers.html" data-title="Teachers" data-keys="teachers faculty assign subjects roles">
-          <span class="tile-ico">👨‍🏫</span><div class="tile-name">Teachers</div><div class="tile-desc">Assign subjects &amp; roles</div><span class="tile-arrow">→</span>
-        </button>
-        <button class="tile" data-page="tests.html" data-title="Mock Exams" data-keys="tests mocks papers questions exams">
-          <span class="tile-ico">📝</span><div class="tile-name">Mock Exams</div><div class="tile-desc">Papers, questions &amp; attempts</div><span class="tile-arrow">→</span>
-        </button>
-        <button class="tile" data-page="lectures.html" data-title="Lectures" data-keys="lectures videos files upload library">
-          <span class="tile-ico">🎬</span><div class="tile-name">Lectures</div><div class="tile-desc">Upload videos &amp; files</div><span class="tile-arrow">→</span>
-        </button>
-        <button class="tile" data-page="live.html" data-title="Live Classes" data-keys="live classes meetings schedule zoom">
-          <span class="tile-ico">🔴</span><div class="tile-name">Live Classes</div><div class="tile-desc">Schedule meetings</div><span class="tile-arrow">→</span>
-        </button>
-        <button class="tile" data-page="leaderboard.html" data-title="Leaderboard" data-keys="leaderboard rankings batch toppers">
-          <span class="tile-ico">🏆</span><div class="tile-name">Leaderboard</div><div class="tile-desc">Batch-wise rankings</div><span class="tile-arrow">→</span>
-        </button>
-        <button class="tile" data-page="doubts.html" data-title="Doubts" data-keys="doubts queries reply students">
-          <span class="tile-ico">💬</span><div class="tile-name">Doubts</div><div class="tile-desc">Reply to students</div><span class="tile-arrow">→</span>
-        </button>
-        <button class="tile" data-page="announcements.html" data-title="Announcements" data-keys="announcements publish notify notice">
-          <span class="tile-ico">📢</span><div class="tile-name">Announcements</div><div class="tile-desc">Publish to all students</div><span class="tile-arrow">→</span>
-        </button>
-        <button class="tile" data-page="testimonials.html" data-title="Testimonials" data-keys="testimonials reviews feedback students words">
-          <span class="tile-ico">⭐</span><div class="tile-name">Testimonials</div><div class="tile-desc">Publish reviews to website</div><span class="tile-arrow">→</span>
-        </button>
-      </div>
-      <div class="no-results hidden" id="noResults">No module matches your search.</div>
-    </div>
-  </div>
-
-  <!-- VIEWER -->
-  <div class="viewer" id="viewer">
-    <div class="viewer-bar">
-      <button class="back-btn" id="backBtn" type="button">← All modules</button>
-      <span class="viewer-title" id="viewerTitle"></span>
-      <div style="flex:1;"></div>
-      <button class="logout-corner" id="logoutBtn2" type="button">Logout ⏻</button>
-    </div>
-    <iframe class="viewer-frame" id="viewerFrame" title="module"></iframe>
-  </div>
-</div>
-
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-<script src="../firebase-config.js"></script>
+<header class="top"><div class="brand"><div class="mark">VP</div><div><h1>Vinayak ProEdu</h1><small>Secure admin workspace</small></div></div><button id="logoutBtn" class="btn secondary hidden" type="button">Log out ↗</button></header>
+<section id="loginWrap" class="login"><div class="loginbox"><div class="eyebrow">Admin authentication</div><h2>Welcome back</h2><p>Sign in to access your admin modules. A fresh sign-in is required whenever this dashboard is reopened.</p><form id="loginForm"><div class="lf"><label for="adminEmail">Admin email</label><input id="adminEmail" type="email" autocomplete="username" required placeholder="admin@email.com"></div><div class="lf"><label for="adminPassword">Password</label><input id="adminPassword" type="password" autocomplete="current-password" required></div><button id="loginBtn" class="btn primary" type="submit">Sign in securely</button></form><div id="loginStatus" class="status" role="status"></div></div></section>
+<main id="home" class="wrap hidden"><div class="intro"><div><div class="eyebrow">Administration</div><h2>Your workspace</h2><p>Choose a module to manage Vinayak ProEdu.</p></div><div class="meta" style="margin:8px 0"><span id="studentCount">Loading student count…</span></div></div>
+<div class="search"><input id="hubSearch" type="search" placeholder="Search modules — students, mocks, lectures, doubts…" autocomplete="off" aria-label="Search modules"></div><div class="meta"><span id="hubCount">10 modules</span><span>Session expires when you reload or close this dashboard.</span></div>
+<div class="tiles" id="tiles">
+<button class="tile" data-page="students.html" data-title="Students" data-keys="students enrolments access learners"><span class="ico">👥</span><div class="name">Students</div><div class="desc">Manage enrolments and access</div><span class="arrow">↗</span></button>
+<button class="tile" data-page="students.html?view=batches" data-title="Batches" data-keys="batches groups create batch"><span class="ico">📦</span><div class="name">Batches</div><div class="desc">Create and manage batches</div><span class="arrow">↗</span></button>
+<button class="tile" data-page="teachers.html" data-title="Teachers" data-keys="teachers faculty subjects roles"><span class="ico">👩‍🏫</span><div class="name">Teachers</div><div class="desc">Assign subjects and roles</div><span class="arrow">↗</span></button>
+<button class="tile" data-page="tests.html" data-title="Mock Exams" data-keys="tests mocks papers questions exams"><span class="ico">📝</span><div class="name">Mock Exams</div><div class="desc">Papers, questions and attempts</div><span class="arrow">↗</span></button>
+<button class="tile" data-page="lectures.html" data-title="Lectures" data-keys="lectures videos files upload library"><span class="ico">🎬</span><div class="name">Lectures</div><div class="desc">Upload recordings and files</div><span class="arrow">↗</span></button>
+<button class="tile" data-page="live.html" data-title="Live Classes" data-keys="live classes meetings schedule zoom"><span class="ico">🔴</span><div class="name">Live Classes</div><div class="desc">Schedule and manage meetings</div><span class="arrow">↗</span></button>
+<button class="tile" data-page="leaderboard.html" data-title="Leaderboard" data-keys="leaderboard rankings batch toppers"><span class="ico">🏆</span><div class="name">Leaderboard</div><div class="desc">Batch-wise rankings</div><span class="arrow">↗</span></button>
+<button class="tile" data-page="doubts.html" data-title="Doubts" data-keys="doubts queries replies students"><span class="ico">💬</span><div class="name">Doubts</div><div class="desc">Answer student questions</div><span class="arrow">↗</span></button>
+<button class="tile" data-page="announcements.html" data-title="Announcements" data-keys="announcements publish notify notice"><span class="ico">📢</span><div class="name">Announcements</div><div class="desc">Publish student notices</div><span class="arrow">↗</span></button>
+<button class="tile" data-page="testimonials.html" data-title="Testimonials" data-keys="testimonials reviews feedback website"><span class="ico">⭐</span><div class="name">Testimonials</div><div class="desc">Publish website reviews</div><span class="arrow">↗</span></button>
+</div><div id="noResults" class="noresults hidden">No module matches your search.</div><div class="foot">Security note: this login screen controls the interface. Firebase Security Rules must independently protect database and storage access.</div></main>
+<section id="viewer" class="viewer" aria-label="Admin module"><div class="viewerbar"><button id="backBtn" class="btn outline" type="button">← All modules</button><strong id="viewerTitle"></strong><span style="flex:1"></span><button id="viewerLogout" class="btn secondary" type="button">Log out</button></div><iframe id="viewerFrame" class="frame" title="Admin module" referrerpolicy="same-origin"></iframe></section>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script><script src="../firebase-config.js"></script>
 <script>
 (function(){
 'use strict';
-var $ = function(id){ return document.getElementById(id); };
-function on(id, ev, fn){ var n = $(id); if(n) n.addEventListener(ev, fn); return n; }
-
-/* ======= Instant session restore (no flashing, no waiting) ======= */
-var unlocked = false;
-try{ unlocked = localStorage.getItem('adminUnlocked')==='1' || sessionStorage.getItem('adminUnlocked')==='1'; }catch(e){}
-if(unlocked){
-  $('loginWrap').style.display = 'none';
-  $('appShell').classList.remove('hidden');
+const ADMIN='vinayakproedu@gmail.com', $=id=>document.getElementById(id), norm=s=>String(s||'').trim().toLowerCase();
+let auth=null,db=null,tiles=[...document.querySelectorAll('.tile')],studentCountStarted=false,signingIn=false;
+function showLogin(message=''){ $('loginWrap').classList.remove('hidden');$('home').classList.add('hidden');$('viewer').classList.remove('open');$('viewerFrame').src='about:blank';$('logoutBtn').classList.add('hidden');$('loginStatus').textContent=message;$('adminPassword').value=''; }
+function showHome(){ $('loginWrap').classList.add('hidden');$('home').classList.remove('hidden');$('logoutBtn').classList.remove('hidden');loadStudentCount(); }
+function clearUnlockFlags(){try{localStorage.removeItem('adminUnlocked');sessionStorage.removeItem('adminUnlocked')}catch(_){}}
+function startFreshSession(){
+ // Require a fresh password after every full dashboard load. Clear old UI flags synchronously before Firebase's persisted auth state is processed.
+ clearUnlockFlags();
+ if(!window.firebase||!firebase.apps.length){showLogin('Firebase did not load. Check firebase-config.js.');return}
+ auth=firebase.auth();db=firebase.firestore();
+ auth.signOut().catch(()=>{}).finally(()=>{showLogin()});
 }
-
-if(typeof firebase === 'undefined' || !firebase.apps.length){
-  var st = $('loginStatus');
-  if(st && !unlocked){ st.textContent = 'Firebase failed to load — check firebase-config.js'; }
-  return;
-}
-var auth = firebase.auth();
-var db = firebase.firestore();
-var ADMIN_EMAIL = 'vinayakproedu@gmail.com';
-var norm = function(s){ return String(s||'').trim().toLowerCase(); };
-
-/* ======= Auth ======= */
-function showApp(){
-  $('loginWrap').style.display = 'none';
-  $('appShell').classList.remove('hidden');
-  loadCount();
-}
-function showLogin(){
-  $('appShell').classList.add('hidden');
-  $('loginWrap').style.display = '';
-}
-auth.onAuthStateChanged(function(user){
-  if(user && norm(user.email) === norm(ADMIN_EMAIL)){
-    try{ localStorage.setItem('adminUnlocked','1'); }catch(e){}
-    showApp();
-  } else {
-    if(user) auth.signOut().catch(function(){});
-    try{ localStorage.removeItem('adminUnlocked'); sessionStorage.removeItem('adminUnlocked'); }catch(e){}
-    showLogin();
-  }
-});
-on('adminLoginBtn','click', doLogin);
-on('adminPassword','keydown', function(e){ if(e.key === 'Enter') doLogin(); });
-function doLogin(){
-  var btn = $('adminLoginBtn'), st = $('loginStatus');
-  var email = ($('adminEmail').value||'').trim(), pw = $('adminPassword').value;
-  if(!email || !pw){ st.textContent = 'Email and password required.'; st.className = 'login-status'; return; }
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spin"></span>Signing in…';
-  st.textContent = ''; st.className = 'login-status';
-  auth.signInWithEmailAndPassword(email, pw).then(function(){
-    try{
-      localStorage.setItem('adminUnlocked','1');
-      sessionStorage.setItem('adminUnlocked','1');
-    }catch(e){}
-    btn.innerHTML = 'Login as Admin'; btn.disabled = false;
-  }).catch(function(err){
-    btn.innerHTML = 'Login as Admin'; btn.disabled = false;
-    st.textContent = err.message; st.className = 'login-status';
-  });
-}
-function doLogout(){
-  try{ localStorage.removeItem('adminUnlocked'); sessionStorage.removeItem('adminUnlocked'); }catch(e){}
-  auth.signOut().then(function(){ location.reload(); }).catch(function(){ location.reload(); });
-}
-on('logoutBtn','click', doLogout);
-on('logoutBtn2','click', doLogout);
-
-/* ======= Student count (non-blocking) ======= */
-var countLoaded = false;
-function loadCount(){
-  if(countLoaded) return; countLoaded = true;
-  db.collection('users').where('role','==','student').get().then(function(snap){
-    $('hubCount').textContent = snap.size + ' students enrolled';
-  }).catch(function(){ $('hubCount').textContent = ''; });
-}
-
-/* ======= Tile search ======= */
-var tiles = Array.prototype.slice.call(document.querySelectorAll('.tile'));
-on('hubSearch','input', function(){
-  var q = norm($('hubSearch').value);
-  var vis = 0;
-  tiles.forEach(function(t){
-    var hay = norm(t.textContent + ' ' + (t.dataset.keys||''));
-    var show = !q || hay.indexOf(q) !== -1;
-    t.style.display = show ? '' : 'none';
-    if(show) vis++;
-  });
-  $('noResults').classList.toggle('hidden', vis > 0);
-});
-
-/* ======= Viewer (embedded modules) ======= */
-var viewer = $('viewer'), frame = $('viewerFrame');
-function openModule(page, title){
-  $('viewerTitle').textContent = title;
-  $('hubView').classList.add('hidden');
-  viewer.classList.add('open');
-  frame.src = page;
-}
-function closeModule(){
-  frame.src = 'about:blank';
-  viewer.classList.remove('open');
-  $('hubView').classList.remove('hidden');
-  loadCount();
-}
-tiles.forEach(function(t){
-  t.addEventListener('click', function(){ openModule(t.dataset.page, t.dataset.title); });
-});
-on('backBtn','click', closeModule);
-window.addEventListener('message', function(e){
-  if(e.data && e.data.type === 'vp-close'){ closeModule(); }
-});
-window.addEventListener('keydown', function(e){
-  if(e.key === 'Escape' && viewer.classList.contains('open')) closeModule();
-});
+$('loginForm').addEventListener('submit',async e=>{e.preventDefault();if(signingIn)return;signingIn=true;const btn=$('loginBtn');btn.disabled=true;btn.textContent='Verifying…';$('loginStatus').textContent='';try{const cred=await auth.signInWithEmailAndPassword($('adminEmail').value.trim(),$('adminPassword').value);if(norm(cred.user.email)!==ADMIN){await auth.signOut();throw new Error('This account is not authorised for the admin portal.')}localStorage.setItem('adminUnlocked','1');sessionStorage.setItem('adminUnlocked','1');showHome()}catch(err){$('loginStatus').textContent=err.message||'Sign-in failed.'}finally{signingIn=false;btn.disabled=false;btn.textContent='Sign in securely'}});
+async function logout(){clearUnlockFlags();$('viewerFrame').src='about:blank';try{if(auth)await auth.signOut()}finally{showLogin('You have been logged out. Please sign in again.')}}
+$('logoutBtn').addEventListener('click',logout);$('viewerLogout').addEventListener('click',logout);
+function loadStudentCount(){if(studentCountStarted||!db)return;studentCountStarted=true;db.collection('users').where('role','==','student').get().then(s=>{$('studentCount').textContent=s.size+' students enrolled'}).catch(()=>$('studentCount').textContent='')}
+$('hubSearch').addEventListener('input',()=>{const q=norm($('hubSearch').value);let n=0;tiles.forEach(t=>{const show=!q||norm(t.textContent+' '+t.dataset.keys).includes(q);t.classList.toggle('hidden',!show);if(show)n++});$('hubCount').textContent=n+' module'+(n===1?'':'s');$('noResults').classList.toggle('hidden',n>0)});
+function openModule(tile){if(!auth||!auth.currentUser||norm(auth.currentUser.email)!==ADMIN){showLogin('Your session expired. Please sign in again.');return}const page=tile.dataset.page;$('viewerTitle').textContent=tile.dataset.title;$('home').classList.add('hidden');$('viewer').classList.add('open');$('viewerFrame').src=page}
+tiles.forEach(t=>t.addEventListener('click',()=>openModule(t)));
+function closeModule(){ $('viewerFrame').src='about:blank';$('viewer').classList.remove('open');$('home').classList.remove('hidden') }
+$('backBtn').addEventListener('click',closeModule);
+window.addEventListener('message',e=>{if(e.origin!==location.origin)return;if(e.data&&e.data.type==='vp-close')closeModule()});
+window.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('viewer').classList.contains('open'))closeModule()});
+// Clear the UI unlock on reload/close. Reload path also signs out Firebase, so the next open requires password.
+window.addEventListener('pagehide',clearUnlockFlags);
+window.addEventListener('beforeunload',clearUnlockFlags);
+startFreshSession();
 })();
 </script>
-</body>
-</html>
+</body></html>
