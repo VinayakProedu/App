@@ -88,10 +88,11 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
 @media (max-width: 640px){
   .app-main{padding:14px}
 }
+body.auth-pending #loginWrap,body.auth-pending #loginScreen{visibility:hidden!important;pointer-events:none!important}
 </style>
 <base target="_blank">
 </head>
-<body>
+<body class="auth-pending">
 
 <!-- LOGIN -->
 <div class="login-wrap" id="loginWrap">
@@ -215,6 +216,7 @@ el.logoutBtn.addEventListener('click', async () => { await auth.signOut(); locat
 el.closeBtn.addEventListener('click', () => { window.location.href = 'index.html'; });
 
 auth.onAuthStateChanged(user => {
+    document.body.classList.remove("auth-pending");
   if(user){
     const isAdmin = norm(user.email) === norm(ADMIN_EMAIL);
     el.loginWrap.classList.add('hidden');

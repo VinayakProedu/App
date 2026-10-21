@@ -102,9 +102,10 @@ tbody tr:hover{background:#fffafa}
 #batchPanel .batch-item strong{color:var(--garnet)}
 #batchPanel .batch-item .btn-danger{background:#fff0f0;color:var(--mahogany);border-color:#efbfc0}
 #batchPanel .batch-item .btn-danger:hover{background:#ffe0e1}
+body.auth-pending #loginWrap,body.auth-pending #loginScreen{visibility:hidden!important;pointer-events:none!important}
 </style>
 </head>
-<body>
+<body class="auth-pending">
 <section class="login-screen" id="loginScreen">
   <div class="login-card">
     <img class="logo" src="https://pasteimg.com/images/2026/03/31/WhatsApp-Image-2026-03-19-at-6.49.19-PM.jpg" alt="Vinayak ProEdu">
@@ -198,6 +199,7 @@ async function signIn() {
 $('adminLoginBtn').addEventListener('click', signIn);
 $('adminPassword').addEventListener('keydown', event => { if (event.key === 'Enter') signIn(); });
 auth.onAuthStateChanged(user => {
+    document.body.classList.remove("auth-pending");
   if (user && (user.email || '').toLowerCase() === ADMIN_EMAIL && localStorage.getItem('adminUnlocked') === '1') {
     showApp(); initialise();
   } else {

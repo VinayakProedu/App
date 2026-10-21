@@ -136,6 +136,7 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
   .countdown-box{flex-wrap:wrap;}
 }
 .hidden{display:none !important;}
+body.auth-pending #loginWrap,body.auth-pending #loginScreen{visibility:hidden!important;pointer-events:none!important}
 </style>
 <style>
 /* Sidebar removed: full-width clean layout */
@@ -184,7 +185,7 @@ body{background:var(--smoke);color:var(--ink)}
 @media(max-width:640px){.app-main{padding:14px}.app-topbar{align-items:flex-start}.filter-bar>*{min-width:0;max-width:100%}.filter-bar select{width:100%}.live-card{padding:15px}}
 </style>
 </head>
-<body>
+<body class="auth-pending">
 <button id="logoutBtn" type="button" style="position:fixed;top:14px;right:16px;z-index:12000;border:none;border-radius:999px;padding:9px 18px;background:#fef2f2;color:#b42318;border:1px solid #fecaca;font:700 13px 'DM Sans',sans-serif;cursor:pointer;box-shadow:0 4px 14px rgba(13,27,64,.12);">🚪 Logout</button>
 
 
@@ -306,6 +307,7 @@ body{background:var(--smoke);color:var(--ink)}
   });
 
   auth.onAuthStateChanged(async user => {
+    document.body.classList.remove("auth-pending");
     var lw = document.getElementById('loginWrap');
     var ap = document.getElementById('appShell');
     if(user && user.email === ADMIN_EMAIL){

@@ -70,6 +70,7 @@ a{text-decoration:none;color:inherit;}
 .empty-box{padding:20px;border:1px dashed #d9e2ef;border-radius:14px;background:#fbfdff;color:#5d6e83;text-align:center;}
 .hint{font-size:.85rem;color:var(--muted);line-height:1.6;background:#f8fafc;border:1px solid #e5e7eb;border-radius:12px;padding:12px 14px;margin-bottom:14px;}
 @media(max-width:900px){.app-sidebar{width:100%;height:auto;position:relative;}.app-main{margin-left:0;}.app-grid-2{grid-template-columns:1fr;}.app-shell{flex-direction:column;}}
+body.auth-pending #loginWrap,body.auth-pending #loginScreen{visibility:hidden!important;pointer-events:none!important}
 </style>
 <style>
 /* Sidebar removed: full-width clean layout */
@@ -108,7 +109,7 @@ body{background:#F5F3F4;color:#161A1D}
 .stats-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:18px 0 22px}.stat-card{background:#fff;border:1px solid #eadbdc;border-radius:16px;padding:17px 19px;box-shadow:0 6px 20px rgba(102,7,8,.04)}.stat-card span{display:block;color:#6B6B6B;font-size:.8rem}.stat-card strong{display:block;color:#660708;font-size:1.8rem;margin-top:5px}.list-tools,.bulk-tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}.selection-search{min-width:120px;flex:1;padding:9px 11px;border:1px solid #eadbdc;border-radius:10px;background:#fff;color:#161A1D;font:inherit}.small-btn{padding:8px 10px;border:1px solid #eadbdc;background:#FDF0F0;color:#660708;border-radius:9px;font-weight:700;font-size:.78rem;cursor:pointer}.bulk-tools{font-size:.8rem;color:#6B6B6B}.teacher-row[hidden]{display:none!important}@media(max-width:700px){.stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.list-tools>*{width:100%}}
 </style>
 </head>
-<body>
+<body class="auth-pending">
 
 <div class="login-wrap" id="loginWrap" style="display:none">
   <div class="login-box">
@@ -181,10 +182,16 @@ body{background:#F5F3F4;color:#161A1D}
   };
 
   auth.onAuthStateChanged(async user => {
+    document.body.classList.remove("auth-pending");
     if(user && user.email === ADMIN_EMAIL){
       $('loginWrap').classList.add('hidden'); $('appShell').classList.remove('hidden');
       localStorage.setItem('adminUnlocked','1'); sessionStorage.setItem('adminUnlocked','1');
-      await loadAll();
+      try { await loadAll(); }
+      catch (err) {
+        const list = $('tList');
+        if (list) list.innerHTML = '<div class="empty-box" style="color:#b42318">Could not load teacher data: ' + esc(err.message || 'Firestore request failed') + '. Check Firebase configuration, permissions, and the users/lectures collections.</div>';
+        console.error('Teacher page load failed:', err);
+      }
     } else {
       if(user) auth.signOut();
       $('loginWrap').classList.remove('hidden');$('loginWrap').style.display=''; $('appShell').classList.add('hidden');
@@ -199,10 +206,22 @@ body{background:#F5F3F4;color:#161A1D}
 
   let allSubjects = [];
   async function loadAll(){
-    const [lSnap, uSnap] = await Promise.all([
-      db.collection('lectures').limit(500).get(),
-      db.collection('users').where('role','==','teacher').get()
-    ]);
+    let lSnap, teacherDocs;
+    try {
+      [lSnap, teacherDocs] = await Promise.all([
+        db.collection('lectures').limit(500).get(),
+        db.collection('users').where('role','==','teacher').get().then(s => s.docs)
+      ]);
+    } catch (queryError) {
+      // Some existing projects store teacher profiles with legacy role values.
+      // Fall back to reading user profiles and filter known teacher-role variants.
+      lSnap = await db.collection('lectures').limit(500).get();
+      const usersSnapshot = await db.collection('users').get();
+      teacherDocs = usersSnapshot.docs.filter(d => {
+        const role = String((d.data() || {}).role || '').trim().toLowerCase();
+        return ['teacher','faculty','instructor'].includes(role);
+      });
+    }
     const set = new Set();
     lSnap.docs.forEach(d => { const s = d.data().subject; if(s) set.add(s); });
     allSubjects = [...set].sort();
@@ -214,7 +233,7 @@ body{background:#F5F3F4;color:#161A1D}
     $('tSubjects').innerHTML = allSubjects.length ? allSubjects.map(s =>
       `<label class="enrolment-option"><input type="checkbox" class="t-subj" value="${esc(s)}"><span>${esc(s)}</span></label>`).join('')
       : '<span style="font-size:.85rem;color:var(--muted)">No subjects found yet — upload a lecture first, or type subjects when adding lectures later. You can still add the teacher and tick subjects afterward.</span>';
-    const teachers = uSnap.docs.map(d => ({id:d.id, ...d.data()}));
+    const teachers = teacherDocs.map(d => ({id:d.id, ...d.data()}));
     $('tList').innerHTML = teachers.length ? teachers.map(t => `
       <div class="mini-item">
         <strong style="color:var(--navy)">${esc(t.name || t.email)}</strong>
