@@ -9,7 +9,7 @@
 <title>Manage Teachers | Vinayak ProEdu Admin</title>
 <link rel="icon" type="image/png" href="https://pasteimg.com/images/2026/03/31/WhatsApp-Image-2026-03-19-at-6.49.19-PM.jpg">
 <link rel="manifest" href="./manifest.json">
-<meta name="theme-color" content="#0D1B40">
+<meta name="theme-color" content="#660708">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -77,6 +77,36 @@ a{text-decoration:none;color:inherit;}
 .app-main{margin-left:0 !important;}
 @media(max-width:900px){.app-main{margin-left:0 !important;}}
 </style>
+
+<style id="vinayak-brand-refresh">
+:root{--navy:#660708;--blue:#A4161A;--gold:#A4161A;--gold-lt:#E5383B;--ink:#161A1D;--muted:#6B6B6B}
+body{background:#F5F3F4;color:#161A1D}
+.login-wrap{background:radial-gradient(ellipse at top right,#A4161A 0%,#660708 58%,#161A1D 100%)}
+.login-box{border-radius:24px;background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.22)}
+.login-field input:focus{border-color:#E5383B;box-shadow:0 0 0 3px rgba(229,56,59,.18)}
+.login-btn,.primary-btn{background:linear-gradient(135deg,#660708,#A4161A);color:#fff;box-shadow:0 7px 18px rgba(102,7,8,.15)}
+.secondary-btn{background:#FDF0F0;color:#660708;border:1px solid #f0cfd0}
+.app-main{padding:clamp(16px,3vw,36px);max-width:1800px;margin-inline:auto}
+.app-topbar{border-bottom:1px solid #eadbdc;padding-bottom:20px;margin-bottom:24px}
+.app-title{color:#660708;font-size:clamp(1.6rem,2.5vw,2.15rem)}
+.app-sub{margin-top:6px}
+.app-card{border:1px solid #eadbdc;border-radius:20px;box-shadow:0 8px 26px rgba(102,7,8,.06)}
+.subject-title{color:#660708}
+.portal-field input,.portal-field select,.portal-field textarea{border-color:#e3d4d5;border-radius:12px}
+.portal-field input:focus,.portal-field select:focus,.portal-field textarea:focus{outline:none;border-color:#A4161A;box-shadow:0 0 0 3px rgba(164,22,26,.11)}
+.ghost-btn{background:#FDF0F0;color:#660708;border:1px solid #f0cfd0}
+.enrolment-grid{padding:10px;border:1px solid #eadbdc;background:#fcf9f9;border-radius:14px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.enrolment-option{background:#fff;border-color:#eadbdc;color:#161A1D;border-radius:11px;transition:background .15s,border-color .15s}
+.enrolment-option:has(input:checked){background:#FDF0F0;border-color:#A4161A}
+.enrolment-option input{accent-color:#A4161A}
+.assignment-label{display:block;font-size:.74rem;font-weight:800;letter-spacing:.8px;color:#660708;margin:12px 0 4px}
+.mini-list{max-height:680px}
+.mini-item{border-color:#eadbdc;border-radius:14px;padding:16px}
+.hint{background:#FDF0F0;border-color:#f0d6d7;color:#5d4c4d}
+.danger-btn{background:#fff1f1;color:#A4161A;border-color:#f2c3c5}
+@media(max-width:900px){.app-grid-2{grid-template-columns:1fr}}
+.stats-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:18px 0 22px}.stat-card{background:#fff;border:1px solid #eadbdc;border-radius:16px;padding:17px 19px;box-shadow:0 6px 20px rgba(102,7,8,.04)}.stat-card span{display:block;color:#6B6B6B;font-size:.8rem}.stat-card strong{display:block;color:#660708;font-size:1.8rem;margin-top:5px}.list-tools,.bulk-tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}.selection-search{min-width:120px;flex:1;padding:9px 11px;border:1px solid #eadbdc;border-radius:10px;background:#fff;color:#161A1D;font:inherit}.small-btn{padding:8px 10px;border:1px solid #eadbdc;background:#FDF0F0;color:#660708;border-radius:9px;font-weight:700;font-size:.78rem;cursor:pointer}.bulk-tools{font-size:.8rem;color:#6B6B6B}.teacher-row[hidden]{display:none!important}@media(max-width:700px){.stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.list-tools>*{width:100%}}
+</style>
 </head>
 <body>
 
@@ -106,13 +136,15 @@ a{text-decoration:none;color:inherit;}
     2️⃣ Come back here, enter that email → tick their subjects → <b>Add as Teacher</b><br>
     3️⃣ Click <b>📧 Send set-password email</b> so the teacher can choose their own password (they use the same secret admin link to log in)</div>
 
+    <section class="stats-grid"><div class="stat-card"><span>Total teachers</span><strong id="statTotal">—</strong></div><div class="stat-card"><span>Active teachers</span><strong id="statActive">—</strong></div><div class="stat-card"><span>Inactive teachers</span><strong id="statInactive">—</strong></div><div class="stat-card"><span>Subjects covered</span><strong id="statSubjects">—</strong></div></section>
     <div class="app-grid-2">
       <div class="app-card">
         <h3 class="subject-title">➕ Add / Update Teacher</h3>
         <div class="portal-field"><label>Teacher Email *</label><input id="tEmail" type="email" placeholder="teacher@gmail.com"></div>
         <div class="portal-field"><label>Display Name</label><input id="tName" type="text" placeholder="e.g. CA Priya Sharma"></div>
-        <label style="font-size:.74rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px;">Assigned Subjects * (they can only manage these)</label>
+        <label style="font-size:.74rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px;">ASSIGNED BATCHES (where this teacher can publish)</label>
         <div class="enrolment-grid" id="tBatches"><span style="font-size:.85rem;color:var(--muted)">Loading batches…</span></div>
+        <label class="assignment-label">ASSIGNED SUBJECTS (permissions for subject-based tools)</label>
         <div class="enrolment-grid" id="tSubjects"><span style="font-size:.85rem;color:var(--muted)">Loading subjects…</span></div>
         <div style="display:flex;gap:10px;flex-wrap:wrap;">
           <button class="primary-btn" type="button" onclick="saveTeacher()">💾 Save Teacher</button>
@@ -123,6 +155,7 @@ a{text-decoration:none;color:inherit;}
       </div>
       <div class="app-card">
         <h3 class="subject-title">👨‍🏫 Existing Teachers</h3>
+        <div class="list-tools"><input id="teacherSearch" class="selection-search" placeholder="Search name or email…"><select id="teacherStatusFilter" class="selection-search"><option value="all">All statuses</option><option value="active">Active teachers</option><option value="inactive">Inactive / other roles</option></select><button class="small-btn" type="button" onclick="selectTeachers(true)">Select all</button><button class="small-btn" type="button" onclick="selectTeachers(false)">Clear</button></div><div class="bulk-tools"><button type="button" class="small-btn" onclick="bulkReset()">Send reset emails</button><button type="button" class="small-btn" onclick="bulkDeactivate()">Deactivate selected</button><span id="selectedCount">0 selected</span></div>
         <div id="tList" class="mini-list"><div class="empty-box">Loading…</div></div>
       </div>
     </div>
@@ -186,7 +219,7 @@ a{text-decoration:none;color:inherit;}
       <div class="mini-item">
         <strong style="color:var(--navy)">${esc(t.name || t.email)}</strong>
         <span style="font-size:.8rem;color:var(--muted)"> · ${esc(t.email)}</span><br>
-        <span style="font-size:.82rem">${(t.assignedSubjects||[]).map(s=>`<span style="background:#eef4ff;color:#1e3c72;border-radius:999px;padding:2px 8px;font-size:.72rem;font-weight:700;margin:2px 4px 2px 0;display:inline-block">${esc(s)}</span>`).join('') || '<i style="color:#9ca3af">no subjects</i>'}</span>
+        <span style="font-size:.82rem">${(t.assignedSubjects||[]).map(s=>`<span style="background:#FDF0F0;color:#660708;border-radius:999px;padding:2px 8px;font-size:.72rem;font-weight:700;margin:2px 4px 2px 0;display:inline-block">${esc(s)}</span>`).join('') || '<i style="color:#9ca3af">no subjects</i>'}</span>
         <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
           <button class="secondary-btn" style="padding:7px 12px;font-size:.8rem;" onclick="sendTeacherReset('${esc(t.email)}')">📧 Set-password email</button>
           <button class="danger-btn" style="padding:7px 12px;font-size:.8rem;" onclick="removeTeacher('${t.id}','${esc(t.email)}')">Remove</button>
@@ -284,6 +317,12 @@ a{text-decoration:none;color:inherit;}
     }catch(e){ st.textContent = e.message; st.classList.add('error'); }
   };
 
+  function filterTeachers(){const q=$('teacherSearch').value.toLowerCase().trim(),s=$('teacherStatusFilter').value;document.querySelectorAll('.teacher-row').forEach(row=>{const txt=row.textContent.toLowerCase();const active=row.dataset.status==='active';row.hidden=!txt.includes(q)||(s==='active'&&!active)||(s==='inactive'&&active);});updateSelectedCount();}
+  $('teacherSearch').addEventListener('input',filterTeachers);$('teacherStatusFilter').addEventListener('change',filterTeachers);
+  window.selectTeachers=function(on){document.querySelectorAll('.teacher-select').forEach(i=>{if(!i.closest('.teacher-row').hidden)i.checked=on;});updateSelectedCount();};
+  window.updateSelectedCount=function(){const el=$('selectedCount');if(el)el.textContent=document.querySelectorAll('.teacher-select:checked').length+' selected';};
+  window.bulkReset=async function(){const chosen=[...document.querySelectorAll('.teacher-select:checked')].map(i=>allTeachers.find(t=>t.id===i.value)).filter(Boolean);if(!chosen.length)return alert('Select at least one teacher.');if(!confirm('Send password reset emails to '+chosen.length+' teacher(s)?'))return;let n=0;for(const t of chosen){try{await auth.sendPasswordResetEmail(t.email);n++;}catch(e){}}alert('Reset emails sent: '+n+' of '+chosen.length);};
+  window.bulkDeactivate=async function(){const ids=[...document.querySelectorAll('.teacher-select:checked')].map(i=>i.value);if(!ids.length)return alert('Select at least one teacher.');if(!confirm('Deactivate '+ids.length+' teacher profile(s)?'))return;try{for(const id of ids)await db.collection('users').doc(id).update({role:'trial',assignedSubjects:[],assignedBatches:[]});await loadAll();alert('Selected teachers deactivated.');}catch(e){alert(e.message);}};
   window.sendTeacherReset = function(email){
     auth.sendPasswordResetEmail(email).then(()=>alert('Password-reset email sent to '+email)).catch(e=>alert(e.message));
   };

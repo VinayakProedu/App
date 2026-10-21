@@ -7,7 +7,7 @@
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="permissions-policy" content="camera=(), microphone=(), geolocation=()">
 <link rel="manifest" href="./manifest.json">
-<meta name="theme-color" content="#0D1B40">
+<meta name="theme-color" content="#660708">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 
@@ -143,6 +143,46 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
 .app-main{margin-left:0 !important;}
 @media(max-width:900px){.app-main{margin-left:0 !important;}}
 </style>
+
+<style id="vinayak-brand-refresh">
+:root{--navy:#660708;--navy-mid:#A4161A;--blue:#A4161A;--gold:#A4161A;--gold-lt:#E5383B;--amber:#E5383B;--ink:#161A1D;--muted:#6B6B6B;--smoke:#F5F3F4;--white:#FFFFFF;--shadow-sm:0 8px 26px rgba(102,7,8,.07);--shadow-md:0 18px 48px rgba(102,7,8,.13);}
+body{background:var(--smoke);color:var(--ink)}
+.login-wrap{background:radial-gradient(ellipse at top right,#A4161A 0%,#660708 58%,#161A1D 100%)}
+.login-box{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.22);border-radius:24px}
+.login-field input:focus{border-color:#E5383B;box-shadow:0 0 0 3px rgba(229,56,59,.2)}
+.login-btn,.primary-btn{background:linear-gradient(135deg,#660708,#A4161A);color:#fff;box-shadow:0 7px 18px rgba(102,7,8,.17)}
+.login-btn:hover,.primary-btn:hover{background:linear-gradient(135deg,#A4161A,#E5383B)}
+.app-main{padding:clamp(16px,3vw,36px);max-width:1800px;margin-inline:auto}
+.app-topbar{border-bottom:1px solid #eadbdc;padding-bottom:20px;margin-bottom:24px}
+.app-title{color:#660708;font-size:clamp(1.6rem,2.5vw,2.2rem)}
+.app-sub{margin-top:7px;max-width:700px}
+.app-grid-2{grid-template-columns:minmax(320px,.92fr) minmax(0,1.08fr);gap:20px;align-items:start}
+.app-card{border:1px solid #eadbdc;border-radius:20px;padding:clamp(17px,2.2vw,26px);box-shadow:0 8px 26px rgba(102,7,8,.06)}
+.subject-title{color:#660708;font-size:1.25rem}
+.form-intro{font-size:.9rem;color:var(--muted);margin:-6px 0 18px}
+.portal-field label{color:#5f4b4c;letter-spacing:.7px}
+.portal-field input,.portal-field select,.portal-field textarea,.filter-bar select,.practice-search{border-color:#e3d4d5;border-radius:12px;background:#fff}
+.portal-field input:focus,.portal-field select:focus,.portal-field textarea:focus,.filter-bar select:focus,.practice-search:focus{outline:none;border-color:#A4161A;box-shadow:0 0 0 3px rgba(164,22,26,.11)}
+.secondary-btn{background:#FDF0F0;color:#660708;border:1px solid #f0cfd0}
+.ghost-btn{background:#FDF0F0;color:#660708;border:1px solid #f0cfd0}
+.danger-btn{background:#fff1f1;color:#A4161A;border-color:#f2c3c5}
+.batch-select-grid{background:#fff;border-color:#eadbdc;max-height:260px;padding:12px}
+.batch-option{border-color:#eadbdc;border-radius:12px;color:#161A1D;transition:background .15s,border-color .15s}
+.batch-option:has(input:checked){background:#FDF0F0;border-color:#A4161A}
+.batch-option input{accent-color:#A4161A}
+.live-card{border-color:#eadbdc;border-radius:16px;padding:20px;box-shadow:0 4px 16px rgba(22,26,29,.03)}
+.live-card.upcoming{border-left:4px solid #E5383B}
+.live-card.past{border-left:4px solid #c5babb;background:#faf9f9}
+.live-badge{background:#FDF0F0;color:#A4161A}
+.live-badge.past{background:#F5F3F4;color:#6B6B6B}
+.live-title{color:#660708;font-size:1.15rem}
+.countdown-box .cd-unit{background:linear-gradient(135deg,#660708,#A4161A)}
+.empty-box{background:#fcf9f9;border-color:#eadbdc;color:#6B6B6B}
+#logoutBtn{background:#fff1f1!important;color:#A4161A!important;border-color:#f2c3c5!important}
+.required-mark{color:#E5383B;font-style:normal}
+@media(max-width:1000px){.app-grid-2{grid-template-columns:1fr}}
+@media(max-width:640px){.app-main{padding:14px}.app-topbar{align-items:flex-start}.filter-bar>*{min-width:0;max-width:100%}.filter-bar select{width:100%}.live-card{padding:15px}}
+</style>
 </head>
 <body>
 <button id="logoutBtn" type="button" style="position:fixed;top:14px;right:16px;z-index:12000;border:none;border-radius:999px;padding:9px 18px;background:#fef2f2;color:#b42318;border:1px solid #fecaca;font:700 13px 'DM Sans',sans-serif;cursor:pointer;box-shadow:0 4px 14px rgba(13,27,64,.12);">🚪 Logout</button>
@@ -168,8 +208,8 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
   <main class="app-main">
     <div class="app-topbar">
       <div>
-        <h1 class="app-title">Live Class Scheduler</h1>
-        <div class="app-sub">Schedule Zoom, Google Meet, or FreeConferenceCall sessions</div>
+        <h1 class="app-title">Live Classes</h1>
+        <div class="app-sub">Schedule sessions and assign them directly to your existing batches.</div>
       </div>
       <button class="ghost-btn" id="closeBtn" type="button">← Dashboard</button>
     </div>
@@ -177,22 +217,22 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
     <div class="app-grid-2">
       <!-- LEFT: Schedule Form -->
       <div class="app-card">
-        <h3 class="subject-title">Schedule New Live Class</h3>
+        <h3 class="subject-title">Schedule a session</h3>
+        <p class="form-intro">Choose the batch or batches first. The class will be associated with those batches.</p>
 
         <div class="portal-field"><label>Class Title *</label><input type="text" id="liveTitle" placeholder="e.g. FR Live Doubt Session - Conceptual Framework"></div>
-        <div class="portal-field"><label>Subject / Paper Code *</label><input type="text" id="liveSubject" placeholder="e.g. FR, FM, SBL..."></div>
 
         <div class="app-grid-2" style="grid-template-columns:1fr 1fr;">
           <div class="portal-field"><label>Date *</label><input type="date" id="liveDate"></div>
           <div class="portal-field"><label>Time *</label><input type="time" id="liveTime"></div>
         </div>
 
-        <div class="portal-field"><label>Meeting Link *</label><input type="text" id="liveLink" placeholder="https://zoom.us/j/... or https://meet.google.com/..."></div>
+        <div class="portal-field"><label>Meeting Link *</label><input type="url" id="liveLink" inputmode="url" placeholder="https://zoom.us/j/... or https://meet.google.com/..." autocomplete="url"></div>
 
         <!-- BATCH SELECTOR -->
         <div class="portal-field">
           <label style="display:flex;justify-content:space-between;align-items:center;">
-            <span>Assign to Batches</span>
+            <span>Assign to batches <em class="required-mark">*</em></span>
             <span id="batchLoadStatus" style="font-size:0.72rem;color:var(--muted);text-transform:none;letter-spacing:0;font-weight:500;"></span>
           </label>
           <div id="liveBatchSelect" class="batch-select-grid">
@@ -211,7 +251,7 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
 
       <!-- RIGHT: Upcoming & Past -->
       <div class="app-card">
-        <h3 class="subject-title">All Live Classes</h3>
+        <h3 class="subject-title">Scheduled sessions</h3>
         <div class="filter-bar">
           <select id="batchFilter" onchange="renderClasses()"><option value="">All Batches</option></select>
           <button class="ghost-btn" type="button" onclick="window.loadBatches()" style="padding:8px 12px;font-size:0.85rem;">🔄 Refresh Batches</button>
@@ -299,7 +339,7 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
     }
     box.innerHTML = batches.map(b => `
       <label class="batch-option">
-        <input type="checkbox" value="${esc(b.code)}" ${selected.includes(b.code)?'checked':''}>
+        <input type="checkbox" value="${esc(b.code || b.id)}" ${selected.includes(String(b.code || b.id))?'checked':''}>
         <span style="word-break:break-word;">${esc(b.code)}<br><span style="font-size:0.75rem;color:var(--muted);font-weight:500;">${esc(b.name||'')}</span></span>
       </label>
     `).join('');
@@ -312,19 +352,25 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
   /* Schedule */
   document.getElementById('scheduleBtn').addEventListener('click', async () => {
     const title = val('liveTitle');
-    const subject = val('liveSubject');
-    const date = val('liveDate');
+        const date = val('liveDate');
     const time = val('liveTime');
     const link = val('liveLink');
     const desc = val('liveDesc');
     const batchCodes = getSelectedBatchCodes('liveBatchSelect');
 
-    if(!title || !subject || !date || !time || !link){ setStatus(document.getElementById('scheduleStatus'), 'Fill all required fields.', true); return; }
-    if(window.__isTeacher && !(window.__teacherSubjects||[]).includes(subject)){ setStatus(document.getElementById('scheduleStatus'), 'Only your assigned subjects: ' + (window.__teacherSubjects||[]).join(', '), true); return; }
+    if(!title || !date || !time || !link){ setStatus(document.getElementById('scheduleStatus'), 'Enter a title, date, time and meeting link.', true); return; }
+    if(!/^https?:\/\//i.test(link)){ setStatus(document.getElementById('scheduleStatus'), 'Enter a valid meeting URL beginning with https:// or http://.', true); return; }
+    if(!batchCodes.length){ setStatus(document.getElementById('scheduleStatus'), 'Select at least one batch for this session.', true); return; }
+    const selectedBatches = allBatches.filter(b => batchCodes.includes(String(b.code || b.id || '')));
+    const legacySubjects = [...new Set(selectedBatches.flatMap(b => [b.subject, b.subjectCode, b.paperCode, ...(Array.isArray(b.subjects) ? b.subjects : [])]).filter(v => typeof v === 'string' && v.trim()).map(v => v.trim()))];
+    // Compatibility: only derive a subject if batch metadata explicitly provides one. Never guess from a batch name/code.
+    const legacySubject = legacySubjects.length === 1 ? legacySubjects[0] : '';
+    if(legacySubjects.length > 1){ setStatus(document.getElementById('scheduleStatus'), 'Selected batches have conflicting subject metadata. Schedule them separately so the legacy subject can be derived safely.', true); return; }
 
     try{
       const payload = {
-        title, subject,
+        title,
+        ...(legacySubject ? { subject: legacySubject } : {}),
         lectureDate: date,
         lectureTime: time,
         meetingLink: link,
@@ -336,7 +382,6 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
       setStatus(document.getElementById('scheduleStatus'), 'Live class scheduled ✅');
 
       document.getElementById('liveTitle').value = '';
-      document.getElementById('liveSubject').value = '';
       document.getElementById('liveDate').value = '';
       document.getElementById('liveTime').value = '';
       document.getElementById('liveLink').value = '';
@@ -349,7 +394,6 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
 
   document.getElementById('clearBtn').addEventListener('click', () => {
     document.getElementById('liveTitle').value = '';
-    document.getElementById('liveSubject').value = '';
     document.getElementById('liveDate').value = '';
     document.getElementById('liveTime').value = '';
     document.getElementById('liveLink').value = '';
@@ -363,9 +407,20 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
   let allBatches = [];
 
   async function loadClasses(){
-    const snap = await db.collection('lectures').where('meetingLink','!=','').orderBy('uploadedAt','desc').limit(200).get();
-    allClasses = snap.docs.map(d => ({id: d.id, ...d.data()}));
-    renderClasses();
+    const box = document.getElementById('liveList');
+    if(box) box.innerHTML = '<div class="empty-box">Loading live classes…</div>';
+    try {
+      // Avoid requiring a composite index for meetingLink + uploadedAt.
+      // Sort and filter client-side so this page works with the current Firestore indexes.
+      const snap = await db.collection('lectures').orderBy('uploadedAt','desc').limit(300).get();
+      allClasses = snap.docs
+        .map(d => ({id: d.id, ...d.data()}))
+        .filter(c => typeof c.meetingLink === 'string' && c.meetingLink.trim() !== '');
+      renderClasses();
+    } catch(err) {
+      console.error('loadClasses error', err);
+      if(box) box.innerHTML = '<div class="empty-box">Could not load live classes. Check Firestore permissions and the browser console, then retry.</div>';
+    }
   }
 
   async function loadBatches(){
@@ -382,8 +437,8 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
       if(sel){
         const current = sel.value;
         sel.innerHTML = '<option value="">All Batches</option>' + 
-          batches.map(b => `<option value="${esc(b.code)}">${esc(b.code)} - ${esc(b.name || 'Unnamed')}</option>`).join('');
-        if(current && batches.some(b => b.code === current)) sel.value = current;
+          batches.map(b => { const code = String(b.code || b.id || ''); return `<option value="${esc(code)}">${esc(code)} - ${esc(b.name || 'Unnamed')}</option>`; }).join('');
+        if(current && batches.some(b => String(b.code || b.id || '') === current)) sel.value = current;
       }
       if(statusEl) statusEl.textContent = batches.length ? `${batches.length} ready` : 'None';
       if(filterStatus) filterStatus.textContent = batches.length ? `${batches.length} batch(es) ready` : 'No batches found';
@@ -396,18 +451,19 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
   window.loadBatches = loadBatches;
 
   window.renderClasses = function(){
+    let sourceClasses = allClasses;
     if(window.__isTeacher){
       const subs = window.__teacherSubjects || [];
-      allClasses = allClasses.filter(c => subs.includes(c.subject));
+      sourceClasses = sourceClasses.filter(c => subs.includes(c.subject));
     }
     const box = document.getElementById('liveList');
     const q = (document.getElementById('liveSearch')?.value || '').toLowerCase();
     const batchFilter = document.getElementById('batchFilter')?.value || '';
 
-    let filtered = allClasses.filter(c => {
+    let filtered = sourceClasses.filter(c => {
       if(batchFilter && !(c.batchCodes || []).includes(batchFilter)) return false;
       if(!q) return true;
-      return [c.title,c.subject,c.description].join(' ').toLowerCase().includes(q);
+      return [c.title,c.subject,c.description,(c.batchCodes||[]).join(' ')].join(' ').toLowerCase().includes(q);
     });
 
     const now = new Date();
@@ -440,7 +496,7 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
         <div class="live-badge ${isUpcoming ? '' : 'past'}">${isUpcoming ? '🔴 UPCOMING' : '✅ COMPLETED'}</div>
         <div class="live-title">${esc(c.title || 'Untitled')}</div>
         <div class="live-meta">
-          <strong>${esc(c.subject || 'General')}</strong><br>
+          ${c.subject ? `<strong>${esc(c.subject)}</strong><br>` : '<strong>Batch-assigned session</strong><br>'}
           📅 ${esc(c.lectureDate || '')} · 🕒 ${esc(c.lectureTime || '')}<br>
           ${c.batchCodes?.length ? `👥 Batches: ${esc(c.batchCodes.join(', '))}<br>` : ''}
           ${c.description ? `📝 ${esc(c.description)}<br>` : ''}
