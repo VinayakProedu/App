@@ -23,6 +23,10 @@ const attention=[...list].sort((a,b)=>a.average-b.average).slice(0,4);$('attenti
 const papers={};attempts.forEach(a=>{const key=String(a.subject||a.paperName||a.paperTitle||'Uncategorised');const x=papers[key]||(papers[key]={n:0,ps:[],ids:new Set()});x.n++;x.ps.push(a._pct);x.ids.add(String(a.userId||a.studentId))});$('paperRows').innerHTML=Object.entries(papers).sort((a,b)=>avg(b[1].ps)-avg(a[1].ps)).map(([k,v])=>`<tr><td>${esc(k)}</td><td>${v.n}</td><td>${fmt(avg(v.ps))}</td><td>${v.ids.size}</td></tr>`).join('')||'<tr><td colspan="4" class="empty">No paper-level records.</td></tr>';}
 ['batch','subject','basis','search','minAttempts'].forEach(id=>$(id).addEventListener(id==='search'?'input':'change',render));$('refresh').onclick=loadData;$('export').onclick=()=>{const trs=[...$('rows').querySelectorAll('tr')];const header=['Rank','Student','Email','Attempts','Average %','Best %','Latest %','Change pp','Volatility SD pp','Marks','Total'];const rows=trs.filter(tr=>tr.cells.length>1).map(tr=>[...tr.cells].map(td=>td.innerText.replace(/\s+/g,' ').trim()));const csv=[header,...rows.map(r=>r.length===9?[]:r)].filter(r=>r.length).map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\r\n');const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8;'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='vinayak-proedu-leaderboard.csv';a.click();URL.revokeObjectURL(url)};
 try{if(!firebase.apps.length)throw Error('firebase config missing');auth=firebase.auth();db=firebase.firestore();auth.onAuthStateChanged(user=>{
-    document.body.classList.remove("auth-pending");if(user&&(user.email||'').toLowerCase()===ADMIN){showApp();loadData()}else showLogin()})}catch(e){showLogin('Firebase initialisation failed: '+e.message)}
+    document.body.classList.remove('auth-pending');
+    const embedded = window.self !== window.top;
+    if(user && (user.email||'').toLowerCase()===ADMIN && (embedded || localStorage.getItem('adminUnlocked')==='1')){showApp();loadData()}
+    else { if(user && !embedded) auth.signOut(); showLogin(embedded?'Your Admin session is not active. Return to the dashboard and sign in again.':''); }
+  })}catch(e){showLogin('Firebase initialisation failed: '+e.message)}
 })();
 </script></body></html>

@@ -44,7 +44,14 @@ function startFreshSession(){
  auth=firebase.auth();db=firebase.firestore();
  auth.signOut().catch(()=>{}).finally(()=>{showLogin()});
 }
-$('loginForm').addEventListener('submit',async e=>{e.preventDefault();if(signingIn)return;signingIn=true;const btn=$('loginBtn');btn.disabled=true;btn.textContent='Verifying…';$('loginStatus').textContent='';try{const cred=await auth.signInWithEmailAndPassword($('adminEmail').value.trim(),$('adminPassword').value);if(norm(cred.user.email)!==ADMIN){await auth.signOut();throw new Error('This account is not authorised for the admin portal.')}localStorage.setItem('adminUnlocked','1');sessionStorage.setItem('adminUnlocked','1');showHome()}catch(err){$('loginStatus').textContent=err.message||'Sign-in failed.'}finally{signingIn=false;btn.disabled=false;btn.textContent='Sign in securely'}});
+$('loginForm').addEventListener('submit',async e=>{e.preventDefault();if(signingIn)return;signingIn=true;const btn=$('loginBtn');btn.disabled=true;btn.textContent='Verifying…';$('loginStatus').textContent='';try{
+ // Set the UI session marker before Firebase emits auth-state changes to embedded Admin tiles.
+ // This prevents child pages from racing the parent login and signing out the shared Firebase session.
+ localStorage.setItem('adminUnlocked','1');sessionStorage.setItem('adminUnlocked','1');
+ const cred=await auth.signInWithEmailAndPassword($('adminEmail').value.trim(),$('adminPassword').value);
+ if(norm(cred.user.email)!==ADMIN){clearUnlockFlags();await auth.signOut();throw new Error('This account is not authorised for the admin portal.')}
+ showHome()
+ }catch(err){clearUnlockFlags();$('loginStatus').textContent=err.message||'Sign-in failed.'}finally{signingIn=false;btn.disabled=false;btn.textContent='Sign in securely'}});
 async function logout(){clearUnlockFlags();$('viewerFrame').src='about:blank';try{if(auth)await auth.signOut()}finally{showLogin('You have been logged out. Please sign in again.')}}
 $('logoutBtn').addEventListener('click',logout);
 function loadStudentCount(){if(studentCountStarted||!db)return;studentCountStarted=true;db.collection('users').where('role','==','student').get().then(s=>{$('studentCount').textContent=s.size+' students enrolled'}).catch(()=>$('studentCount').textContent='')}

@@ -18,7 +18,7 @@ body.auth-pending #loginWrap,body.auth-pending #loginScreen{visibility:hidden!im
 </style>
 </head>
 <body class="auth-pending">
-<header class="topbar"><div class="brand"><div class="brand-mark">VP</div><div><h1>Vinayak ProEdu</h1><small>Admin · Doubt management</small></div></div><button id="logoutBtn" class="btn secondary hidden" type="button">Log out ↗</button></header>
+<header class="topbar"><div class="brand"><img class="brand-mark" src="https://pasteimg.com/images/2026/03/31/WhatsApp-Image-2026-03-19-at-6.49.19-PM.jpg" alt="Vinayak ProEdu logo"><div><h1>Vinayak ProEdu</h1><small>Admin · Doubt management</small></div></div><button id="logoutBtn" class="btn secondary hidden" type="button">Log out ↗</button></header>
 <section class="login" id="loginWrap"><div class="login-card"><div class="eyebrow">Admin workspace</div><h2>Student Doubts</h2><p>Sign in to manage batch questions and replies.</p><form id="loginForm"><label for="adminEmail">Admin email</label><input class="field" id="adminEmail" type="email" autocomplete="username" required placeholder="admin@email.com"><label for="adminPassword">Password</label><input class="field" id="adminPassword" type="password" autocomplete="current-password" required><button class="btn primary" id="loginBtn" type="submit">Sign in</button></form><div id="loginStatus" class="login-status" role="status"></div></div></section>
 <main class="wrap hidden" id="app">
   <div class="hero"><div><div class="eyebrow">Student support</div><h2>Doubts overview</h2><p>Choose a batch to review questions and respond to students.</p></div><button class="btn outline" id="dashboardBtn" type="button">← Dashboard</button></div>
@@ -51,7 +51,13 @@ function setSignedIn(user){$('loginWrap').classList.toggle('hidden',!!user);$('a
 $('loginForm').addEventListener('submit',async e=>{e.preventDefault();const btn=$('loginBtn');setBusy(btn,true,'Signing in…');$('loginStatus').textContent='';try{const cred=await auth.signInWithEmailAndPassword($('adminEmail').value.trim(),$('adminPassword').value);if((cred.user.email||'').toLowerCase()!==ADMIN_EMAIL){await auth.signOut();throw new Error('This account is not authorised for the admin portal.')}localStorage.setItem('adminUnlocked','1')}catch(err){$('loginStatus').textContent=err.message||'Sign-in failed.'}finally{setBusy(btn,false)}});
 $('logoutBtn').addEventListener('click',async()=>{localStorage.removeItem('adminUnlocked');await auth.signOut()});
 auth.onAuthStateChanged(user=>{
-    document.body.classList.remove("auth-pending");if(user&&(user.email||'').toLowerCase()===ADMIN_EMAIL&&localStorage.getItem('adminUnlocked')==='1')setSignedIn(user);else{if(user)auth.signOut();setSignedIn(null)}});
+    document.body.classList.remove('auth-pending');
+    const embedded = window.self !== window.top;
+    const authorized = user && (user.email||'').toLowerCase()===ADMIN_EMAIL;
+    // Embedded tiles rely on the authenticated parent dashboard; do not sign out the shared Firebase session.
+    if(authorized && (embedded || localStorage.getItem('adminUnlocked')==='1')) setSignedIn(user);
+    else { if(user && !embedded) auth.signOut(); setSignedIn(null); }
+  });
 $('dashboardBtn').addEventListener('click',()=>{try{if(window.self!==window.top){parent.postMessage({type:'vp-close'},'*');return}}catch(_){}location.href='index.html'});
 async function loadBatches(){const sel=$('batchSelect');try{const snap=await db.collection('batches').orderBy('createdAt','desc').get();batches=snap.docs.map(d=>({...d.data(),id:d.id}));const prev=sel.value;sel.innerHTML='<option value="">Choose a batch…</option>'+batches.map(b=>`<option value="${esc(b.code||'')}">${esc(b.name||'Unnamed batch')}</option>`).join('');if(prev&&batches.some(b=>b.code===prev))sel.value=prev;notice(batches.length?`${batches.length} batches available.`:'No batches found. Create a batch first.',batches.length?'':'error')}catch(err){notice('Could not load batches: '+err.message,'error')}}
 $('refreshBatches').addEventListener('click',loadBatches);

@@ -183,7 +183,7 @@ body{background:#F5F3F4;color:#161A1D}
 
   auth.onAuthStateChanged(async user => {
     document.body.classList.remove("auth-pending");
-    if(user && user.email === ADMIN_EMAIL){
+    if(user && (user.email || '').toLowerCase() === ADMIN_EMAIL.toLowerCase()){
       $('loginWrap').classList.add('hidden'); $('appShell').classList.remove('hidden');
       localStorage.setItem('adminUnlocked','1'); sessionStorage.setItem('adminUnlocked','1');
       try { await loadAll(); }
@@ -200,7 +200,7 @@ body{background:#F5F3F4;color:#161A1D}
   $('adminLoginBtn').onclick = async () => {
     try{
       const c = await auth.signInWithEmailAndPassword($('adminEmail').value.trim(), $('adminPassword').value);
-      if(c.user.email !== ADMIN_EMAIL){ await auth.signOut(); $('loginStatus').textContent='Admin only.'; return; }
+      if((c.user.email || '').toLowerCase() !== ADMIN_EMAIL.toLowerCase()){ await auth.signOut(); $('loginStatus').textContent='Admin only.'; return; }
     }catch(e){ $('loginStatus').textContent = e.message; }
   };
 
@@ -208,19 +208,18 @@ body{background:#F5F3F4;color:#161A1D}
   async function loadAll(){
     let lSnap, teacherDocs;
     try {
+      // Load the users collection once and normalize role values. A role==teacher query
+      // silently misses legacy values such as Faculty even when the query succeeds.
       [lSnap, teacherDocs] = await Promise.all([
         db.collection('lectures').limit(500).get(),
-        db.collection('users').where('role','==','teacher').get().then(s => s.docs)
+        db.collection('users').get().then(s => s.docs.filter(d => {
+          const data = d.data() || {};
+          const role = String(data.role || data.userRole || '').trim().toLowerCase();
+          return ['teacher','faculty','instructor'].includes(role) || data.isTeacher === true;
+        }))
       ]);
     } catch (queryError) {
-      // Some existing projects store teacher profiles with legacy role values.
-      // Fall back to reading user profiles and filter known teacher-role variants.
-      lSnap = await db.collection('lectures').limit(500).get();
-      const usersSnapshot = await db.collection('users').get();
-      teacherDocs = usersSnapshot.docs.filter(d => {
-        const role = String((d.data() || {}).role || '').trim().toLowerCase();
-        return ['teacher','faculty','instructor'].includes(role);
-      });
+      throw new Error('Could not read teachers or lectures from Firestore: ' + (queryError.message || queryError));
     }
     const set = new Set();
     lSnap.docs.forEach(d => { const s = d.data().subject; if(s) set.add(s); });
@@ -281,7 +280,7 @@ body{background:#F5F3F4;color:#161A1D}
   };
 
   /* ===== AUTO-CREATE: account + profile + email in one click ===== */
-  const WEBHOOK_URL = 'PASTE_YOUR_WEB_APP_URL_HERE';   // ← from Apps Script deployment (ends in /exec)
+  const WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbyOg2__3r7E3axbRm9-XZy29fuR32a4gjJCsJJbkS5JxzhEbV8W2W2U3yTidV1bTaw/exec';   // Existing Apps Script deployment
   const API_KEY = 'AIzaSyCwZGVK9I_GQmJkRatZOyMs0gdcZ8nSouc';
   function genPass(){
     const c='abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ23456789';
