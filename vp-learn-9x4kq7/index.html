@@ -7,7 +7,7 @@
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="permissions-policy" content="camera=(), microphone=(), geolocation=()">
 <link rel="manifest" href="./manifest.json">
-<meta name="theme-color" content="#660708">
+<meta name="theme-color" content="#0D1B40">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -24,7 +24,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
 <style>
-:root{--navy:#660708;--blue:#A4161A;--gold:#E5383B;--gold-lt:#F06467;--ink:#161A1D;--muted:#62676B;--smoke:#F5F3F4;--white:#FFFFFF;--rose:#FDF0F0;--border:#E8DCDD;--r-sm:10px;--r-md:16px;--r-lg:24px;}
+:root{--navy:#0D1B40;--blue:#1e3c72;--gold:#C9922A;--gold-lt:#E8AA48;--ink:#1A1A2E;--muted:#6B7280;--smoke:#EFF1F6;--white:#FFFFFF;--r-sm:10px;--r-md:16px;--r-lg:24px;}
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;font-size:16px;}
 body{font-family:'DM Sans',sans-serif;color:var(--ink);background:#f5f7fb;line-height:1.65;overflow-x:hidden;}
@@ -265,40 +265,11 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
 .pf-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:22px;padding-top:16px;border-top:1px solid #eef2f8;}
 @media(max-width:760px){.pf-grid{grid-template-columns:1fr;}}
 
-/* ===== Vinayak ProEdu unified student theme ===== */
-body,.student-app,.app-main{background:#F5F3F4;color:#161A1D}
-.login-screen{background:linear-gradient(135deg,#660708,#A4161A)}
-.login-brand img,.app-brand img{border-color:#E5383B}
-.login-brand p,.login-toggle a{color:#F06467}
-.portal-field input:focus{border-color:#E5383B;box-shadow:0 0 0 3px rgba(229,56,59,.16)}
-.primary-btn{background:linear-gradient(135deg,#660708,#A4161A);color:#fff}
-.secondary-btn{background:linear-gradient(135deg,#660708,#A4161A);color:#fff}
-.ghost-btn{background:#FDF0F0;color:#660708;border-color:#E8DCDD}
-.app-sidebar{background:#660708}
-.app-menu button{background:#A4161A;color:#fff}
-.app-menu button:hover,.app-menu button.active{background:#E5383B;color:#fff}
-.app-title,.subject-title,.course-info h4,.hub-option-card h4,.player-info h3,.syllabus-header h3{color:#660708}
-.app-card,.course-card,.hub-option-card,.student-batch-card{border-color:#E8DCDD;box-shadow:0 8px 24px rgba(102,7,8,.07)}
-.metric,.live-card{background:linear-gradient(135deg,#660708,#A4161A)}
-.course-thumb{background:linear-gradient(135deg,#660708,#A4161A)!important}
-.course-thumb .badge{background:#FDF0F0;color:#660708}
-.course-card:hover,.hub-option-card:hover{border-color:#E5383B;box-shadow:0 14px 32px rgba(102,7,8,.13)}
-.course-info p,.app-sub{color:#62676B}
-.chip,.mock-tag,.vp-tag{background:#FDF0F0;color:#660708}
-.empty-box{background:#fff;border-color:#E8DCDD;color:#62676B}
-.syllabus-section[open] summary{background:#660708;border-color:#660708}
-.syllabus-section[open] summary .sec-icon{color:#F06467}
-.progress-bar-fill{background:linear-gradient(90deg,#660708,#E5383B)}
-.lesson-item.active{background:#FDF0F0;border-left-color:#A4161A}
-.lesson-item .icon{background:#FDF0F0;color:#A4161A}
-.portal-reopen{background:linear-gradient(135deg,#660708,#A4161A);color:#fff}
-.student-batch-card{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid #E8DCDD;border-radius:16px;padding:18px 20px;margin-bottom:20px;box-shadow:0 8px 24px rgba(102,7,8,.06)}
-.student-batch-icon{display:grid;place-items:center;width:44px;height:44px;flex:0 0 44px;border-radius:12px;background:#FDF0F0;color:#A4161A;font-size:22px}
-.student-batch-label{color:#A4161A;font-size:11px;font-weight:800;letter-spacing:1px}
+/* Batch-first dashboard card */
+.student-batch-card{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid #E8DCDD;border-radius:16px;padding:18px 20px;margin-bottom:20px;box-shadow:0 8px 24px rgba(13,27,64,.06)}
+.student-batch-icon{display:grid;place-items:center;width:44px;height:44px;flex:0 0 44px;border-radius:12px;background:#eef4ff;color:#1e3c72;font-size:22px}
+.student-batch-label{color:#1e3c72;font-size:11px;font-weight:800;letter-spacing:1px}
 .student-batch-name{color:#161A1D;font-size:16px;font-weight:800;overflow-wrap:anywhere}
-.course-action{color:#660708;font-weight:800}
-.course-card:focus-visible{outline:3px solid #E5383B;outline-offset:3px}
-@media(max-width:640px){.app-main{padding:14px}.student-batch-card{padding:14px}.course-grid{grid-template-columns:repeat(auto-fill,minmax(min(100%,220px),1fr));gap:14px}}
 
 </style>
 <base target="_blank">
@@ -483,10 +454,6 @@ body,.student-app,.app-main{background:#F5F3F4;color:#161A1D}
         <h2 class="app-title" style="margin-bottom:6px;">My Profile</h2>
         <p class="app-sub" style="margin-bottom:18px;">Your personal details — used for certificates and institute communications.</p>
         <div class="app-card" style="padding:24px;">
-          <div class="student-batch-card" style="margin-bottom:18px" aria-live="polite">
-            <div class="student-batch-icon" aria-hidden="true">♟</div>
-            <div><div class="student-batch-label">YOUR BATCH</div><div id="profileBatchNameX" class="student-batch-name">Loading batch…</div></div>
-          </div>
           <div class="pf-grid">
             <div class="pf-row"><label>Full Name</label><input id="pfNameX" placeholder="Your full name"></div>
             <div class="pf-row"><label>Email</label><input id="pfEmailX" disabled style="background:#f3f4f6;"></div>
@@ -539,7 +506,7 @@ function getYouTubeId(input) {
 
 /* ===== STATE ===== */
 const state = {
-  currentUser: null, userData: null, courses: [], lectures: [], activeCourse: null, studentBatchName: '',
+  currentUser: null, userData: null, courses: [], lectures: [], activeCourse: null,
   pagination: { mocks: { page: 1, pageSize: 20 }, doubts: { page: 1, pageSize: 10 } }
 };
 
@@ -598,179 +565,197 @@ document.querySelectorAll('.app-menu button[data-stu-view]').forEach(btn=>{
 
 /* ===== STUDENT BATCH NAME (codes stay internal) ===== */
 async function resolveStudentBatchName(batchCode){
-  if(!batchCode) return '';
-  try{
-    const snap = await db.collection('batches').doc(String(batchCode)).get();
-    if(!snap.exists) return '';
-    const data = snap.data() || {};
-    return typeof data.name === 'string' ? data.name.trim() : '';
-  }catch(err){
-    console.warn('Could not resolve student batch name:', err);
-    return '';
-  }
+  if(!batchCode)return '';
+  try{const snap=await db.collection('batches').doc(String(batchCode)).get();if(!snap.exists)return '';const d=snap.data()||{};return typeof d.name==='string'?d.name.trim():'';}
+  catch(err){console.warn('Could not resolve student batch name:',err);return '';}
 }
 function renderStudentBatchName(){
-  const label = state.studentBatchName || 'No batch assigned';
-  ['studentBatchNameX','profileBatchNameX'].forEach(id=>{
-    const el = document.getElementById(id);
-    if(el) el.textContent = label;
-  });
+  const label=state.studentBatchName||'No batch assigned';
+  ['studentBatchNameX','profileBatchNameX'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=label;});
 }
 
-/* ===== DASHBOARD ===== */
+/* ===== BATCH-FIRST ACCESS + DASHBOARD ===== */
+function lectureBatchCodes(lecture){
+  return Array.isArray(lecture.batchCodes) ? lecture.batchCodes.map(String) : [];
+}
+function lectureIsUnrestricted(lecture){ return lectureBatchCodes(lecture).length === 0; }
+function lectureIsLive(lecture){ return Boolean(lecture.meetingLink); }
+function lectureMatchesBatch(lecture, batchCode){
+  return Boolean(batchCode) && lectureBatchCodes(lecture).includes(String(batchCode));
+}
+function getLecturesForActiveCourse(){
+  const course = state.activeCourse;
+  if(!course) return [];
+  const lectures = Array.isArray(state.lectures) ? state.lectures : [];
+  if(course.type === 'batch') return lectures.filter(l => lectureMatchesBatch(l, course.batchCode));
+  if(course.type === 'general') return lectures.filter(l => lectureIsUnrestricted(l));
+  if(course.type === 'individual') return lectures.filter(l => (state.individuallyAssignedLectureIds || []).includes(l.id));
+  return [];
+}
+
 async function loadDashboard(){
   const user = auth.currentUser; if(!user) return;
   let userDoc = await db.collection('users').doc(user.uid).get().catch(()=>null);
   if(!userDoc || !userDoc.exists){
-    // self-healing: auto-create a trial profile (allowed by rules for role 'trial')
     await db.collection('users').doc(user.uid).set({
-      uid: user.uid, name: user.displayName || '', email: user.email || '', phone: '',
-      role: 'trial', batchCode: '', enrolledSubjects: [], assignedLectureIds: [],
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      uid:user.uid, name:user.displayName||'', email:user.email||'', phone:'',
+      role:'trial', batchCode:'', enrolledSubjects:[], assignedLectureIds:[],
+      createdAt:firebase.firestore.FieldValue.serverTimestamp(),
+      updatedAt:firebase.firestore.FieldValue.serverTimestamp()
     }).catch(()=>{});
     userDoc = await db.collection('users').doc(user.uid).get().catch(()=>null);
   }
-  state.userData = userDoc && userDoc.exists ? userDoc.data() : { role: 'trial' };
-  const isTrial = (state.userData.role || 'trial') !== 'student';
-  const myBatch = state.userData.batchCode || ''; // internal only; never render this value
+  state.userData = userDoc && userDoc.exists ? userDoc.data() : {role:'trial'};
+  const data = state.userData;
+  const isTrial = (data.role || 'trial') !== 'student';
+  const myBatch = String(data.batchCode || '');
+  const assignedIds = Array.isArray(data.assignedLectureIds) ? data.assignedLectureIds.map(String) : [];
+  const enrolledSubjects = Array.isArray(data.enrolledSubjects) ? data.enrolledSubjects : [];
+  state.individuallyAssignedLectureIds = assignedIds;
+
   state.studentBatchName = await resolveStudentBatchName(myBatch);
   renderStudentBatchName();
-  const mySubjects = Array.isArray(state.userData.enrolledSubjects) ? state.userData.enrolledSubjects : [];
-  const myLectures = Array.isArray(state.userData.assignedLectureIds) ? state.userData.assignedLectureIds : [];
 
-  const lectSnap = await db.collection('lectures').limit(500).get().catch(()=>null);
-  let lectures = lectSnap ? lectSnap.docs.map(d=>({id:d.id,...d.data()})) : [];
+  const [lectureSnap, batchSnap] = await Promise.all([
+    db.collection('lectures').limit(500).get().catch(()=>null),
+    myBatch ? db.collection('batches').doc(myBatch).get().catch(()=>null) : Promise.resolve(null)
+  ]);
+  const allLectures = lectureSnap ? lectureSnap.docs.map(d=>({id:d.id,...d.data()})) : [];
 
+  let accessible;
   if(isTrial){
-    // Trial users can only see resources explicitly marked free.
-    lectures = lectures.filter(l => l.isFree === true);
+    accessible = allLectures.filter(l => l.isFree === true);
   } else {
-    const batchLectures = lectures.filter(l => {
-      const codes = Array.isArray(l.batchCodes) ? l.batchCodes : [];
-      // Preserve current policy: unrestricted/general lectures are visible to students.
-      return codes.length === 0 || (!!myBatch && codes.includes(myBatch));
+    accessible = allLectures.filter(l => {
+      const inAssignedBatch = lectureMatchesBatch(l,myBatch);
+      const unrestricted = lectureIsUnrestricted(l);
+      const individuallyGranted = assignedIds.includes(String(l.id));
+      const legacySubjectAccess = !myBatch && assignedIds.length===0 &&
+        enrolledSubjects.includes(l.subject || 'General') && unrestricted;
+      return inAssignedBatch || unrestricted || individuallyGranted || legacySubjectAccess;
     });
-    const individuallyGranted = lectures.filter(l => myLectures.includes(l.id));
-    const accessible = new Map();
-    [...batchLectures, ...individuallyGranted].forEach(l => accessible.set(l.id, l));
-    lectures = [...accessible.values()];
+  }
+  state.lectures = accessible;
 
-    // Preserve subject fallback for legacy student records without a batch or grants.
-    if(!myBatch && myLectures.length === 0 && mySubjects.length){
-      lectures = lectures.filter(l => {
-        const sub = l.subject || 'General';
-        return mySubjects.includes(sub) || sub === 'General';
-      });
+  const courses = [];
+  if(!isTrial && myBatch && batchSnap && batchSnap.exists){
+    const batchData = batchSnap.data() || {};
+    const batchName = typeof batchData.name === 'string' ? batchData.name.trim() : '';
+    const batchLectures = accessible.filter(l => lectureMatchesBatch(l,myBatch));
+    if(batchName){
+      courses.push({key:'batch:'+myBatch,type:'batch',batchCode:myBatch,title:batchName,
+        count:batchLectures.length,hasLive:batchLectures.some(lectureIsLive)});
     }
   }
 
-  state.lectures = lectures;
-  const subjects = [...new Set(lectures.map(l => l.subject || 'General'))].sort();
-  state.courses = subjects.map(sub => ({
-    subject: sub,
-    count: lectures.filter(l => (l.subject||'General')===sub).length,
-    hasLive: lectures.filter(l => (l.subject||'General')===sub && l.meetingLink).length > 0
-  }));
+  // Unrestricted resources stay in a separate General tile; batch-only records
+  // are deliberately excluded even when their subject field says “General”.
+  const generalLectures = accessible.filter(lectureIsUnrestricted);
+  if(generalLectures.length){
+    courses.push({key:'general',type:'general',title:isTrial?'Free Resources':'General',
+      count:generalLectures.length,hasLive:generalLectures.some(lectureIsLive)});
+  }
+
+  // Explicit individual grants to a batch-restricted lecture are shown in their
+  // own tile if that lecture is not already part of the student's assigned batch.
+  const individualOnly = accessible.filter(l => assignedIds.includes(String(l.id)) &&
+    !lectureIsUnrestricted(l) && !lectureMatchesBatch(l,myBatch));
+  if(!isTrial && individualOnly.length){
+    courses.push({key:'individual',type:'individual',title:'Individually Assigned',
+      count:individualOnly.length,hasLive:individualOnly.some(lectureIsLive)});
+  }
+  state.courses = courses;
   renderCourses();
+
   if(isTrial){
-    document.getElementById('pageSubX').textContent = '🎁 Free trial — free resources + free quiz. Enroll for full access.';
-    let b = document.getElementById('trialBannerX');
-    if(!b){
-      b = document.createElement('div');
-      b.id = 'trialBannerX';
-      b.style.cssText = 'background:linear-gradient(135deg,#FDF0F0,#fff);color:#660708;border:1px solid #E8DCDD;border-left:5px solid #E5383B;border-radius:16px;padding:16px 20px;margin-bottom:16px;font-weight:700;box-shadow:0 8px 24px rgba(102,7,8,.08);';
-      b.innerHTML = '🎓 <b>Free Trial Access</b> — watch the free resources and take the free quiz below. For the complete course, all mocks & live batches, WhatsApp <b>+91 83200 35390</b>.';
-      const home = document.getElementById('studentHomeX');
-      if(home) home.insertBefore(b, home.firstChild);
+    document.getElementById('pageSubX').textContent='Free trial — free resources + free quiz. Enroll for full access.';
+    let banner=document.getElementById('trialBannerX');
+    if(!banner){
+      banner=document.createElement('div'); banner.id='trialBannerX';
+      banner.style.cssText='background:linear-gradient(135deg,#FDF0F0,#fff);color:#660708;border:1px solid #E8DCDD;border-left:5px solid #E5383B;border-radius:16px;padding:16px 20px;margin-bottom:16px;font-weight:700;box-shadow:0 8px 24px rgba(102,7,8,.08);';
+      banner.innerHTML='🎓 <b>Free Trial Access</b> — only resources explicitly marked free are available. For full access, contact Vinayak ProEdu.';
+      const home=document.getElementById('studentHomeX'); if(home) home.insertBefore(banner,home.firstChild);
     }
   }
 }
 
 function renderCourses(){
-  const grid = document.getElementById('studentCourseGridX');
-  const empty = document.getElementById('studentCourseEmptyX');
-  if(!state.courses.length){ grid.innerHTML=''; empty.classList.remove('hidden'); return; }
+  const grid=document.getElementById('studentCourseGridX');
+  const empty=document.getElementById('studentCourseEmptyX');
+  if(!grid||!empty) return;
+  if(!state.courses || !state.courses.length){grid.innerHTML='';empty.classList.remove('hidden');return;}
   empty.classList.add('hidden');
-  grid.innerHTML = state.courses.map(c => `
-    <div class="course-card" role="button" tabindex="0"
-         onclick="selectCourse('${esc(c.subject)}')"
-         onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectCourse('${esc(c.subject)}')}">
-      <div class="course-thumb">
-        <span class="badge">${esc(c.subject.slice(0,4).toUpperCase())}</span>
-        <span style="font-size:1.5rem" aria-hidden="true">📚</span>
-      </div>
-      <div class="course-info">
-        <h4>${esc(c.subject)}</h4>
-        <p>${c.count} lesson${c.count!==1?'s':''} ${c.hasLive?'· 🔴 Live classes available':''}</p>
-        <div class="course-meta"><span>Vinayak ProEdu</span><span class="course-action">Continue learning →</span></div>
-      </div>
-    </div>
-  `).join('');
+  grid.innerHTML=state.courses.map((c,i)=>`
+    <div class="course-card" role="button" tabindex="0" onclick="selectCourseByIndex(${i})"
+      onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectCourseByIndex(${i})}">
+      <div class="course-thumb"><span class="badge">${c.type==='batch'?'BATCH':c.type==='individual'?'ASSIGNED':'GENERAL'}</span>
+        <span style="font-size:1.5rem" aria-hidden="true">${c.type==='batch'?'👥':c.type==='individual'?'📌':'📚'}</span></div>
+      <div class="course-info"><h4>${esc(c.title)}</h4>
+        <p>${c.count} resource${c.count===1?'':'s'} ${c.hasLive?'· 🔴 Live classes available':''}</p>
+        <div class="course-meta"><span>Vinayak ProEdu</span><span class="course-action">Open →</span></div></div>
+    </div>`).join('');
 }
 
 function filterCourses(){
-  const q = (document.getElementById('studentCourseSearchX')?.value||'').toLowerCase();
+  const q=(document.getElementById('studentCourseSearchX')?.value||'').toLowerCase();
   document.querySelectorAll('#studentCourseGridX .course-card').forEach(card=>{
-    card.style.display = !q || card.innerText.toLowerCase().includes(q) ? '' : 'none';
+    card.style.display=!q||card.innerText.toLowerCase().includes(q)?'':'none';
   });
 }
-
-window.selectCourse = function(subject){
-  state.activeCourse = { subject };
-  document.getElementById('courseHubTitleX').textContent = subject;
+window.selectCourseByIndex=function(index){
+  const course=state.courses && state.courses[index]; if(!course) return;
+  state.activeCourse={...course, subject:course.type==='general'?'General':course.title};
+  document.getElementById('courseHubTitleX').textContent=course.title;
   openStudentView('studentCourseHubX');
 };
+window.selectCourse=function(title){
+  const course=(state.courses||[]).find(c=>c.title===title);
+  if(!course) return;
+  state.activeCourse={...course, subject:course.type==='general'?'General':course.title};
+  document.getElementById('courseHubTitleX').textContent=course.title;
+  openStudentView('studentCourseHubX');
+};
+window.backToDashboard=function(){state.activeCourse=null;openStudentView('studentHomeX');};
+window.backToCourseHub=function(){if(!state.activeCourse)return backToDashboard();openStudentView('studentCourseHubX');};
 
-window.backToDashboard = function(){ state.activeCourse = null; openStudentView('studentHomeX'); };
-window.backToCourseHub = function(){ if(!state.activeCourse) return backToDashboard(); openStudentView('studentCourseHubX'); };
-
-window.openCourseSection = function(section){
+window.openCourseSection=function(section){
   if(!state.activeCourse) return;
-  const sub = state.activeCourse.subject;
-  if(section==='lectures'){ document.getElementById('lectureCourseNameX').textContent=sub; openStudentView('studentLecturesX'); renderSyllabus(sub); }
-  else if(section==='mocks'){ document.getElementById('mockCourseNameX').textContent=sub; openStudentView('studentMocksX'); if(window.__loadMocksForCourse) window.__loadMocksForCourse(sub); }
-  else if(section==='live'){ document.getElementById('liveCourseNameX').textContent=sub; openStudentView('studentLiveX'); loadLiveClasses(sub); }
-  else if(section==='doubts'){ document.getElementById('doubtCourseNameX').textContent=sub; state.pagination.doubts.page=1; openStudentView('studentDoubtsX'); loadCourseDoubts(); }
-  else if(section==='leaderboard'){ document.getElementById('lbCourseNameX').textContent=sub; openStudentView('studentCourseLeaderboardX'); loadCourseLeaderboard(sub); }
-  else if(section==='calendar'){ document.getElementById('calCourseNameX').textContent=sub; openStudentView('studentCourseCalendarX'); loadCourseCalendar(sub); }
+  const course=state.activeCourse, title=course.title;
+  const el=id=>document.getElementById(id);
+  if(section==='lectures'){el('lectureCourseNameX').textContent=title;openStudentView('studentLecturesX');renderSyllabus();}
+  else if(section==='live'){el('liveCourseNameX').textContent=title;openStudentView('studentLiveX');loadLiveClasses();}
+  else if(section==='calendar'){el('calCourseNameX').textContent=title;openStudentView('studentCourseCalendarX');loadCourseCalendar();}
+  else if(section==='mocks'){el('mockCourseNameX').textContent=title;openStudentView('studentMocksX');if(window.__loadMocksForCourse)window.__loadMocksForCourse(course.type==='general'?'General':title);}
+  else if(section==='doubts'){el('doubtCourseNameX').textContent=title;state.pagination.doubts.page=1;openStudentView('studentDoubtsX');loadCourseDoubts();}
+  else if(section==='leaderboard'){el('lbCourseNameX').textContent=title;openStudentView('studentCourseLeaderboardX');loadCourseLeaderboard(course.type==='general'?'General':title);}
 };
 
-/* ===== LECTURES ===== */
-async function renderSyllabus(subject){
-  const container = document.getElementById('studentSyllabusX');
-  container.innerHTML = '<div class="skeleton" style="height:60px;margin-bottom:8px;"></div><div class="skeleton" style="height:60px;margin-bottom:8px;"></div>';
-  
-  // Use pre-filtered user lectures so General (missing subject) lectures appear correctly
-  let courseLectures = state.lectures.filter(l => (l.subject || 'General') === subject);
-  courseLectures.sort((a,b) => String(a.lectureDate||'').localeCompare(String(b.lectureDate||'')));
-  
-  if(!courseLectures.length){ container.innerHTML = '<div class="empty-box">No lectures yet.</div>'; return; }
-  const total = courseLectures.length;
-  document.getElementById('courseProgressBarX').style.width = '0%';
-  document.getElementById('courseProgressTextX').textContent = `0 of ${total} Lessons`;
-  document.getElementById('courseProgressPctX').textContent = '0%';
-  if(document.getElementById('courseProgressBigX')) document.getElementById('courseProgressBigX').textContent = '0%';
-  const bySection = {};
-  courseLectures.forEach(l => { const sec = l.section || 'General'; if(!bySection[sec]) bySection[sec]=[]; bySection[sec].push(l); });
-  container.innerHTML = Object.keys(bySection).sort().map((sec, idx) => {
-    const lessons = bySection[sec].sort((a,b) => String(a.lectureDate||'').localeCompare(String(b.lectureDate||'')));
-    return `<details class="syllabus-section" ${idx===0?'open':''}>
-      <summary><span>${esc(sec)}</span><span class="sec-icon">${lessons.length} lesson(s)</span></summary>
-      ${lessons.map(l => {
-        const releaseDate = l.lectureDate ? new Date(l.lectureDate + 'T' + (l.lectureTime||'00:00')) : null;
-        const isLocked = releaseDate && releaseDate > new Date();
-        return `<div class="lesson-item ${isLocked?'locked':''}" onclick="${isLocked?'':`playLesson('${l.id}')`}">
-          <div class="icon">${isLocked?'🔒':'▶'}</div>
-          <div><div class="lesson-title">${esc(l.title||'Lesson')}</div>
-          <div class="lesson-meta">${esc(l.lectureDate||'')} ${l.lectureTime?'· '+esc(l.lectureTime):''}</div></div>
-        </div>`;
-      }).join('')}
-    </details>`;
+/* ===== RECORDED LECTURES ===== */
+async function renderSyllabus(){
+  const container=document.getElementById('studentSyllabusX');
+  container.innerHTML='<div class="skeleton" style="height:60px;margin-bottom:8px"></div><div class="skeleton" style="height:60px;margin-bottom:8px"></div>';
+  const courseLectures=getLecturesForActiveCourse().filter(l=>!lectureIsLive(l))
+    .sort((a,b)=>String(a.lectureDate||'').localeCompare(String(b.lectureDate||'')));
+  if(!courseLectures.length){container.innerHTML='<div class="empty-box">No recorded lectures in this section yet.</div>';return;}
+  const total=courseLectures.length;
+  const progressBar=document.getElementById('courseProgressBarX');if(progressBar)progressBar.style.width='0%';
+  const progressText=document.getElementById('courseProgressTextX');if(progressText)progressText.textContent=`0 of ${total} Lessons`;
+  const progressPct=document.getElementById('courseProgressPctX');if(progressPct)progressPct.textContent='0%';
+  const progressBig=document.getElementById('courseProgressBigX');if(progressBig)progressBig.textContent='0%';
+  const bySection={};
+  courseLectures.forEach(l=>{const sec=l.section||l.subject||'General';if(!bySection[sec])bySection[sec]=[];bySection[sec].push(l);});
+  container.innerHTML=Object.keys(bySection).sort().map((sec,idx)=>{
+    const lessons=bySection[sec].sort((a,b)=>String(a.lectureDate||'').localeCompare(String(b.lectureDate||'')));
+    return `<details class="syllabus-section" ${idx===0?'open':''}><summary><span>${esc(sec)}</span><span class="sec-icon">${lessons.length} lesson(s)</span></summary>
+      ${lessons.map(l=>{const releaseDate=l.lectureDate?new Date(l.lectureDate+'T'+(l.lectureTime||'00:00')):null;const locked=releaseDate&&releaseDate>new Date();
+        return `<div class="lesson-item ${locked?'locked':''}" ${locked?'':`onclick="playLesson('${esc(l.id)}')"`}><div class="icon">${locked?'🔒':'▶'}</div><div><div class="lesson-title">${esc(l.title||'Lesson')}</div><div class="lesson-meta">${esc(l.lectureDate||'')} ${l.lectureTime?'· '+esc(l.lectureTime):''}</div></div></div>`;
+      }).join('')}</details>`;
   }).join('');
-  const first = courseLectures.find(l => !l.lectureDate || new Date(l.lectureDate + 'T' + (l.lectureTime||'00:00')) <= new Date());
+  const first=courseLectures.find(l=>!l.lectureDate||new Date(l.lectureDate+'T'+(l.lectureTime||'00:00'))<=new Date());
   if(first) playLesson(first.id);
 }
+
+
 
 window.filterLectures = function(){
   const q = (document.getElementById('lectureSearchX')?.value || '').toLowerCase().trim();
@@ -789,8 +774,8 @@ window.filterLectures = function(){
 };
 
 window.playLesson = async function(lectureId){
-  let lecture = state.lectures.find(l => l.id === lectureId);
-  if(!lecture){ const snap=await db.collection('lectures').doc(lectureId).get().catch(()=>null); if(!snap||!snap.exists)return; lecture={id:snap.id,...snap.data()}; }
+  const lecture = (state.lectures || []).find(l => l.id === lectureId);
+  if(!lecture){ console.warn('Lecture is not in the current student access set.'); return; }
   const videoContainer = document.getElementById('lectureVideoContainerX');
   document.getElementById('lecturePlayerTitleX').textContent = lecture.title || 'Lesson';
   document.getElementById('lecturePlayerMetaX').textContent = (lecture.subject||'')+' · '+(lecture.section||'General');
@@ -811,27 +796,22 @@ window.playLesson = async function(lectureId){
   else { videoContainer.innerHTML = `<div style="color:#fff;text-align:center;padding:40px;"><p>No content attached.</p></div>`; }
 };
 
-/* ===== LIVE ===== */
-async function loadLiveClasses(subject){
-  const container = document.getElementById('liveListX');
-  const empty = document.getElementById('liveEmptyX');
-  container.innerHTML = '<div class="skeleton" style="height:120px;border-radius:16px;"></div>';
-  const now = new Date();
-  const snap = await db.collection('lectures').where('subject','==',subject).limit(200).get().catch(()=>null);
-  let lives = snap ? snap.docs.map(d=>({id:d.id,...d.data()})).filter(l => l.meetingLink) : [];
-  const relevant = lives.filter(l => {
-    if(!l.lectureDate) return false;
-    const d = new Date(l.lectureDate + 'T' + (l.lectureTime||'00:00'));
-    return d >= new Date(now.getTime() - 2*3600*1000);
-  }).sort((a,b)=> new Date(a.lectureDate+'T'+(a.lectureTime||'00:00')) - new Date(b.lectureDate+'T'+(b.lectureTime||'00:00')));
-  if(!relevant.length){ container.innerHTML=''; empty.classList.remove('hidden'); return; }
+/* ===== LIVE CLASSES — scoped to the selected batch/general tile ===== */
+async function loadLiveClasses(){
+  const container=document.getElementById('liveListX'), empty=document.getElementById('liveEmptyX');
+  container.innerHTML='<div class="skeleton" style="height:120px;border-radius:16px"></div>';
+  const now=new Date();
+  const relevant=getLecturesForActiveCourse().filter(l=>lectureIsLive(l)&&l.lectureDate)
+    .filter(l=>new Date(l.lectureDate+'T'+(l.lectureTime||'00:00'))>=new Date(now.getTime()-2*3600*1000))
+    .sort((a,b)=>new Date(a.lectureDate+'T'+(a.lectureTime||'00:00'))-new Date(b.lectureDate+'T'+(b.lectureTime||'00:00')));
+  if(!relevant.length){container.innerHTML='';empty.classList.remove('hidden');return;}
   empty.classList.add('hidden');
-  container.innerHTML = relevant.map(l => {
-    const d = new Date(l.lectureDate + 'T' + (l.lectureTime||'00:00'));
-    const isLive = Math.abs(now - d) < 3600*1000;
-    return `<div class="live-card">${isLive?'<span class="live-badge">● LIVE</span>':'<span class="live-badge upcoming">Upcoming</span>'}<h4>${esc(l.title||'Live')}</h4><p style="opacity:.8;">${esc(l.lectureDate||'')} at ${esc(l.lectureTime||'')}</p><a href="${esc(l.meetingLink)}" target="_blank" class="primary-btn" style="display:inline-block;">Join</a></div>`;
+  container.innerHTML=relevant.map(l=>{const d=new Date(l.lectureDate+'T'+(l.lectureTime||'00:00'));const isLive=Math.abs(now-d)<3600*1000;
+    return `<div class="live-card">${isLive?'<span class="live-badge">● LIVE</span>':'<span class="live-badge upcoming">Upcoming</span>'}<h4>${esc(l.title||'Live')}</h4><p style="opacity:.8">${esc(l.lectureDate||'')} at ${esc(l.lectureTime||'')}</p><a href="${esc(l.meetingLink)}" target="_blank" rel="noopener noreferrer" class="primary-btn" style="display:inline-block">Join</a></div>`;
   }).join('');
 }
+
+
 
 /* ===== LEADERBOARD ===== */
 async function loadCourseLeaderboard(subject){
@@ -873,24 +853,19 @@ async function loadCourseLeaderboard(subject){
   } catch(err){ console.error(err); podium.innerHTML='<div class="empty-box" style="grid-column:1/-1;">Failed to load.</div>'; tbody.innerHTML=''; }
 }
 
-/* ===== CALENDAR ===== */
-async function loadCourseCalendar(subject){
-  const list = document.getElementById('courseCalendarListX');
-  list.innerHTML = '<div class="skeleton" style="height:100px;border-radius:12px;"></div>';
-  const now = new Date();
-  const snap = await db.collection('lectures').where('subject','==',subject).limit(200).get().catch(()=>null);
-  let events = snap ? snap.docs.map(d=>({id:d.id,...d.data()})).filter(l => l.meetingLink && l.lectureDate) : [];
-  events = events.filter(l => new Date(l.lectureDate+'T'+(l.lectureTime||'00:00')) >= new Date(now.getTime()-2*3600*1000));
-  events.sort((a,b)=>String(a.lectureDate||'').localeCompare(String(b.lectureDate||'')));
-  if(!events.length){ list.innerHTML='<div class="empty-box">No upcoming events.</div>'; return; }
-  list.innerHTML = events.map(l => `
-    <div class="calendar-item">
-      <div class="calendar-date">${esc(l.lectureDate||'TBD')} · ${esc(l.lectureTime||'')}</div>
-      <div class="calendar-title">${esc(l.title||'Event')}</div>
-      <a href="${esc(l.meetingLink)}" target="_blank" class="primary-btn" style="margin-top:6px;display:inline-block">Join Live</a>
-    </div>
-  `).join('');
+/* ===== CALENDAR — scoped to the selected batch/general tile ===== */
+async function loadCourseCalendar(){
+  const list=document.getElementById('courseCalendarListX');
+  list.innerHTML='<div class="skeleton" style="height:100px;border-radius:12px"></div>';
+  const now=new Date();
+  const events=getLecturesForActiveCourse().filter(l=>lectureIsLive(l)&&l.lectureDate)
+    .filter(l=>new Date(l.lectureDate+'T'+(l.lectureTime||'00:00'))>=new Date(now.getTime()-2*3600*1000))
+    .sort((a,b)=>String(a.lectureDate||'').localeCompare(String(b.lectureDate||'')));
+  if(!events.length){list.innerHTML='<div class="empty-box">No upcoming events.</div>';return;}
+  list.innerHTML=events.map(l=>`<div class="calendar-item"><div class="calendar-date">${esc(l.lectureDate||'TBD')} · ${esc(l.lectureTime||'')}</div><div class="calendar-title">${esc(l.title||'Event')}</div><a href="${esc(l.meetingLink)}" target="_blank" rel="noopener noreferrer" class="primary-btn" style="margin-top:6px;display:inline-block">Join Live</a></div>`).join('');
 }
+
+
 
 /* ===== ANNOUNCEMENTS ===== */
 async function loadAnnouncements(){
@@ -983,8 +958,6 @@ window.loadProfile = async function(){
   $('pfPinX').value = data.pincode || '';
   const since = data.createdAt?.toDate ? data.createdAt.toDate().toLocaleDateString() : '—';
   const role = (data.role === 'student') ? 'Full student' : 'Free trial';
-  state.studentBatchName = await resolveStudentBatchName(data.batchCode || (state.userData && state.userData.batchCode) || '');
-  renderStudentBatchName();
   $('pfMetaX').textContent = `${user.email || ''} · Member since ${since} · ${role}`;
   $('pfStatusX').textContent = '';
 };
