@@ -1,13 +1,13 @@
 {
-  "name": "Vinayak ProEdu \u2014 Student Portal",
+  "name": "Vinayak ProEdu — Student Portal",
   "short_name": "ProEdu",
-  "description": "Vinayak ProEdu student portal \u2014 lectures, mocks, live classes",
+  "description": "Vinayak ProEdu student portal — lectures, mocks, live classes",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#0D1B40",
-  "theme_color": "#0D1B40",
+  "background_color": "#F5F3F4",
+  "theme_color": "#660708",
   "icons": [
     {
       "src": "../icon-192.png",

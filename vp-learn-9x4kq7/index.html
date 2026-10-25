@@ -7,7 +7,7 @@
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="permissions-policy" content="camera=(), microphone=(), geolocation=()">
 <link rel="manifest" href="./manifest.json">
-<meta name="theme-color" content="#0D1B40">
+<meta name="theme-color" content="#660708">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -24,7 +24,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
 <style>
-:root{--navy:#0D1B40;--blue:#1e3c72;--gold:#C9922A;--gold-lt:#E8AA48;--ink:#1A1A2E;--muted:#6B7280;--smoke:#EFF1F6;--white:#FFFFFF;--r-sm:10px;--r-md:16px;--r-lg:24px;}
+:root{--navy:#660708;--blue:#A4161A;--gold:#E5383B;--gold-lt:#F06467;--ink:#161A1D;--muted:#62676B;--smoke:#F5F3F4;--white:#FFFFFF;--rose:#FDF0F0;--border:#E8DCDD;--r-sm:10px;--r-md:16px;--r-lg:24px;}
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;font-size:16px;}
 body{font-family:'DM Sans',sans-serif;color:var(--ink);background:#f5f7fb;line-height:1.65;overflow-x:hidden;}
@@ -264,6 +264,42 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
 .pf-row input:disabled{color:#6B7280;}
 .pf-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:22px;padding-top:16px;border-top:1px solid #eef2f8;}
 @media(max-width:760px){.pf-grid{grid-template-columns:1fr;}}
+
+/* ===== Vinayak ProEdu unified student theme ===== */
+body,.student-app,.app-main{background:#F5F3F4;color:#161A1D}
+.login-screen{background:linear-gradient(135deg,#660708,#A4161A)}
+.login-brand img,.app-brand img{border-color:#E5383B}
+.login-brand p,.login-toggle a{color:#F06467}
+.portal-field input:focus{border-color:#E5383B;box-shadow:0 0 0 3px rgba(229,56,59,.16)}
+.primary-btn{background:linear-gradient(135deg,#660708,#A4161A);color:#fff}
+.secondary-btn{background:linear-gradient(135deg,#660708,#A4161A);color:#fff}
+.ghost-btn{background:#FDF0F0;color:#660708;border-color:#E8DCDD}
+.app-sidebar{background:#660708}
+.app-menu button{background:#A4161A;color:#fff}
+.app-menu button:hover,.app-menu button.active{background:#E5383B;color:#fff}
+.app-title,.subject-title,.course-info h4,.hub-option-card h4,.player-info h3,.syllabus-header h3{color:#660708}
+.app-card,.course-card,.hub-option-card,.student-batch-card{border-color:#E8DCDD;box-shadow:0 8px 24px rgba(102,7,8,.07)}
+.metric,.live-card{background:linear-gradient(135deg,#660708,#A4161A)}
+.course-thumb{background:linear-gradient(135deg,#660708,#A4161A)!important}
+.course-thumb .badge{background:#FDF0F0;color:#660708}
+.course-card:hover,.hub-option-card:hover{border-color:#E5383B;box-shadow:0 14px 32px rgba(102,7,8,.13)}
+.course-info p,.app-sub{color:#62676B}
+.chip,.mock-tag,.vp-tag{background:#FDF0F0;color:#660708}
+.empty-box{background:#fff;border-color:#E8DCDD;color:#62676B}
+.syllabus-section[open] summary{background:#660708;border-color:#660708}
+.syllabus-section[open] summary .sec-icon{color:#F06467}
+.progress-bar-fill{background:linear-gradient(90deg,#660708,#E5383B)}
+.lesson-item.active{background:#FDF0F0;border-left-color:#A4161A}
+.lesson-item .icon{background:#FDF0F0;color:#A4161A}
+.portal-reopen{background:linear-gradient(135deg,#660708,#A4161A);color:#fff}
+.student-batch-card{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid #E8DCDD;border-radius:16px;padding:18px 20px;margin-bottom:20px;box-shadow:0 8px 24px rgba(102,7,8,.06)}
+.student-batch-icon{display:grid;place-items:center;width:44px;height:44px;flex:0 0 44px;border-radius:12px;background:#FDF0F0;color:#A4161A;font-size:22px}
+.student-batch-label{color:#A4161A;font-size:11px;font-weight:800;letter-spacing:1px}
+.student-batch-name{color:#161A1D;font-size:16px;font-weight:800;overflow-wrap:anywhere}
+.course-action{color:#660708;font-weight:800}
+.course-card:focus-visible{outline:3px solid #E5383B;outline-offset:3px}
+@media(max-width:640px){.app-main{padding:14px}.student-batch-card{padding:14px}.course-grid{grid-template-columns:repeat(auto-fill,minmax(min(100%,220px),1fr));gap:14px}}
+
 </style>
 <base target="_blank">
 <base target="_blank">
@@ -315,6 +351,12 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
 
       <!-- DASHBOARD -->
       <section class="app-view" id="studentHomeX">
+        <div class="student-batch-card" aria-live="polite">
+          <div class="student-batch-icon" aria-hidden="true">♟</div>
+          <div><div class="student-batch-label">YOUR BATCH</div>
+            <div id="studentBatchNameX" class="student-batch-name">Loading batch…</div>
+          </div>
+        </div>
         <div class="app-card" style="border:none;box-shadow:none;background:transparent;padding:0;">
           <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:8px;">
             <h3 class="subject-title" style="margin:0">My Assigned Courses</h3>
@@ -441,6 +483,10 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
         <h2 class="app-title" style="margin-bottom:6px;">My Profile</h2>
         <p class="app-sub" style="margin-bottom:18px;">Your personal details — used for certificates and institute communications.</p>
         <div class="app-card" style="padding:24px;">
+          <div class="student-batch-card" style="margin-bottom:18px" aria-live="polite">
+            <div class="student-batch-icon" aria-hidden="true">♟</div>
+            <div><div class="student-batch-label">YOUR BATCH</div><div id="profileBatchNameX" class="student-batch-name">Loading batch…</div></div>
+          </div>
           <div class="pf-grid">
             <div class="pf-row"><label>Full Name</label><input id="pfNameX" placeholder="Your full name"></div>
             <div class="pf-row"><label>Email</label><input id="pfEmailX" disabled style="background:#f3f4f6;"></div>
@@ -493,7 +539,7 @@ function getYouTubeId(input) {
 
 /* ===== STATE ===== */
 const state = {
-  currentUser: null, userData: null, courses: [], lectures: [], activeCourse: null,
+  currentUser: null, userData: null, courses: [], lectures: [], activeCourse: null, studentBatchName: '',
   pagination: { mocks: { page: 1, pageSize: 20 }, doubts: { page: 1, pageSize: 10 } }
 };
 
@@ -550,6 +596,27 @@ document.querySelectorAll('.app-menu button[data-stu-view]').forEach(btn=>{
   });
 });
 
+/* ===== STUDENT BATCH NAME (codes stay internal) ===== */
+async function resolveStudentBatchName(batchCode){
+  if(!batchCode) return '';
+  try{
+    const snap = await db.collection('batches').doc(String(batchCode)).get();
+    if(!snap.exists) return '';
+    const data = snap.data() || {};
+    return typeof data.name === 'string' ? data.name.trim() : '';
+  }catch(err){
+    console.warn('Could not resolve student batch name:', err);
+    return '';
+  }
+}
+function renderStudentBatchName(){
+  const label = state.studentBatchName || 'No batch assigned';
+  ['studentBatchNameX','profileBatchNameX'].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) el.textContent = label;
+  });
+}
+
 /* ===== DASHBOARD ===== */
 async function loadDashboard(){
   const user = auth.currentUser; if(!user) return;
@@ -566,7 +633,9 @@ async function loadDashboard(){
   }
   state.userData = userDoc && userDoc.exists ? userDoc.data() : { role: 'trial' };
   const isTrial = (state.userData.role || 'trial') !== 'student';
-  const myBatch = state.userData.batchCode || '';
+  const myBatch = state.userData.batchCode || ''; // internal only; never render this value
+  state.studentBatchName = await resolveStudentBatchName(myBatch);
+  renderStudentBatchName();
   const mySubjects = Array.isArray(state.userData.enrolledSubjects) ? state.userData.enrolledSubjects : [];
   const myLectures = Array.isArray(state.userData.assignedLectureIds) ? state.userData.assignedLectureIds : [];
 
@@ -574,14 +643,26 @@ async function loadDashboard(){
   let lectures = lectSnap ? lectSnap.docs.map(d=>({id:d.id,...d.data()})) : [];
 
   if(isTrial){
+    // Trial users can only see resources explicitly marked free.
     lectures = lectures.filter(l => l.isFree === true);
   } else {
-    if(myBatch) lectures = lectures.filter(l => { const b = l.batchCodes||[]; return !b.length || b.includes(myBatch); });
-    if(myLectures.length) lectures = lectures.filter(l => myLectures.includes(l.id));
-    else if(mySubjects.length) lectures = lectures.filter(l => {
-      const sub = l.subject || 'General';
-      return mySubjects.includes(sub) || sub === 'General';
+    const batchLectures = lectures.filter(l => {
+      const codes = Array.isArray(l.batchCodes) ? l.batchCodes : [];
+      // Preserve current policy: unrestricted/general lectures are visible to students.
+      return codes.length === 0 || (!!myBatch && codes.includes(myBatch));
     });
+    const individuallyGranted = lectures.filter(l => myLectures.includes(l.id));
+    const accessible = new Map();
+    [...batchLectures, ...individuallyGranted].forEach(l => accessible.set(l.id, l));
+    lectures = [...accessible.values()];
+
+    // Preserve subject fallback for legacy student records without a batch or grants.
+    if(!myBatch && myLectures.length === 0 && mySubjects.length){
+      lectures = lectures.filter(l => {
+        const sub = l.subject || 'General';
+        return mySubjects.includes(sub) || sub === 'General';
+      });
+    }
   }
 
   state.lectures = lectures;
@@ -598,7 +679,7 @@ async function loadDashboard(){
     if(!b){
       b = document.createElement('div');
       b.id = 'trialBannerX';
-      b.style.cssText = 'background:linear-gradient(135deg,#C9922A,#E8AA48);color:#0D1B40;border-radius:16px;padding:16px 20px;margin-bottom:16px;font-weight:700;box-shadow:0 8px 24px rgba(201,146,42,.25);';
+      b.style.cssText = 'background:linear-gradient(135deg,#FDF0F0,#fff);color:#660708;border:1px solid #E8DCDD;border-left:5px solid #E5383B;border-radius:16px;padding:16px 20px;margin-bottom:16px;font-weight:700;box-shadow:0 8px 24px rgba(102,7,8,.08);';
       b.innerHTML = '🎓 <b>Free Trial Access</b> — watch the free resources and take the free quiz below. For the complete course, all mocks & live batches, WhatsApp <b>+91 83200 35390</b>.';
       const home = document.getElementById('studentHomeX');
       if(home) home.insertBefore(b, home.firstChild);
@@ -612,15 +693,17 @@ function renderCourses(){
   if(!state.courses.length){ grid.innerHTML=''; empty.classList.remove('hidden'); return; }
   empty.classList.add('hidden');
   grid.innerHTML = state.courses.map(c => `
-    <div class="course-card" onclick="selectCourse('${esc(c.subject)}')">
-      <div class="course-thumb" style="background:linear-gradient(135deg,#1e3c72,#2a5298)">
+    <div class="course-card" role="button" tabindex="0"
+         onclick="selectCourse('${esc(c.subject)}')"
+         onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectCourse('${esc(c.subject)}')}">
+      <div class="course-thumb">
         <span class="badge">${esc(c.subject.slice(0,4).toUpperCase())}</span>
-        <span style="font-size:1.5rem">📚</span>
+        <span style="font-size:1.5rem" aria-hidden="true">📚</span>
       </div>
       <div class="course-info">
         <h4>${esc(c.subject)}</h4>
-        <p>${c.count} lesson${c.count!==1?'s':''} ${c.hasLive?'· 🔴 Live':''}</p>
-        <div class="course-meta"><span>Vinayak ProEdu</span><span>▶ Open</span></div>
+        <p>${c.count} lesson${c.count!==1?'s':''} ${c.hasLive?'· 🔴 Live classes available':''}</p>
+        <div class="course-meta"><span>Vinayak ProEdu</span><span class="course-action">Continue learning →</span></div>
       </div>
     </div>
   `).join('');
@@ -900,6 +983,8 @@ window.loadProfile = async function(){
   $('pfPinX').value = data.pincode || '';
   const since = data.createdAt?.toDate ? data.createdAt.toDate().toLocaleDateString() : '—';
   const role = (data.role === 'student') ? 'Full student' : 'Free trial';
+  state.studentBatchName = await resolveStudentBatchName(data.batchCode || (state.userData && state.userData.batchCode) || '');
+  renderStudentBatchName();
   $('pfMetaX').textContent = `${user.email || ''} · Member since ${since} · ${role}`;
   $('pfStatusX').textContent = '';
 };
