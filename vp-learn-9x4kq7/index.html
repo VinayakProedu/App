@@ -7,7 +7,7 @@
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="permissions-policy" content="camera=(), microphone=(), geolocation=()">
 <link rel="manifest" href="./manifest.json">
-<meta name="theme-color" content="#0D1B40">
+<meta name="theme-color" content="#660708">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -24,7 +24,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
 <style>
-:root{--navy:#0D1B40;--blue:#1e3c72;--gold:#C9922A;--gold-lt:#E8AA48;--ink:#1A1A2E;--muted:#6B7280;--smoke:#EFF1F6;--white:#FFFFFF;--r-sm:10px;--r-md:16px;--r-lg:24px;}
+:root{--navy:#660708;--blue:#A4161A;--gold:#E5383B;--gold-lt:#F06467;--ink:#161A1D;--muted:#6B7280;--smoke:#F5F3F4;--white:#FFFFFF;--r-sm:10px;--r-md:16px;--r-lg:24px;}
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;font-size:16px;}
 body{font-family:'DM Sans',sans-serif;color:var(--ink);background:#f5f7fb;line-height:1.65;overflow-x:hidden;}
@@ -45,8 +45,8 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
 .portal-field input:focus{outline:none;border-color:rgba(201,146,42,0.6);background:rgba(255,255,255,0.13);box-shadow:0 0 0 3px rgba(201,146,42,0.15);}
 .primary-btn,.secondary-btn,.ghost-btn{border:none;border-radius:12px;padding:12px 16px;font-weight:800;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;}
 .primary-btn{background:linear-gradient(135deg,var(--gold),var(--gold-lt));color:var(--navy);}
-.secondary-btn{background:linear-gradient(135deg,#0D1B40,#1e3c72);color:#fff;}
-.ghost-btn{background:#eef4ff;color:#1e3c72;border:1px solid #dbe4f0;}
+.secondary-btn{background:linear-gradient(135deg,#660708,#A4161A);color:#fff;}
+.ghost-btn{background:#FDF0F0;color:#A4161A;border:1px solid #E8DCDD;}
 .primary-btn:hover,.secondary-btn:hover,.ghost-btn:hover{transform:translateY(-1px);}
 .login-toggle{text-align:center;margin-top:14px;font-size:0.88rem;color:rgba(255,255,255,0.6);}
 .login-toggle a{color:var(--gold-lt);font-weight:700;cursor:pointer;}
@@ -60,44 +60,44 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
 .app-shell{display:flex;width:100%;height:100%;}
 .app-sidebar{width:260px;background:var(--navy);color:#fff;padding:18px;overflow:auto;flex-shrink:0;}
 .app-brand{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
-.app-brand img{width:40px;height:40px;border-radius:50%;border:2px solid #C9922A;object-fit:cover;}
+.app-brand img{width:40px;height:40px;border-radius:50%;border:2px solid #E5383B;object-fit:cover;}
 .app-brand h3{font-family:'Playfair Display',serif;font-size:1.02rem;margin:0}
 .app-brand p{font-size:.72rem;letter-spacing:1.4px;text-transform:uppercase;color:rgba(232,170,72,.8)}
 .app-menu{display:grid;gap:8px;margin-top:10px}
-.app-menu button{width:100%;border:none;background:#1e3c72;color:#fff;padding:12px 14px;border-radius:10px;cursor:pointer;text-align:left;font-weight:700;font-family:'DM Sans',sans-serif;}
-.app-menu button:hover,.app-menu button.active{background:#C9922A;color:#111}
+.app-menu button{width:100%;border:none;background:#A4161A;color:#fff;padding:12px 14px;border-radius:10px;cursor:pointer;text-align:left;font-weight:700;font-family:'DM Sans',sans-serif;}
+.app-menu button:hover,.app-menu button.active{background:#E5383B;color:#111}
 .portal-collapse-btn{width:100%;margin:0 0 14px;padding:10px 12px;border:1px solid rgba(255,255,255,.22);border-radius:10px;background:rgba(255,255,255,.08);color:#fff;cursor:pointer;font:inherit;font-weight:700;text-align:left;transition:.2s}
 .portal-collapse-btn:hover{background:rgba(255,255,255,.16)}
 .app-main{flex:1;overflow:auto;padding:20px}
 .app-topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
-.app-title{font-family:'Playfair Display',serif;color:#0D1B40;font-size:1.5rem;margin:0}
+.app-title{font-family:'Playfair Display',serif;color:#660708;font-size:1.5rem;margin:0}
 .app-sub{color:#6b7280;font-size:.88rem}
 .app-card{background:#fff;border:1px solid rgba(201,146,42,.12);border-radius:20px;padding:18px;box-shadow:0 4px 18px rgba(13,27,64,.06);margin-bottom:16px}
 .app-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .app-grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.metric{background:linear-gradient(135deg,#0D1B40,#1e3c72);color:#fff;border-radius:16px;padding:16px}
+.metric{background:linear-gradient(135deg,#660708,#A4161A);color:#fff;border-radius:16px;padding:16px}
 .metric .n{font-family:'Playfair Display',serif;font-size:2rem;font-weight:800}
 .metric .l{font-size:.75rem;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.6)}
 .mini-list{display:grid;gap:10px}
 .mini-item{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:12px}
-.chip{display:inline-flex;align-items:center;gap:6px;background:#eef4ff;color:#1e3c72;border-radius:999px;padding:6px 10px;font-size:.75rem;font-weight:700;margin:4px 6px 0 0}
+.chip{display:inline-flex;align-items:center;gap:6px;background:#FDF0F0;color:#A4161A;border-radius:999px;padding:6px 10px;font-size:.75rem;font-weight:700;margin:4px 6px 0 0}
 .empty-box{padding:14px;border:1px dashed #d9e2ef;border-radius:14px;background:#fbfdff;color:#5d6e83}
-.subject-title{font-family:'Playfair Display',serif;font-size:1.05rem;color:#0D1B40;margin:4px 0 10px}
+.subject-title{font-family:'Playfair Display',serif;font-size:1.05rem;color:#660708;margin:4px 0 10px}
 .btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
 .hidden{display:none !important}
-.portal-reopen{display:none;position:fixed;left:16px;bottom:16px;z-index:10005;border:0;border-radius:999px;padding:11px 16px;background:linear-gradient(135deg,var(--gold),var(--gold-lt));color:var(--navy);font:inherit;font-weight:800;box-shadow:0 8px 25px rgba(13,27,64,.3);cursor:pointer}
+.portal-reopen{display:none;position:fixed;left:16px;bottom:16px;z-index:10005;border:0;border-radius:999px;padding:11px 16px;background:linear-gradient(135deg,var(--gold),var(--gold-lt));color:var(--navy);font:inherit;font-weight:800;box-shadow:0 8px 25px rgba(102,7,8,.3);cursor:pointer}
 .portal-reopen.portal-visible{display:block}
-.back-btn{display:inline-flex;align-items:center;gap:6px;background:#f1f5f9;color:#0D1B40;border:none;border-radius:10px;padding:10px 16px;font-weight:700;cursor:pointer;margin-bottom:14px;transition:all .2s;font-family:'DM Sans',sans-serif;}
+.back-btn{display:inline-flex;align-items:center;gap:6px;background:#f1f5f9;color:#660708;border:none;border-radius:10px;padding:10px 16px;font-weight:700;cursor:pointer;margin-bottom:14px;transition:all .2s;font-family:'DM Sans',sans-serif;}
 .back-btn:hover{background:#e2e8f0}
 
 /* Course Grid */
 .course-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px}
 .course-card{background:#fff;border-radius:18px;overflow:hidden;border:1px solid rgba(13,27,64,.08);box-shadow:0 4px 18px rgba(13,27,64,.06);cursor:pointer;transition:transform .25s,box-shadow .25s}
 .course-card:hover{transform:translateY(-5px);box-shadow:0 16px 40px rgba(13,27,64,.12)}
-.course-thumb{width:100%;height:160px;background:linear-gradient(135deg,#1e3c72,#2a5298);display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Playfair Display',serif;font-size:1.3rem;position:relative;overflow:hidden}
-.course-thumb .badge{position:absolute;top:10px;left:10px;background:linear-gradient(135deg,#C9922A,#E8AA48);color:#0D1B40;font-size:.72rem;font-weight:800;padding:5px 12px;border-radius:20px;text-transform:uppercase;letter-spacing:.5px}
+.course-thumb{width:100%;height:160px;background:linear-gradient(135deg,#A4161A,#8F1114);display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Playfair Display',serif;font-size:1.3rem;position:relative;overflow:hidden}
+.course-thumb .badge{position:absolute;top:10px;left:10px;background:linear-gradient(135deg,#E5383B,#F06467);color:#660708;font-size:.72rem;font-weight:800;padding:5px 12px;border-radius:20px;text-transform:uppercase;letter-spacing:.5px}
 .course-info{padding:18px}
-.course-info h4{font-family:'Playfair Display',serif;color:#0D1B40;margin:0 0 6px;font-size:1.08rem}
+.course-info h4{font-family:'Playfair Display',serif;color:#660708;margin:0 0 6px;font-size:1.08rem}
 .course-info p{color:#6B7280;font-size:.88rem;margin:0 0 12px;line-height:1.5}
 .course-meta{display:flex;justify-content:space-between;align-items:center;font-size:.82rem;color:#6B7280}
 
@@ -106,7 +106,7 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
 .hub-option-card{background:#fff;border:1px solid rgba(201,146,42,.12);border-radius:20px;padding:28px 20px;text-align:center;cursor:pointer;transition:all .25s;box-shadow:0 4px 18px rgba(13,27,64,.06);}
 .hub-option-card:hover{transform:translateY(-5px);box-shadow:0 16px 40px rgba(13,27,64,.12);border-color:rgba(201,146,42,.35);}
 .hub-option-card .icon{font-size:2.5rem;margin-bottom:12px;}
-.hub-option-card h4{font-family:'Playfair Display',serif;color:#0D1B40;margin:0 0 6px;font-size:1.15rem;}
+.hub-option-card h4{font-family:'Playfair Display',serif;color:#660708;margin:0 0 6px;font-size:1.15rem;}
 .hub-option-card p{color:#6b7280;font-size:.85rem;margin:0;}
 
 /* Lecture Player */
@@ -115,28 +115,28 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
 .player-video{flex:1;display:flex;align-items:center;justify-content:center;position:relative;min-height:0}
 .player-video iframe,.player-video video{width:100%;height:100%;border:none}
 .player-info{background:#fff;padding:20px 24px;border-top:1px solid #e5e7eb}
-.player-info h3{margin:0 0 6px;color:#0D1B40;font-family:'Playfair Display',serif;font-size:1.15rem}
+.player-info h3{margin:0 0 6px;color:#660708;font-family:'Playfair Display',serif;font-size:1.15rem}
 .player-info p{color:#6b7280;margin:0;font-size:.9rem}
 .syllabus-sidebar{width:380px;background:#fff;border-left:1px solid #e5e7eb;display:flex;flex-direction:column;flex-shrink:0}
 .syllabus-header{padding:20px;border-bottom:1px solid #e5e7eb}
-.syllabus-header h3{margin:0 0 12px;color:#0D1B40;font-family:'Playfair Display',serif;font-size:1.1rem}
+.syllabus-header h3{margin:0 0 12px;color:#660708;font-family:'Playfair Display',serif;font-size:1.1rem}
 .progress-bar-wrap{background:#e5e7eb;height:6px;border-radius:3px;overflow:hidden;margin-bottom:8px}
-.progress-bar-fill{background:linear-gradient(90deg,#C9922A,#E8AA48);height:100%;border-radius:3px;transition:width .4s ease}
+.progress-bar-fill{background:linear-gradient(90deg,#E5383B,#F06467);height:100%;border-radius:3px;transition:width .4s ease}
 .syllabus-body{flex:1;overflow:auto;padding:12px}
 .syllabus-section{margin-bottom:10px;border:1px solid #e5e7eb;border-radius:14px;overflow:hidden}
-.syllabus-section summary{list-style:none;cursor:pointer;padding:14px 16px;background:#f8fafc;font-weight:700;color:#0D1B40;display:flex;justify-content:space-between;align-items:center;font-size:.92rem}
+.syllabus-section summary{list-style:none;cursor:pointer;padding:14px 16px;background:#f8fafc;font-weight:700;color:#660708;display:flex;justify-content:space-between;align-items:center;font-size:.92rem}
 .syllabus-section summary::-webkit-details-marker{display:none}
 .syllabus-section summary .sec-icon{font-size:.8rem;color:#6b7280}
-.syllabus-section[open] summary{background:#0D1B40;color:#fff}
-.syllabus-section[open] summary .sec-icon{color:#E8AA48}
-.syllabus-section[open]{border-color:#0D1B40}
+.syllabus-section[open] summary{background:#660708;color:#fff}
+.syllabus-section[open] summary .sec-icon{color:#F06467}
+.syllabus-section[open]{border-color:#660708}
 .lesson-item{padding:12px 16px;border-bottom:1px solid #f0f0f0;cursor:pointer;display:flex;align-items:center;gap:12px;transition:background .15s}
 .lesson-item:last-child{border-bottom:none}
 .lesson-item:hover{background:#f8fafc}
-.lesson-item.active{background:#eef4ff;border-left:3px solid #1e3c72;padding-left:13px}
+.lesson-item.active{background:#FDF0F0;border-left:3px solid #A4161A;padding-left:13px}
 .lesson-item.locked{opacity:.55;cursor:not-allowed}
 .lesson-item.locked:hover{background:transparent}
-.lesson-item .icon{width:32px;height:32px;border-radius:8px;background:#e8efff;color:#1e3c72;display:grid;place-items:center;font-size:.85rem;flex-shrink:0}
+.lesson-item .icon{width:32px;height:32px;border-radius:8px;background:#FDF0F0;color:#A4161A;display:grid;place-items:center;font-size:.85rem;flex-shrink:0}
 .lesson-item.locked .icon{background:#f3f4f6;color:#9ca3af}
 .lesson-title{font-size:.9rem;color:#1f2937;font-weight:600;line-height:1.4}
 .lesson-meta{font-size:.78rem;color:#6b7280;margin-top:3px}
@@ -145,20 +145,20 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
 .mock-list{display:grid;gap:12px;}
 .mock-card{background:#fff;border:1.5px solid #e5e7eb;border-radius:14px;padding:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
 .mock-card:hover{border-color:rgba(201,146,42,.35);}
-.mock-tag{background:#eef4ff;color:#1e3c72;font-size:.72rem;font-weight:800;padding:4px 10px;border-radius:999px;}
+.mock-tag{background:#FDF0F0;color:#A4161A;font-size:.72rem;font-weight:800;padding:4px 10px;border-radius:999px;}
 
 /* Live */
-.live-card{background:linear-gradient(135deg,#0D1B40,#1e3c72);color:#fff;border-radius:16px;padding:20px;margin-bottom:12px;}
+.live-card{background:linear-gradient(135deg,#660708,#A4161A);color:#fff;border-radius:16px;padding:20px;margin-bottom:12px;}
 .live-card h4{font-family:'Playfair Display',serif;margin:0 0 6px;}
 .live-badge{display:inline-block;background:#ef4444;color:#fff;font-size:.65rem;font-weight:800;padding:3px 10px;border-radius:999px;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
-.live-badge.upcoming{background:#C9922A;}
+.live-badge.upcoming{background:#E5383B;}
 
 /* Calendar */
 .calendar-list{display:grid;gap:10px;max-height:360px;overflow:auto}
 .calendar-item{background:#faf8f5;border:1px solid rgba(201,146,42,.15);border-radius:12px;padding:10px 12px}
-.calendar-date{font-size:.72rem;font-weight:800;color:#C9922A;letter-spacing:1px;text-transform:uppercase}
-.calendar-title{font-size:.88rem;font-weight:700;color:#0D1B40;margin-top:4px}
-.calendar-link{font-size:.78rem;color:#C9922A;font-weight:700;word-break:break-word}
+.calendar-date{font-size:.72rem;font-weight:800;color:#E5383B;letter-spacing:1px;text-transform:uppercase}
+.calendar-title{font-size:.88rem;font-weight:700;color:#660708;margin-top:4px}
+.calendar-link{font-size:.78rem;color:#E5383B;font-weight:700;word-break:break-word}
 
 /* Leaderboard */
 .leaderboard-table{width:100%;border-collapse:separate;border-spacing:0 8px;}
@@ -172,8 +172,8 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
 
 /* Podium */
 .podium-wrap{display:grid;grid-template-columns:1fr 1.2fr 1fr;gap:16px;align-items:end;}
-.podium-1st{background:linear-gradient(135deg,#ffd700,#ffed4e);color:#0D1B40;border-radius:20px;padding:28px 16px;text-align:center;box-shadow:0 16px 45px rgba(255,215,0,.35);transform:scale(1.06);}
-.podium-2nd{background:linear-gradient(135deg,#c0c0c0,#e8e8e8);color:#0D1B40;border-radius:20px;padding:22px 16px;text-align:center;box-shadow:0 12px 35px rgba(192,192,192,.25);}
+.podium-1st{background:linear-gradient(135deg,#ffd700,#ffed4e);color:#660708;border-radius:20px;padding:28px 16px;text-align:center;box-shadow:0 16px 45px rgba(255,215,0,.35);transform:scale(1.06);}
+.podium-2nd{background:linear-gradient(135deg,#c0c0c0,#e8e8e8);color:#660708;border-radius:20px;padding:22px 16px;text-align:center;box-shadow:0 12px 35px rgba(192,192,192,.25);}
 .podium-3rd{background:linear-gradient(135deg,#cd7f32,#e6a55c);color:#fff;border-radius:20px;padding:22px 16px;text-align:center;box-shadow:0 12px 35px rgba(205,127,50,.25);}
 .podium-crown{font-size:2.2rem;margin-bottom:6px;line-height:1;}
 .podium-name{font-family:'Playfair Display',serif;font-weight:700;font-size:1.05rem;margin-bottom:4px;}
@@ -182,12 +182,12 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
 
 /* Announcements */
 .announcement-high{border-left:4px solid #ef4444 !important;}
-.announcement-normal{border-left:4px solid #C9922A !important;}
+.announcement-normal{border-left:4px solid #E5383B !important;}
 
 /* Pagination */
 .pagination-bar{display:flex;justify-content:center;gap:8px;margin-top:16px;flex-wrap:wrap;}
-.pagination-bar button{border:1px solid #e5e7eb;background:#fff;border-radius:8px;padding:8px 14px;cursor:pointer;font-weight:700;color:#0D1B40;}
-.pagination-bar button.active{background:linear-gradient(135deg,#C9922A,#E8AA48);color:#0D1B40;border-color:transparent;}
+.pagination-bar button{border:1px solid #e5e7eb;background:#fff;border-radius:8px;padding:8px 14px;cursor:pointer;font-weight:700;color:#660708;}
+.pagination-bar button.active{background:linear-gradient(135deg,#E5383B,#F06467);color:#660708;border-color:transparent;}
 .pagination-bar button:disabled{opacity:.4;cursor:not-allowed;}
 
 /* Search */
@@ -205,14 +205,14 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
 .feedback.correct{background:#d1fae5;border-color:#10b981;color:#065f46;}
 .feedback.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
 .option-btn{display:block;width:100%;text-align:left;padding:14px 16px;margin:8px 0;border:1.5px solid #e5e7eb;border-radius:12px;background:#fff;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.95rem;transition:all .15s;}
-.option-btn:hover{border-color:#1e3c72;background:#f8fbff;}
-.option-btn.selected{border-color:#1e3c72;background:#eef4ff;color:#0D1B40;font-weight:700;}
+.option-btn:hover{border-color:#A4161A;background:#FDF0F0;}
+.option-btn.selected{border-color:#A4161A;background:#FDF0F0;color:#660708;font-weight:700;}
 .dropdown-select{width:100%;padding:12px 14px;border-radius:12px;border:1.5px solid #e5e7eb;background:#fff;font-family:'DM Sans',sans-serif;font-size:.95rem;}
 .fill-input{width:100%;padding:12px 14px;border-radius:12px;border:1.5px solid #e5e7eb;background:#fff;font-family:'DM Sans',sans-serif;font-size:.95rem;}
 .manual-textarea{width:100%;padding:12px 14px;border-radius:12px;border:1.5px solid #e5e7eb;background:#fff;font-family:'DM Sans',sans-serif;font-size:.95rem;min-height:140px;resize:vertical;}
 .question-card{background:#fff;border-radius:16px;padding:20px;}
 .question-meta{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;flex-wrap:wrap;gap:8px;}
-.question-title{margin:0;font-size:1.2rem;color:#0D1B40;}
+.question-title{margin:0;font-size:1.2rem;color:#660708;}
 .question-sub{color:#6b7280;font-size:.85rem;}
 
 @media(max-width:900px){
@@ -237,39 +237,51 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
 .app-card{border-radius:18px;border:1px solid rgba(13,27,64,.08);box-shadow:0 4px 18px rgba(13,27,64,.05);}
 .course-card{border:1px solid rgba(13,27,64,.08);border-radius:20px;background:#fff;overflow:hidden;box-shadow:0 4px 18px rgba(13,27,64,.06);transition:transform .25s,box-shadow .25s;}
 .course-card:hover{transform:translateY(-5px);box-shadow:0 18px 44px rgba(13,27,64,.13);}
-.course-thumb{height:170px;background:linear-gradient(135deg,#0D1B40 0%,#1e3c72 55%,#2a5298 100%);}
-.course-thumb .badge{background:linear-gradient(135deg,#C9922A,#E8AA48);color:#0D1B40;letter-spacing:1px;}
+.course-thumb{height:170px;background:linear-gradient(135deg,#660708 0%,#A4161A 55%,#8F1114 100%);}
+.course-thumb .badge{background:linear-gradient(135deg,#E5383B,#F06467);color:#660708;letter-spacing:1px;}
 .course-info h4{font-size:1.16rem;letter-spacing:.2px;}
 .course-meta{font-weight:600;}
 .hub-option-card{border:1px solid rgba(13,27,64,.08);transition:transform .25s,box-shadow .25s,border-color .25s;}
 .hub-option-card:hover{transform:translateY(-5px);box-shadow:0 18px 44px rgba(13,27,64,.12);border-color:rgba(201,146,42,.4);}
-.primary-btn{background:linear-gradient(135deg,#C9922A,#E8AA48);color:#0D1B40;box-shadow:0 6px 18px rgba(201,146,42,.28);letter-spacing:.3px;}
+.primary-btn{background:linear-gradient(135deg,#E5383B,#F06467);color:#660708;box-shadow:0 6px 18px rgba(201,146,42,.28);letter-spacing:.3px;}
 .secondary-btn{box-shadow:0 6px 18px rgba(13,27,64,.18);}
 .syllabus-section{transition:border-color .2s;}
 .syllabus-section:hover{border-color:rgba(201,146,42,.35);}
 .lesson-item:hover{background:#f4f7fd;}
-.lesson-item.active{background:#eef4ff;border-left:3px solid #C9922A;}
-.lesson-item.active .icon{background:#0D1B40;color:#E8AA48;}
+.lesson-item.active{background:#FDF0F0;border-left:3px solid #E5383B;}
+.lesson-item.active .icon{background:#660708;color:#F06467;}
 .lesson-item .icon{transition:all .2s;}
 .mini-item{border-radius:14px;transition:box-shadow .2s;}
 .mini-item:hover{box-shadow:0 8px 22px rgba(13,27,64,.07);}
-.progress-bar-fill{background:linear-gradient(90deg,#C9922A,#E8AA48);}
-.calendar-item{border-left:3px solid #C9922A;}
+.progress-bar-fill{background:linear-gradient(90deg,#E5383B,#F06467);}
+.calendar-item{border-left:3px solid #E5383B;}
 .app-menu button{letter-spacing:.2px;}
 .pf-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 26px;}
 .pf-row{display:flex;align-items:center;gap:14px;}
 .pf-row label{width:150px;flex-shrink:0;font-size:.7rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#6B7280;margin:0;}
 .pf-row input{flex:1;min-width:0;margin:0;padding:11px 14px;border:1px solid #dbe2ee;border-radius:10px;font:inherit;background:#fbfcfe;transition:border-color .2s, box-shadow .2s;}
-.pf-row input:focus{outline:none;border-color:#C9922A;box-shadow:0 0 0 3px rgba(201,146,42,.14);background:#fff;}
+.pf-row input:focus{outline:none;border-color:#E5383B;box-shadow:0 0 0 3px rgba(201,146,42,.14);background:#fff;}
 .pf-row input:disabled{color:#6B7280;}
 .pf-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:22px;padding-top:16px;border-top:1px solid #eef2f8;}
 @media(max-width:760px){.pf-grid{grid-template-columns:1fr;}}
 
 /* Batch-first dashboard card */
 .student-batch-card{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid #E8DCDD;border-radius:16px;padding:18px 20px;margin-bottom:20px;box-shadow:0 8px 24px rgba(13,27,64,.06)}
-.student-batch-icon{display:grid;place-items:center;width:44px;height:44px;flex:0 0 44px;border-radius:12px;background:#eef4ff;color:#1e3c72;font-size:22px}
-.student-batch-label{color:#1e3c72;font-size:11px;font-weight:800;letter-spacing:1px}
+.student-batch-icon{display:grid;place-items:center;width:44px;height:44px;flex:0 0 44px;border-radius:12px;background:#FDF0F0;color:#A4161A;font-size:22px}
+.student-batch-label{color:#A4161A;font-size:11px;font-weight:800;letter-spacing:1px}
 .student-batch-name{color:#161A1D;font-size:16px;font-weight:800;overflow-wrap:anywhere}
+
+
+/* Doubt Centre — website palette, readable conversation and attachment UI */
+.doubt-status{display:inline-flex;align-items:center;border-radius:999px;padding:4px 9px;font-size:.72rem;font-weight:800;text-transform:capitalize;background:#FDF0F0;color:#660708}
+.doubt-status.answered{background:#FDF0F0;color:#A4161A}
+.doubt-status.closed{background:#F5F3F4;color:#62676B}
+#doubtMessagesX{display:grid;gap:10px;margin-top:14px}
+#doubtMessagesX .mini-item{border-left:3px solid #A4161A;overflow-wrap:anywhere}
+#doubtMessagesX img{max-width:100%}
+#doubtConversationX[hidden]{display:none!important}
+#doubtSubmitX:disabled,#doubtFollowupSubmitX:disabled{opacity:.6;cursor:wait}
+#doubtFilesX,#doubtFollowupFilesX{max-width:100%;font:inherit}
 
 </style>
 <base target="_blank">
@@ -316,7 +328,7 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
           <h2 class="app-title" id="pageTitleX">Dashboard</h2>
           <div class="app-sub" id="pageSubX">Select a course assigned by your admin</div>
         </div>
-        <button onclick="openStudentView('studentProfileX');loadProfile();" title="My Profile" style="width:42px;height:42px;border-radius:50%;border:2px solid #C9922A;background:linear-gradient(135deg,#0D1B40,#1e3c72);color:#E8AA48;font-size:1.15rem;cursor:pointer;flex-shrink:0;">👤</button>
+        <button onclick="openStudentView('studentProfileX');loadProfile();" title="My Profile" style="width:42px;height:42px;border-radius:50%;border:2px solid #E5383B;background:linear-gradient(135deg,#660708,#A4161A);color:#F06467;font-size:1.15rem;cursor:pointer;flex-shrink:0;">👤</button>
         
       </div>
 
@@ -375,7 +387,7 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
             <div class="syllabus-header">
               <h3>Syllabus</h3>
               <input type="search" id="lectureSearchX" class="course-search" placeholder="Search lessons..." oninput="filterLectures()" style="max-width:100%;margin-bottom:10px;padding:10px 14px;">
-              <div style="font-size:1.7rem;font-weight:800;color:#0D1B40;line-height:1;"><span id="courseProgressBigX">0%</span> <span style="font-size:1rem;font-weight:600;color:#6b7280;">complete</span></div>
+              <div style="font-size:1.7rem;font-weight:800;color:#660708;line-height:1;"><span id="courseProgressBigX">0%</span> <span style="font-size:1rem;font-weight:600;color:#6b7280;">complete</span></div>
               <div class="progress-bar-wrap" style="margin-top:8px;"><div class="progress-bar-fill" id="courseProgressBarX" style="width:0%"></div></div>
               <div style="display:flex;justify-content:space-between;font-size:.82rem;color:#6b7280;">
                 <span id="courseProgressTextX">0 of 0 Lessons</span><span id="courseProgressPctX">0%</span>
@@ -410,19 +422,47 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
       <!-- DOUBTS -->
       <section class="app-view hidden" id="studentDoubtsX">
         <button class="back-btn" onclick="backToCourseHub()" type="button">← Back to Course</button>
-        <h2 class="app-title" style="margin:10px 0 6px;">💬 Doubts — <span id="doubtCourseNameX">Course</span></h2>
+        <h2 class="app-title" style="margin:10px 0 6px;">💬 Doubt Centre — <span id="doubtCourseNameX">Course</span></h2>
         <div class="app-grid-2">
           <div class="app-card">
             <h3 class="subject-title">Ask a New Doubt</h3>
-            <div class="portal-field" style="margin-bottom:12px"><label>Topic</label><input id="doubtTopicX" placeholder="e.g. Chapter 3" style="color:#1A1A2E;background:#fff;border:1px solid rgba(13,27,64,.14)"></div>
-            <div class="portal-field" style="margin-bottom:12px"><label>Your doubt</label><textarea id="doubtTextX" placeholder="Explain..." style="color:#1A1A2E;background:#fff;border:1px solid rgba(13,27,64,.14);min-height:110px;resize:vertical"></textarea></div>
-            <button class="primary-btn" type="button" onclick="submitCourseDoubt()">Send to Faculty</button>
-            <div id="doubtStatusX" class="portal-status" style="color:#0D1B40;margin-top:10px"></div>
+            <div class="portal-field" style="margin-bottom:12px">
+              <label for="doubtTopicX">Topic</label>
+              <input id="doubtTopicX" maxlength="120" placeholder="e.g. Chapter 3"
+                style="color:#161A1D;background:#fff;border:1px solid rgba(13,27,64,.14)">
+            </div>
+            <div class="portal-field" style="margin-bottom:12px">
+              <label for="doubtTextX">Your doubt</label>
+              <textarea id="doubtTextX" maxlength="5000" placeholder="Explain your doubt..."
+                style="color:#161A1D;background:#fff;border:1px solid rgba(13,27,64,.14);min-height:110px;resize:vertical"></textarea>
+            </div>
+            <div class="portal-field" style="margin-bottom:12px">
+              <label for="doubtFilesX">Attach images or PDFs (up to 5 files, 8 MB each)</label>
+              <input id="doubtFilesX" type="file" accept="image/jpeg,image/png,image/webp,image/gif,application/pdf" multiple>
+            </div>
+            <button class="primary-btn" id="doubtSubmitX" type="button" onclick="submitCourseDoubt()">Send to Faculty</button>
+            <div id="doubtStatusX" class="portal-status" role="status" aria-live="polite" style="color:#660708;margin-top:10px"></div>
           </div>
           <div class="app-card">
             <h3 class="subject-title">My Doubts</h3>
             <div id="studentDoubtListX" class="mini-list"><div class="skeleton" style="height:100px;border-radius:14px;"></div></div>
           </div>
+        </div>
+        <div class="app-card" id="doubtConversationX" hidden style="margin-top:18px">
+          <button class="back-btn" onclick="closeStudentDoubtConversation()" type="button">← Back to My Doubts</button>
+          <h3 class="subject-title" id="doubtConversationTitleX">Conversation</h3>
+          <div id="doubtMessagesX"></div>
+          <div class="portal-field" style="margin-top:14px">
+            <label for="doubtFollowupTextX">Follow-up question</label>
+            <textarea id="doubtFollowupTextX" maxlength="5000" placeholder="Continue this conversation..."
+              style="color:#161A1D;background:#fff;border:1px solid rgba(13,27,64,.14);min-height:100px;resize:vertical"></textarea>
+          </div>
+          <div class="portal-field">
+            <label for="doubtFollowupFilesX">Attach images or PDFs (up to 5 files, 8 MB each)</label>
+            <input id="doubtFollowupFilesX" type="file" accept="image/jpeg,image/png,image/webp,image/gif,application/pdf" multiple>
+          </div>
+          <button class="primary-btn" id="doubtFollowupSubmitX" type="button" onclick="sendStudentDoubtFollowup()">Send Follow-up</button>
+          <div id="doubtFollowupStatusX" class="portal-status" role="status" aria-live="polite" style="color:#660708;margin-top:10px"></div>
         </div>
       </section>
 
@@ -466,7 +506,7 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
           <div class="pf-foot">
             <span class="small" id="pfMetaX" style="color:#6B7280;">—</span>
             <span style="display:flex;align-items:center;gap:12px;">
-              <span id="pfStatusX" class="portal-status" style="color:#0D1B40;margin:0;min-height:0;"></span>
+              <span id="pfStatusX" class="portal-status" style="color:#660708;margin:0;min-height:0;"></span>
               <button class="primary-btn" type="button" onclick="saveProfile()">Save Profile</button>
             </span>
           </div>
@@ -848,7 +888,7 @@ async function loadCourseLeaderboard(subject){
     }).join('');
     tbody.innerHTML = rows.map((r, i) => {
       const medal = i===0?'🥇':i===1?'🥈':i===2?'🥉':'';
-      return `<tr><td style="padding:14px;font-weight:800;color:${i<3?'#C9922A':'#6b7280'};">${medal} #${i+1}</td><td style="padding:14px;"><strong>${esc(r.name)}</strong></td><td style="padding:14px;">${r.count}</td><td style="padding:14px;font-weight:700;">${r.avg}%</td><td style="padding:14px;">${r.best}%</td></tr>`;
+      return `<tr><td style="padding:14px;font-weight:800;color:${i<3?'#E5383B':'#6b7280'};">${medal} #${i+1}</td><td style="padding:14px;"><strong>${esc(r.name)}</strong></td><td style="padding:14px;">${r.count}</td><td style="padding:14px;font-weight:700;">${r.avg}%</td><td style="padding:14px;">${r.best}%</td></tr>`;
     }).join('');
   } catch(err){ console.error(err); podium.innerHTML='<div class="empty-box" style="grid-column:1/-1;">Failed to load.</div>'; tbody.innerHTML=''; }
 }
@@ -881,7 +921,7 @@ async function loadAnnouncements(){
       const isHigh = a.priority === 'high';
       return `<div class="mini-item ${isHigh?'announcement-high':'announcement-normal'}">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:8px;">
-          <strong style="font-size:1.05rem;color:#0D1B40;">${esc(a.title||'Announcement')}</strong>
+          <strong style="font-size:1.05rem;color:#660708;">${esc(a.title||'Announcement')}</strong>
           ${isHigh?'<span style="background:#fee2e2;color:#991b1b;padding:3px 10px;border-radius:999px;font-size:.7rem;font-weight:800;">IMPORTANT</span>':''}
         </div>
         <p style="color:#374151;line-height:1.6;margin-bottom:8px;">${esc(a.message||'')}</p>
@@ -891,57 +931,219 @@ async function loadAnnouncements(){
   } catch(err){ list.innerHTML='<div class="empty-box">Unable to load.</div>'; }
 }
 
-/* ===== DOUBTS ===== */
-async function loadCourseDoubts(){
-  if(!state.activeCourse) return;
-  const user = auth.currentUser; if(!user) return;
+/* ===== DOUBT CENTRE: STUDENT SIDE ===== */
+const STUDENT_DOUBT_MAX_FILE_BYTES = 8 * 1024 * 1024;
+const STUDENT_DOUBT_MAX_FILES = 5;
+let activeStudentDoubtId = null;
+let activeStudentDoubtUnsubscribe = null;
+
+function getStudentDoubtFiles(inputId) {
+  return Array.from(document.getElementById(inputId)?.files || []);
+}
+function validateStudentDoubtFiles(files) {
+  if (files.length > STUDENT_DOUBT_MAX_FILES) throw new Error('Attach no more than 5 files.');
+  for (const f of files) {
+    const allowed = ['image/jpeg','image/png','image/webp','image/gif','application/pdf'];
+    if (!allowed.includes(f.type)) throw new Error('Only JPG, PNG, WEBP, GIF and PDF files are allowed.');
+    if (!f.size || f.size > STUDENT_DOUBT_MAX_FILE_BYTES) throw new Error(`${f.name}: file must be smaller than 8 MB.`);
+  }
+}
+async function uploadStudentDoubtFiles(doubtId, files) {
+  validateStudentDoubtFiles(files);
+  const user = auth.currentUser;
+  if (!user) throw new Error('Please sign in again.');
+  const result = [];
+  for (const f of files) {
+    const safe = f.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+    const path = `doubt-attachments/${doubtId}/${user.uid}/${Date.now()}-${Math.random().toString(36).slice(2)}-${safe}`;
+    const ref = firebase.storage().ref(path);
+    await ref.put(f, {contentType:f.type, customMetadata:{ownerUid:user.uid,doubtId}});
+    result.push({storagePath:path,name:f.name,contentType:f.type,size:f.size});
+  }
+  return result;
+}
+async function studentDoubtAttachmentHtml(a) {
+  const name = esc(a.name || a.attachmentName || 'Attachment');
+  const path = a.storagePath || a.attachmentPath;
+  if (path) {
+    try {
+      const url = await firebase.storage().ref(path).getDownloadURL();
+      if ((a.contentType || '').startsWith('image/')) {
+        return `<div style="margin:8px 0"><a href="${url}" target="_blank" rel="noopener noreferrer">${name}</a><br><img src="${url}" alt="${name}" loading="lazy" style="max-width:260px;max-height:220px;object-fit:contain;border-radius:8px;margin-top:5px"></div>`;
+      }
+      return `<p style="margin:6px 0">📎 <a href="${url}" target="_blank" rel="noopener noreferrer">${name}</a></p>`;
+    } catch (e) {
+      return `<p style="margin:6px 0">📎 ${name} (not available)</p>`;
+    }
+  }
+  if (a.attachmentUrl) {
+    return `<p style="margin:6px 0">📎 <a href="${esc(a.attachmentUrl)}" target="_blank" rel="noopener noreferrer">${name}</a></p>`;
+  }
+  return '';
+}
+async function renderStudentDoubtConversation(data) {
+  const messages = document.getElementById('doubtMessagesX');
+  const blocks = [];
+  blocks.push(`<div class="mini-item"><strong>Your original question</strong><p>${esc(data.message || '')}</p></div>`);
+  for (const a of (data.attachments || [])) blocks.push(await studentDoubtAttachmentHtml(a));
+  if (data.screenshotUrl) blocks.push(`<p><a href="${esc(data.screenshotUrl)}" target="_blank" rel="noopener noreferrer">Open existing attachment</a></p>`);
+  for (const r of (Array.isArray(data.replies) ? data.replies : [])) {
+    blocks.push(`<div class="mini-item"><strong>${esc(r.by === 'faculty' || r.by === 'admin' ? 'Faculty' : 'Student')}</strong><p>${esc(r.text || '')}</p></div>`);
+    if (r.attachmentUrl) blocks.push(await studentDoubtAttachmentHtml({attachmentUrl:r.attachmentUrl,attachmentName:r.attachmentName}));
+    for (const a of (r.attachments || [])) blocks.push(await studentDoubtAttachmentHtml(a));
+  }
+  messages.innerHTML = blocks.join('');
+}
+async function loadCourseDoubts() {
+  if (!state.activeCourse || !auth.currentUser) return;
+  const user = auth.currentUser;
   const box = document.getElementById('studentDoubtListX');
-  box.innerHTML = '<div class="skeleton" style="height:100px;border-radius:14px;"></div>'.repeat(2);
+  box.innerHTML = '<div class="skeleton" style="height:100px;border-radius:14px"></div>';
   try {
-    const snap = await db.collection('studentDoubts').where('userId','==',user.uid).where('courseSubject','==',state.activeCourse.subject).limit(50).get();
-    let doubts = snap.docs.map(d=>({id:d.id,...d.data()}));
-    doubts.sort((a,b) => (b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
-    if(!doubts.length){ box.innerHTML='<div class="empty-box">No doubts yet.</div>'; return; }
+    // Query only this student's records, then scope by batch/course in memory.
+    // This avoids requiring a new composite index for the existing schema.
+    const snap = await db.collection('studentDoubts')
+      .where('userId', '==', user.uid).get();
+    const all = snap.docs.map(d => ({id:d.id, ...d.data()}));
+    const course = state.activeCourse;
+    let doubts;
+    if (course.type === 'batch') {
+      doubts = all.filter(d => d.batchCode === course.batchCode ||
+        (!d.batchCode && (d.courseSubject === course.title || d.courseSubject === 'General')));
+    } else {
+      const generalName = course.title || 'General';
+      doubts = all.filter(d => !d.batchCode &&
+        (d.courseSubject === generalName || (!d.courseSubject && generalName === 'General')));
+    }
+    doubts.sort((a,b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+    if (!doubts.length) {
+      box.innerHTML = '<div class="empty-box">No doubts yet. Ask your first question using the form.</div>';
+      return;
+    }
     box.innerHTML = doubts.map(d => {
-      const replies = Array.isArray(d.replies) ? d.replies : [];
+      const isClosed = d.status === 'closed';
       return `<div class="mini-item">
-        <strong>${esc(d.topic||'General')}</strong> 
-        <span style="display:inline-flex;padding:3px 8px;border-radius:999px;background:${d.status==='open'?'#d1fae5;color:#065f46':'#dbe8ff;color:#1e3c72'};font-size:.72rem;font-weight:800;margin-left:6px">${esc(d.status||'open')}</span><br>
-        <span style="font-size:.85rem;color:#6b7280">${esc(d.studentName||'')} · ${fmtDate(d.createdAt)}</span>
-        <p style="margin-top:8px;font-size:.92rem">${esc(d.message||'')}</p>
-        ${replies.length ? `<div style="margin-top:10px;border-left:3px solid #C9922A;padding-left:10px;">${replies.map(r=>`<div><span style="font-size:.75rem;color:#6b7280">${esc(r.by||'Faculty')}</span><p style="margin:4px 0;font-size:.9rem">${esc(r.text||'')}</p></div>`).join('')}</div>` : '<div style="margin-top:8px;font-size:.85rem;color:#9ca3af">Awaiting reply…</div>'}
+        <div style="display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap">
+          <strong>${esc(d.topic || 'General')}</strong>
+          <span class="doubt-status ${isClosed ? 'closed' : (d.status === 'answered' ? 'answered' : 'open')}">${esc(d.status || 'open')}</span>
+        </div>
+        <div style="font-size:.82rem;color:var(--muted);margin-top:4px">${fmtDate(d.createdAt)}</div>
+        <p style="margin-top:8px;white-space:pre-wrap">${esc(d.message || '')}</p>
+        <button class="primary-btn" type="button" onclick="openStudentDoubtConversation('${d.id}')">Open Conversation${Array.isArray(d.replies) && d.replies.length ? ` (${d.replies.length})` : ''}</button>
       </div>`;
     }).join('');
-  } catch(err){ box.innerHTML='<div class="empty-box">Unable to load doubts.</div>'; }
+  } catch(err) {
+    console.error(err);
+    box.innerHTML = '<div class="empty-box">Unable to load doubts. Please check your connection and permissions.</div>';
+  }
 }
-
-window.submitCourseDoubt = async function(){
-  if(!state.activeCourse) return;
-  const subject = state.activeCourse.subject;
-  const topic = document.getElementById('doubtTopicX')?.value.trim() || 'General';
-  const message = document.getElementById('doubtTextX')?.value.trim();
-  const statusEl = document.getElementById('doubtStatusX');
+window.submitCourseDoubt = async function() {
   const user = auth.currentUser;
-  if(!user || !message){ if(statusEl) statusEl.textContent = 'Sign in and write your doubt first.'; return; }
-  try{
-    if(statusEl) statusEl.textContent = 'Sending…';
-    await db.collection('studentDoubts').add({
-      userId: user.uid,
-      studentName: user.displayName || user.email || 'Student',
-      courseSubject: subject,
-      topic: topic,
-      message: message,
-      status: 'open',
-      replies: [],
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+  const statusEl = document.getElementById('doubtStatusX');
+  const button = document.getElementById('doubtSubmitX');
+  if (!state.activeCourse || !user) { statusEl.textContent='Sign in and select a course first.'; return; }
+  const topic = document.getElementById('doubtTopicX').value.trim() || 'General';
+  const message = document.getElementById('doubtTextX').value.trim();
+  const files = getStudentDoubtFiles('doubtFilesX');
+  if (!message && !files.length) { statusEl.textContent='Write a doubt or attach a file first.'; return; }
+  try {
+    validateStudentDoubtFiles(files);
+    button.disabled = true;
+    statusEl.textContent='Uploading attachments…';
+    const ref = db.collection('studentDoubts').doc();
+    const attachments = await uploadStudentDoubtFiles(ref.id, files);
+    await ref.set({
+      userId:user.uid,
+      studentName:user.displayName || user.email || 'Student',
+      courseSubject:state.activeCourse.title || 'General',
+      batchCode:state.activeCourse.type === 'batch' ? state.activeCourse.batchCode : '',
+      batchName:state.activeCourse.type === 'batch' ? state.activeCourse.title : '',
+      courseType:state.activeCourse.type || 'general',
+      topic,message,attachments,status:'open',replies:[],
+      createdAt:firebase.firestore.FieldValue.serverTimestamp(),
+      updatedAt:firebase.firestore.FieldValue.serverTimestamp()
     });
-    document.getElementById('doubtTextX').value = '';
-    document.getElementById('doubtTopicX').value = '';
-    if(statusEl) statusEl.textContent = 'Sent successfully.';
-    loadCourseDoubts();
-  }catch(err){ if(statusEl) statusEl.textContent = err.message || 'Could not send.'; }
+    document.getElementById('doubtTopicX').value='';
+    document.getElementById('doubtTextX').value='';
+    document.getElementById('doubtFilesX').value='';
+    statusEl.textContent='Doubt submitted successfully.';
+    await loadCourseDoubts();
+  } catch(err) {
+    console.error(err);
+    statusEl.textContent=err.message || 'Could not submit the doubt.';
+  } finally { button.disabled=false; }
 };
+window.openStudentDoubtConversation = async function(doubtId) {
+  const user = auth.currentUser;
+  if (!user) return;
+  const ref = db.collection('studentDoubts').doc(doubtId);
+  const snap = await ref.get();
+  if (!snap.exists || snap.data().userId !== user.uid) {
+    alert('This doubt is not available in your account.'); return;
+  }
+  activeStudentDoubtId = doubtId;
+  document.getElementById('doubtConversationX').hidden = false;
+  document.getElementById('doubtConversationTitleX').textContent=snap.data().topic || 'Conversation';
+  if (activeStudentDoubtUnsubscribe) activeStudentDoubtUnsubscribe();
+  activeStudentDoubtUnsubscribe = ref.onSnapshot(async doc => {
+    if (!doc.exists || doc.data().userId !== auth.currentUser?.uid) return;
+    await renderStudentDoubtConversation(doc.data());
+  });
+};
+window.closeStudentDoubtConversation = function() {
+  if (activeStudentDoubtUnsubscribe) activeStudentDoubtUnsubscribe();
+  activeStudentDoubtUnsubscribe=null;
+  activeStudentDoubtId=null;
+  document.getElementById('doubtConversationX').hidden=true;
+  loadCourseDoubts();
+};
+window.sendStudentDoubtFollowup = async function() {
+  const user = auth.currentUser;
+  const statusEl=document.getElementById('doubtFollowupStatusX');
+  const button=document.getElementById('doubtFollowupSubmitX');
+  const message=document.getElementById('doubtFollowupTextX').value.trim();
+  const files=getStudentDoubtFiles('doubtFollowupFilesX');
+  if (!user || !activeStudentDoubtId) { statusEl.textContent='Open one of your doubts first.'; return; }
+  if (!message && !files.length) { statusEl.textContent='Write a message or attach a file first.'; return; }
+  try {
+    validateStudentDoubtFiles(files);
+    button.disabled=true;
+    const ref=db.collection('studentDoubts').doc(activeStudentDoubtId);
+    const snap=await ref.get();
+    if (!snap.exists || snap.data().userId!==user.uid) throw new Error('You cannot reply to this doubt.');
+    if (snap.data().status==='closed') throw new Error('This doubt is closed.');
+    statusEl.textContent='Uploading attachments…';
+    const attachments=await uploadStudentDoubtFiles(activeStudentDoubtId,files);
+    await db.runTransaction(async tx => {
+      const latest=await tx.get(ref);
+      if (!latest.exists || latest.data().userId!==user.uid) throw new Error('Doubt unavailable.');
+      if (latest.data().status==='closed') throw new Error('This doubt is closed.');
+      const replies=Array.isArray(latest.data().replies)?latest.data().replies.slice():[];
+      // Use a concrete Timestamp inside the replies array; Firestore serverTimestamp
+      // transforms are not supported inside array elements.
+      replies.push({
+        by:'student',
+        text:message,
+        attachments,
+        at:firebase.firestore.Timestamp.now()
+      });
+      // Persist the updated replies array so follow-ups actually appear in the thread.
+      tx.update(ref,{
+        replies,
+        status:'open',
+        updatedAt:firebase.firestore.FieldValue.serverTimestamp()
+      });
+    });
+    document.getElementById('doubtFollowupTextX').value='';
+    document.getElementById('doubtFollowupFilesX').value='';
+    statusEl.textContent='Follow-up sent.';
+    await loadCourseDoubts();
+  } catch(err) {
+    console.error(err);
+    statusEl.textContent=err.message || 'Unable to send follow-up.';
+  } finally { button.disabled=false; }
+};
+/* ===== END DOUBT CENTRE ===== */
 
 /* ===== PROFILE ===== */
 window.loadProfile = async function(){
@@ -1013,7 +1215,7 @@ if ('serviceWorker' in navigator) {
     var b = document.createElement('button');
     b.id = 'vpInstallBtn';
     b.textContent = '📲 Install App';
-    b.style.cssText = "position:fixed;left:18px;bottom:18px;z-index:15000;border:none;border-radius:999px;padding:12px 20px;background:linear-gradient(135deg,#C9922A,#E8AA48);color:#0D1B40;font:800 14px 'DM Sans',sans-serif;box-shadow:0 10px 28px rgba(13,27,64,.35);cursor:pointer;";
+    b.style.cssText = "position:fixed;left:18px;bottom:18px;z-index:15000;border:none;border-radius:999px;padding:12px 20px;background:linear-gradient(135deg,#E5383B,#F06467);color:#660708;font:800 14px 'DM Sans',sans-serif;box-shadow:0 10px 28px rgba(13,27,64,.35);cursor:pointer;";
     b.onclick = function(){ if(deferredPrompt){ deferredPrompt.prompt(); deferredPrompt = null; } b.remove(); };
     document.body.appendChild(b);
   }
