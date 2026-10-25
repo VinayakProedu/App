@@ -7,7 +7,7 @@
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="permissions-policy" content="camera=(), microphone=(), geolocation=()">
 <link rel="manifest" href="./manifest.json">
-<meta name="theme-color" content="#0D1B40">
+<meta name="theme-color" content="#660708">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -24,7 +24,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
 <style>
-:root{--navy:#0D1B40;--blue:#1e3c72;--gold:#C9922A;--gold-lt:#E8AA48;--ink:#1A1A2E;--muted:#6B7280;--smoke:#EFF1F6;--white:#FFFFFF;--r-sm:10px;--r-md:16px;--r-lg:24px;}
+:root{--navy:#660708;--blue:#A4161A;--gold:#E5383B;--gold-lt:#F06467;--ink:#161A1D;--muted:#62676B;--smoke:#F5F3F4;--white:#FFFFFF;--rose:#FDF0F0;--border:#E8DCDD;--r-sm:10px;--r-md:16px;--r-lg:24px;}
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;font-size:16px;}
 body{font-family:'DM Sans',sans-serif;color:var(--ink);background:#f5f7fb;line-height:1.65;overflow-x:hidden;}
@@ -264,6 +264,42 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
 .pf-row input:disabled{color:#6B7280;}
 .pf-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:22px;padding-top:16px;border-top:1px solid #eef2f8;}
 @media(max-width:760px){.pf-grid{grid-template-columns:1fr;}}
+
+/* ===== Vinayak ProEdu unified student theme ===== */
+body,.student-app,.app-main{background:#F5F3F4;color:#161A1D}
+.login-screen{background:linear-gradient(135deg,#660708,#A4161A)}
+.login-brand img,.app-brand img{border-color:#E5383B}
+.login-brand p,.login-toggle a{color:#F06467}
+.portal-field input:focus{border-color:#E5383B;box-shadow:0 0 0 3px rgba(229,56,59,.16)}
+.primary-btn{background:linear-gradient(135deg,#660708,#A4161A);color:#fff}
+.secondary-btn{background:linear-gradient(135deg,#660708,#A4161A);color:#fff}
+.ghost-btn{background:#FDF0F0;color:#660708;border-color:#E8DCDD}
+.app-sidebar{background:#660708}
+.app-menu button{background:#A4161A;color:#fff}
+.app-menu button:hover,.app-menu button.active{background:#E5383B;color:#fff}
+.app-title,.subject-title,.course-info h4,.hub-option-card h4,.player-info h3,.syllabus-header h3{color:#660708}
+.app-card,.course-card,.hub-option-card,.student-batch-card{border-color:#E8DCDD;box-shadow:0 8px 24px rgba(102,7,8,.07)}
+.metric,.live-card{background:linear-gradient(135deg,#660708,#A4161A)}
+.course-thumb{background:linear-gradient(135deg,#660708,#A4161A)!important}
+.course-thumb .badge{background:#FDF0F0;color:#660708}
+.course-card:hover,.hub-option-card:hover{border-color:#E5383B;box-shadow:0 14px 32px rgba(102,7,8,.13)}
+.course-info p,.app-sub{color:#62676B}
+.chip,.mock-tag,.vp-tag{background:#FDF0F0;color:#660708}
+.empty-box{background:#fff;border-color:#E8DCDD;color:#62676B}
+.syllabus-section[open] summary{background:#660708;border-color:#660708}
+.syllabus-section[open] summary .sec-icon{color:#F06467}
+.progress-bar-fill{background:linear-gradient(90deg,#660708,#E5383B)}
+.lesson-item.active{background:#FDF0F0;border-left-color:#A4161A}
+.lesson-item .icon{background:#FDF0F0;color:#A4161A}
+.portal-reopen{background:linear-gradient(135deg,#660708,#A4161A);color:#fff}
+.student-batch-card{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid #E8DCDD;border-radius:16px;padding:18px 20px;margin-bottom:20px;box-shadow:0 8px 24px rgba(102,7,8,.06)}
+.student-batch-icon{display:grid;place-items:center;width:44px;height:44px;flex:0 0 44px;border-radius:12px;background:#FDF0F0;color:#A4161A;font-size:22px}
+.student-batch-label{color:#A4161A;font-size:11px;font-weight:800;letter-spacing:1px}
+.student-batch-name{color:#161A1D;font-size:16px;font-weight:800;overflow-wrap:anywhere}
+.course-action{color:#660708;font-weight:800}
+.course-card:focus-visible{outline:3px solid #E5383B;outline-offset:3px}
+@media(max-width:640px){.app-main{padding:14px}.student-batch-card{padding:14px}.course-grid{grid-template-columns:repeat(auto-fill,minmax(min(100%,220px),1fr));gap:14px}}
+
 </style>
 <base target="_blank">
 <base target="_blank">
@@ -315,6 +351,12 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
 
       <!-- DASHBOARD -->
       <section class="app-view" id="studentHomeX">
+        <div class="student-batch-card" aria-live="polite">
+          <div class="student-batch-icon" aria-hidden="true">♟</div>
+          <div><div class="student-batch-label">YOUR BATCH</div>
+            <div id="studentBatchNameX" class="student-batch-name">Loading batch…</div>
+          </div>
+        </div>
         <div class="app-card" style="border:none;box-shadow:none;background:transparent;padding:0;">
           <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:8px;">
             <h3 class="subject-title" style="margin:0">My Assigned Courses</h3>
@@ -397,47 +439,19 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
       <!-- DOUBTS -->
       <section class="app-view hidden" id="studentDoubtsX">
         <button class="back-btn" onclick="backToCourseHub()" type="button">← Back to Course</button>
-        <h2 class="app-title" style="margin:10px 0 6px;">💬 Doubt Centre — <span id="doubtCourseNameX">Course</span></h2>
+        <h2 class="app-title" style="margin:10px 0 6px;">💬 Doubts — <span id="doubtCourseNameX">Course</span></h2>
         <div class="app-grid-2">
           <div class="app-card">
             <h3 class="subject-title">Ask a New Doubt</h3>
-            <div class="portal-field" style="margin-bottom:12px">
-              <label for="doubtTopicX">Topic</label>
-              <input id="doubtTopicX" maxlength="120" placeholder="e.g. Chapter 3"
-                style="color:#1A1A2E;background:#fff;border:1px solid rgba(13,27,64,.14)">
-            </div>
-            <div class="portal-field" style="margin-bottom:12px">
-              <label for="doubtTextX">Your doubt</label>
-              <textarea id="doubtTextX" maxlength="5000" placeholder="Explain your doubt..."
-                style="color:#1A1A2E;background:#fff;border:1px solid rgba(13,27,64,.14);min-height:110px;resize:vertical"></textarea>
-            </div>
-            <div class="portal-field" style="margin-bottom:12px">
-              <label for="doubtFilesX">Attach images or PDFs (up to 5 files, 8 MB each)</label>
-              <input id="doubtFilesX" type="file" accept="image/jpeg,image/png,image/webp,image/gif,application/pdf" multiple>
-            </div>
-            <button class="primary-btn" id="doubtSubmitX" type="button" onclick="submitCourseDoubt()">Send to Faculty</button>
-            <div id="doubtStatusX" class="portal-status" role="status" aria-live="polite" style="color:#0D1B40;margin-top:10px"></div>
+            <div class="portal-field" style="margin-bottom:12px"><label>Topic</label><input id="doubtTopicX" placeholder="e.g. Chapter 3" style="color:#1A1A2E;background:#fff;border:1px solid rgba(13,27,64,.14)"></div>
+            <div class="portal-field" style="margin-bottom:12px"><label>Your doubt</label><textarea id="doubtTextX" placeholder="Explain..." style="color:#1A1A2E;background:#fff;border:1px solid rgba(13,27,64,.14);min-height:110px;resize:vertical"></textarea></div>
+            <button class="primary-btn" type="button" onclick="submitCourseDoubt()">Send to Faculty</button>
+            <div id="doubtStatusX" class="portal-status" style="color:#0D1B40;margin-top:10px"></div>
           </div>
           <div class="app-card">
             <h3 class="subject-title">My Doubts</h3>
             <div id="studentDoubtListX" class="mini-list"><div class="skeleton" style="height:100px;border-radius:14px;"></div></div>
           </div>
-        </div>
-        <div class="app-card" id="doubtConversationX" hidden style="margin-top:18px">
-          <button class="back-btn" onclick="closeStudentDoubtConversation()" type="button">← Back to My Doubts</button>
-          <h3 class="subject-title" id="doubtConversationTitleX">Conversation</h3>
-          <div id="doubtMessagesX"></div>
-          <div class="portal-field" style="margin-top:14px">
-            <label for="doubtFollowupTextX">Follow-up question</label>
-            <textarea id="doubtFollowupTextX" maxlength="5000" placeholder="Continue this conversation..."
-              style="color:#1A1A2E;background:#fff;border:1px solid rgba(13,27,64,.14);min-height:100px;resize:vertical"></textarea>
-          </div>
-          <div class="portal-field">
-            <label for="doubtFollowupFilesX">Attach images or PDFs (up to 5 files, 8 MB each)</label>
-            <input id="doubtFollowupFilesX" type="file" accept="image/jpeg,image/png,image/webp,image/gif,application/pdf" multiple>
-          </div>
-          <button class="primary-btn" id="doubtFollowupSubmitX" type="button" onclick="sendStudentDoubtFollowup()">Send Follow-up</button>
-          <div id="doubtFollowupStatusX" class="portal-status" role="status" aria-live="polite" style="color:#0D1B40;margin-top:10px"></div>
         </div>
       </section>
 
@@ -469,6 +483,10 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
         <h2 class="app-title" style="margin-bottom:6px;">My Profile</h2>
         <p class="app-sub" style="margin-bottom:18px;">Your personal details — used for certificates and institute communications.</p>
         <div class="app-card" style="padding:24px;">
+          <div class="student-batch-card" style="margin-bottom:18px" aria-live="polite">
+            <div class="student-batch-icon" aria-hidden="true">♟</div>
+            <div><div class="student-batch-label">YOUR BATCH</div><div id="profileBatchNameX" class="student-batch-name">Loading batch…</div></div>
+          </div>
           <div class="pf-grid">
             <div class="pf-row"><label>Full Name</label><input id="pfNameX" placeholder="Your full name"></div>
             <div class="pf-row"><label>Email</label><input id="pfEmailX" disabled style="background:#f3f4f6;"></div>
@@ -521,7 +539,7 @@ function getYouTubeId(input) {
 
 /* ===== STATE ===== */
 const state = {
-  currentUser: null, userData: null, courses: [], lectures: [], activeCourse: null,
+  currentUser: null, userData: null, courses: [], lectures: [], activeCourse: null, studentBatchName: '',
   pagination: { mocks: { page: 1, pageSize: 20 }, doubts: { page: 1, pageSize: 10 } }
 };
 
@@ -578,6 +596,27 @@ document.querySelectorAll('.app-menu button[data-stu-view]').forEach(btn=>{
   });
 });
 
+/* ===== STUDENT BATCH NAME (codes stay internal) ===== */
+async function resolveStudentBatchName(batchCode){
+  if(!batchCode) return '';
+  try{
+    const snap = await db.collection('batches').doc(String(batchCode)).get();
+    if(!snap.exists) return '';
+    const data = snap.data() || {};
+    return typeof data.name === 'string' ? data.name.trim() : '';
+  }catch(err){
+    console.warn('Could not resolve student batch name:', err);
+    return '';
+  }
+}
+function renderStudentBatchName(){
+  const label = state.studentBatchName || 'No batch assigned';
+  ['studentBatchNameX','profileBatchNameX'].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) el.textContent = label;
+  });
+}
+
 /* ===== DASHBOARD ===== */
 async function loadDashboard(){
   const user = auth.currentUser; if(!user) return;
@@ -594,7 +633,9 @@ async function loadDashboard(){
   }
   state.userData = userDoc && userDoc.exists ? userDoc.data() : { role: 'trial' };
   const isTrial = (state.userData.role || 'trial') !== 'student';
-  const myBatch = state.userData.batchCode || '';
+  const myBatch = state.userData.batchCode || ''; // internal only; never render this value
+  state.studentBatchName = await resolveStudentBatchName(myBatch);
+  renderStudentBatchName();
   const mySubjects = Array.isArray(state.userData.enrolledSubjects) ? state.userData.enrolledSubjects : [];
   const myLectures = Array.isArray(state.userData.assignedLectureIds) ? state.userData.assignedLectureIds : [];
 
@@ -602,14 +643,26 @@ async function loadDashboard(){
   let lectures = lectSnap ? lectSnap.docs.map(d=>({id:d.id,...d.data()})) : [];
 
   if(isTrial){
+    // Trial users can only see resources explicitly marked free.
     lectures = lectures.filter(l => l.isFree === true);
   } else {
-    if(myBatch) lectures = lectures.filter(l => { const b = l.batchCodes||[]; return !b.length || b.includes(myBatch); });
-    if(myLectures.length) lectures = lectures.filter(l => myLectures.includes(l.id));
-    else if(mySubjects.length) lectures = lectures.filter(l => {
-      const sub = l.subject || 'General';
-      return mySubjects.includes(sub) || sub === 'General';
+    const batchLectures = lectures.filter(l => {
+      const codes = Array.isArray(l.batchCodes) ? l.batchCodes : [];
+      // Preserve current policy: unrestricted/general lectures are visible to students.
+      return codes.length === 0 || (!!myBatch && codes.includes(myBatch));
     });
+    const individuallyGranted = lectures.filter(l => myLectures.includes(l.id));
+    const accessible = new Map();
+    [...batchLectures, ...individuallyGranted].forEach(l => accessible.set(l.id, l));
+    lectures = [...accessible.values()];
+
+    // Preserve subject fallback for legacy student records without a batch or grants.
+    if(!myBatch && myLectures.length === 0 && mySubjects.length){
+      lectures = lectures.filter(l => {
+        const sub = l.subject || 'General';
+        return mySubjects.includes(sub) || sub === 'General';
+      });
+    }
   }
 
   state.lectures = lectures;
@@ -626,7 +679,7 @@ async function loadDashboard(){
     if(!b){
       b = document.createElement('div');
       b.id = 'trialBannerX';
-      b.style.cssText = 'background:linear-gradient(135deg,#C9922A,#E8AA48);color:#0D1B40;border-radius:16px;padding:16px 20px;margin-bottom:16px;font-weight:700;box-shadow:0 8px 24px rgba(201,146,42,.25);';
+      b.style.cssText = 'background:linear-gradient(135deg,#FDF0F0,#fff);color:#660708;border:1px solid #E8DCDD;border-left:5px solid #E5383B;border-radius:16px;padding:16px 20px;margin-bottom:16px;font-weight:700;box-shadow:0 8px 24px rgba(102,7,8,.08);';
       b.innerHTML = '🎓 <b>Free Trial Access</b> — watch the free resources and take the free quiz below. For the complete course, all mocks & live batches, WhatsApp <b>+91 83200 35390</b>.';
       const home = document.getElementById('studentHomeX');
       if(home) home.insertBefore(b, home.firstChild);
@@ -640,15 +693,17 @@ function renderCourses(){
   if(!state.courses.length){ grid.innerHTML=''; empty.classList.remove('hidden'); return; }
   empty.classList.add('hidden');
   grid.innerHTML = state.courses.map(c => `
-    <div class="course-card" onclick="selectCourse('${esc(c.subject)}')">
-      <div class="course-thumb" style="background:linear-gradient(135deg,#1e3c72,#2a5298)">
+    <div class="course-card" role="button" tabindex="0"
+         onclick="selectCourse('${esc(c.subject)}')"
+         onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectCourse('${esc(c.subject)}')}">
+      <div class="course-thumb">
         <span class="badge">${esc(c.subject.slice(0,4).toUpperCase())}</span>
-        <span style="font-size:1.5rem">📚</span>
+        <span style="font-size:1.5rem" aria-hidden="true">📚</span>
       </div>
       <div class="course-info">
         <h4>${esc(c.subject)}</h4>
-        <p>${c.count} lesson${c.count!==1?'s':''} ${c.hasLive?'· 🔴 Live':''}</p>
-        <div class="course-meta"><span>Vinayak ProEdu</span><span>▶ Open</span></div>
+        <p>${c.count} lesson${c.count!==1?'s':''} ${c.hasLive?'· 🔴 Live classes available':''}</p>
+        <div class="course-meta"><span>Vinayak ProEdu</span><span class="course-action">Continue learning →</span></div>
       </div>
     </div>
   `).join('');
@@ -861,186 +916,57 @@ async function loadAnnouncements(){
   } catch(err){ list.innerHTML='<div class="empty-box">Unable to load.</div>'; }
 }
 
-/* ===== DOUBT CENTRE: STUDENT SIDE ===== */
-const STUDENT_DOUBT_MAX_FILE_BYTES = 8 * 1024 * 1024;
-const STUDENT_DOUBT_MAX_FILES = 5;
-let activeStudentDoubtId = null;
-let activeStudentDoubtUnsubscribe = null;
-
-function getStudentDoubtFiles(inputId) {
-  return Array.from(document.getElementById(inputId)?.files || []);
-}
-function validateStudentDoubtFiles(files) {
-  if (files.length > STUDENT_DOUBT_MAX_FILES) throw new Error('Attach no more than 5 files.');
-  for (const f of files) {
-    const allowed = ['image/jpeg','image/png','image/webp','image/gif','application/pdf'];
-    if (!allowed.includes(f.type)) throw new Error('Only JPG, PNG, WEBP, GIF and PDF files are allowed.');
-    if (!f.size || f.size > STUDENT_DOUBT_MAX_FILE_BYTES) throw new Error(`${f.name}: file must be smaller than 8 MB.`);
-  }
-}
-async function uploadStudentDoubtFiles(doubtId, files) {
-  validateStudentDoubtFiles(files);
-  const user = auth.currentUser;
-  if (!user) throw new Error('Please sign in again.');
-  const result = [];
-  for (const f of files) {
-    const safe = f.name.replace(/[^a-zA-Z0-9._-]/g, '_');
-    const path = `doubt-attachments/${doubtId}/${user.uid}/${Date.now()}-${Math.random().toString(36).slice(2)}-${safe}`;
-    const ref = firebase.storage().ref(path);
-    await ref.put(f, {contentType:f.type, customMetadata:{ownerUid:user.uid,doubtId}});
-    result.push({storagePath:path,name:f.name,contentType:f.type,size:f.size});
-  }
-  return result;
-}
-async function studentDoubtAttachmentHtml(a) {
-  const name = esc(a.name || a.attachmentName || 'Attachment');
-  const path = a.storagePath || a.attachmentPath;
-  if (path) {
-    try {
-      const url = await firebase.storage().ref(path).getDownloadURL();
-      if ((a.contentType || '').startsWith('image/')) {
-        return `<div style="margin:8px 0"><a href="${url}" target="_blank" rel="noopener noreferrer">${name}</a><br><img src="${url}" alt="${name}" loading="lazy" style="max-width:260px;max-height:220px;object-fit:contain;border-radius:8px;margin-top:5px"></div>`;
-      }
-      return `<p style="margin:6px 0">📎 <a href="${url}" target="_blank" rel="noopener noreferrer">${name}</a></p>`;
-    } catch (e) {
-      return `<p style="margin:6px 0">📎 ${name} (not available)</p>`;
-    }
-  }
-  if (a.attachmentUrl) {
-    return `<p style="margin:6px 0">📎 <a href="${esc(a.attachmentUrl)}" target="_blank" rel="noopener noreferrer">${name}</a></p>`;
-  }
-  return '';
-}
-async function renderStudentDoubtConversation(data) {
-  const messages = document.getElementById('doubtMessagesX');
-  const blocks = [];
-  blocks.push(`<div class="mini-item"><strong>Your original question</strong><p>${esc(data.message || '')}</p></div>`);
-  for (const a of (data.attachments || [])) blocks.push(await studentDoubtAttachmentHtml(a));
-  if (data.screenshotUrl) blocks.push(`<p><a href="${esc(data.screenshotUrl)}" target="_blank" rel="noopener noreferrer">Open existing attachment</a></p>`);
-  for (const r of (Array.isArray(data.replies) ? data.replies : [])) {
-    blocks.push(`<div class="mini-item"><strong>${esc(r.by === 'faculty' || r.by === 'admin' ? 'Faculty' : 'Student')}</strong><p>${esc(r.text || '')}</p></div>`);
-    if (r.attachmentUrl) blocks.push(await studentDoubtAttachmentHtml({attachmentUrl:r.attachmentUrl,attachmentName:r.attachmentName}));
-    for (const a of (r.attachments || [])) blocks.push(await studentDoubtAttachmentHtml(a));
-  }
-  messages.innerHTML = blocks.join('');
-}
-async function loadCourseDoubts() {
-  if (!state.activeCourse || !auth.currentUser) return;
-  const user = auth.currentUser;
+/* ===== DOUBTS ===== */
+async function loadCourseDoubts(){
+  if(!state.activeCourse) return;
+  const user = auth.currentUser; if(!user) return;
   const box = document.getElementById('studentDoubtListX');
-  box.innerHTML = '<div class="skeleton" style="height:100px;border-radius:14px;"></div>';
+  box.innerHTML = '<div class="skeleton" style="height:100px;border-radius:14px;"></div>'.repeat(2);
   try {
-    const snap = await db.collection('studentDoubts')
-      .where('userId','==',user.uid)
-      .where('courseSubject','==',state.activeCourse.subject)
-      .limit(50).get();
-    const doubts = snap.docs.map(d => ({id:d.id,...d.data()}));
-    doubts.sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
-    if (!doubts.length) { box.innerHTML='<div class="empty-box">No doubts yet.</div>'; return; }
-    box.innerHTML = doubts.map(d => `<div class="mini-item">
-      <strong>${esc(d.topic||'General')}</strong>
-      <span style="display:inline-flex;padding:3px 8px;border-radius:999px;background:${d.status==='open'?'#d1fae5;color:#065f46':'#dbe8ff;color:#1e3c72'};font-size:.72rem;font-weight:800;margin-left:6px">${esc(d.status||'open')}</span>
-      <br><span style="font-size:.85rem;color:#6b7280">${fmtDate(d.createdAt)}</span>
-      <p style="margin-top:8px;font-size:.92rem">${esc(d.message||'')}</p>
-      <button class="primary-btn" type="button" onclick="openStudentDoubtConversation('${d.id}')">Open Conversation</button>
-    </div>`).join('');
-  } catch(err) {
-    console.error(err);
-    box.innerHTML='<div class="empty-box">Unable to load doubts. Please check your connection and permissions.</div>';
-  }
+    const snap = await db.collection('studentDoubts').where('userId','==',user.uid).where('courseSubject','==',state.activeCourse.subject).limit(50).get();
+    let doubts = snap.docs.map(d=>({id:d.id,...d.data()}));
+    doubts.sort((a,b) => (b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
+    if(!doubts.length){ box.innerHTML='<div class="empty-box">No doubts yet.</div>'; return; }
+    box.innerHTML = doubts.map(d => {
+      const replies = Array.isArray(d.replies) ? d.replies : [];
+      return `<div class="mini-item">
+        <strong>${esc(d.topic||'General')}</strong> 
+        <span style="display:inline-flex;padding:3px 8px;border-radius:999px;background:${d.status==='open'?'#d1fae5;color:#065f46':'#dbe8ff;color:#1e3c72'};font-size:.72rem;font-weight:800;margin-left:6px">${esc(d.status||'open')}</span><br>
+        <span style="font-size:.85rem;color:#6b7280">${esc(d.studentName||'')} · ${fmtDate(d.createdAt)}</span>
+        <p style="margin-top:8px;font-size:.92rem">${esc(d.message||'')}</p>
+        ${replies.length ? `<div style="margin-top:10px;border-left:3px solid #C9922A;padding-left:10px;">${replies.map(r=>`<div><span style="font-size:.75rem;color:#6b7280">${esc(r.by||'Faculty')}</span><p style="margin:4px 0;font-size:.9rem">${esc(r.text||'')}</p></div>`).join('')}</div>` : '<div style="margin-top:8px;font-size:.85rem;color:#9ca3af">Awaiting reply…</div>'}
+      </div>`;
+    }).join('');
+  } catch(err){ box.innerHTML='<div class="empty-box">Unable to load doubts.</div>'; }
 }
-window.submitCourseDoubt = async function() {
-  const user = auth.currentUser;
+
+window.submitCourseDoubt = async function(){
+  if(!state.activeCourse) return;
+  const subject = state.activeCourse.subject;
+  const topic = document.getElementById('doubtTopicX')?.value.trim() || 'General';
+  const message = document.getElementById('doubtTextX')?.value.trim();
   const statusEl = document.getElementById('doubtStatusX');
-  const button = document.getElementById('doubtSubmitX');
-  if (!state.activeCourse || !user) { statusEl.textContent='Sign in and select a course first.'; return; }
-  const topic = document.getElementById('doubtTopicX').value.trim() || 'General';
-  const message = document.getElementById('doubtTextX').value.trim();
-  const files = getStudentDoubtFiles('doubtFilesX');
-  if (!message && !files.length) { statusEl.textContent='Write a doubt or attach a file first.'; return; }
-  try {
-    validateStudentDoubtFiles(files);
-    button.disabled = true;
-    statusEl.textContent='Uploading attachments…';
-    const ref = db.collection('studentDoubts').doc();
-    const attachments = await uploadStudentDoubtFiles(ref.id, files);
-    await ref.set({
-      userId:user.uid,
-      studentName:user.displayName || user.email || 'Student',
-      courseSubject:state.activeCourse.subject,
-      topic,message,attachments,status:'open',replies:[],
-      createdAt:firebase.firestore.FieldValue.serverTimestamp(),
-      updatedAt:firebase.firestore.FieldValue.serverTimestamp()
-    });
-    document.getElementById('doubtTopicX').value='';
-    document.getElementById('doubtTextX').value='';
-    document.getElementById('doubtFilesX').value='';
-    statusEl.textContent='Doubt submitted successfully.';
-    await loadCourseDoubts();
-  } catch(err) {
-    console.error(err);
-    statusEl.textContent=err.message || 'Could not submit the doubt.';
-  } finally { button.disabled=false; }
-};
-window.openStudentDoubtConversation = async function(doubtId) {
   const user = auth.currentUser;
-  if (!user) return;
-  const ref = db.collection('studentDoubts').doc(doubtId);
-  const snap = await ref.get();
-  if (!snap.exists || snap.data().userId !== user.uid) {
-    alert('This doubt is not available in your account.'); return;
-  }
-  activeStudentDoubtId = doubtId;
-  document.getElementById('doubtConversationX').hidden = false;
-  document.getElementById('doubtConversationTitleX').textContent=snap.data().topic || 'Conversation';
-  if (activeStudentDoubtUnsubscribe) activeStudentDoubtUnsubscribe();
-  activeStudentDoubtUnsubscribe = ref.onSnapshot(async doc => {
-    if (!doc.exists || doc.data().userId !== auth.currentUser?.uid) return;
-    await renderStudentDoubtConversation(doc.data());
-  });
-};
-window.closeStudentDoubtConversation = function() {
-  if (activeStudentDoubtUnsubscribe) activeStudentDoubtUnsubscribe();
-  activeStudentDoubtUnsubscribe=null;
-  activeStudentDoubtId=null;
-  document.getElementById('doubtConversationX').hidden=true;
-  loadCourseDoubts();
-};
-window.sendStudentDoubtFollowup = async function() {
-  const user = auth.currentUser;
-  const statusEl=document.getElementById('doubtFollowupStatusX');
-  const button=document.getElementById('doubtFollowupSubmitX');
-  const message=document.getElementById('doubtFollowupTextX').value.trim();
-  const files=getStudentDoubtFiles('doubtFollowupFilesX');
-  if (!user || !activeStudentDoubtId) { statusEl.textContent='Open one of your doubts first.'; return; }
-  if (!message && !files.length) { statusEl.textContent='Write a message or attach a file first.'; return; }
-  try {
-    validateStudentDoubtFiles(files);
-    button.disabled=true;
-    const ref=db.collection('studentDoubts').doc(activeStudentDoubtId);
-    const snap=await ref.get();
-    if (!snap.exists || snap.data().userId!==user.uid) throw new Error('You cannot reply to this doubt.');
-    if (snap.data().status==='closed') throw new Error('This doubt is closed.');
-    statusEl.textContent='Uploading attachments…';
-    const attachments=await uploadStudentDoubtFiles(activeStudentDoubtId,files);
-    await db.runTransaction(async tx => {
-      const latest=await tx.get(ref);
-      if (!latest.exists || latest.data().userId!==user.uid) throw new Error('Doubt unavailable.');
-      if (latest.data().status==='closed') throw new Error('This doubt is closed.');
-      const replies=Array.isArray(latest.data().replies)?latest.data().replies.slice():[];
-      replies.push({by:'student',text:message,attachments,at:firebase.firestore.FieldValue.serverTimestamp()});
-      tx.update(ref,{replies,status:'open',updatedAt:firebase.firestore.FieldValue.serverTimestamp()});
+  if(!user || !message){ if(statusEl) statusEl.textContent = 'Sign in and write your doubt first.'; return; }
+  try{
+    if(statusEl) statusEl.textContent = 'Sending…';
+    await db.collection('studentDoubts').add({
+      userId: user.uid,
+      studentName: user.displayName || user.email || 'Student',
+      courseSubject: subject,
+      topic: topic,
+      message: message,
+      status: 'open',
+      replies: [],
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     });
-    document.getElementById('doubtFollowupTextX').value='';
-    document.getElementById('doubtFollowupFilesX').value='';
-    statusEl.textContent='Follow-up sent.';
-    await loadCourseDoubts();
-  } catch(err) {
-    console.error(err);
-    statusEl.textContent=err.message || 'Unable to send follow-up.';
-  } finally { button.disabled=false; }
+    document.getElementById('doubtTextX').value = '';
+    document.getElementById('doubtTopicX').value = '';
+    if(statusEl) statusEl.textContent = 'Sent successfully.';
+    loadCourseDoubts();
+  }catch(err){ if(statusEl) statusEl.textContent = err.message || 'Could not send.'; }
 };
-/* ===== END DOUBT CENTRE ===== */
 
 /* ===== PROFILE ===== */
 window.loadProfile = async function(){
@@ -1057,6 +983,8 @@ window.loadProfile = async function(){
   $('pfPinX').value = data.pincode || '';
   const since = data.createdAt?.toDate ? data.createdAt.toDate().toLocaleDateString() : '—';
   const role = (data.role === 'student') ? 'Full student' : 'Free trial';
+  state.studentBatchName = await resolveStudentBatchName(data.batchCode || (state.userData && state.userData.batchCode) || '');
+  renderStudentBatchName();
   $('pfMetaX').textContent = `${user.email || ''} · Member since ${since} · ${role}`;
   $('pfStatusX').textContent = '';
 };
