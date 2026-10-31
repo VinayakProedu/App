@@ -7,7 +7,7 @@
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="permissions-policy" content="camera=(), microphone=(), geolocation=()">
 <link rel="manifest" href="./manifest.json">
-<meta name="theme-color" content="#660708">
+<meta name="theme-color" content="#650B0D">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -283,8 +283,100 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
 #doubtSubmitX:disabled,#doubtFollowupSubmitX:disabled{opacity:.6;cursor:wait}
 #doubtFilesX,#doubtFollowupFilesX{max-width:100%;font:inherit}
 
+
+/* ===== Vinayak ProEdu brand palette — restrained garnet, champagne and ivory ===== */
+:root{
+  --navy:#650B0D;
+  --blue:#8B171B;
+  --gold:#C8A66A;
+  --gold-lt:#E5D3AE;
+  --ink:#262629;
+  --muted:#6F7078;
+  --smoke:#F7F5F2;
+  --white:#FFFFFF;
+  --brand-accent:#8B171B;
+  --line:#E9E3DC;
+  --soft-accent:#F8EFEC;
+}
+body,.student-app{background:#F7F5F2;color:#262629}
+.app-sidebar{background:linear-gradient(180deg,#650B0D 0%,#791014 100%);color:#FFFDFC}
+.app-brand img{border-color:#C8A66A}
+.app-brand p{color:#E5D3AE}
+.app-menu button{background:rgba(255,255,255,.075);color:#FFF8F4;border:1px solid rgba(255,255,255,.06);transition:background .2s,border-color .2s,transform .2s}
+.app-menu button:hover{background:rgba(255,255,255,.13);color:#fff}
+.app-menu button.active{background:#F1E4D3;color:#650B0D;border-color:#D8BE91;box-shadow:inset 3px 0 0 #C8A66A}
+.portal-collapse-btn{border-color:rgba(255,255,255,.2);background:rgba(255,255,255,.065)}
+.portal-collapse-btn:hover{background:rgba(255,255,255,.13)}
+.app-card,.course-card,.hub-option-card,.lecture-player,.mock-card{border-color:#E9E3DC;box-shadow:0 6px 22px rgba(64,35,28,.045)}
+.app-card{background:#fff}
+.course-card:hover,.hub-option-card:hover{border-color:#DCC9B8;box-shadow:0 15px 36px rgba(64,35,28,.09)}
+.course-thumb{background:linear-gradient(135deg,#650B0D,#8B171B);color:#fff}
+.course-thumb .badge{background:#E9DCC6;color:#650B0D}
+.primary-btn{background:linear-gradient(135deg,#DCC69B,#C8A66A);color:#4A1717;box-shadow:0 5px 14px rgba(125,83,39,.12)}
+.primary-btn:hover{filter:brightness(1.025)}
+.secondary-btn{background:#791014;color:#fff;box-shadow:0 5px 14px rgba(101,11,13,.14)}
+.ghost-btn{background:#F8EFEC;color:#7D171B;border-color:#E9D8D2}
+.login-screen{background:radial-gradient(circle at 18% 12%,#A52A2D 0%,transparent 34%),linear-gradient(135deg,#650B0D 0%,#791014 100%)}
+.login-card{background:rgba(255,255,255,.075);border-color:rgba(255,255,255,.17);box-shadow:0 28px 80px rgba(39,6,8,.28)}
+.login-brand img{border-color:#C8A66A}
+.login-brand p,.login-toggle a{color:#E5D3AE}
+.portal-field input:focus{border-color:#C8A66A;box-shadow:0 0 0 3px rgba(200,166,106,.18)}
+.portal-field label{color:#777783}
+.login-card .portal-field label{color:rgba(255,255,255,.75)}
+.login-card .portal-field input{border-color:rgba(255,255,255,.2)}
+.app-topbar>button[title="My Profile"]{border:1px solid #D8BE91!important;background:linear-gradient(135deg,#791014,#9A2428)!important;color:#F5E8D2!important}
+.student-batch-card{border-color:#E9E3DC;background:linear-gradient(105deg,#fff 0%,#FBF8F4 100%);box-shadow:0 7px 24px rgba(64,35,28,.045)}
+.student-batch-icon{background:#F8EFEC;color:#8B171B}
+.student-batch-label{color:#9A6D42}
+.student-batch-name{color:#3A2928}
+.chip,.mock-tag{background:#F8EFEC;color:#8B171B}
+.empty-box{border-color:#E4DAD2;background:#FCFAF8;color:#716A68}
+.back-btn{background:#F1EAE3;color:#6E1719}
+.back-btn:hover{background:#E9DED3}
+.lesson-item.active{background:#FBF0EC;border-left-color:#A4161A}
+.lesson-item.active .icon{background:#8B171B;color:#fff}
+.lesson-item .icon{background:#F8EFEC;color:#8B171B}
+.syllabus-section[open] summary{background:#791014;color:#fff}
+.syllabus-section[open] summary .sec-icon{color:#E5D3AE}
+.syllabus-section[open]{border-color:#791014}
+.progress-bar-fill{background:linear-gradient(90deg,#A4161A,#D2A66A)}
+.live-card{background:linear-gradient(125deg,#650B0D,#8B171B);color:#fff}
+.live-badge{background:#C8A66A;color:#4A1717}
+.live-badge.upcoming{background:#E5D3AE;color:#650B0D}
+.calendar-item{background:#FCFAF8;border-color:#E9E3DC;border-left-color:#C8A66A}
+.calendar-date,.calendar-link{color:#8B171B}
+.calendar-title{color:#6E1719}
+.leaderboard-table th{color:#6F7078}
+.leaderboard-table td{border-color:#E9E3DC}
+.rank-1 td{background:linear-gradient(90deg,#F4E7CE,#fff)!important}
+.rank-2 td{background:linear-gradient(90deg,#F2F0ED,#fff)!important}
+.rank-3 td{background:linear-gradient(90deg,#F3E6DF,#fff)!important}
+.podium-1st{background:linear-gradient(135deg,#E9D7A9,#F7EED8);color:#5D2020;box-shadow:0 12px 30px rgba(130,105,58,.12)}
+.podium-2nd{background:linear-gradient(135deg,#E6E0DA,#F8F6F3);color:#5D2929;box-shadow:0 10px 26px rgba(64,35,28,.06)}
+.podium-3rd{background:linear-gradient(135deg,#D9B6A2,#F0DDD1);color:#5D2929;box-shadow:0 10px 26px rgba(64,35,28,.06)}
+.pagination-bar button{color:#6E1719}
+.pagination-bar button.active{background:#791014;color:#fff;border-color:#791014}
+.course-search:focus,.pf-row input:focus{border-color:#C8A66A;box-shadow:0 0 0 3px rgba(200,166,106,.14)}
+.pf-row input{border-color:#E6DDD5;background:#FCFAF8}
+.pf-row label{color:#77706F}
+.pf-foot{border-top-color:#EEE7E0}
+.doubt-status{background:#F8EFEC;color:#8B171B}
+.doubt-status.answered{background:#F5E9E3;color:#8B171B}
+.doubt-status.closed{background:#F2F0ED;color:#77706F}
+#doubtMessagesX .mini-item{border-left-color:#C8A66A}
+.announcement-high{border-left-color:#A4161A!important}
+.announcement-normal{border-left-color:#C8A66A!important}
+.option-btn:hover,.option-btn.selected{border-color:#C8A66A;background:#FBF0EC;color:#6E1719}
+.feedback.correct{background:#EDF5EF;border-color:#B5D6BE;color:#286047}
+.feedback.wrong{background:#FBF0EE;border-color:#E4B9B1;color:#8A3F36}
+.portal-reopen{background:linear-gradient(135deg,#DCC69B,#C8A66A);color:#4A1717;box-shadow:0 8px 25px rgba(64,35,28,.16)}
+@media(max-width:640px){
+  .app-sidebar{box-shadow:12px 0 40px rgba(39,6,8,.18)}
+  .pf-row{align-items:flex-start;flex-direction:column;gap:6px}
+  .pf-row label{width:auto}
+}
+
 </style>
-<base target="_blank">
 <base target="_blank">
 </head>
 <body>
@@ -1200,46 +1292,63 @@ window.sendStudentDoubtFollowup = async function() {
 
 /* ===== PROFILE ===== */
 window.loadProfile = async function(){
-  const user = auth.currentUser; if(!user) return;
-  $('pfEmailX').value = user.email || '';
-  $('pfAccEmailX').textContent = user.email || '—';
+  const user = auth.currentUser;
+  if(!user) return;
+  const field = id => document.getElementById(id);
+  const setValue = (id, value) => { const el = field(id); if(el) el.value = value ?? ''; };
+  const setText = (id, value) => { const el = field(id); if(el) el.textContent = value ?? ''; };
+
+  setValue('pfEmailX', user.email || '');
+  setText('pfAccEmailX', user.email || '—'); // Optional legacy element; safely ignored if absent.
   let data = {};
-  try{ const snap = await db.collection('users').doc(user.uid).get(); if(snap.exists) data = snap.data() || {}; }catch(e){}
-  $('pfNameX').value = data.name || user.displayName || '';
-  $('pfPhoneX').value = data.phone || '';
-  $('pfStateX').value = data.state || '';
-  $('pfCityX').value = data.city || '';
-  $('pfAddressX').value = data.address || '';
-  $('pfPinX').value = data.pincode || '';
+  try {
+    const snap = await db.collection('users').doc(user.uid).get();
+    if(snap.exists) data = snap.data() || {};
+  } catch(err) {
+    console.error('Profile load failed:', err);
+    setText('pfStatusX', 'Unable to load profile. Please try again.');
+    return;
+  }
+
+  setValue('pfNameX', data.name || user.displayName || '');
+  setValue('pfPhoneX', data.phone || '');
+  setValue('pfStateX', data.state || '');
+  setValue('pfCityX', data.city || '');
+  setValue('pfAddressX', data.address || '');
+  setValue('pfPinX', data.pincode || '');
   const since = data.createdAt?.toDate ? data.createdAt.toDate().toLocaleDateString() : '—';
   const role = (data.role === 'student') ? 'Full student' : 'Free trial';
-  $('pfMetaX').textContent = `${user.email || ''} · Member since ${since} · ${role}`;
-  $('pfStatusX').textContent = '';
+  setText('pfMetaX', `${user.email || ''} · Member since ${since} · ${role}`);
+  setText('pfStatusX', '');
 };
 window.saveProfile = async function(){
-  const user = auth.currentUser; if(!user) return;
-  const btn = $('pfStatusX');
+  const user = auth.currentUser;
+  if(!user) return;
+  const field = id => document.getElementById(id);
+  const value = id => (field(id)?.value || '').trim();
+  const status = field('pfStatusX');
+  const setStatus = message => { if(status) status.textContent = message; };
   const payload = {
-    name: $('pfNameX').value.trim().slice(0, 120),
-    phone: $('pfPhoneX').value.trim().slice(0, 40),
-    state: $('pfStateX').value.trim().slice(0, 80),
-    city: $('pfCityX').value.trim().slice(0, 80),
-    address: $('pfAddressX').value.trim().slice(0, 500),
-    pincode: $('pfPinX').value.trim().slice(0, 12),
+    name: value('pfNameX').slice(0, 120),
+    phone: value('pfPhoneX').slice(0, 40),
+    state: value('pfStateX').slice(0, 80),
+    city: value('pfCityX').slice(0, 80),
+    address: value('pfAddressX').slice(0, 500),
+    pincode: value('pfPinX').slice(0, 12),
     profileUpdatedAt: firebase.firestore.FieldValue.serverTimestamp()
   };
-  if (!payload.name) { btn.textContent = 'Please enter your full name.'; return; }
-  try{
-    btn.textContent = 'Saving…';
-    // Merge only these profile fields; role, batchCode, email, and permissions are untouched.
+  if (!payload.name) { setStatus('Please enter your full name.'); return; }
+  try {
+    setStatus('Saving…');
+    // Merge only profile fields; role, batchCode, email, and permissions remain untouched.
     await db.collection('users').doc(user.uid).set(payload, {merge: true});
-    btn.textContent = '✓ Profile saved.';
+    setStatus('✓ Profile saved.');
     if(state.userData) Object.assign(state.userData, payload);
-  }catch(err){
+  } catch(err) {
     console.error('Profile save failed:', err);
-    btn.textContent = err && err.code === 'permission-denied'
+    setStatus(err && (err.code === 'permission-denied' || err.code === 'firestore/permission-denied')
       ? 'Profile saving is blocked by Firestore rules. The student profile-update rule must be updated.'
-      : (err.message || 'Could not save profile.');
+      : (err.message || 'Could not save profile.'));
   }
 };
 
