@@ -300,7 +300,8 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2;}
       <div class="portal-field"><label>Email</label><input type="email" id="loginEmailX" placeholder="student@email.com"></div>
       <div class="portal-field"><label>Password</label><input type="password" id="loginPasswordX" placeholder="••••••••"></div>
       <button class="secondary-btn" id="studentLoginBtnX" type="button" style="width:100%">Login</button>
-      <div class="portal-status" id="studentLoginStatusX"></div>
+      <button class="text-btn" id="forgotPasswordBtnX" type="button" style="width:100%;margin-top:10px;background:transparent;border:0;color:#A4161A;text-decoration:underline;cursor:pointer;font-weight:700;">Forgot password?</button>
+      <div class="portal-status" id="studentLoginStatusX" role="status" aria-live="polite"></div>
     </div>
   </div>
 </div>
@@ -591,6 +592,33 @@ document.getElementById('studentLoginBtnX').addEventListener('click', async ()=>
   }catch(err){ setStatus('studentLoginStatusX',err.message,true); }
 });
 
+document.getElementById('forgotPasswordBtnX').addEventListener('click', async ()=>{
+  const emailEl = document.getElementById('loginEmailX');
+  const email = (emailEl.value || '').trim();
+  if (!email) {
+    setStatus('studentLoginStatusX', 'Enter your email address first, then select Forgot password.', true);
+    emailEl.focus();
+    return;
+  }
+  const btn = document.getElementById('forgotPasswordBtnX');
+  btn.disabled = true;
+  try {
+    await auth.sendPasswordResetEmail(email);
+    setStatus('studentLoginStatusX', 'If an account exists for this email, a password-reset email has been sent. Check your inbox and spam folder.');
+  } catch (err) {
+    console.error('Password reset failed:', err);
+    const code = err && err.code;
+    const message = code === 'auth/invalid-email'
+      ? 'Please enter a valid email address.'
+      : code === 'auth/too-many-requests'
+        ? 'Too many attempts. Please wait a while and try again.'
+        : 'Unable to send the reset email. Check the address and Firebase Authentication email settings, then try again.';
+    setStatus('studentLoginStatusX', message, true);
+  } finally {
+    btn.disabled = false;
+  }
+});
+
 document.getElementById('studentLogoutBtnX').addEventListener('click', async ()=>{ await auth.signOut(); location.reload(); });
 
 
@@ -767,7 +795,7 @@ window.openCourseSection=function(section){
   else if(section==='calendar'){el('calCourseNameX').textContent=title;openStudentView('studentCourseCalendarX');loadCourseCalendar();}
   else if(section==='mocks'){el('mockCourseNameX').textContent=title;openStudentView('studentMocksX');if(window.__loadMocksForCourse)window.__loadMocksForCourse(course.type==='general'?'General':title);}
   else if(section==='doubts'){el('doubtCourseNameX').textContent=title;state.pagination.doubts.page=1;openStudentView('studentDoubtsX');loadCourseDoubts();}
-  else if(section==='leaderboard'){el('lbCourseNameX').textContent=title;openStudentView('studentCourseLeaderboardX');loadCourseLeaderboard(course.type==='general'?'General':title);}
+  else if(section==='leaderboard'){el('lbCourseNameX').textContent=course.type==='batch'?'Assigned Batch':title;openStudentView('studentCourseLeaderboardX');loadCourseLeaderboard();}
 };
 
 /* ===== RECORDED LECTURES ===== */
@@ -854,43 +882,68 @@ async function loadLiveClasses(){
 
 
 /* ===== LEADERBOARD ===== */
-async function loadCourseLeaderboard(subject){
+async function loadCourseLeaderboard(){
   const podium = document.getElementById('lbPodiumX');
   const tbody = document.getElementById('lbTableBodyX');
+  const batchCode = String((state.userData && state.userData.batchCode) || '');
   podium.innerHTML = '<div class="skeleton" style="height:180px;border-radius:20px;"></div>'.repeat(3);
-  tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:24px;">Loading…</td></tr>';
+  tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:24px;">Loading batch results…</td></tr>';
+  if (!batchCode) {
+    podium.innerHTML = '<div class="empty-box" style="grid-column:1/-1;">No batch is assigned to your account yet.</div>';
+    tbody.innerHTML = '';
+    return;
+  }
   try {
-    const snap = await db.collection('attempts').where('subject','==',subject).limit(300).get();
-    const attempts = snap.docs.map(d => d.data());
+    // Result documents must carry batchCode when an attempt is submitted.
+    // The matching Firestore rule must permit students to read only attempts
+    // whose batchCode equals their own users/{uid}.batchCode.
+    const snap = await db.collection('attempts')
+      .where('batchCode', '==', batchCode)
+      .limit(500)
+      .get();
+    const attempts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     const stats = {};
     attempts.forEach(a => {
-      const uid = a.userId || 'unknown';
-      if(!stats[uid]) stats[uid] = { name: a.userName || 'Student', scores: [], best: 0, count: 0 };
-      stats[uid].scores.push(Number(a.percentage || 0));
-      stats[uid].best = Math.max(stats[uid].best, Number(a.percentage || 0));
+      const uid = String(a.userId || '');
+      if (!uid) return;
+      if (!stats[uid]) stats[uid] = {
+        name: a.userName || a.studentName || 'Student',
+        scores: [], best: 0, count: 0
+      };
+      const score = Number(a.percentage ?? (Number(a.total) > 0 ? Number(a.score || 0) / Number(a.total) * 100 : 0));
+      if (!Number.isFinite(score)) return;
+      stats[uid].scores.push(score);
+      stats[uid].best = Math.max(stats[uid].best, score);
       stats[uid].count++;
     });
-    let rows = Object.entries(stats).map(([uid, s]) => ({
-      uid, name: s.name, count: s.count,
-      avg: Math.round(s.scores.reduce((a,b)=>a+b,0)/s.scores.length),
-      best: s.best
-    })).sort((a,b) => b.avg - a.avg || b.best - a.best);
-    if(!rows.length){ podium.innerHTML = '<div class="empty-box" style="grid-column:1/-1;">No test data yet.</div>'; tbody.innerHTML=''; return; }
+    const rows = Object.entries(stats).map(([uid, v]) => ({
+      uid, name: v.name, count: v.count,
+      avg: v.scores.length ? Math.round(v.scores.reduce((a,b)=>a+b,0)/v.scores.length) : 0,
+      best: Math.round(v.best)
+    })).sort((a,b) => b.avg-a.avg || b.best-a.best || a.name.localeCompare(b.name));
+    if (!rows.length) {
+      podium.innerHTML = '<div class="empty-box" style="grid-column:1/-1;">No batch results are available yet.</div>';
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:24px;">Results will appear after students submit tests recorded with the batch code.</td></tr>';
+      return;
+    }
     const top3 = rows.slice(0,3);
     const order = [
       { rank:2, data:top3[1], cls:'podium-2nd', icon:'🥈', label:'2nd' },
       { rank:1, data:top3[0], cls:'podium-1st', icon:'👑', label:'1st' },
       { rank:3, data:top3[2], cls:'podium-3rd', icon:'🥉', label:'3rd' }
     ];
-    podium.innerHTML = order.map(p => {
-      if(!p.data) return '<div></div>';
-      return `<div class="${p.cls}"><div class="podium-crown">${p.icon}</div><div class="podium-name">${esc(p.data.name)}</div><div class="podium-meta">${p.data.count} tests · ${p.label}</div><div class="podium-score">${p.data.avg}%</div></div>`;
-    }).join('');
-    tbody.innerHTML = rows.map((r, i) => {
+    podium.innerHTML = order.map(p => !p.data ? '<div></div>' :
+      `<div class="${p.cls}"><div class="podium-crown">${p.icon}</div><div class="podium-name">${esc(p.data.name)}</div><div class="podium-meta">${p.data.count} tests · ${p.label}</div><div class="podium-score">${p.data.avg}%</div></div>`
+    ).join('');
+    tbody.innerHTML = rows.map((r,i) => {
       const medal = i===0?'🥇':i===1?'🥈':i===2?'🥉':'';
       return `<tr><td style="padding:14px;font-weight:800;color:${i<3?'#E5383B':'#6b7280'};">${medal} #${i+1}</td><td style="padding:14px;"><strong>${esc(r.name)}</strong></td><td style="padding:14px;">${r.count}</td><td style="padding:14px;font-weight:700;">${r.avg}%</td><td style="padding:14px;">${r.best}%</td></tr>`;
     }).join('');
-  } catch(err){ console.error(err); podium.innerHTML='<div class="empty-box" style="grid-column:1/-1;">Failed to load.</div>'; tbody.innerHTML=''; }
+  } catch(err) {
+    console.error('Batch leaderboard failed:', err);
+    podium.innerHTML = '<div class="empty-box" style="grid-column:1/-1;">Unable to load batch results. Firestore rules and attempt batch tags must be configured.</div>';
+    tbody.innerHTML = '';
+  }
 }
 
 /* ===== CALENDAR — scoped to the selected batch/general tile ===== */
@@ -1167,17 +1220,27 @@ window.saveProfile = async function(){
   const user = auth.currentUser; if(!user) return;
   const btn = $('pfStatusX');
   const payload = {
-    name: $('pfNameX').value.trim(), phone: $('pfPhoneX').value.trim(),
-    state: $('pfStateX').value.trim(), city: $('pfCityX').value.trim(),
-    address: $('pfAddressX').value.trim(), pincode: $('pfPinX').value.trim(),
-    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    name: $('pfNameX').value.trim().slice(0, 120),
+    phone: $('pfPhoneX').value.trim().slice(0, 40),
+    state: $('pfStateX').value.trim().slice(0, 80),
+    city: $('pfCityX').value.trim().slice(0, 80),
+    address: $('pfAddressX').value.trim().slice(0, 500),
+    pincode: $('pfPinX').value.trim().slice(0, 12),
+    profileUpdatedAt: firebase.firestore.FieldValue.serverTimestamp()
   };
+  if (!payload.name) { btn.textContent = 'Please enter your full name.'; return; }
   try{
     btn.textContent = 'Saving…';
+    // Merge only these profile fields; role, batchCode, email, and permissions are untouched.
     await db.collection('users').doc(user.uid).set(payload, {merge: true});
     btn.textContent = '✓ Profile saved.';
     if(state.userData) Object.assign(state.userData, payload);
-  }catch(err){ btn.textContent = err.message || 'Could not save.'; }
+  }catch(err){
+    console.error('Profile save failed:', err);
+    btn.textContent = err && err.code === 'permission-denied'
+      ? 'Profile saving is blocked by Firestore rules. The student profile-update rule must be updated.'
+      : (err.message || 'Could not save profile.');
+  }
 };
 
 /* ===== AUTH STATE ===== */
