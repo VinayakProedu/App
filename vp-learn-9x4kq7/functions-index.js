@@ -103,6 +103,8 @@ exports.emailStudentOnFacultyReply = onDocumentUpdated({
 // password setup link; never creates a password or exposes SMTP credentials in the browser.
 exports.inviteStudent = onCall({
   region: "asia-south1",
+  // Explicitly allow the production admin portal origins for callable preflight requests.
+  cors: ["https://www.vinayakproedu.com", "https://vinayakproedu.com"],
   secrets: [SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, MAIL_FROM],
   enforceAppCheck: false
 }, async request => {
